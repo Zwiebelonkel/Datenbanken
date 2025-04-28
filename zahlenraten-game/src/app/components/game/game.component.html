@@ -1,0 +1,28 @@
+<div *ngIf="!gameOver">
+    <p>Zahl 1: {{ num1 }}</p>
+    <p>Zahl 2: {{ num2 }}</p>
+    <p>Test-Zahl: {{ testNum }}</p>
+  
+    <button (click)="guess('inside')">Zwischen</button>
+    <button (click)="guess('outside')">Außerhalb</button>
+  
+    <p>Punkte: {{ score }}</p>
+  </div>
+  
+  <div *ngIf="gameOver">
+    <h2>Game Over!</h2>
+    <p>Dein Score: {{ score }}</p>
+    <div *ngIf="isHighscore">
+      <input [(ngModel)]="username" placeholder="Dein Name">
+      <button (click)="submitScore()">Highscore speichern</button>
+    </div>
+    <button (click)="restart()">Nochmal spielen</button>
+  </div>
+  
+  <h3>🏆 Top 10</h3>
+  <ul>
+    <li *ngFor="let s of topScores">
+      {{ s.username }} – {{ s.score }} Punkte ({{ s.created_at | date:'short' }})
+    </li>
+  </ul>
+  

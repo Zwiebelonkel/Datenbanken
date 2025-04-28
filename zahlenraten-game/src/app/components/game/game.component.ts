@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ScoreService } from '../../services/score.service';
+import { CommonModule } from '@angular/common'; // für *ngIf, *ngFor, date
+import { FormsModule } from '@angular/forms';   // für ngModel
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.css']
+  styleUrls: ['./game.component.scss'],
+  imports: [CommonModule, FormsModule], // <- Wichtig! Hier die Module einbinden
 })
 export class GameComponent implements OnInit {
   num1 = 0;

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router'; // für <router-outlet>
 
 @Component({
-  selector: 'app-root',  // Der Selektor für die Komponente (wird in index.html verwendet)
-  templateUrl: './app.component.html',  // Verweist auf die HTML-Datei
-  styleUrls: ['./app.component.scss']  // Verweist auf die CSS-Datei
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  standalone: true,
+  imports: [RouterOutlet],  // <- Hier RouterOutlet einbinden
 })
 export class AppComponent {
-  title = 'zahlenraten-game';  // Beispiel für eine Eigenschaft
+  // dein Code
 }

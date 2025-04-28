@@ -45,11 +45,38 @@ export class GameComponent implements OnInit {
 
   guess(answer: 'inside' | 'outside') {
     const correct = this.isBetween() ? 'inside' : 'outside';
+    const resultElement = document.querySelector('.game-container') as HTMLElement;
+
+    // Temporarily show the testNum
+    this.showTestNum();
+
     if (answer === correct) {
       this.score++;
-      this.newRound();
+      this.flashBackground(resultElement, 'green');
+      setTimeout(() => this.newRound(), 1000); // Wait 1 second before starting a new round
     } else {
-      this.endGame();
+      this.flashBackground(resultElement, 'red');
+      setTimeout(() => this.endGame(), 1000); // Wait 1 second before ending the game
+    }
+  }
+
+  showTestNum() {
+    const testNumElement = document.getElementById('finalNumber') as HTMLElement;
+    if (testNumElement) {
+      testNumElement.style.visibility = 'visible';
+      setTimeout(() => {
+        testNumElement.style.visibility = 'hidden';
+      }, 1000); // Hide after 1 second
+    }
+  }
+
+  flashBackground(element: HTMLElement, color: string) {
+    if (element) {
+      console.log("Flash: "+color + "on " + element.className);
+      element.style.backgroundColor = color + ' !important';
+            setTimeout(() => {
+        element.style.backgroundColor = '';
+      }, 1000); // Reset background color after 0.5 seconds
     }
   }
 
@@ -63,6 +90,7 @@ export class GameComponent implements OnInit {
   submitScore() {
     this.scoreService.submitScore({ username: this.username, score: this.score }).subscribe(() => {
       this.loadHighscores();
+      this.restart()
     });
   }
 

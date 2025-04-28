@@ -10,4 +10,6 @@ app.use('/api/scores', scoresRoutes);
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server läuft auf http://localhost:${PORT}`);
+  console.log(`Ein Glück`);
+
 });

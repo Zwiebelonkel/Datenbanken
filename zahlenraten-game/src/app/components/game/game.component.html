@@ -1,28 +1,39 @@
-<div *ngIf="!gameOver">
-    <p>Zahl 1: {{ num1 }}</p>
-    <p>Zahl 2: {{ num2 }}</p>
-    <p>Test-Zahl: {{ testNum }}</p>
-  
-    <button (click)="guess('inside')">Zwischen</button>
-    <button (click)="guess('outside')">Außerhalb</button>
-  
-    <p>Punkte: {{ score }}</p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+<div class="game-container" *ngIf="!gameOver">
+  <div class="numbers">
+    <p><strong>Zahl 1:</strong> {{ num1 }}</p>
+    <p><strong>Zahl 2:</strong> {{ num2 }}</p>
+    <div id="finalNumber"><p><strong>Test-Zahl:</strong> {{ testNum }}</p></div>
   </div>
-  
-  <div *ngIf="gameOver">
-    <h2>Game Over!</h2>
-    <p>Dein Score: {{ score }}</p>
-    <div *ngIf="isHighscore">
-      <input [(ngModel)]="username" placeholder="Dein Name">
-      <button (click)="submitScore()">Highscore speichern</button>
-    </div>
-    <button (click)="restart()">Nochmal spielen</button>
+
+  <div class="buttons">
+    <button class="btn" (click)="guess('inside')">Zwischen</button>
+    <button class="btn" (click)="guess('outside')">Außerhalb</button>
   </div>
-  
+
+  <p class="score">Punkte: <span>{{ score }}</span></p>
+</div>
+
+<div class="game-over" *ngIf="gameOver">
+  <h2>🎯 Game Over!</h2>
+  <p class="final-score">Dein Score: <strong>{{ score }}</strong></p>
+
+  <div *ngIf="isHighscore" class="highscore-form">
+    <input [(ngModel)]="username" placeholder="Dein Name" class="input" required>
+    <button class="btn" (click)="submitScore()" [disabled]="!username">Highscore speichern</button>
+  </div>
+
+  <button class="btn restart" (click)="restart()">🔄 Nochmal spielen</button>
+</div>
+
+<div class="highscores">
   <h3>🏆 Top 10</h3>
   <ul>
+    <li *ngIf="topScores.length === 0">Noch keine Highscores vorhanden.</li>
     <li *ngFor="let s of topScores">
-      {{ s.username }} – {{ s.score }} Punkte ({{ s.created_at | date:'short' }})
+      <span>{{ s.username }}</span> – <strong>{{ s.score }} Punkte</strong> <em>({{ s.created_at | date:'short' }})</em>
     </li>
   </ul>
-  
+</div>

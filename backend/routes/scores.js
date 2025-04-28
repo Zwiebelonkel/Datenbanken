@@ -22,11 +22,15 @@ router.get('/top', (req, res) => {
   db.query(
     'SELECT username, score, created_at FROM scores ORDER BY score DESC LIMIT 10',
     (err, results) => {
-      if (err) return res.status(500).json({ error: err });
+      if (err) {
+        console.error("Datenbankfehler:", err);  // Zeigt den Fehler in der Konsole an
+        return res.status(500).json({ error: err }); // Gibt den Fehler als Antwort zurück
+      }
       res.json(results);
     }
   );
 });
+
 
 // Prüfen ob Score in Top 10 ist
 router.post('/isHighscore', (req, res) => {

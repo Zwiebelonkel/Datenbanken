@@ -8,5 +8,8 @@ import { RouterOutlet } from '@angular/router'; // für <router-outlet>
   imports: [RouterOutlet],  // <- Hier RouterOutlet einbinden
 })
 export class AppComponent {
+  title(title: any) {
+    throw new Error('Method not implemented.');
+  }
   // dein Code
 }

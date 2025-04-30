@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ScoreService } from '../../services/score.service';
 import { CommonModule } from '@angular/common'; // für *ngIf, *ngFor, date
+import { AuthService } from '../../services/auth.service'; // Import AuthService
+import { Router } from '@angular/router'; // Import Router
 import { FormsModule } from '@angular/forms';   // für ngModel
 
 @Component({
@@ -18,8 +20,7 @@ export class GameComponent implements OnInit {
   gameOver = false;
   isHighscore = false;
   topScores: any[] = [];
-
-  constructor(private scoreService: ScoreService) {}
+  constructor(private scoreService: ScoreService, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.newRound();
@@ -104,4 +105,10 @@ export class GameComponent implements OnInit {
     this.score = 0;
     this.newRound();
   }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+  
 }

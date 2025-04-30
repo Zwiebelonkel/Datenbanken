@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router'; // für <router-outlet>
+import { RouterModule } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
   standalone: true,
-  imports: [RouterOutlet],  // <- Hier RouterOutlet einbinden
+  imports: [RouterModule],
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title(title: any) {
-    throw new Error('Method not implemented.');
+  constructor(private auth: AuthService) {}
+
+  logout() {
+    this.auth.logout();
   }
-  // dein Code
 }

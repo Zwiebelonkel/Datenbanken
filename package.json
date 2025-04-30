@@ -1,0 +1,12 @@
+{
+    "name": "zahlenraten-root",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+      "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix zahlenraten-game\""
+    },
+    "devDependencies": {
+      "concurrently": "^8.0.1"
+    }
+  }
+  

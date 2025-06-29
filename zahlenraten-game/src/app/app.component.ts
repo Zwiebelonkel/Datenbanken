@@ -9,6 +9,7 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.component.html',
 })
 export class AppComponent {
+  title: any;
   constructor(private auth: AuthService) {}
 
   logout() {

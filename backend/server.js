@@ -2,14 +2,18 @@ import express from 'express';
 import cors from 'cors';
 import mysql from 'mysql2';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import scoresRoutes from './routes/scores.js';
 
 const app = express();
+const PORT = 3000;
+const JWT_SECRET = 'dein_geheimes_token_passwort'; // Später in .env auslagern
 
 app.use(cors());
 app.use(express.json());
 app.use('/api/scores', scoresRoutes);
 
+// MySQL Verbindung
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -38,7 +42,7 @@ app.post('/api/register', async (req, res) => {
   );
 });
 
-// Login
+// Login mit JWT
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -52,12 +56,15 @@ app.post('/api/login', (req, res) => {
       const valid = await bcrypt.compare(password, results[0].password);
       if (!valid) return res.status(401).json({ message: 'Falsches Passwort' });
 
-      res.json({ success: true, message: 'Login erfolgreich' });
+      // JWT erzeugen
+      const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+
+      res.json({ success: true, token });
     }
   );
 });
 
-const PORT = 3000;
+// Server starten
 app.listen(PORT, () => {
-  console.log(`Server läuft auf http://localhost:${PORT}`);
+  console.log(`✅ Server läuft auf http://localhost:${PORT}`);
 });

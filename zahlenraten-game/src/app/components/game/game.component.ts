@@ -116,5 +116,10 @@ submitScore() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  goToLogin() {
+  this.router.navigate(['/login']);
+}
+
   
 }

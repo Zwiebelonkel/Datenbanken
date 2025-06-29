@@ -26,8 +26,9 @@ export class LoginComponent {
     }).subscribe({
       next: (res) => {
         if (res.success) {
-          // optional: Token speichern, z. B. localStorage
-          // localStorage.setItem('token', res.token || '');
+          if (res.token) {
+            localStorage.setItem('token', res.token);
+          }
           this.router.navigate(['/']); // z. B. Spielseite
         } else {
           this.error = true;

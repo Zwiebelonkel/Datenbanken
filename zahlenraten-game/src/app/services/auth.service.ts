@@ -4,13 +4,12 @@ import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedIn = false;
   private apiUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   login(username: string, password: string) {
-    return this.http.post(`${this.apiUrl}/login`, { username, password });
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { username, password });
   }
 
   register(username: string, password: string) {
@@ -18,7 +17,37 @@ export class AuthService {
   }
 
   logout() {
-    this.loggedIn = false;
+    localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getUsername(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.username;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  getRole(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.role;
+    } catch (e) {
+      return null;
+    }
   }
 }

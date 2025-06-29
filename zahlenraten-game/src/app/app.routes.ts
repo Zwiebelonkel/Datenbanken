@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components//game/login/login.component';
 import { GameComponent } from './components/game/game.component';
+import { LoginComponent } from './components/game/login/login.component';
+import { RegisterComponent } from './components/game/register/register.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', component: GameComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'game', component: GameComponent }
 ];

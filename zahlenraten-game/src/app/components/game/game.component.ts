@@ -16,11 +16,10 @@ export class GameComponent implements OnInit {
   num2 = 0;
   testNum = 0;
   score = 0;
-  username = '';
   gameOver = false;
   isHighscore = false;
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, private authService: AuthService, private router: Router) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.newRound();
@@ -88,12 +87,19 @@ export class GameComponent implements OnInit {
     });
   }
 
-  submitScore() {
-    this.scoreService.submitScore({ username: this.username, score: this.score }).subscribe(() => {
-      this.loadHighscores();
-      this.restart()
-    });
+submitScore() {
+  const username = this.authService.getUsername();
+  if (!username) {
+    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    return;
   }
+
+  this.scoreService.submitScore({ username, score: this.score }).subscribe(() => {
+    this.loadHighscores();
+    this.restart();
+  });
+}
+
 
   loadHighscores() {
     this.scoreService.getTopScores().subscribe(scores => {

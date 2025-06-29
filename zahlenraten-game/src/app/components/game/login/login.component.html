@@ -1,10 +1,12 @@
 <h2>Login</h2>
-<form (ngSubmit)="login()">
-  <input type="text" [(ngModel)]="username" name="username" placeholder="Benutzername" required />
-  <br />
-  <input type="password" [(ngModel)]="password" name="password" placeholder="Passwort" required />
-  <br />
-  <button type="submit">Login</button>
-</form>
+
+<input type="text" [(ngModel)]="username" placeholder="Benutzername">
+<input type="password" [(ngModel)]="password" placeholder="Passwort">
+<button (click)="login()">Login</button>
 
 <div *ngIf="error" style="color: red;">Login fehlgeschlagen</div>
+
+<p>
+  Noch kein Konto?
+  <a [routerLink]="['/register']" style="color: blue; cursor: pointer;">Registrieren</a>
+</p>

@@ -7,9 +7,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { GameComponent } from './components/game/game.component';
 import { routes } from './app.routes';
+import { RegisterComponent } from './components/game/register/register.component';
+import { LoginComponent } from './components/game/login/login.component';
 
 @NgModule({
   declarations: [
+    RegisterComponent,
+    LoginComponent,
     AppComponent,
     GameComponent
   ],

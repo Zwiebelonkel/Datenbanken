@@ -1,6 +1,14 @@
+<!-- Google Fonts (optional) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Eingeloggt-Anzeige -->
+<p *ngIf="authService.isLoggedIn()" style="font-weight: bold;">
+  👤 Eingeloggt als: {{ authService.getUsername() }}
+</p>
+
+<!-- Spiel läuft -->
 <div class="game-container" *ngIf="!gameOver">
   <div class="numbers">
     <p><strong>Zahl 1:</strong> {{ num1 }}</p>
@@ -16,18 +24,24 @@
   <p class="score">Punkte: <span>{{ score }}</span></p>
 </div>
 
+<!-- Spiel vorbei -->
 <div class="game-over" *ngIf="gameOver">
   <h2>🎯 Game Over!</h2>
   <p class="final-score">Dein Score: <strong>{{ score }}</strong></p>
 
-  <div *ngIf="isHighscore" class="highscore-form">
-    <input [(ngModel)]="username" placeholder="Dein Name" class="input" required>
-    <button class="btn" (click)="submitScore()" [disabled]="!username">Highscore speichern</button>
+  <!-- Nur zeigen, wenn es ein Highscore ist UND der Spieler eingeloggt -->
+  <div *ngIf="isHighscore && authService.isLoggedIn()" class="highscore-form">
+    <button class="btn" (click)="submitScore()">🏅 Highscore speichern</button>
+  </div>
+
+  <div *ngIf="!authService.isLoggedIn()" style="color: gray; font-size: 0.9em;">
+    <em>👉 <a routerLink="/login">Einloggen</a>, um Highscores zu speichern</em>
   </div>
 
   <button class="btn restart" (click)="restart()">🔄 Nochmal spielen</button>
 </div>
 
+<!-- Highscoreliste -->
 <div class="highscores">
   <h3>🏆 Top 10</h3>
   <ul>

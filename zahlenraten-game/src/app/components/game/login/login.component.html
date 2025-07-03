@@ -1,12 +1,14 @@
-<h2>Login</h2>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
 
-<input type="text" [(ngModel)]="username" placeholder="Benutzername">
-<input type="password" [(ngModel)]="password" placeholder="Passwort">
-<button (click)="login()">Login</button>
+<div class="form-container">
+  <h2>🔐 Login</h2>
 
-<div *ngIf="error" style="color: red;">Login fehlgeschlagen</div>
+  <input type="text" [(ngModel)]="username" placeholder="Benutzername">
+  <input type="password" [(ngModel)]="password" placeholder="Passwort">
+  <button (click)="login()">Einloggen</button>
 
-<p>
-  Noch kein Konto?
-  <a [routerLink]="['/register']" style="color: blue; cursor: pointer;">Registrieren</a>
-</p>
+  <div *ngIf="error" class="error-msg">Login fehlgeschlagen</div>
+
+  <p>Noch kein Konto? <a routerLink="/register">Hier registrieren</a></p>
+</div>
+

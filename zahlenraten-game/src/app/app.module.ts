@@ -9,13 +9,15 @@ import { GameComponent } from './components/game/game.component';
 import { routes } from './app.routes';
 import { RegisterComponent } from './components/game/register/register.component';
 import { LoginComponent } from './components/game/login/login.component';
+import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
 
 @NgModule({
   declarations: [
     RegisterComponent,
     LoginComponent,
     AppComponent,
-    GameComponent
+    GameComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,

@@ -118,7 +118,15 @@ submitScore() {
 
   goToLogin() {
   this.router.navigate(['/login']);
-}
+  }
+
+  admin() {
+    if (this.authService.getRole() === 'admin') {
+      this.router.navigate(['/admin']);
+    } else {
+      console.warn('Nur Admins können diese Seite aufrufen.');
+    }
+  }
 
   
 }

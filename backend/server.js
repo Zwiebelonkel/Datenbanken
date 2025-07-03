@@ -42,7 +42,7 @@ app.post('/api/register', async (req, res) => {
   );
 });
 
-// Login mit JWT
+// Login mit JWT inkl. ROLE
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -53,18 +53,63 @@ app.post('/api/login', (req, res) => {
       if (err) return res.status(500).json({ message: 'Login-Fehler' });
       if (results.length === 0) return res.status(401).json({ message: 'Benutzer nicht gefunden' });
 
-      const valid = await bcrypt.compare(password, results[0].password);
+      const user = results[0];
+      const valid = await bcrypt.compare(password, user.password);
       if (!valid) return res.status(401).json({ message: 'Falsches Passwort' });
 
-      // JWT erzeugen
-      const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+      // 🛠 JWT erzeugen – MIT Rolle!
+      const token = jwt.sign(
+        { username: user.username, role: user.role },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+      );
 
       res.json({ success: true, token });
     }
   );
 });
 
+
+// Benutzer abrufen
+app.get('/api/users', (req, res) => {
+  db.query('SELECT id, username FROM users', (err, results) => {
+    if (err) return res.status(500).json({ error: 'DB Fehler beim Laden der Benutzer' });
+    res.json(results);
+  });
+});
+
+// Benutzer löschen
+app.delete('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  db.query('DELETE FROM users WHERE id = ?', [id], (err) => {
+    if (err) return res.status(500).json({ error: 'Fehler beim Löschen des Benutzers' });
+    res.sendStatus(200);
+  });
+});
+
+// Alle Highscores abrufen
+app.get('/api/scores/all', (req, res) => {
+  db.query('SELECT * FROM scores', (err, results) => {
+    if (err) return res.status(500).json({ error: 'Fehler beim Laden der Scores' });
+    res.json(results);
+  });
+});
+
+// Highscore löschen
+app.delete('/api/scores/:id', (req, res) => {
+  const id = req.params.id;
+  db.query('DELETE FROM scores WHERE id = ?', [id], (err) => {
+    if (err) return res.status(500).json({ error: 'Fehler beim Löschen des Scores' });
+    res.sendStatus(200);
+  });
+});
+
+
 // Server starten
 app.listen(PORT, () => {
   console.log(`✅ Server läuft auf http://localhost:${PORT}`);
+  const password = 'admin'; // oder dein gewünschtes Passwort
+bcrypt.hash(password, 10).then(hash => {
+  console.log('Gehashter Wert:', hash);
+});
 });

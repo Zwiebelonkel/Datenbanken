@@ -6,13 +6,16 @@
 <nav style="display: flex; gap: 10px; margin-bottom: 20px;">
   <button *ngIf="!authService.isLoggedIn()" (click)="goToLogin()">Login</button>
   <button *ngIf="authService.isLoggedIn()" (click)="logout()">Logout</button>
+  <button *ngIf="authService.isLoggedIn() && authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">Manage</button>
 </nav>
 
 <!-- Eingeloggt-Anzeige -->
 <p *ngIf="authService.isLoggedIn()" style="font-weight: bold;">
   👤 Eingeloggt als: {{ authService.getUsername() }}
-</p>
+  <br>
+    Role: {{ authService.getRole() }}
 
+</p>
 <!-- Spiel läuft -->
 <div class="game-container" *ngIf="!gameOver">
   <div class="numbers">

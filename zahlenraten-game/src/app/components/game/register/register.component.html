@@ -1,11 +1,14 @@
-<h2>Registrieren</h2>
-<form (ngSubmit)="register()">
-  <input type="text" [(ngModel)]="username" name="username" placeholder="Benutzername" required />
-  <br />
-  <input type="password" [(ngModel)]="password" name="password" placeholder="Passwort" required />
-  <br />
-  <button type="submit">Registrieren</button>
-</form>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
 
-<div *ngIf="success" style="color: green;">Registrierung erfolgreich! Du kannst dich jetzt einloggen.</div>
-<div *ngIf="error" style="color: red;">{{ errorMessage }}</div>
+<div class="form-container">
+  <h2>📝 Registrieren</h2>
+
+  <input type="text" [(ngModel)]="username" placeholder="Benutzername">
+  <input type="password" [(ngModel)]="password" placeholder="Passwort">
+  <button (click)="register()">Registrieren</button>
+
+  <div *ngIf="success" class="success-msg">Registrierung erfolgreich 🎉</div>
+  <div *ngIf="error" class="error-msg">{{ errorMessage }}</div>
+
+  <p>Schon registriert? <a routerLink="/login">Hier einloggen</a></p>
+</div>

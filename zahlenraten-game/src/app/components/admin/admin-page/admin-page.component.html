@@ -1,0 +1,27 @@
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+<div class="admin-container">
+  <h1>🔧 Admin Panel</h1>
+
+  <!-- Benutzerverwaltung -->
+  <section class="admin-section">
+    <h2>👥 Benutzerverwaltung</h2>
+    <ul class="admin-list">
+      <li *ngFor="let user of users">
+        <span class="username">{{ user.username }}</span>
+        <button class="delete-btn" (click)="deleteUser(user.id)">❌ Löschen</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Highscores -->
+  <section class="admin-section">
+    <h2>🏆 Highscores verwalten</h2>
+    <ul class="admin-list">
+      <li *ngFor="let score of scores">
+        <span class="score-entry">{{ score.username }} – {{ score.score }} Punkte</span>
+        <button class="delete-btn" (click)="deleteScore(score.id)">❌ Löschen</button>
+      </li>
+    </ul>
+  </section>
+</div>

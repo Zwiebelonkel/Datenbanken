@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router'; // <--- HINZUFÜGEN
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
   imports: [FormsModule, CommonModule, RouterModule]
 })
 

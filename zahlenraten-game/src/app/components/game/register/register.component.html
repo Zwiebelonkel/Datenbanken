@@ -5,7 +5,7 @@
 
   <input type="text" [(ngModel)]="username" placeholder="Benutzername">
   <input type="password" [(ngModel)]="password" placeholder="Passwort">
-  <button (click)="register()">Registrieren</button>
+  <button (click)="register()" [disabled]="!username || !password">Registrieren</button>
 
   <div *ngIf="success" class="success-msg">Registrierung erfolgreich 🎉</div>
   <div *ngIf="error" class="error-msg">{{ errorMessage }}</div>

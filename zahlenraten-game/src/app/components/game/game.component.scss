@@ -88,4 +88,47 @@
   .highscores li span {
     font-weight: bold;
   }
+
+  .topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem auto 2rem;
+  max-width: 900px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  color: #333;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.topbar-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.topbar-buttons button {
+  background-color: #4285f4;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.topbar-buttons button:hover {
+  background-color: #3367d6;
+}
+
   

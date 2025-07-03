@@ -34,11 +34,12 @@ export class AdminPageComponent implements OnInit {
     });
   }
 
-  deleteUser(id: number) {
-    this.http.delete(`http://localhost:3000/api/users/${id}`).subscribe(() => {
-      this.loadUsers();
-    });
-  }
+deleteUser(id: number) {
+  this.http.delete(`http://localhost:3000/api/users/${id}`).subscribe(() => {
+    this.users = this.users.filter(user => user.id !== id);
+  });
+}
+
 
   deleteScore(id: number) {
     this.http.delete(`http://localhost:3000/api/scores/${id}`).subscribe(() => {

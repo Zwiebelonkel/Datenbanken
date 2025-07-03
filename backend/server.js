@@ -83,9 +83,10 @@ app.delete('/api/users/:id', (req, res) => {
   const id = req.params.id;
   db.query('DELETE FROM users WHERE id = ?', [id], (err) => {
     if (err) return res.status(500).json({ error: 'Fehler beim Löschen des Benutzers' });
-    res.sendStatus(200);
+    res.status(200).json({ success: true }); // ✅
   });
 });
+
 
 // Alle Highscores abrufen
 app.get('/api/scores/all', (req, res) => {
@@ -100,9 +101,10 @@ app.delete('/api/scores/:id', (req, res) => {
   const id = req.params.id;
   db.query('DELETE FROM scores WHERE id = ?', [id], (err) => {
     if (err) return res.status(500).json({ error: 'Fehler beim Löschen des Scores' });
-    res.sendStatus(200);
+    res.status(200).json({ success: true }); // ✅
   });
 });
+
 
 
 // Server starten

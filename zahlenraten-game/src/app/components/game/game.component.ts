@@ -16,6 +16,7 @@ export class GameComponent implements OnInit {
   num2 = 0;
   testNum = 0;
   score = 0;
+  lives = 3;
   gameOver = false;
   isHighscore = false;
   topScores: any[] = [];
@@ -51,10 +52,15 @@ export class GameComponent implements OnInit {
     this.showTestNum();
 
     if (answer === correct) {
-      this.score++;
+      this.score += 1 * this.lives;
       this.flashBackground(resultElement, 'green');
       setTimeout(() => this.newRound(), 1000); // Wait 1 second before starting a new round
+    } else if (this.lives > 1) {
+      this.lives--;
+      this.flashBackground(resultElement, 'red');
+      setTimeout(() => this.newRound(), 1000); // Wait 1 second before ending the game
     } else {
+      this.lives = 0;
       this.flashBackground(resultElement, 'red');
       setTimeout(() => this.endGame(), 1000); // Wait 1 second before ending the game
     }

@@ -114,6 +114,7 @@ submitScore() {
   }
 
   restart() {
+    this.lives = 3;
     this.score = 0;
     this.newRound();
   }

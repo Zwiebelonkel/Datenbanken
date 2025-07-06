@@ -108,7 +108,10 @@ app.delete('/api/scores/:id', (req, res) => {
 // GET: Alle Achievements eines Users
 const ALL_ACHIEVEMENTS = [
   { name: 'First Game', description: 'Dein erstes Spiel!' },
+  { name: 'Newbie', description: 'Du hast 10 Punkte erreicht!' },
   { name: 'Glückspilz', description: 'Du hast 100 Punkte erreicht!' },
+  { name: 'Zahlenmeister', description: 'Du hast 1000 Punkte erreicht!' },
+  { name: 'Strategieprofi', description: 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren' },
   // Weitere hier ergänzen
 ];
 

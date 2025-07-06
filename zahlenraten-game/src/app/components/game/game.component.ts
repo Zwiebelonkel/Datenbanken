@@ -21,6 +21,8 @@ export class GameComponent implements OnInit {
   hasPlayedYet: boolean = false;
   gameOver = false;
   isHighscore = false;
+  consecutiveWins = 0;
+
   topScores: any[] = [];
   constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient) {}
 
@@ -56,12 +58,15 @@ export class GameComponent implements OnInit {
     if (answer === correct) {
       this.score += 1 * this.lives;
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
+      this.consecutiveWins++;
+
       setTimeout(() => this.newRound(), 1000); // Wait 1 second before starting a new round
     } else if (this.lives > 1) {
       this.lives--;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.newRound(), 1000); // Wait 1 second before ending the game
     } else {
+      this.consecutiveWins = 0;
       this.lives = 0;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.endGame(), 1000); // Wait 1 second before ending the game
@@ -162,25 +167,36 @@ unlockAchievement(name: string) {
 
 
 checkForAchievements() {
-  if (this.score >= 10) {
-    console.log('Achievement unlocked: Glückspilz');
-    this.unlockAchievement('Glückspilz');
-  }
   if (!this.hasPlayedYet) {
-    console.log('Achievement unlocked: First Game');
     this.unlockAchievement('First Game');
     this.hasPlayedYet = true;
   }
+  if (this.score >= 10) {
+    this.unlockAchievement('Newbie');
+  }
+  if (this.score >= 100) {
+    this.unlockAchievement('Glückspilz');
+  }
+  if (this.score >= 1000) {
+    this.unlockAchievement('Zahlenmeister');
+  }
+  if (this.consecutiveWins >= 5) {
+    this.unlockAchievement('Strategieprofi');
+  }
 }
+
 
 getAchievementDescription(name: string): string {
   const descriptions: Record<string, string> = {
     'First Game': 'Dein erstes Spiel!',
-    'Glückspilz': 'Du hast 100 Punkte erreicht!'
-    // Weitere Achievements hier hinzufügen
+    'Newbie': 'Du hast 10 Punkte erreicht!',
+    'Glückspilz': 'Du hast 100 Punkte erreicht!',
+    'Zahlenmeister': 'Du hast 1000 Punkte erreicht!',
+    'Strategieprofi': 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren'
   };
   return descriptions[name] || 'Erfolg freigeschaltet';
 }
+
 
 
 }

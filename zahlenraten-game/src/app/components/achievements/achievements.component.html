@@ -1,0 +1,12 @@
+<div class="achievement-container">
+  <h2>🎖️ Erfolge</h2>
+  <ul>
+    <li *ngFor="let ach of achievements" [class.locked]="!ach.unlocked">
+      <span class="icon">{{ ach.unlocked ? '✅' : '🔒' }}</span>
+      <div>
+        <p><strong>{{ ach.name }}</strong></p>
+        <p>{{ ach.description }}</p>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -11,6 +11,10 @@
   <div class="topbar-buttons">
     <button (click)="logout()">🚪 Logout</button>
     <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Manage</button>
+    <nav style="display: flex; gap: 10px; margin-bottom: 20px;">
+  <button (click)="goToAchievements()">🎖️ Erfolge</button>
+</nav>
+
   </div>
 </div>
 

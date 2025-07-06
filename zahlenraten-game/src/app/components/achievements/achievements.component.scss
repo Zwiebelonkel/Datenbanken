@@ -1,0 +1,40 @@
+.achievement-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  font-family: 'Nunito', sans-serif;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+
+    &.locked {
+      opacity: 0.4;
+      filter: grayscale(1);
+    }
+
+    .icon {
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { routes } from './app.routes';
 import { RegisterComponent } from './components/game/register/register.component';
 import { LoginComponent } from './components/game/login/login.component';
 import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
+import { AchievementsComponent } from './components/achievements/achievements.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AdminPageComponent } from './components/admin/admin-page/admin-page.com
     LoginComponent,
     AppComponent,
     GameComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    AchievementsComponent
   ],
   imports: [
     BrowserModule,

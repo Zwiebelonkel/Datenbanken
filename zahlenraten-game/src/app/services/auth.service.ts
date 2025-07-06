@@ -39,6 +39,18 @@ export class AuthService {
     }
   }
 
+  getUserId(): number | null {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.id;
+  } catch (e) {
+    return null;
+  }
+}
+
+
   getRole(): string | null {
     const token = localStorage.getItem('token');
     if (!token) return null;

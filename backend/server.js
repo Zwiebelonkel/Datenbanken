@@ -59,7 +59,7 @@ app.post('/api/login', (req, res) => {
 
       // 🛠 JWT erzeugen – MIT Rolle!
       const token = jwt.sign(
-        { username: user.username, role: user.role },
+        { id: user.id, username: user.username, role: user.role },
         JWT_SECRET,
         { expiresIn: '1h' }
       );
@@ -104,6 +104,78 @@ app.delete('/api/scores/:id', (req, res) => {
     res.status(200).json({ success: true }); // ✅
   });
 });
+
+// GET: Alle Achievements eines Users
+const ALL_ACHIEVEMENTS = [
+  { name: 'First Game', description: 'Dein erstes Spiel!' },
+  { name: 'Glückspilz', description: 'Du hast 100 Punkte erreicht!' },
+  // Weitere hier ergänzen
+];
+
+app.get('/api/achievements', (req, res) => {
+  const username = req.query.username;
+  if (!username) return res.status(400).json({ error: 'Kein Benutzername angegeben' });
+
+  db.query(`
+    SELECT a.name FROM achievements a
+    JOIN users u ON u.id = a.user_id
+    WHERE LOWER(u.username) = LOWER(?)
+  `, [username], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Fehler beim Laden der Achievements' });
+
+    const unlockedNames = results.map(r => r.name);
+    const merged = ALL_ACHIEVEMENTS.map(ach => ({
+      ...ach,
+      unlocked: unlockedNames.includes(ach.name)
+    }));
+
+    res.json(merged);
+  });
+});
+
+// Achievement freischalten
+app.post('/api/unlock', (req, res) => {
+  const { userId, name, description } = req.body;
+
+  if (!userId || !name || !description) {
+    return res.status(400).json({ message: 'Fehlende Daten' });
+  }
+
+  // Gibt es diesen Erfolg schon?
+  db.query(
+    'SELECT * FROM achievements WHERE user_id = ? AND name = ?',
+    [userId, name],
+    (err, rows) => {
+      if (err) {
+        console.error('Fehler beim SELECT:', err);
+        return res.status(500).send('Serverfehler');
+      }
+
+      if (rows.length === 0) {
+        // Noch nicht vorhanden: einfügen
+        db.query(
+          'INSERT INTO achievements (user_id, name, description, unlocked) VALUES (?, ?, ?, 1)',
+          [userId, name, description],
+          (err) => {
+            if (err) {
+              console.error('Fehler beim INSERT:', err);
+              return res.status(500).send('Serverfehler');
+            }
+            console.log(`✅ Achievement "${name}" für User ${userId} gespeichert.`);
+            return res.status(200).send('OK');
+          }
+        );
+      } else {
+        console.log(`⚠️ Achievement "${name}" für User ${userId} bereits vorhanden.`);
+        return res.status(200).send('OK');
+      }
+    }
+  );
+});
+
+
+
+
 
 
 

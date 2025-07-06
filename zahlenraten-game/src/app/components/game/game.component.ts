@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'; // für *ngIf, *ngFor, date
 import { AuthService } from '../../services/auth.service'; // Import AuthService
 import { Router } from '@angular/router'; // Import Router
 import { FormsModule } from '@angular/forms';   // für ngModel
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-game',
@@ -17,10 +18,11 @@ export class GameComponent implements OnInit {
   testNum = 0;
   score = 0;
   lives = 3;
+  hasPlayedYet: boolean = false;
   gameOver = false;
   isHighscore = false;
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
     this.newRound();
@@ -64,6 +66,7 @@ export class GameComponent implements OnInit {
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.endGame(), 1000); // Wait 1 second before ending the game
     }
+    this.checkForAchievements()
   }
 
   showTestNum() {
@@ -139,6 +142,45 @@ submitScore() {
   return Array(this.lives).fill(0);
 }
 
+goToAchievements() {
+  this.router.navigate(['/achievements']);
+}
 
-  
+unlockAchievement(name: string) {
+  this.http.post('http://localhost:3000/api/unlock', {
+    userId: this.authService.getUserId(),
+    name: name,
+    description: this.getAchievementDescription(name)  // 👈 genau hier!
+  }, { responseType: 'text' }) // 👈 wichtig für Fehlervermeidung
+  .subscribe({
+    next: () => console.log('Achievement unlocked:', name),
+    error: (err) => console.error('Fehler beim Unlock:', err)
+  });
+}
+
+
+
+
+checkForAchievements() {
+  if (this.score >= 10) {
+    console.log('Achievement unlocked: Glückspilz');
+    this.unlockAchievement('Glückspilz');
+  }
+  if (!this.hasPlayedYet) {
+    console.log('Achievement unlocked: First Game');
+    this.unlockAchievement('First Game');
+    this.hasPlayedYet = true;
+  }
+}
+
+getAchievementDescription(name: string): string {
+  const descriptions: Record<string, string> = {
+    'First Game': 'Dein erstes Spiel!',
+    'Glückspilz': 'Du hast 100 Punkte erreicht!'
+    // Weitere Achievements hier hinzufügen
+  };
+  return descriptions[name] || 'Erfolg freigeschaltet';
+}
+
+
 }

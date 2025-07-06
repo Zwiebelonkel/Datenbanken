@@ -131,4 +131,30 @@
   background-color: #3367d6;
 }
 
+.hearts {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;     // zentriert horizontal
+  align-items: center;         // zentriert vertikal (falls nötig)
+  gap: 0.4rem;                 // Abstand zwischen Herzen
+}
+
+.hearts span {
+  display: inline-block;
+  transform-origin: center;
+  animation: pulse 0.8s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+
+
   

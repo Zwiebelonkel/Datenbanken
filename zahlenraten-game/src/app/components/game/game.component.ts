@@ -53,15 +53,15 @@ export class GameComponent implements OnInit {
 
     if (answer === correct) {
       this.score += 1 * this.lives;
-      this.flashBackground(resultElement, 'green');
+      this.flashBackground(resultElement, 'rgb(177, 255, 168)');
       setTimeout(() => this.newRound(), 1000); // Wait 1 second before starting a new round
     } else if (this.lives > 1) {
       this.lives--;
-      this.flashBackground(resultElement, 'red');
+      this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.newRound(), 1000); // Wait 1 second before ending the game
     } else {
       this.lives = 0;
-      this.flashBackground(resultElement, 'red');
+      this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.endGame(), 1000); // Wait 1 second before ending the game
     }
   }
@@ -78,8 +78,8 @@ export class GameComponent implements OnInit {
 
   flashBackground(element: HTMLElement, color: string) {
     if (element) {
-      console.log("Flash: "+color + "on " + element.className);
-      element.style.backgroundColor = color + ' !important';
+      console.log("Flash: "+color + " on " + element.className);
+      element.style.backgroundColor = color;
             setTimeout(() => {
         element.style.backgroundColor = '';
       }, 1000); // Reset background color after 0.5 seconds
@@ -134,6 +134,11 @@ submitScore() {
       console.warn('Nur Admins können diese Seite aufrufen.');
     }
   }
+
+  getLivesArray(): number[] {
+  return Array(this.lives).fill(0);
+}
+
 
   
 }

@@ -94,12 +94,37 @@ export class GameComponent implements OnInit {
     }
   }
 
-  endGame() {
-    this.gameOver = true;
-    this.scoreService.isHighscore(this.score).subscribe(res => {
-      this.isHighscore = res.isHighscore;
-    });
+endGame() {
+  const username = this.authService.getUsername();
+  if (!username) {
+    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    return;
   }
+
+  this.gameOver = true;
+
+  // 1. total_score aktualisieren
+  this.scoreService.updateTotalScore({ username, score: this.score }).subscribe({
+    next: () => console.log('✅ total_score aktualisiert'),
+    error: err => console.error('❌ Fehler beim total_score:', err)
+  });
+
+  // 2. Score immer speichern (nicht nur wenn Highscore)
+  this.scoreService.submitScore({ username, score: this.score }).subscribe({
+    next: () => {
+      this.loadHighscores(); // danach neu laden
+      console.log('✅ Score gespeichert');
+    },
+    error: err => console.error('❌ Fehler beim Speichern des Scores:', err)
+  });
+
+  // 3. Highscore prüfen (für Anzeige oder Animation etc.)
+  this.scoreService.isHighscore(this.score).subscribe(res => {
+    this.isHighscore = res.isHighscore;
+  });
+}
+
+
 
 submitScore() {
   const username = this.authService.getUsername();
@@ -180,7 +205,7 @@ checkForAchievements() {
   if (this.score >= 1000) {
     this.unlockAchievement('Zahlenmeister');
   }
-  if (this.consecutiveWins >= 5) {
+  if (this.consecutiveWins >= 10) {
     this.unlockAchievement('Strategieprofi');
   }
 }
@@ -192,7 +217,7 @@ getAchievementDescription(name: string): string {
     'Newbie': 'Du hast 10 Punkte erreicht!',
     'Glückspilz': 'Du hast 100 Punkte erreicht!',
     'Zahlenmeister': 'Du hast 1000 Punkte erreicht!',
-    'Strategieprofi': 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren'
+    'Strategieprofi': 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren'
   };
   return descriptions[name] || 'Erfolg freigeschaltet';
 }

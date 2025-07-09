@@ -27,4 +27,8 @@ export class ScoreService {
   isHighscore(score: number): Observable<{ isHighscore: boolean }> {
     return this.http.post<{ isHighscore: boolean }>(`${this.apiUrl}/isHighscore`, { score });
   }
+
+  updateTotalScore(scoreData: { username: string; score: number }) {
+    return this.http.post(`${this.apiUrl}/updateTotalScore`, scoreData);
+  }
 }

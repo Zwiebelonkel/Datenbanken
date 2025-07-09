@@ -17,6 +17,28 @@ router.post('/submit', (req, res) => {
   );
 });
 
+router.post('/updateTotalScore', (req, res) => {
+  const { username, score } = req.body;
+
+  if (!username || typeof score !== 'number') {
+    return res.status(400).json({ message: 'Ungültige Eingaben' });
+  }
+
+  db.query(
+    'UPDATE users SET total_score = total_score + ? WHERE LOWER(username) = LOWER(?)',
+    [score, username],
+    (err, result) => {
+      if (err) {
+        console.error('❌ Fehler beim total_score:', err);
+        return res.status(500).json({ message: 'total_score Update fehlgeschlagen' });
+      }
+      console.log(`✅ total_score für ${username} um ${score} erhöht.`);
+      res.json({ success: true });
+    }
+  );
+});
+
+
 // Top 10 Scores abrufen
 router.get('/top', (req, res) => {
   db.query(

@@ -78,4 +78,4 @@ router.get('/userTotalScore/:username', (req, res) => {
 });
 
 
-module.exports = router;
+export default router;

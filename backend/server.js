@@ -3,8 +3,9 @@ import cors from 'cors';
 import mysql from 'mysql2';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import scoresRoutes from './routes/scores.js' assert { type: "commonjs" }; // ✅ funktioniert bei CJS
-import profileRoutes from './routes/profile.js' assert { type: "commonjs" }; // ✅ funktioniert bei CJS
+
+import scoresRoutes from './routes/scores.js';
+import profileRoutes from './routes/profile.js';
 require('dotenv').config();
 
 const app = express();

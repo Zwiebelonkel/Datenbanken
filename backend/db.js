@@ -1,3 +1,4 @@
+// db.js
 import mysql from 'mysql2';
 
 const pool = mysql.createPool({
@@ -9,4 +10,4 @@ const pool = mysql.createPool({
   connectionLimit: 10,
 });
 
-export default pool; // ✅ wichtig für import db from '../db.js'
+export default pool; // ✅

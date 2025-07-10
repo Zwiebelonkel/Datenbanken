@@ -5,9 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import scoresRoutes from './routes/scores.js';
 import profileRoutes from './routes/profile.js';
-import dotenv from 'dotenv';
-
-dotenv.config(); // Lädt Umgebungsvariablen aus .env Datei
+require('dotenv').config();
 
 const app = express();
 const PORT = 3000;

@@ -5,13 +5,14 @@ import { AuthService } from '../../services/auth.service'; // Import AuthService
 import { Router } from '@angular/router'; // Import Router
 import { FormsModule } from '@angular/forms';   // für ngModel
 import { HttpClient } from '@angular/common/http';
+import { DarkModeService } from '../../services/dark.service';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
   imports: [CommonModule, FormsModule], // <- Wichtig! Hier die Module einbinden
-  // encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None
 })
 export class GameComponent implements OnInit {
   num1 = 0;
@@ -27,12 +28,16 @@ export class GameComponent implements OnInit {
 
 
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService) {}
 
   ngOnInit() {
     this.newRound();
     this.loadHighscores();
   }
+
+  isDarkMode(): boolean {
+  return this.darkModeService.isDarkMode();
+}
 
   newRound() {
     this.num1 = this.getRandomNumber();
@@ -63,16 +68,16 @@ export class GameComponent implements OnInit {
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
       this.consecutiveWins++;
 
-      setTimeout(() => this.newRound(), 1000); // Wait 1 second before starting a new round
+      setTimeout(() => this.newRound(), 500); // Wait 1 second before starting a new round
     } else if (this.lives > 1) {
       this.lives--;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-      setTimeout(() => this.newRound(), 1000); // Wait 1 second before ending the game
+      setTimeout(() => this.newRound(), 500); // Wait 1 second before ending the game
     } else {
       this.consecutiveWins = 0;
       this.lives = 0;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-      setTimeout(() => this.endGame(), 1000); // Wait 1 second before ending the game
+      setTimeout(() => this.endGame(), 500); // Wait 1 second before ending the game
     }
     this.checkForAchievements()
   }
@@ -83,7 +88,7 @@ export class GameComponent implements OnInit {
       testNumElement.style.visibility = 'visible';
       setTimeout(() => {
         testNumElement.style.visibility = 'hidden';
-      }, 1000); // Hide after 1 second
+      }, 500); // Hide after 1 second
     }
   }
 
@@ -93,7 +98,7 @@ export class GameComponent implements OnInit {
       element.style.backgroundColor = color;
             setTimeout(() => {
         element.style.backgroundColor = '';
-      }, 1000); // Reset background color after 0.5 seconds
+      }, 500); // Reset background color after 0.5 seconds
     }
   }
 

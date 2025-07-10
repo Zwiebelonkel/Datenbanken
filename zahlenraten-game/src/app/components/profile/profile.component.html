@@ -1,11 +1,11 @@
 <div class="profile-container">
   <div class="profile-avatar">
-    <img src="../../../assets/profile2.png" alt="Profilbild" />
-    <h2>Profil</h2>
+    <img src="assets/profile.png" alt="Profilbild" />
+    <h2>{{username}}</h2>
   </div>
 
   <div class="profile-card">
-    <h3>Statistiken</h3>
+    <h3>📊 Statistiken</h3>
     <div class="stat-row">
       <span>🏆 Punkte</span>
       <span>{{ totalScore }}</span>
@@ -18,5 +18,18 @@
       <span>😊 Erfolge</span>
       <span>{{ unlockedAchievements }}</span>
     </div>
+  </div>
+
+  <div class="password-change-box">
+    <h3>🔐 Passwort ändern</h3>
+
+    <input [(ngModel)]="currentPassword" type="password" placeholder="Aktuelles Passwort" />
+    <input [(ngModel)]="newPassword" type="password" placeholder="Neues Passwort" />
+    <input [(ngModel)]="repeatPassword" type="password" placeholder="Neues Passwort wiederholen" />
+
+    <button (click)="changePassword()">Ändern</button>
+
+    <div *ngIf="pwChangeSuccess" class="success-msg">✅ Passwort erfolgreich geändert</div>
+    <div *ngIf="!pwChangeSuccess" class="error-msg">{{ pwChangeMsg }}</div>
   </div>
 </div>

@@ -210,6 +210,35 @@ app.get('/api/profile', (req, res) => {
   });
 });
 
+// PATCH /api/users/password
+app.patch('/api/users/password', (req, res) => {
+  const { username, currentPassword, newPassword } = req.body;
+
+  db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+    if (err || results.length === 0) {
+      return res.status(400).json({ message: 'Benutzer nicht gefunden' });
+    }
+
+    const user = results[0];
+
+    bcrypt.compare(currentPassword, user.password, (errCompare, isMatch) => {
+      if (errCompare || !isMatch) {
+        return res.status(403).json({ message: 'Falsches Passwort' });
+      }
+
+      bcrypt.hash(newPassword, 10, (errHash, hashedPassword) => {
+        if (errHash) return res.status(500).json({ message: 'Fehler beim Verschlüsseln' });
+
+        db.query('UPDATE users SET password = ? WHERE username = ?', [hashedPassword, username], (errUpdate) => {
+          if (errUpdate) return res.status(500).json({ message: 'Fehler beim Ändern' });
+          res.json({ message: 'Passwort erfolgreich geändert' });
+        });
+      });
+    });
+  });
+});
+
+
 
 
 

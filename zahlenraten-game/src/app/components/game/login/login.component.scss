@@ -44,10 +44,16 @@ button {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease;
+  transition: 0.2s;
+
 }
 
 button:hover {
   background-color: #45a049;
+  transform: scale(1.1);
+  transition: 0.2s;
+
+
 }
 
 a {

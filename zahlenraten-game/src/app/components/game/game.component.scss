@@ -1,118 +1,133 @@
+body.dark-mode {
+  background-color: #121212;
+  color: #f1f1f1;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .game-container, .game-over, .highscores {
-    max-width: 500px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  :host {
-    font-family: "Nunito", sans-serif;
-  }
-  
-  .numbers p {
-    font-size: 1.2rem;
-    margin: 0.5rem 0;
-  }
-  
-  .buttons {
-    margin: 1.5rem 0;
-    transition: 0.2s;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
-  }
-  
-  .btn {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    margin: 0.5rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s;
-    transition: 0.2s;
+body.dark-mode .game-container,
+body.dark-mode .game-over,
+body.dark-mode .highscores {
+  background: #1f1f1f;
+  color: #f1f1f1;
+}
 
-  }
+.numbers p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
 
-  #finalNumber{
-    visibility: hidden;
-  }
-  
-  .btn:hover {
-    background: #45a049;
-    scale: 1.1;
-    transition: 0.2s;
-  }
-    .btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
-  .restart {
-    background: #2196F3;
-  }
-  
-  .restart:hover {
-    background: #1e88e5;
-  }
-  
-  .score, .final-score {
-    font-size: 1.3rem;
-    margin-top: 1rem;
-  }
-  
-  .input {
-    width: 80%;
-    padding: 0.6rem;
-    margin-top: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-  }
-  
-  .highscore-form {
-    margin: 1.5rem 0;
-  }
-  
-  .highscores ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 1rem;
-  }
-  
-  .highscores li {
-    background: #fff;
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
-    font-size: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.2s;
-  }
+.buttons {
+  margin: 1.5rem 0;
+  transition: 0.2s;
+}
 
-    .highscores li:hover {
-    background: #d8d8d8;
-    scale: 1.02;
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
-    font-size: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.2s;
-  }
-  
-  .highscores li span {
-    font-weight: bold;
-  }
+.btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  margin: 0.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background: #45a049;
+  transform: scale(1.1);
+}
+
+.btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.restart {
+  background: #2196F3;
+}
+
+.restart:hover {
+  background: #1e88e5;
+}
+
+.score, .final-score {
+  font-size: 1.3rem;
+  margin-top: 1rem;
+}
+
+.input {
+  width: 80%;
+  padding: 0.6rem;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #333;
+}
+
+body.dark-mode .input {
+  background: #2c2c2c;
+  color: #f1f1f1;
+  border: 1px solid #555;
+}
+
+.highscore-form {
+  margin: 1.5rem 0;
+}
+
+.highscores ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.highscores li {
+  background: #fff;
+  padding: 0.8rem;
+  border-bottom: 1px solid #eee;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s ease;
+}
+
+.highscores li:hover {
+  background: #d8d8d8;
+  transform: scale(1.02);
+}
+
+.highscores li span {
+  font-weight: bold;
+}
+
+body.dark-mode .highscores li {
+  background: #2c2c2c;
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode .highscores li:hover {
+  background: #3a3a3a;
+}
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: #ffffffcc; /* leicht transparentes Weiß */
+  background: #ffffffcc;
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: space-between;
@@ -120,10 +135,16 @@
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  font-family: 'Nunito', sans-serif;
   font-size: 1rem;
   color: #333;
   border-radius: 0 0 12px 12px;
+  transition: background 0.3s ease;
+}
+
+body.dark-mode .topbar {
+  background: #1a1a1acc;
+  color: #f1f1f1;
+  border-bottom: 1px solid #444;
 }
 
 .user-info {
@@ -138,8 +159,6 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  transition: 0.2s;
-
 }
 
 .topbar-buttons button {
@@ -151,27 +170,24 @@
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: all 0.2s ease;
 }
 
 .topbar-buttons button:hover {
   background-color: #3367d6;
-  scale: 1.05;
-  transition: 0.2s;
-
+  transform: scale(1.05);
 }
-
 
 .hearts {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   display: flex;
-  justify-content: center;     // zentriert horizontal
-  align-items: center;         // zentriert vertikal (falls nötig)
-  gap: 0.4rem;                 // Abstand zwischen Herzen
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .hearts span {
@@ -179,6 +195,10 @@
   transform-origin: center;
   animation: pulse 0.8s infinite;
 }
+
+  #finalNumber{
+    visibility: hidden;
+  }
 
 @keyframes pulse {
   0%, 100% {
@@ -188,8 +208,3 @@
     transform: scale(0.9);
   }
 }
-
-
-
-
-  

@@ -16,6 +16,7 @@ app.use(express.json());
 app.use('/api/scores', scoresRoutes);
 app.use('/api/profile', profileRoutes);
 
+require('dotenv').config();
 // MySQL Verbindung
 const db = mysql.createConnection({
   host: 'localhost',

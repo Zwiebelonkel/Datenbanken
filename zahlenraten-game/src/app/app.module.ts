@@ -11,6 +11,7 @@ import { RegisterComponent } from './components/game/register/register.component
 import { LoginComponent } from './components/game/login/login.component';
 import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AchievementsComponent } from './components/achievements/achievements.co
     AppComponent,
     GameComponent,
     AdminPageComponent,
-    AchievementsComponent
+    AchievementsComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

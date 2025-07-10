@@ -31,4 +31,9 @@ export class ScoreService {
   updateTotalScore(scoreData: { username: string; score: number }) {
     return this.http.post(`${this.apiUrl}/updateTotalScore`, scoreData);
   }
+
+  getTotalScore(username: string): Observable<{ total_score: number }> {
+  return this.http.get<{ total_score: number }>(`http://localhost:3000/api/scores/userTotalScore/${username}`);
+}
+
 }

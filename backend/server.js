@@ -4,6 +4,8 @@ import mysql from 'mysql2';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import scoresRoutes from './routes/scores.js';
+import profileRoutes from './routes/profile.js';
+
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +14,7 @@ const JWT_SECRET = 'dein_geheimes_token_passwort'; // Später in .env auslagern
 app.use(cors());
 app.use(express.json());
 app.use('/api/scores', scoresRoutes);
+app.use('/api/profile', profileRoutes);
 
 // MySQL Verbindung
 const db = mysql.createConnection({
@@ -176,7 +179,36 @@ app.post('/api/unlock', (req, res) => {
   );
 });
 
+// Benutzerstatistiken abrufen
+app.get('/api/profile', (req, res) => {
+  const username = req.query.username;
+  if (!username) return res.status(400).json({ error: 'Kein Benutzername übergeben' });
 
+  const stats = {};
+
+  // 1. Gesamtpunkte
+  db.query('SELECT total_score FROM users WHERE username = ?', [username], (err, result1) => {
+    if (err || result1.length === 0) return res.status(500).json({ error: 'Fehler bei total_score' });
+    stats.totalScore = result1[0].total_score;
+
+    // 2. Anzahl Spiele
+    db.query('SELECT COUNT(*) AS count FROM scores WHERE username = ?', [username], (err2, result2) => {
+      if (err2) return res.status(500).json({ error: 'Fehler bei Spielanzahl' });
+      stats.totalGames = result2[0].count;
+
+      // 3. Erfolge
+      db.query(`
+        SELECT COUNT(*) AS count FROM achievements a
+        JOIN users u ON a.user_id = u.id
+        WHERE u.username = ?
+      `, [username], (err3, result3) => {
+        if (err3) return res.status(500).json({ error: 'Fehler bei Erfolgen' });
+        stats.unlockedAchievements = result3[0].count;
+        res.json(stats);
+      });
+    });
+  });
+});
 
 
 

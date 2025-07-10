@@ -89,47 +89,57 @@
     font-weight: bold;
   }
 
-  .topbar {
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffffcc; /* leicht transparentes Weiß */
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f1f1f1;
   padding: 1rem 1.5rem;
-  border-radius: 12px;
-  margin: 1.5rem auto 2rem;
-  max-width: 900px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   font-family: 'Nunito', sans-serif;
   font-size: 1rem;
   color: #333;
+  border-radius: 0 0 12px 12px;
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .topbar-buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  align-items: center;
 }
 
 .topbar-buttons button {
   background-color: #4285f4;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
   color: white;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .topbar-buttons button:hover {
   background-color: #3367d6;
 }
+
 
 .hearts {
   font-size: 1.5rem;

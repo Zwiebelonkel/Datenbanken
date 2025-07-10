@@ -4,6 +4,7 @@ import { LoginComponent } from './components/game/login/login.component';
 import { RegisterComponent } from './components/game/register/register.component';
 import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -12,4 +13,6 @@ export const routes: Routes = [
   { path: 'game', component: GameComponent },
   { path: 'admin', component: AdminPageComponent },
   { path: 'achievements', component: AchievementsComponent },
+  { path: 'profile', component: ProfileComponent },
+
 ];

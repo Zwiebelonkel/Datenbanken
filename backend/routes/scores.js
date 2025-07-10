@@ -68,4 +68,14 @@ router.post('/isHighscore', (req, res) => {
   );
 });
 
+router.get('/userTotalScore/:username', (req, res) => {
+  const { username } = req.params;
+  db.query('SELECT total_score FROM users WHERE username = ?', [username], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Fehler beim Laden' });
+    if (results.length === 0) return res.status(404).json({ error: 'User nicht gefunden' });
+    res.json({ total_score: results[0].total_score });
+  });
+});
+
+
 module.exports = router;

@@ -176,6 +176,10 @@ goToAchievements() {
   this.router.navigate(['/achievements']);
 }
 
+goToProfile() {
+  this.router.navigate(['/profile']);
+}
+
 unlockAchievement(name: string) {
   this.http.post('http://localhost:3000/api/unlock', {
     userId: this.authService.getUserId(),

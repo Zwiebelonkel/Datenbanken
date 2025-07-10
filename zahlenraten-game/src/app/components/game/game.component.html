@@ -8,13 +8,12 @@
     <span>👤 Eingeloggt als: <strong>{{ authService.getUsername() }}</strong></span>
     <span>🛡️ Rolle: <strong>{{ authService.getRole()?.toLowerCase() }}</strong></span>
   </div>
-  <div class="topbar-buttons">
-    <button (click)="logout()">🚪 Logout</button>
-    <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Manage</button>
-    <nav style="display: flex; gap: 10px; margin-bottom: 20px;">
-  <button (click)="goToAchievements()">🎖️ Erfolge</button>
-</nav>
 
+  <div class="topbar-buttons">
+    <button (click)="goToAchievements()">🎖️ Erfolge</button>
+    <button (click)="goToProfile()">👤 Profil</button>
+    <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
+    <button (click)="logout()">🚪 Logout</button>
   </div>
 </div>
 

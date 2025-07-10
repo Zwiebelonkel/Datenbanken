@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // <--- hinzufügen
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-admin-page',
@@ -14,12 +16,18 @@ export class AdminPageComponent implements OnInit {
   users: any[] = [];
   scores: any[] = [];
 
-  constructor(private http: HttpClient, public authService: AuthService) {}
+  constructor(private http: HttpClient, public authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.loadUsers();
-    this.loadScores();
+ngOnInit(): void {
+  const role = this.authService.getRole()?.toLowerCase();
+  if (role !== 'admin') {
+    this.router.navigate(['/']); // oder z.B. '/login'
+    return;
   }
+
+  this.loadUsers();
+  this.loadScores();
+}
 
   loadUsers() {
     this.http.get<any[]>('http://localhost:3000/api/users').subscribe(data => {

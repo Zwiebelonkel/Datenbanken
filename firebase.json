@@ -1,10 +1,9 @@
 {
   "hosting": {
-    "public": "zahlenraten-game/dist/zahlenraten-game",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "public": "dist/zahlenraten-game/browser",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
     ]
   }
 }

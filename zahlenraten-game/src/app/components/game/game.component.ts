@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
 import { ScoreService } from '../../services/score.service';
 import { CommonModule } from '@angular/common'; // für *ngIf, *ngFor, date
 import { AuthService } from '../../services/auth.service'; // Import AuthService
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
   imports: [CommonModule, FormsModule], // <- Wichtig! Hier die Module einbinden
+  // encapsulation: ViewEncapsulation.None
 })
 export class GameComponent implements OnInit {
   num1 = 0;
@@ -22,6 +23,8 @@ export class GameComponent implements OnInit {
   gameOver = false;
   isHighscore = false;
   consecutiveWins = 0;
+  darkMode = false;
+
 
   topScores: any[] = [];
   constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient) {}
@@ -225,6 +228,20 @@ getAchievementDescription(name: string): string {
   };
   return descriptions[name] || 'Erfolg freigeschaltet';
 }
+
+toggleDarkMode() {
+  this.darkMode = !this.darkMode;
+  const body = document.body;
+  if (this.darkMode) {
+    console.log("Dark Mode aktiviert");
+    body.classList.add('dark-mode');
+  } else {
+    console.log("Dark Mode deaktiviert");
+    body.classList.remove('dark-mode');
+  }
+}
+
+
 
 
 

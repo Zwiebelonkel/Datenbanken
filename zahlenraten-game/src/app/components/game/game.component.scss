@@ -18,6 +18,8 @@
   
   .buttons {
     margin: 1.5rem 0;
+    transition: 0.2s;
+
   }
   
   .btn {
@@ -30,6 +32,8 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.3s;
+    transition: 0.2s;
+
   }
 
   #finalNumber{
@@ -38,6 +42,8 @@
   
   .btn:hover {
     background: #45a049;
+    scale: 1.1;
+    transition: 0.2s;
   }
     .btn:disabled {
     background: #ccc;
@@ -83,6 +89,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: 0.2s;
+  }
+
+    .highscores li:hover {
+    background: #d8d8d8;
+    scale: 1.02;
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s;
   }
   
   .highscores li span {
@@ -94,7 +113,7 @@
   top: 0;
   z-index: 1000;
   background: #ffffffcc; /* leicht transparentes Weiß */
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(5px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -119,6 +138,8 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  transition: 0.2s;
+
 }
 
 .topbar-buttons button {
@@ -138,6 +159,9 @@
 
 .topbar-buttons button:hover {
   background-color: #3367d6;
+  scale: 1.05;
+  transition: 0.2s;
+
 }
 
 
@@ -164,6 +188,7 @@
     transform: scale(0.9);
   }
 }
+
 
 
 

@@ -5,25 +5,28 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import scoresRoutes from './routes/scores.js';
 import profileRoutes from './routes/profile.js';
+import dotenv from 'dotenv';
 
+dotenv.config(); // Lädt Umgebungsvariablen aus .env Datei
 
 const app = express();
 const PORT = 3000;
-const JWT_SECRET = 'dein_geheimes_token_passwort'; // Später in .env auslagern
+const JWT_SECRET = process.env.JWT_SECRET; // Später in .env auslagern
 
 app.use(cors());
 app.use(express.json());
 app.use('/api/scores', scoresRoutes);
 app.use('/api/profile', profileRoutes);
 
-require('dotenv').config();
 // MySQL Verbindung
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'highscores_db',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT, // nicht vergessen!
 });
+
 
 // Registrierung
 app.post('/api/register', async (req, res) => {

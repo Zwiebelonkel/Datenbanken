@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+import mysql from 'mysql2';
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
@@ -9,4 +9,4 @@ const pool = mysql.createPool({
   connectionLimit: 10,
 });
 
-module.exports = pool;
+export default pool; // ✅ wichtig für import db from '../db.js'

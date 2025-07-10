@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/Datenbanken",
+    "public": "zahlenraten-game/dist/zahlenraten-game",
     "ignore": [
       "firebase.json",
       "**/.*",

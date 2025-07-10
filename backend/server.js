@@ -6,7 +6,8 @@ import jwt from 'jsonwebtoken';
 
 import scoresRoutes from './routes/scores.js';
 import profileRoutes from './routes/profile.js';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const PORT = 3000;

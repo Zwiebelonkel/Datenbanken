@@ -1,6 +1,8 @@
-const express = require('express');
+import express from 'express';
+import db from '../db.js';
+
 const router = express.Router();
-const db = require('../db');
+
 
 // Highscore speichern
 router.post('/submit', (req, res) => {

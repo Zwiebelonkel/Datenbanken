@@ -20,25 +20,32 @@ export class LoginComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login() {
-    this.http.post<{ success: boolean, token?: string, message?: string }>('//outside-between.onrender.com/api/login', {
+login() {
+  this.http.post<{ success: boolean, token?: string, message?: string }>(
+    'https://outside-between.onrender.com/api/login',
+    {
       username: this.username,
       password: this.password
-    }).subscribe({
-      next: (res) => {
-        if (res.success) {
-          if (res.token) {
-            localStorage.setItem('token', res.token);
-          }
-          this.router.navigate(['/']); // z. B. Spielseite
-        } else {
-          this.error = true;
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  ).subscribe({
+    next: (res) => {
+      if (res.success) {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
         }
-      },
-      error: (err) => {
+        this.router.navigate(['/']); // z. B. Spielseite oder Dashboard
+      } else {
         this.error = true;
-        console.error('Login-Fehler:', err);
       }
-    });
-  }
+    },
+    error: (err) => {
+      this.error = true;
+      console.error('Login-Fehler:', err);
+    }
+  });
+}
+
 }

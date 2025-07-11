@@ -106,6 +106,7 @@ endGame() {
   const username = this.authService.getUsername();
   if (!username) {
     console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    this.gameOver = true;
     return;
   }
 

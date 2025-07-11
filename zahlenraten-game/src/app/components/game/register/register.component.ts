@@ -22,27 +22,34 @@ export class RegisterComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  register() {
-    this.http.post('//outside-between.onrender.com/api/register', {
+register() {
+  this.http.post(
+    'https://outside-between.onrender.com/api/register',
+    {
       username: this.username,
       password: this.password
-    }).subscribe({
-      next: () => {
-        this.success = true;
-        this.error = false;
-        this.errorMessage = '';
-        this.username = '';
-        this.password = '';
-      },
-      error: (err) => {
-        this.success = false;
-        this.error = true;
-        if (err.status === 409) {
-          this.errorMessage = 'Benutzername bereits vergeben';
-        } else {
-          this.errorMessage = 'Registrierung fehlgeschlagen';
-        }
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  ).subscribe({
+    next: () => {
+      this.success = true;
+      this.error = false;
+      this.errorMessage = '';
+      this.username = '';
+      this.password = '';
+    },
+    error: (err) => {
+      this.success = false;
+      this.error = true;
+      if (err.status === 409) {
+        this.errorMessage = 'Benutzername bereits vergeben';
+      } else {
+        this.errorMessage = 'Registrierung fehlgeschlagen';
       }
-    });
-  }
+    }
+  });
+}
+
 }

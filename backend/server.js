@@ -28,6 +28,7 @@ const db = mysql.createConnection({
 
 // Registrierung
 app.post('/api/register', async (req, res) => {
+  console.log('📩 Neue Registrierungsanfrage:', req.body); // <-- hinzufügen
   const { username, password } = req.body;
 
   const hash = await bcrypt.hash(password, 10);

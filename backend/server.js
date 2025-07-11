@@ -1,3 +1,5 @@
+import 'dotenv/config'; // Das lädt automatisch deine .env
+
 import express from 'express';
 import cors from 'cors';
 import mysql from 'mysql2';
@@ -6,7 +8,7 @@ import jwt from 'jsonwebtoken';
 
 import scoresRoutes from './routes/scores.js';
 import profileRoutes from './routes/profile.js';
-import dotenv from 'dotenv';
+
 dotenv.config();
 
 const app = express();

@@ -23,7 +23,7 @@ export class RegisterComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   register() {
-    this.http.post('http://localhost:3000/api/register', {
+    this.http.post('//outside-between.onrender.com/api/register', {
       username: this.username,
       password: this.password
     }).subscribe({

@@ -12,7 +12,7 @@ interface UserStats {
   providedIn: 'root'
 })
 export class ProfileService {
-  private apiUrl = 'http://localhost:3000/api/profile';
+  private apiUrl = '//outside-between.onrender.com/api/profile';
 
   constructor(private http: HttpClient) {}
 

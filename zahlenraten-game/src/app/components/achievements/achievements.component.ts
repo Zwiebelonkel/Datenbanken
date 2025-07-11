@@ -17,7 +17,7 @@ export class AchievementsComponent implements OnInit {
 
 ngOnInit(): void {
   const username = this.authService.getUsername();
-  this.http.get<any[]>(`http://localhost:3000/api/achievements?username=${username}`)
+  this.http.get<any[]>(`//outside-between.onrender.com/api/achievements?username=${username}`)
     .subscribe(data => {
       console.log('Erhaltene Achievements:', data);
       this.achievements = data;

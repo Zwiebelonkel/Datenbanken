@@ -189,7 +189,7 @@ goToProfile() {
 }
 
 unlockAchievement(name: string) {
-  this.http.post('http://localhost:3000/api/unlock', {
+  this.http.post('//outside-between.onrender.com/api/unlock', {
     userId: this.authService.getUserId(),
     name: name,
     description: this.getAchievementDescription(name)  // 👈 genau hier!

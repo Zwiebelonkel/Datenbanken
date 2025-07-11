@@ -21,7 +21,7 @@ export class LoginComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   login() {
-    this.http.post<{ success: boolean, token?: string, message?: string }>('http://localhost:3000/api/login', {
+    this.http.post<{ success: boolean, token?: string, message?: string }>('//outside-between.onrender.com/api/login', {
       username: this.username,
       password: this.password
     }).subscribe({

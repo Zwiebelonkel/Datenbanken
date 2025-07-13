@@ -38,3 +38,17 @@
     }
   }
 }
+
+body.dark-mode .achievement-container {
+  background: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.dark-mode .achievement-container li {
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode .achievement-container li.locked {
+  opacity: 0.3;
+  filter: grayscale(1);
+}

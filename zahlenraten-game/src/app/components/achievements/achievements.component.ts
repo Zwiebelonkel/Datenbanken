@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { ViewEncapsulation } from '@angular/core';
+
 
 @Component({
   selector: 'app-achievements',
   templateUrl: './achievements.component.html',
   styleUrls: ['./achievements.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   imports: [CommonModule],
   standalone: true
 })

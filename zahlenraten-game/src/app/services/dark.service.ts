@@ -1,22 +1,31 @@
-// dark-mode.service.ts
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class DarkModeService {
-  private darkModeEnabled = false;
+  private enabled: boolean = false;
 
-  isDarkMode(): boolean {
-    return this.darkModeEnabled;
+  constructor() {
+    const saved = localStorage.getItem('darkMode');
+    this.enabled = saved === 'true';
+    this.applyDarkMode();
   }
 
-  toggleDarkMode(): void {
-    this.darkModeEnabled = !this.darkModeEnabled;
-    document.body.classList.toggle('dark-mode', this.darkModeEnabled);
-    console.log('Dark Mode:', this.darkModeEnabled ? 'aktiviert' : 'deaktiviert');
+  toggleDarkMode() {
+    this.enabled = !this.enabled;
+    localStorage.setItem('darkMode', String(this.enabled));
+    this.applyDarkMode();
+  }
+  isDarkMode() {
+    return this.enabled;
   }
 
-  setDarkMode(enabled: boolean): void {
-    this.darkModeEnabled = enabled;
-    document.body.classList.toggle('dark-mode', enabled);
+  applyDarkMode() {
+    if (this.enabled) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
   }
 }

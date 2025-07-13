@@ -2,4 +2,21 @@
 
 body {
   font-family: 'Nunito', sans-serif;
+  margin: 0;
+}
+
+body.dark-mode .admin-container {
+  background: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.dark-mode .admin-list li {
+  background: #2c2c2c;
+  border: 1px solid #444;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #f1f1f1;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

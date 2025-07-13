@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // <--- HINZUFÜGEN
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -30,7 +30,7 @@ export class LoginComponent {
           if (res.token) {
             localStorage.setItem('token', res.token);
           }
-          this.router.navigate(['/']); // z. B. Spielseite
+          this.router.navigate(['/']);
         } else {
           this.error = true;
         }

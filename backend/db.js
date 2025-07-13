@@ -1,4 +1,3 @@
-// db.js
 import { createClient } from '@libsql/client';
 
 const db = createClient({

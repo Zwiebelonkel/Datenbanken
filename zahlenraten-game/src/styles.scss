@@ -8,13 +8,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ======== DARK MODE GLOBAL ======== */
 body.dark-mode {
   background-color: #121212;
   color: #f1f1f1;
 }
 
-/* ======== ADMIN PAGE STYLES ======== */
 .admin-container {
   max-width: 800px;
   margin: 0 auto;
@@ -98,7 +96,6 @@ body.dark-mode .admin-list li {
   }
 }
 
-/* ======== ACHIEVEMENTS PAGE ======== */
 .achievement-container {
   max-width: 600px;
   margin: 2rem auto;
@@ -144,7 +141,6 @@ body.dark-mode .admin-list li {
   }
 }
 
-/* ======== ACHIEVEMENTS DARK MODE ======== */
 body.dark-mode .achievement-container {
   background: #1e1e1e;
   color: #f1f1f1;
@@ -167,7 +163,6 @@ body.dark-mode .achievement-container li.locked {
   color: #aaa;
 }
 
-/* ======== LOGIN PAGE DARK MODE ======== */
 body.dark-mode .form-container {
   background-color: #1e1e1e;
   color: #f1f1f1;
@@ -193,44 +188,5 @@ body.dark-mode .form-container a {
   color: #66ff66;
 }
 
-.burger {
-  display: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  margin-right: 1rem;
-}
-
-@media (max-width: 768px) {
-  .burger {
-    display: block;
-  }
-
-  .topbar-buttons {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    right: 10px;
-    background: #ffffffcc;
-    backdrop-filter: blur(6px);
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    z-index: 1000;
-  }
-
-  .topbar-buttons.open {
-    display: flex;
-  }
-
-  .topbar {
-    justify-content: space-between;
-    padding: 1rem;
-  }
-
-  body.dark-mode .topbar-buttons {
-    background: #1f1f1fcc;
-  }
-}
 
 

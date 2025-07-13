@@ -3,7 +3,6 @@ import db from '../db.js';
 
 const router = express.Router();
 
-// 🔸 Score einreichen
 router.post('/submit', async (req, res) => {
   const { username, score } = req.body;
   const date = new Date().toISOString();
@@ -19,7 +18,7 @@ router.post('/submit', async (req, res) => {
   }
 });
 
-// 🔸 Gesamtpunktzahl aktualisieren
+//Gesamtpunktzahl aktualisieren
 router.post('/updateTotalScore', async (req, res) => {
   const { username, score } = req.body;
 
@@ -39,7 +38,7 @@ router.post('/updateTotalScore', async (req, res) => {
   }
 });
 
-// 🔸 Top 10 Scores abrufen
+//Top 10 Scores abrufen
 router.get('/top', async (req, res) => {
   try {
     const result = await db.execute('SELECT username, score, created_at FROM scores ORDER BY score DESC LIMIT 10');
@@ -49,7 +48,7 @@ router.get('/top', async (req, res) => {
   }
 });
 
-// 🔸 Alle Scores abrufen
+//Alle Scores abrufen
 router.get('/all', async (req, res) => {
   try {
     const result = await db.execute('SELECT * FROM scores');
@@ -59,7 +58,7 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// 🔸 Highscore prüfen
+//Highscore prüfen
 router.post('/isHighscore', async (req, res) => {
   const { score } = req.body;
   try {
@@ -74,7 +73,7 @@ router.post('/isHighscore', async (req, res) => {
   }
 });
 
-// 🔸 Total Score eines Users abrufen
+//Total Score eines Users abrufen
 router.get('/userTotalScore/:username', async (req, res) => {
   const { username } = req.params;
   try {

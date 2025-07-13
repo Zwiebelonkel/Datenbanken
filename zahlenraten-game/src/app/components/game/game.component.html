@@ -1,13 +1,13 @@
-<!-- Google Fonts (optional) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
 
 <div class="topbar" *ngIf="authService.isLoggedIn()">
-  <div class="user-info">
+  <!-- <div class="user-info">
     <span>👤 Eingeloggt als: <strong>{{ authService.getUsername() }}</strong></span>
     <span>🛡️ Rolle: <strong>{{ authService.getRole()?.toLowerCase() }}</strong></span>
-  </div>
+  </div> -->
+  <span>👤 Welcome <strong>{{ authService.getUsername() }}</strong></span>
 
   <div class="topbar-buttons">
     <button (click)="goToAchievements()">🎖️ Erfolge</button>
@@ -49,7 +49,6 @@
   <h2>🎯 Game Over!</h2>
   <p class="final-score">Dein Score: <strong>{{ score }}</strong></p>
 
-  <!-- Nur zeigen, wenn es ein Highscore ist UND der Spieler eingeloggt -->
   <div *ngIf="authService.isLoggedIn()" class="highscore-form">
     <button class="btn" (click)="submitScore()">🏅 Highscore speichern</button>
   </div>
@@ -67,7 +66,7 @@
   <ul>
     <li *ngIf="topScores.length === 0">Noch keine Highscores vorhanden.</li>
     <li *ngFor="let s of topScores">
-      <span>{{ s.username }}</span> – <strong>{{ s.score }} Punkte</strong> <em>({{ s.created_at | date:'short' }})</em>
+      <span>{{ s.username }}</span><strong>{{ s.score }} Punkte</strong>
     </li>
   </ul>
 </div>

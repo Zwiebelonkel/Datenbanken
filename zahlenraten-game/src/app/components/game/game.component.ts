@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
 import { ScoreService } from '../../services/score.service';
-import { CommonModule } from '@angular/common'; // für *ngIf, *ngFor, date
-import { AuthService } from '../../services/auth.service'; // Import AuthService
-import { Router } from '@angular/router'; // Import Router
-import { FormsModule } from '@angular/forms';   // für ngModel
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DarkModeService } from '../../services/dark.service';
 
@@ -11,7 +11,7 @@ import { DarkModeService } from '../../services/dark.service';
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
-  imports: [CommonModule, FormsModule], // <- Wichtig! Hier die Module einbinden
+  imports: [CommonModule, FormsModule],
   encapsulation: ViewEncapsulation.None
 })
 export class GameComponent implements OnInit {
@@ -60,7 +60,6 @@ export class GameComponent implements OnInit {
     const correct = this.isBetween() ? 'inside' : 'outside';
     const resultElement = document.querySelector('.game-container') as HTMLElement;
 
-    // Temporarily show the testNum
     this.showTestNum();
 
     if (answer === correct) {
@@ -68,16 +67,16 @@ export class GameComponent implements OnInit {
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
       this.consecutiveWins++;
 
-      setTimeout(() => this.newRound(), 500); // Wait 1 second before starting a new round
+      setTimeout(() => this.newRound(), 500);
     } else if (this.lives > 1) {
       this.lives--;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-      setTimeout(() => this.newRound(), 500); // Wait 1 second before ending the game
+      setTimeout(() => this.newRound(), 500);
     } else {
       this.consecutiveWins = 0;
       this.lives = 0;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-      setTimeout(() => this.endGame(), 500); // Wait 1 second before ending the game
+      setTimeout(() => this.endGame(), 500);
     }
     this.checkForAchievements()
   }
@@ -88,7 +87,7 @@ export class GameComponent implements OnInit {
       testNumElement.style.visibility = 'visible';
       setTimeout(() => {
         testNumElement.style.visibility = 'hidden';
-      }, 500); // Hide after 1 second
+      }, 500); // Hide
     }
   }
 
@@ -98,7 +97,7 @@ export class GameComponent implements OnInit {
       element.style.backgroundColor = color;
             setTimeout(() => {
         element.style.backgroundColor = '';
-      }, 500); // Reset background color after 0.5 seconds
+      }, 500);
     }
   }
 
@@ -112,13 +111,11 @@ endGame() {
 
   this.gameOver = true;
 
-  // 1. total_score aktualisieren
   this.scoreService.updateTotalScore({ username, score: this.score }).subscribe({
     next: () => console.log('✅ total_score aktualisiert'),
     error: err => console.error('❌ Fehler beim total_score:', err)
   });
 
-  // 3. Highscore prüfen (für Anzeige oder Animation etc.)
   this.scoreService.isHighscore(this.score).subscribe(res => {
     this.isHighscore = res.isHighscore;
   });
@@ -184,8 +181,8 @@ unlockAchievement(name: string) {
   this.http.post('https://outside-between.onrender.com/api/unlock', {
     userId: this.authService.getUserId(),
     name: name,
-    description: this.getAchievementDescription(name)  // 👈 genau hier!
-  }, { responseType: 'text' }) // 👈 wichtig für Fehlervermeidung
+    description: this.getAchievementDescription(name)
+  }, { responseType: 'text' })
   .subscribe({
     next: () => console.log('Achievement unlocked:', name),
     error: (err) => console.error('Fehler beim Unlock:', err)
@@ -237,9 +234,4 @@ toggleDarkMode() {
     body.classList.remove('dark-mode');
   }
 }
-
-
-
-
-
 }

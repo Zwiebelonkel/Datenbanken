@@ -16,7 +16,6 @@ app.use(express.json());
 app.use('/api/scores', scoresRoutes);
 app.use('/api/profile', profileRoutes);
 
-// MySQL Verbindung
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -45,7 +44,7 @@ app.post('/api/register', async (req, res) => {
   );
 });
 
-// Login mit JWT inkl. ROLE
+// Login mit JWT
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -60,7 +59,6 @@ app.post('/api/login', (req, res) => {
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) return res.status(401).json({ message: 'Falsches Passwort' });
 
-      // 🛠 JWT erzeugen – MIT Rolle!
       const token = jwt.sign(
         { id: user.id, username: user.username, role: user.role },
         JWT_SECRET,
@@ -73,7 +71,7 @@ app.post('/api/login', (req, res) => {
 });
 
 
-// Benutzer abrufen
+// Benutzer holen
 app.get('/api/users', (req, res) => {
   db.query('SELECT id, username FROM users', (err, results) => {
     if (err) return res.status(500).json({ error: 'DB Fehler beim Laden der Benutzer' });
@@ -91,7 +89,7 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 
-// Alle Highscores abrufen
+// Alle Highscores holen
 app.get('/api/scores/all', (req, res) => {
   db.query('SELECT * FROM scores', (err, results) => {
     if (err) return res.status(500).json({ error: 'Fehler beim Laden der Scores' });
@@ -108,14 +106,13 @@ app.delete('/api/scores/:id', (req, res) => {
   });
 });
 
-// GET: Alle Achievements eines Users
+
 const ALL_ACHIEVEMENTS = [
   { name: 'First Game', description: 'Dein erstes Spiel!' },
   { name: 'Newbie', description: 'Du hast 10 Punkte erreicht!' },
   { name: 'Glückspilz', description: 'Du hast 100 Punkte erreicht!' },
   { name: 'Zahlenmeister', description: 'Du hast 1000 Punkte erreicht!' },
   { name: 'Strategieprofi', description: 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren' },
-  // Weitere hier ergänzen
 ];
 
 app.get('/api/achievements', (req, res) => {
@@ -147,7 +144,6 @@ app.post('/api/unlock', (req, res) => {
     return res.status(400).json({ message: 'Fehlende Daten' });
   }
 
-  // Gibt es diesen Erfolg schon?
   db.query(
     'SELECT * FROM achievements WHERE user_id = ? AND name = ?',
     [userId, name],
@@ -158,7 +154,6 @@ app.post('/api/unlock', (req, res) => {
       }
 
       if (rows.length === 0) {
-        // Noch nicht vorhanden: einfügen
         db.query(
           'INSERT INTO achievements (user_id, name, description, unlocked) VALUES (?, ?, ?, 1)',
           [userId, name, description],
@@ -179,24 +174,22 @@ app.post('/api/unlock', (req, res) => {
   );
 });
 
-// Benutzerstatistiken abrufen
+// Benutzerstatistik
 app.get('/api/profile', (req, res) => {
   const username = req.query.username;
   if (!username) return res.status(400).json({ error: 'Kein Benutzername übergeben' });
 
   const stats = {};
 
-  // 1. Gesamtpunkte
+
   db.query('SELECT total_score FROM users WHERE username = ?', [username], (err, result1) => {
     if (err || result1.length === 0) return res.status(500).json({ error: 'Fehler bei total_score' });
     stats.totalScore = result1[0].total_score;
 
-    // 2. Anzahl Spiele
     db.query('SELECT COUNT(*) AS count FROM scores WHERE username = ?', [username], (err2, result2) => {
       if (err2) return res.status(500).json({ error: 'Fehler bei Spielanzahl' });
       stats.totalGames = result2[0].count;
 
-      // 3. Erfolge
       db.query(`
         SELECT COUNT(*) AS count FROM achievements a
         JOIN users u ON a.user_id = u.id

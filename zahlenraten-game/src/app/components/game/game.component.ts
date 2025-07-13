@@ -118,15 +118,6 @@ endGame() {
     error: err => console.error('❌ Fehler beim total_score:', err)
   });
 
-  // 2. Score immer speichern (nicht nur wenn Highscore)
-  this.scoreService.submitScore({ username, score: this.score }).subscribe({
-    next: () => {
-      this.loadHighscores(); // danach neu laden
-      console.log('✅ Score gespeichert');
-    },
-    error: err => console.error('❌ Fehler beim Speichern des Scores:', err)
-  });
-
   // 3. Highscore prüfen (für Anzeige oder Animation etc.)
   this.scoreService.isHighscore(this.score).subscribe(res => {
     this.isHighscore = res.isHighscore;

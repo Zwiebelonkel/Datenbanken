@@ -43,7 +43,7 @@ ngOnInit(): void {
   }
 
 deleteUser(id: number) {
-  this.http.delete(`https//outside-between.onrender.com/api/users/${id}`).subscribe(() => {
+  this.http.delete(`https://outside-between.onrender.com/api/users/${id}`).subscribe(() => {
     this.users = this.users.filter(user => user.id !== id);
   });
 }

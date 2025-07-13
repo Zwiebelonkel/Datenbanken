@@ -3,37 +3,37 @@ import db from '../db.js';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const username = req.query.username;
   if (!username) {
     return res.status(400).json({ message: 'Kein Benutzername angegeben' });
   }
 
-  db.query(
-    `SELECT 
-       u.total_score AS totalScore,
-       (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
-       (SELECT COUNT(*) FROM achievements a 
-         JOIN users u2 ON u2.id = a.user_id 
-         WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements
-     FROM users u
-     WHERE LOWER(u.username) = LOWER(?)
-     LIMIT 1
-    `,
-    [username, username, username],
-    (err, results) => {
-      if (err) {
-        console.error('❌ Fehler beim Laden des Profils:', err);
-        return res.status(500).json({ message: 'Datenbankfehler' });
-      }
+  try {
+    const result = await db.execute({
+      sql: `
+        SELECT 
+          u.total_score AS totalScore,
+          (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
+          (SELECT COUNT(*) FROM achievements a 
+             JOIN users u2 ON u2.id = a.user_id 
+             WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements
+        FROM users u
+        WHERE LOWER(u.username) = LOWER(?)
+        LIMIT 1
+      `,
+      args: [username, username, username],
+    });
 
-      if (results.length === 0) {
-        return res.status(404).json({ message: 'Benutzer nicht gefunden' });
-      }
-
-      res.json(results[0]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
     }
-  );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('❌ Fehler beim Laden des Profils:', err);
+    res.status(500).json({ message: 'Datenbankfehler' });
+  }
 });
 
 export default router;

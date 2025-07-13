@@ -94,13 +94,18 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 
-// Alle Highscores abrufen
 app.get('/api/scores/all', (req, res) => {
+  console.log('📥 Route /api/scores/all aufgerufen');
+
   db.query('SELECT * FROM scores', (err, results) => {
-    if (err) return res.status(500).json({ error: 'Fehler beim Laden der Scores' });
+    if (err) {
+      console.error('❌ Fehler bei DB-Abfrage:', err); // ← DAS zeigt dir den genauen Fehler
+      return res.status(500).json({ error: 'Fehler beim Laden der Scores' });
+    }
     res.json(results);
   });
 });
+
 
 // Highscore löschen
 app.delete('/api/scores/:id', (req, res) => {

@@ -12,7 +12,7 @@ interface UserStats {
   providedIn: 'root'
 })
 export class ProfileService {
-  private apiUrl = '//outside-between.onrender.com/api/profile';
+  private apiUrl = 'https://outside-between.onrender.com/api/profile';
 
   constructor(private http: HttpClient) {}
 

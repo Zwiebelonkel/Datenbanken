@@ -46,7 +46,7 @@ changePassword() {
     return;
   }
 
-  this.http.patch('//outside-between.onrender.com/api/users/password', {
+  this.http.patch('https://outside-between.onrender.com/api/users/password', {
     username: this.authService.getUsername(),
     currentPassword: this.currentPassword,
     newPassword: this.newPassword

@@ -12,7 +12,7 @@ interface ScoreEntry {
   providedIn: 'root',
 })
 export class ScoreService {
-  private apiUrl = '//outside-between.onrender.com/api/scores';
+  private apiUrl = 'https://outside-between.onrender.com/api/scores';
 
   constructor(private http: HttpClient) {}
 
@@ -33,7 +33,7 @@ export class ScoreService {
   }
 
   getTotalScore(username: string): Observable<{ total_score: number }> {
-  return this.http.get<{ total_score: number }>(`//outside-between.onrender.com/api/scores/userTotalScore/${username}`);
+  return this.http.get<{ total_score: number }>(`https://outside-between.onrender.com/api/scores/userTotalScore/${username}`);
 }
 
 }

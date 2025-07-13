@@ -9,7 +9,7 @@ import profileRoutes from './routes/profile.js';
 
 const app = express();
 const PORT = 3000;
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';;
 
 app.use(cors());
 app.use(express.json());

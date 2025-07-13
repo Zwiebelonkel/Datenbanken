@@ -30,27 +30,27 @@ ngOnInit(): void {
 }
 
   loadUsers() {
-    this.http.get<any[]>('//outside-between.onrender.com/api/users').subscribe(data => {
+    this.http.get<any[]>('https://outside-between.onrender.com/api/users').subscribe(data => {
       const current = this.authService.getUsername();
       this.users = data.filter(u => u.username !== current); // Admin ausblenden
     });
   }
 
   loadScores() {
-    this.http.get<any[]>('//outside-between.onrender.com/api/scores/all').subscribe(data => {
+    this.http.get<any[]>('https://outside-between.onrender.com/api/scores/all').subscribe(data => {
       this.scores = data;
     });
   }
 
 deleteUser(id: number) {
-  this.http.delete(`//outside-between.onrender.com/api/users/${id}`).subscribe(() => {
+  this.http.delete(`https//outside-between.onrender.com/api/users/${id}`).subscribe(() => {
     this.users = this.users.filter(user => user.id !== id);
   });
 }
 
 
   deleteScore(id: number) {
-    this.http.delete(`//outside-between.onrender.com/api/scores/${id}`).subscribe(() => {
+    this.http.delete(`https://outside-between.onrender.com/api/scores/${id}`).subscribe(() => {
       this.loadScores();
     });
   }

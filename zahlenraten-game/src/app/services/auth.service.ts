@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = '//outside-between.onrender.com/api/';
+  private apiUrl = 'https://outside-between.onrender.com/api/';
 
   constructor(private http: HttpClient, private router: Router) {}
 

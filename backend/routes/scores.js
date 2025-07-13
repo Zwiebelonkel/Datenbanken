@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// Highscore speichern
 router.post('/submit', (req, res) => {
   const { username, score } = req.body;
   const date = new Date();
@@ -39,14 +38,14 @@ router.post('/updateTotalScore', (req, res) => {
 });
 
 
-// Top 10 Scores abrufen
+// Top 10 Scores
 router.get('/top', (req, res) => {
   db.query(
     'SELECT username, score, created_at FROM scores ORDER BY score DESC LIMIT 10',
     (err, results) => {
       if (err) {
-        console.error("Datenbankfehler:", err);  // Zeigt den Fehler in der Konsole an
-        return res.status(500).json({ error: err }); // Gibt den Fehler als Antwort zurück
+        console.error("Datenbankfehler:", err);
+        return res.status(500).json({ error: err });
       }
       res.json(results);
     }
@@ -54,7 +53,6 @@ router.get('/top', (req, res) => {
 });
 
 
-// Prüfen ob Score in Top 10 ist
 router.post('/isHighscore', (req, res) => {
   const { score } = req.body;
   db.query(

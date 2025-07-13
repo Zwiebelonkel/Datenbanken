@@ -9,7 +9,7 @@ import profileRoutes from './routes/profile.js';
 
 const app = express();
 const PORT = 3000;
-const JWT_SECRET = 'dein_geheimes_token_passwort'; // Später in .env auslagern
+const JWT_SECRET = 'geheimes_token_passwort';
 
 app.use(cors());
 app.use(express.json());
@@ -136,7 +136,7 @@ app.get('/api/achievements', (req, res) => {
   });
 });
 
-// Achievement freischalten
+// Achievement  unlxok
 app.post('/api/unlock', (req, res) => {
   const { userId, name, description } = req.body;
 
@@ -203,7 +203,6 @@ app.get('/api/profile', (req, res) => {
   });
 });
 
-// PATCH /api/users/password
 app.patch('/api/users/password', (req, res) => {
   const { username, currentPassword, newPassword } = req.body;
 
@@ -239,7 +238,7 @@ app.patch('/api/users/password', (req, res) => {
 // Server starten
 app.listen(PORT, () => {
   console.log(`✅ Server läuft auf http://localhost:${PORT}`);
-  const password = 'admin'; // oder dein gewünschtes Passwort
+  const password = 'admin';
 bcrypt.hash(password, 10).then(hash => {
   console.log('Gehashter Wert:', hash);
 });

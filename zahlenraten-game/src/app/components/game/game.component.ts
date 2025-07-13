@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
 import { ScoreService } from '../../services/score.service';
-import { CommonModule } from '@angular/common'; // für *ngIf, *ngFor, date
-import { AuthService } from '../../services/auth.service'; // Import AuthService
-import { Router } from '@angular/router'; // Import Router
-import { FormsModule } from '@angular/forms';   // für ngModel
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DarkModeService } from '../../services/dark.service';
 
@@ -11,8 +11,8 @@ import { DarkModeService } from '../../services/dark.service';
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
-  imports: [CommonModule, FormsModule], // <- Wichtig! Hier die Module einbinden
-  encapsulation: ViewEncapsulation.None
+  imports: [CommonModule, FormsModule],
+  // encapsulation: ViewEncapsulation.None
 })
 export class GameComponent implements OnInit {
   num1 = 0;
@@ -60,7 +60,6 @@ export class GameComponent implements OnInit {
     const correct = this.isBetween() ? 'inside' : 'outside';
     const resultElement = document.querySelector('.game-container') as HTMLElement;
 
-    // Temporarily show the testNum
     this.showTestNum();
 
     if (answer === correct) {
@@ -111,7 +110,6 @@ endGame() {
 
   this.gameOver = true;
 
-  // 1. total_score aktualisieren
   this.scoreService.updateTotalScore({ username, score: this.score }).subscribe({
     next: () => console.log('✅ total_score aktualisiert'),
     error: err => console.error('❌ Fehler beim total_score:', err)

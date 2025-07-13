@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common'; // <--- hinzufügen
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.scss'], 
   standalone: true,
-  imports: [CommonModule], // <--- hier einfügen
+  imports: [CommonModule],
 })
 export class AdminPageComponent implements OnInit {
   users: any[] = [];
@@ -21,7 +21,7 @@ export class AdminPageComponent implements OnInit {
 ngOnInit(): void {
   const role = this.authService.getRole()?.toLowerCase();
   if (role !== 'admin') {
-    this.router.navigate(['/']); // oder z.B. '/login'
+    this.router.navigate(['/']);
     return;
   }
 

@@ -1,4 +1,3 @@
-<!-- Google Fonts (optional) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
@@ -18,14 +17,12 @@
   </div>
 </div>
 
-<!-- Falls nicht eingeloggt -->
 <div class="topbar" *ngIf="!authService.isLoggedIn()">
   <div class="topbar-buttons">
     <button (click)="goToLogin()">🔐 Login</button>
   </div>
 </div>
 
-<!-- Spiel läuft -->
 <div class="game-container" *ngIf="!gameOver">
   <div class="hearts">
   <span *ngFor="let life of getLivesArray()">❤</span>
@@ -44,12 +41,10 @@
   <p class="score">Punkte: <span>{{ score }}</span></p>
 </div>
 
-<!-- Spiel vorbei -->
 <div class="game-over" *ngIf="gameOver">
   <h2>🎯 Game Over!</h2>
   <p class="final-score">Dein Score: <strong>{{ score }}</strong></p>
 
-  <!-- Nur zeigen, wenn es ein Highscore ist UND der Spieler eingeloggt -->
   <div *ngIf="isHighscore && authService.isLoggedIn()" class="highscore-form">
     <button class="btn" (click)="submitScore()">🏅 Highscore speichern</button>
   </div>
@@ -61,7 +56,6 @@
   <button class="btn restart" (click)="restart()">🔄 Nochmal spielen</button>
 </div>
 
-<!-- Highscoreliste -->
 <div class="highscores">
   <h3>🏆 Top 10</h3>
   <ul>

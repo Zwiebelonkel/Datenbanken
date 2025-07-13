@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   if (!username) {
     return res.status(400).json({ message: 'Kein Benutzername angegeben' });
   }
-
+ 
   try {
     const result = await db.execute({
       sql: `

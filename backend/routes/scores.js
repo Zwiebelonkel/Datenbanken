@@ -3,8 +3,7 @@ import db from '../db.js';
 
 const router = express.Router();
 
-
-// Highscore speichern
+// 🔸 Score einreichen
 router.post('/submit', (req, res) => {
   const { username, score } = req.body;
   const date = new Date();
@@ -19,6 +18,7 @@ router.post('/submit', (req, res) => {
   );
 });
 
+// 🔸 Gesamtpunktzahl aktualisieren
 router.post('/updateTotalScore', (req, res) => {
   const { username, score } = req.body;
 
@@ -40,23 +40,26 @@ router.post('/updateTotalScore', (req, res) => {
   );
 });
 
-
-// Top 10 Scores abrufen
+// 🔸 Top 10 Scores abrufen
 router.get('/top', (req, res) => {
   db.query(
     'SELECT username, score, created_at FROM scores ORDER BY score DESC LIMIT 10',
     (err, results) => {
-      if (err) {
-        console.error("Datenbankfehler:", err);  // Zeigt den Fehler in der Konsole an
-        return res.status(500).json({ error: err }); // Gibt den Fehler als Antwort zurück
-      }
+      if (err) return res.status(500).json({ error: err });
       res.json(results);
     }
   );
 });
 
+// 🔸 Alle Scores abrufen (z. B. für Admin oder Debug)
+router.get('/all', (req, res) => {
+  db.query('SELECT * FROM scores', (err, results) => {
+    if (err) return res.status(500).json({ error: 'Fehler beim Laden der Scores' });
+    res.json(results);
+  });
+});
 
-// Prüfen ob Score in Top 10 ist
+// 🔸 Prüfen, ob aktueller Score ein Highscore ist
 router.post('/isHighscore', (req, res) => {
   const { score } = req.body;
   db.query(
@@ -70,14 +73,18 @@ router.post('/isHighscore', (req, res) => {
   );
 });
 
+// 🔸 Total Score eines Users abrufen
 router.get('/userTotalScore/:username', (req, res) => {
   const { username } = req.params;
-  db.query('SELECT total_score FROM users WHERE username = ?', [username], (err, results) => {
-    if (err) return res.status(500).json({ error: 'Fehler beim Laden' });
-    if (results.length === 0) return res.status(404).json({ error: 'User nicht gefunden' });
-    res.json({ total_score: results[0].total_score });
-  });
+  db.query(
+    'SELECT total_score FROM users WHERE username = ?',
+    [username],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: 'Fehler beim Laden' });
+      if (results.length === 0) return res.status(404).json({ error: 'User nicht gefunden' });
+      res.json({ total_score: results[0].total_score });
+    }
+  );
 });
-
 
 export default router;

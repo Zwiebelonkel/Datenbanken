@@ -226,4 +226,13 @@ body.dark-mode .topbar {
   100% { transform: rotate(360deg); }
 }
 
+.money {
+  font-size: 1.3rem;
+  color: #2ecc71;
+  margin-top: 0.5rem;
+}
+body.dark-mode .money {
+  color: #7dffb2;
+}
+
 

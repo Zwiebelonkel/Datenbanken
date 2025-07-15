@@ -8,15 +8,24 @@ router.post('/submit', async (req, res) => {
   const date = new Date().toISOString();
 
   try {
+    // 1. Score speichern
     await db.execute({
       sql: 'INSERT INTO scores (username, score, created_at) VALUES (?, ?, ?)',
       args: [username, score, date],
     });
+
+    // 2. Geld aktualisieren (+= score)
+    await db.execute({
+      sql: 'UPDATE users SET money = IFNULL(money, 0) + ? WHERE username = ?',
+      args: [score, username],
+    });
+
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 //Gesamtpunktzahl aktualisieren
 router.post('/updateTotalScore', async (req, res) => {

@@ -25,6 +25,8 @@ export class ProfileComponent implements OnInit {
   pwChangeMsg = '';
   pwChangeSuccess = false;
   isLoading = true;
+  money = 0;
+
 
 
   constructor(private profileService: ProfileService, private authService: AuthService, private http: HttpClient) {}
@@ -39,14 +41,16 @@ ngOnInit(): void {
       this.totalScore = stats.totalScore;
       this.totalGames = stats.totalGames;
       this.unlockedAchievements = stats.unlockedAchievements;
-      this.isLoading = false; // ✅ Ladeanzeige beenden
+      this.money = stats.money; // 💰 Geld übernehmen
+      this.isLoading = false;
     },
     error: err => {
       console.error('Fehler beim Laden der Statistiken', err);
-      this.isLoading = false; // ✅ auch bei Fehler
+      this.isLoading = false;
     }
   });
 }
+
 changePassword() {
   if (this.newPassword !== this.repeatPassword) {
     this.pwChangeSuccess = false;

@@ -19,6 +19,7 @@ export class GameComponent implements OnInit {
   num2 = 0;
   testNum = 0;
   score = 0;
+  money = 0;
   lives = 3;
   hasPlayedYet: boolean = false;
   gameOver = false;
@@ -65,6 +66,7 @@ export class GameComponent implements OnInit {
 
     if (answer === correct) {
       this.score += 1 * this.lives;
+      this.money += 1 * this.lives;
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
       this.consecutiveWins++;
 
@@ -131,7 +133,7 @@ submitScore() {
     return;
   }
 
-  this.scoreService.submitScore({ username, score: this.score }).subscribe(() => {
+  this.scoreService.submitScore(username, this.score, this.money).subscribe(() => {
     this.loadHighscores();
     this.restart();
   });

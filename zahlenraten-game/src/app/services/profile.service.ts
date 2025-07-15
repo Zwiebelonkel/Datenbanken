@@ -6,6 +6,8 @@ interface UserStats {
   totalScore: number;
   totalGames: number;
   unlockedAchievements: number;
+  money: number;
+
 }
 
 @Injectable({

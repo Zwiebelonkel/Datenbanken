@@ -204,7 +204,7 @@ app.patch('/api/users/password', async (req, res) => {
   }
 });
 
-router.post('/updateMoney', async (req, res) => {
+app.post('/updateMoney', async (req, res) => {
   const { username, amount } = req.body;
 
   if (!username || typeof amount !== 'number') {

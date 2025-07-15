@@ -204,25 +204,6 @@ app.patch('/api/users/password', async (req, res) => {
   }
 });
 
-app.post('/updateMoney', async (req, res) => {
-  const { username, amount } = req.body;
-
-  if (!username || typeof amount !== 'number') {
-    return res.status(400).json({ message: 'Ungültige Eingaben' });
-  }
-
-  try {
-    await db.execute({
-      sql: 'UPDATE users SET money = money + ? WHERE username = ?',
-      args: [amount, username],
-    });
-    res.json({ success: true });
-  } catch (err) {
-    console.error('❌ Fehler beim Geld-Update:', err);
-    res.status(500).json({ message: 'Update von money fehlgeschlagen' });
-  }
-});
-
 
 // Server starten
 app.listen(PORT, () => {

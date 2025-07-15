@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule], // ← FormsModule hinzufügen
+  imports: [CommonModule, FormsModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
@@ -24,21 +24,29 @@ export class ProfileComponent implements OnInit {
   repeatPassword = '';
   pwChangeMsg = '';
   pwChangeSuccess = false;
+  isLoading = true;
+
 
   constructor(private profileService: ProfileService, private authService: AuthService, private http: HttpClient) {}
 
-  ngOnInit(): void {
-    const username = this.authService.getUsername();
-    this.username = username || '';
-    if (!username) return;
+ngOnInit(): void {
+  const username = this.authService.getUsername();
+  this.username = username || '';
+  if (!username) return;
 
-    this.profileService.getUserStats(username).subscribe(stats => {
+  this.profileService.getUserStats(username).subscribe({
+    next: stats => {
       this.totalScore = stats.totalScore;
       this.totalGames = stats.totalGames;
       this.unlockedAchievements = stats.unlockedAchievements;
-    });
-  }
-
+      this.isLoading = false; // ✅ Ladeanzeige beenden
+    },
+    error: err => {
+      console.error('Fehler beim Laden der Statistiken', err);
+      this.isLoading = false; // ✅ auch bei Fehler
+    }
+  });
+}
 changePassword() {
   if (this.newPassword !== this.repeatPassword) {
     this.pwChangeSuccess = false;

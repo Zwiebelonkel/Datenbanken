@@ -1,5 +1,9 @@
 <div class="achievement-container">
   <h2>🎖️ Erfolge</h2>
+  <!-- Loading Spinner -->
+<div *ngIf="isLoading" class="loader-container">
+  <div class="loader"></div>
+</div>
   <ul>
     <li *ngFor="let ach of achievements" [class.locked]="!ach.unlocked">
       <span class="icon">{{ ach.unlocked ? '✅' : '🔒' }}</span>

@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AchievementsComponent implements OnInit {
   achievements: any[] = [];
+  isLoading = true;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -21,6 +22,10 @@ ngOnInit(): void {
     .subscribe(data => {
       console.log('Erhaltene Achievements:', data);
       this.achievements = data;
+      this.isLoading = false;
+    }, error => {
+      console.error('Fehler beim Laden der Achievements', error);
+      this.isLoading = false;
     });
 }
 

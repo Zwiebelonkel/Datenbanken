@@ -25,6 +25,7 @@ export class GameComponent implements OnInit {
   isHighscore = false;
   consecutiveWins = 0;
   darkMode = false;
+  isLoading = true;
 
 
   topScores: any[] = [];
@@ -137,11 +138,19 @@ submitScore() {
 }
 
 
-  loadHighscores() {
-    this.scoreService.getTopScores().subscribe(scores => {
+loadHighscores() {
+  this.isLoading = true;
+  this.scoreService.getTopScores().subscribe(
+    (scores) => {
       this.topScores = scores;
-    });
-  }
+      this.isLoading = false;
+    },
+    (error) => {
+      console.error('Fehler beim Laden der Highscores', error);
+      this.isLoading = false;
+    }
+  );
+}
 
   restart() {
     this.lives = 3;

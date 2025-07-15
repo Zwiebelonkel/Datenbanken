@@ -167,6 +167,7 @@ loadHighscores() {
   restart() {
     this.lives = 3;
     this.score = 0;
+    this.money = 0;
     this.newRound();
   }
 

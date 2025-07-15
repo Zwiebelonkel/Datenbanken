@@ -10,7 +10,7 @@ router.post('/submit', async (req, res) => {
   try {
     await db.execute({
       sql: 'INSERT INTO scores (username, score, created_at) VALUES (?, ?, ?)',
-      args: [username, score, money || 0, date],
+      args: [username, score, date],
     });
     res.json({ success: true });
   } catch (err) {

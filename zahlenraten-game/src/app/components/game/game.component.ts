@@ -114,11 +114,22 @@ endGame() {
 
   this.gameOver = true;
 
+  // ✅ total_score aktualisieren
   this.scoreService.updateTotalScore({ username, score: this.score }).subscribe({
     next: () => console.log('✅ total_score aktualisiert'),
     error: err => console.error('❌ Fehler beim total_score:', err)
   });
 
+  // ✅ money aktualisieren
+  this.http.post('https://outside-between.onrender.com/api/updateMoney', {
+    username,
+    amount: this.money
+  }).subscribe({
+    next: () => console.log('💰 Geld aktualisiert'),
+    error: err => console.error('❌ Fehler beim Geld-Update:', err)
+  });
+
+  // ✅ Highscore prüfen
   this.scoreService.isHighscore(this.score).subscribe(res => {
     this.isHighscore = res.isHighscore;
   });
@@ -133,7 +144,7 @@ submitScore() {
     return;
   }
 
-  this.scoreService.submitScore(username, this.score, this.money).subscribe(() => {
+  this.scoreService.submitScore(username, this.score).subscribe(() => {
     this.loadHighscores();
     this.restart();
   });

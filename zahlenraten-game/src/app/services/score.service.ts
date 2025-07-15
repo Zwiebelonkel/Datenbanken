@@ -16,8 +16,8 @@ export class ScoreService {
 
   constructor(private http: HttpClient) {}
 
-  submitScore(username: string, score: number, money: number) {
-  return this.http.post('/api/submit', { username, score, money });
+  submitScore(username: string, score: number) {
+  return this.http.post('/api/submit', { username, score});
   }
 
   getTopScores(): Observable<ScoreEntry[]> {
@@ -34,6 +34,10 @@ export class ScoreService {
 
   getTotalScore(username: string): Observable<{ total_score: number }> {
   return this.http.get<{ total_score: number }>(`https://outside-between.onrender.com/api/scores/userTotalScore/${username}`);
+}
+
+updateMoney(scoreData: { username: string; amount: number }) {
+  return this.http.post(`${this.apiUrl}/updateMoney`, scoreData);
 }
 
 }

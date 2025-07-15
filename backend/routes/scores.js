@@ -4,28 +4,17 @@ import db from '../db.js';
 const router = express.Router();
 
 router.post('/submit', async (req, res) => {
-  const { username, score } = req.body;
+  const { username, score, money } = req.body;
   const date = new Date().toISOString();
 
   try {
-    // Score speichern
     await db.execute({
-      sql: 'INSERT INTO scores (username, score, created_at) VALUES (?, ?, ?)',
-      args: [username, score, date],
+      sql: 'INSERT INTO scores (username, score, money, created_at) VALUES (?, ?, ?, ?)',
+      args: [username, score, money || 0, date],
     });
-
-    // Geld aktualisieren
-    await db.execute({
-      sql: 'UPDATE users SET money = money + ? WHERE username = ?',
-      args: [score, username],
-    });
-
-    // Antwort sicher als JSON senden
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ success: true });
+    res.json({ success: true });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -47,6 +36,26 @@ router.post('/updateTotalScore', async (req, res) => {
   } catch (err) {
     console.error('❌ Fehler beim total_score:', err);
     res.status(500).json({ message: 'total_score Update fehlgeschlagen' });
+  }
+});
+
+// Geld hinzufügen
+router.post('/updateMoney', async (req, res) => {
+  const { username, amount } = req.body;
+
+  if (!username || typeof amount !== 'number') {
+    return res.status(400).json({ message: 'Ungültige Eingaben für Geld' });
+  }
+
+  try {
+    await db.execute({
+      sql: 'UPDATE users SET money = money + ? WHERE LOWER(username) = LOWER(?)',
+      args: [amount, username],
+    });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('❌ Fehler beim money Update:', err);
+    res.status(500).json({ message: 'Money-Update fehlgeschlagen' });
   }
 });
 

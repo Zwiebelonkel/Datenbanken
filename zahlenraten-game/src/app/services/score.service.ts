@@ -16,8 +16,8 @@ export class ScoreService {
 
   constructor(private http: HttpClient) {}
 
-  submitScore(username: string, score: number) {
-  return this.http.post('/api/submit', { username, score});
+  submitScore(scoreData: { username: string; score: number }) {
+    return this.http.post(`${this.apiUrl}/submit`, scoreData);
   }
 
   getTopScores(): Observable<ScoreEntry[]> {

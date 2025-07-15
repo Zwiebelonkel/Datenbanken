@@ -14,7 +14,7 @@
     <button (click)="goToProfile()">👤 Profil</button>
     <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
     <button (click)="logout()">🚪 Logout</button>
-    <button (click)="toggleDarkMode()">🌓 Dark Mode</button>
+<!--    <button (click)="toggleDarkMode()">🌓 Dark Mode</button> -->
   </div>
 </div>
 

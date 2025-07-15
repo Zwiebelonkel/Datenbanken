@@ -142,7 +142,8 @@ submitScore() {
     return;
   }
 
-  this.scoreService.submitScore(username, this.score).subscribe(() => {
+    this.scoreService.submitScore({ username, score: this.score }).subscribe(() => {
+
     this.loadHighscores();
     this.restart();
   });

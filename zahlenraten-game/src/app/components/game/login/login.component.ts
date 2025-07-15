@@ -17,6 +17,7 @@ export class LoginComponent {
   username = '';
   password = '';
   error = false;
+  isLoading = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 

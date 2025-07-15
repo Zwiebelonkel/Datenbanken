@@ -21,6 +21,8 @@ export class LoginComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
 login() {
+  this.isLoading = true; // Spinner starten
+
   this.http.post<{ success: boolean, token?: string, message?: string }>(
     'https://outside-between.onrender.com/api/login',
     {
@@ -32,6 +34,8 @@ login() {
     }
   ).subscribe({
     next: (res) => {
+      this.isLoading = false; // Spinner stoppen
+
       if (res.success) {
         if (res.token) {
           localStorage.setItem('token', res.token);
@@ -42,6 +46,7 @@ login() {
       }
     },
     error: (err) => {
+      this.isLoading = false; // Spinner stoppen auch bei Fehler
       this.error = true;
       console.error('Login-Fehler:', err);
     }

@@ -8,21 +8,24 @@ router.post('/submit', async (req, res) => {
   const date = new Date().toISOString();
 
   try {
-    // 1. Score speichern
+    // Score speichern
     await db.execute({
       sql: 'INSERT INTO scores (username, score, created_at) VALUES (?, ?, ?)',
       args: [username, score, date],
     });
 
-    // 2. Geld aktualisieren (+= score)
+    // Geld aktualisieren
     await db.execute({
-      sql: 'UPDATE users SET money = IFNULL(money, 0) + ? WHERE username = ?',
+      sql: 'UPDATE users SET money = money + ? WHERE username = ?',
       args: [score, username],
     });
 
-    res.json({ success: true });
+    // Antwort sicher als JSON senden
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 

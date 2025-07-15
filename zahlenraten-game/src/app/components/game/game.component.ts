@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
 import { ScoreService } from '../../services/score.service';
+import { MoneyService } from '../../services/money.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -30,7 +31,7 @@ export class GameComponent implements OnInit {
 
 
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService) {}
 
   ngOnInit() {
     this.newRound();
@@ -120,14 +121,11 @@ endGame() {
     error: err => console.error('❌ Fehler beim total_score:', err)
   });
 
-  // ✅ money aktualisieren
-  this.http.post('https://outside-between.onrender.com/api/updateMoney', {
-    username,
-    amount: this.money
-  }).subscribe({
-    next: () => console.log('💰 Geld aktualisiert'),
-    error: err => console.error('❌ Fehler beim Geld-Update:', err)
-  });
+// 💰 money aktualisieren
+this.moneyService.updateMoney({ username, amount: this.score }).subscribe({
+  next: () => console.log('💰 Geld aktualisiert'),
+  error: err => console.error('❌ Fehler beim Geld-Update:', err)
+});
 
   // ✅ Highscore prüfen
   this.scoreService.isHighscore(this.score).subscribe(res => {

@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import scoresRoutes from './routes/scores.js';
 import profileRoutes from './routes/profile.js';
+import moneyRoutes from './routes/money.js';
 import db from './db.js';
 
 const app = express();
@@ -14,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/scores', scoresRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/money', moneyRoutes);
+
 
 const ALL_ACHIEVEMENTS = [
   { name: 'First Game', description: 'Dein erstes Spiel!' },

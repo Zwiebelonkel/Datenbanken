@@ -36,8 +36,4 @@ export class ScoreService {
   return this.http.get<{ total_score: number }>(`https://outside-between.onrender.com/api/scores/userTotalScore/${username}`);
 }
 
-updateMoney(scoreData: { username: string; amount: number }) {
-  return this.http.post(`${this.apiUrl}/updateMoney`, scoreData);
-}
-
 }

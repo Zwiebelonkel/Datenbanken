@@ -89,9 +89,8 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 
-// Alle Highscores holen
 app.get('/api/scores/all', (req, res) => {
-  db.query('SELECT * FROM scores', (err, results) => {
+  db.query('SELECT * FROM scores ORDER BY score DESC', (err, results) => {
     if (err) return res.status(500).json({ error: 'Fehler beim Laden der Scores' });
     res.json(results);
   });

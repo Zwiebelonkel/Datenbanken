@@ -13,6 +13,7 @@
     <button (click)="goToAchievements()">🎖️ Erfolge</button>
     <button (click)="goToProfile()">👤 Profil</button>
     <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
+    <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="howToPlay()">❓</button>
     <button (click)="logout()">🚪 Logout</button>
 <!--    <button (click)="toggleDarkMode()">🌓 Dark Mode</button> -->
   </div>

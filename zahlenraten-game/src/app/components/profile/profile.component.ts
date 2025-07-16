@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   pwChangeSuccess = false;
   isLoading = true;
   money = 0;
+  highscore = 0:
 
 
 
@@ -42,6 +43,7 @@ ngOnInit(): void {
       this.totalGames = stats.totalGames;
       this.unlockedAchievements = stats.unlockedAchievements;
       this.money = stats.money; // 💰 Geld übernehmen
+      this.highscore = stats.highscore;
       this.isLoading = false;
     },
     error: err => {

@@ -7,6 +7,7 @@ interface UserStats {
   totalGames: number;
   unlockedAchievements: number;
   money: number;
+  highscore: number;
 
 }
 

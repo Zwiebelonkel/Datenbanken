@@ -199,7 +199,7 @@ goToProfile() {
   this.router.navigate(['/profile']);
 }
 
-HowToPlay() {
+howToPlay() {
   this.router.navigate(['/how-to-play']);
 }
 

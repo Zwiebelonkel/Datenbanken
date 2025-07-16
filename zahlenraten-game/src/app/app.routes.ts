@@ -5,6 +5,7 @@ import { RegisterComponent } from './components/game/register/register.component
 import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { HowToPlayComponent } from './components/how-to-play/how-to-play.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'admin', component: AdminPageComponent },
   { path: 'achievements', component: AchievementsComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'how-to-play', component: HowToPlayComponent },
 
 ];

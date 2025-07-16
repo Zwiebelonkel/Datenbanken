@@ -199,6 +199,9 @@ goToProfile() {
   this.router.navigate(['/profile']);
 }
 
+HowToPlay() {
+  this.router.navigate(['/how-to-play']);
+
 unlockAchievement(name: string) {
   this.http.post('https://outside-between.onrender.com/api/unlock', {
     userId: this.authService.getUserId(),

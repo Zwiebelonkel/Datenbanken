@@ -10,21 +10,22 @@ router.get('/', async (req, res) => {
   }
  
   try {
-      const result = await db.execute({
-        sql: `
-          SELECT 
-            u.total_score AS totalScore,
-            u.money AS money,
-            (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
-            (SELECT COUNT(*) FROM achievements a 
-               JOIN users u2 ON u2.id = a.user_id 
-               WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements
-          FROM users u
-          WHERE LOWER(u.username) = LOWER(?)
-          LIMIT 1
-        `,
-        args: [username, username, username],
-      });
+const result = await db.execute({
+  sql: `
+    SELECT 
+      u.total_score AS totalScore,
+      u.money AS money,
+      (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
+      (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
+      (SELECT COUNT(*) FROM achievements a 
+         JOIN users u2 ON u2.id = a.user_id 
+         WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements
+    FROM users u
+    WHERE LOWER(u.username) = LOWER(?)
+    LIMIT 1
+  `,
+  args: [username, username, username, username],
+});
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Benutzer nicht gefunden' });

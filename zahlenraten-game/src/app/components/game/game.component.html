@@ -50,7 +50,7 @@
   <h2>🎯 Game Over!</h2>
   <p class="final-score">Dein Score: <strong>{{ score }}</strong></p>
 
-  <div *ngIf="authService.isLoggedIn()" class="highscore-form">
+  <div *ngIf="authService.isLoggedIn() && this.score !== 0" class="highscore-form">
     <button class="btn" (click)="submitScore()">🏅 Highscore speichern</button>
   </div>
 

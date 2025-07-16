@@ -12,6 +12,7 @@ import { LoginComponent } from './components/game/login/login.component';
 import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { HowToPlayComponent } from './components/how-to-play/how-to-play.component';
 import { DarkModeService } from './services/dark.service';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { DarkModeService } from './services/dark.service';
     AdminPageComponent,
     AchievementsComponent,
     ProfileComponent,
+    HowToPlayComponent,
     DarkModeService
   ],
   imports: [

@@ -28,6 +28,7 @@ export class GameComponent implements OnInit {
   consecutiveWins = 0;
   darkMode = false;
   isLoading = true;
+  sidebarOpen = false;
 
 
   topScores: any[] = [];
@@ -259,6 +260,11 @@ getAchievementDescription(name: string): string {
     'Strategieprofi': 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren'
   };
   return descriptions[name] || 'Erfolg freigeschaltet';
+}
+
+
+toggleSidebar() {
+  this.sidebarOpen = !this.sidebarOpen;
 }
 
 toggleDarkMode() {

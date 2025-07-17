@@ -174,6 +174,7 @@ loadHighscores() {
 
   logout() {
     this.authService.logout();
+    this.toggleSidebar();
   }
 
   goToLogin() {

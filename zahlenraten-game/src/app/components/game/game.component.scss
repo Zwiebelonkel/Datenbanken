@@ -241,18 +241,18 @@ body.dark-mode .money {
   cursor: pointer;
   position: fixed;
   top: 1rem;
-  left: 1rem;
+  right: 1rem;
   z-index: 1001;
 }
 
 .sidebar {
   position: fixed;
   top: 0;
-  left: -240px;
+  right: -240px;
   width: 220px;
   height: 100%;
   background: #ffffffee;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(4px);
   box-shadow: 2px 0 6px rgba(0,0,0,0.1);
   padding: 1.5rem;
   box-sizing: border-box;
@@ -265,7 +265,7 @@ body.dark-mode .money {
 }
 
 .sidebar.open {
-  left: 0;
+  right: 0;
 }
 
 .sidebar button {

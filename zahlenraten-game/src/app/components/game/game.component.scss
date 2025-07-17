@@ -235,4 +235,57 @@ body.dark-mode .money {
   color: #7dffb2;
 }
 
+.sidebar-toggle {
+  font-size: 2rem;
+  padding: 1rem;
+  cursor: pointer;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -240px;
+  width: 220px;
+  height: 100%;
+  background: #ffffffee;
+  backdrop-filter: blur(6px);
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  box-sizing: border-box;
+  z-index: 1000;
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 0 10px 10px 0;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar button {
+  background-color: #4285f4;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.sidebar button:hover {
+  background-color: #3367d6;
+  transform: scale(1.05);
+}
+
+body.dark-mode .sidebar {
+  background: #1f1f1fdd;
+  color: white;
+}
 

@@ -25,6 +25,16 @@
     <button (click)="goToLogin()">🔐 Login</button>
   </div>
 </div>
+<div class="sidebar-toggle" (click)="toggleSidebar()">☰</div>
+
+<div class="sidebar" [class.open]="sidebarOpen">
+  <p>👤 {{ authService.getUsername() }}</p>
+  <button (click)="goToAchievements()">🎖️ Erfolge</button>
+  <button (click)="goToProfile()">👤 Profil</button>
+  <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
+  <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="howToPlay()">❓ Anleitung</button>
+  <button (click)="logout()">🚪 Logout</button>
+</div>
 
 <!-- Spiel läuft -->
 <div class="game-container" *ngIf="!gameOver">

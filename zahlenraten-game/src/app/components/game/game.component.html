@@ -16,7 +16,7 @@
     <button (click)="goToLogin()">🔐 Login</button>
   </div>
 </div>
-<div class="sidebar-toggle" (click)="toggleSidebar()">☰</div>
+<div class="sidebar-toggle" *ngIf="authService.isLoggedIn() (click)="toggleSidebar()">☰</div>
 
 <div class="sidebar" [class.open]="sidebarOpen">
   <p>👤 {{ authService.getUsername() }}</p>

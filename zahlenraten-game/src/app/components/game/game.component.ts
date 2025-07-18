@@ -299,7 +299,10 @@ toggleSidebar() {
 }
 
 loadAch() {
-  this.profileService.getUserStats(this.authService.getUsername()).subscribe({
+  const username = this.authService.getUsername();
+  if (!username) return; // Sicherheit: nicht einloggen -> abbrechen
+
+  this.profileService.getUserStats(username).subscribe({
     next: stats => {
       this.achAmount = stats.unlockedAchievements;
     },

@@ -168,11 +168,15 @@ app.post('/api/unlock', async (req, res) => {
         sql: 'INSERT INTO achievements (user_id, name, description, unlocked) VALUES (?, ?, ?, 1)',
         args: [userId, name, description],
       });
+
+      return res.status(201).json({ unlocked: true, name });
     }
 
-    res.status(200).send('OK');
+    // Bereits vorhanden
+    return res.status(200).json({ unlocked: false, name });
   } catch (err) {
-    res.status(500).send('Serverfehler');
+    console.error('Fehler beim Achievement-Unlock:', err);
+    return res.status(500).json({ message: 'Serverfehler' });
   }
 });
 

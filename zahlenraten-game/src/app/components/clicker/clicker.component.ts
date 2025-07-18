@@ -17,6 +17,7 @@ export class ClickerComponent implements OnInit {
   money = 0;
   username: string = '';
   deposited = false;
+  isLoading = true;
 
   constructor(
     public authService: AuthService,

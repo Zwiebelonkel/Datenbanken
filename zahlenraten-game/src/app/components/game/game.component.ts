@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DarkModeService } from '../../services/dark.service';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-game',
@@ -30,12 +31,13 @@ export class GameComponent implements OnInit {
   isLoading = true;
   sidebarOpen = false;
   achievementMessage: string | null = null;
+  achAmount = 0;
 
   buttonsDisabled = false;
 
 
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService) {}
 
   ngOnInit() {
     this.newRound();

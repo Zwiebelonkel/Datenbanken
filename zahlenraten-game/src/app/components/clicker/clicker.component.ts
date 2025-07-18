@@ -26,7 +26,8 @@ export class ClickerComponent implements OnInit {
     public authService: AuthService,
     private moneyService: MoneyService,
     private profileService: ProfileService,
-    private http: HttpClient
+    private http: HttpClient,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit(): void {

@@ -49,7 +49,7 @@ export class ClickerComponent implements OnInit {
   }
 
   loadMoney() {
-   this.profileService.getUserStats(username).subscribe({
+   this.profileService.getUserStats(this.username).subscribe({
     next: stats => {
       this.money = stats.money; // 💰 Geld übernehmen
     },

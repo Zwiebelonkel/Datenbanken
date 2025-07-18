@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
+import { ProfileService } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
@@ -20,6 +21,7 @@ export class ClickerComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private moneyService: MoneyService,
+    private profileservice: ProfileService,
     private http: HttpClient
   ) {}
 

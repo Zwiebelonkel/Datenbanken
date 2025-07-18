@@ -299,7 +299,7 @@ toggleSidebar() {
 }
 
 loadAch() {
-  this.profileService.getUserStats(authService.getUsername).subscribe({
+  this.profileService.getUserStats(this.authService.getUsername).subscribe({
     next: stats => {
       this.achAmount = stats.unlockedAchievements;
     },

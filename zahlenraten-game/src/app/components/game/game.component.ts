@@ -38,6 +38,10 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     this.newRound();
     this.loadHighscores();
+
+setTimeout(() => {
+    this.showAchievementMessage('🎉 Test-Erfolg freigeschaltet!');
+  }, 1000);
   }
 
   isDarkMode(): boolean {

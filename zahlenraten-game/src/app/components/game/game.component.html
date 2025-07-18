@@ -24,7 +24,7 @@
   <button (click)="goToProfile()">👤 Profil</button>
   <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
   <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="howToPlay()">❓ Anleitung</button>
-  <button *ngIf="achAmount >== 3" (click)="goToClicker()">💰</button>
+  <button [disabled]="achAmount < 3" (click)="goToClicker()">💰</button>
   <button (click)="toggleDarkMode()">🌓</button>
   <button (click)="logout()">🚪 Logout</button>
 </div>

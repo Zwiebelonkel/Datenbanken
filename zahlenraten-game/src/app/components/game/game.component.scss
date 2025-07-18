@@ -43,6 +43,7 @@ body.dark-mode .highscores {
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn:hover {
@@ -96,7 +97,7 @@ body.dark-mode .input {
 .highscores li {
   background: #fff;
   padding: 0.8rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px dashed #ccc;
   font-size: 1rem;
   display: flex;
   justify-content: space-between;

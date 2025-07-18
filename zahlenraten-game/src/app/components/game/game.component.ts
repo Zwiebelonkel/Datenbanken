@@ -222,43 +222,47 @@ unlockAchievement(name: string) {
 
 checkForAchievements() {
   if (!this.hasPlayedYet) {
-    this.unlockAchievement('First Game');
+    this.unlockAchievement('First Game 1️⃣');
     this.hasPlayedYet = true;
   }
   if (this.score === 0 && this.lives === 0) {
-    this.unlockAchievement('Pechvogel');
+    this.unlockAchievement('Pechvogel 🐓');
   }
   if (this.score >= 10) {
-    this.unlockAchievement('Newbie');
+    this.unlockAchievement('Newbie 🐣');
   }
   if (this.score >= 50) {
-    this.unlockAchievement('Glückspilz');
+    this.unlockAchievement('Glückspilz 🍄');
   }
   if (this.score >= 75) {
-    this.unlockAchievement('Zahlenmeister');
+    this.unlockAchievement('Zahlenmeister 💯');
   }
   if (this.consecutiveWins >= 3) {
-    this.unlockAchievement('Gambler');
+    this.unlockAchievement('Gambler 🎲');
   }
   if (this.consecutiveWins >= 5) {
-    this.unlockAchievement('Arbeitswoche');
+    this.unlockAchievement('Arbeitswoche 🛠️');
   }
   if (this.consecutiveWins >= 10) {
-    this.unlockAchievement('Strategieprofi');
+    this.unlockAchievement('Strategieprofi 🧭');
+  }
+  if (this.consecutiveWins >= 20) {
+    this.unlockAchievement('Magier 🪄');
   }
 }
 
 
 getAchievementDescription(name: string): string {
   const descriptions: Record<string, string> = {
-    'First Game': 'Dein erstes Spiel!',
-    'Pechvogel': '0 Punkte erzielt',
-    'Newbie': 'Du hast 10 Punkte erreicht!',
-    'Glückspilz': 'Du hast 50 Punkte erreicht!',
-    'Zahlenmeister': 'Du hast 75 Punkte erreicht!',
-    'Gambler': 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren',
-    'Arbeitswoche': 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
-    'Strategieprofi': 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren'
+    'First Game 1️⃣': 'Dein erstes Spiel!',
+    'Pechvogel 🐓': '0 Punkte erzielt',
+    'Newbie 🐣': 'Du hast 10 Punkte erreicht!',
+    'Glückspilz 🍄': 'Du hast 50 Punkte erreicht!',
+    'Zahlenmeister 💯': 'Du hast 75 Punkte erreicht!',
+    'Gambler 🎲': 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren',
+    'Arbeitswoche 🛠️': 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
+    'Strategieprofi 🧭': 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
+    'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren'
   };
   return descriptions[name] || 'Erfolg freigeschaltet';
 }

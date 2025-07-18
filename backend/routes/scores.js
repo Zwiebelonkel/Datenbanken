@@ -52,7 +52,7 @@ router.get('/top', async (req, res) => {
 //Alle Scores abrufen
 router.get('/all', async (req, res) => {
   try {
-    const result = await db.execute('SELECT * FROM scores');
+    const result = await db.execute('SELECT * FROM scores ORDER BY score DESC');
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: 'Fehler beim Laden der Scores' });

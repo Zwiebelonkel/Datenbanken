@@ -211,15 +211,16 @@ howToPlay() {
 }
 
 unlockAchievement(name: string) {
-  this.http.post('https://outside-between.onrender.com/api/unlock', {
-    userId: this.authService.getUserId(),
-    name: name,
-    description: this.getAchievementDescription(name)
-  })
-  .subscribe({
-    next: (res: any) => {
-      console.log('SERVER-ANTWORT:', res); // ← wichtig zum Prüfen
-
+  this.http.post<{ unlocked: boolean; name: string }>(
+    'https://outside-between.onrender.com/api/unlock',
+    {
+      userId: this.authService.getUserId(),
+      name: name,
+      description: this.getAchievementDescription(name)
+    }
+  ).subscribe({
+    next: (res) => {
+      console.log('SERVER-ANTWORT:', res);
       if (res.unlocked) {
         this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
         console.log('✅ Achievement neu freigeschaltet:', res.name);

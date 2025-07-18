@@ -1,14 +1,13 @@
-<div class="game-container">
-  <h2>💸 Clicker</h2>
+<div class="clicker-container">
+  <h2>🖱️ Clicker-Modus</h2>
 
-  <p>💼 Dein Guthaben: <strong>{{ money }} €</strong></p>
-  <p>🖱️ Erspieltes Geld: <strong>{{ clickAmount }} €</strong></p>
+  <div class="money-display">💼 Gesamtguthaben: <strong>{{ money }} €</strong></div>
+  <div class="click-amount">💸 Erspieltes Geld: <strong>{{ clickAmount }} €</strong></div>
 
-  <button class="btn" (click)="click()">Klicken für +1€</button>
-
+  <button class="btn" (click)="click()">+1€ verdienen</button>
   <button class="btn deposit" [disabled]="clickAmount === 0" (click)="deposit()">💰 Einzahlen</button>
 
-  <p *ngIf="deposited" style="color: green; margin-top: 1rem;">
-    ✅ Dein Guthaben wurde aktualisiert!
-  </p>
+  <div *ngIf="deposited" class="success-message">
+    ✅ Dein Guthaben wurde erfolgreich aktualisiert!
+  </div>
 </div>

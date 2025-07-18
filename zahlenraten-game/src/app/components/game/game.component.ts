@@ -211,20 +211,19 @@ unlockAchievement(name: string) {
     userId: this.authService.getUserId(),
     name: name,
     description: this.getAchievementDescription(name)
-  }, { responseType: 'text' })
-.subscribe({
-  next: (res: any) => {
-    if (res.unlocked) {
-      this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
-      console.log('✅ Achievement neu freigeschaltet:', res.name);
-    } else {
-      console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
-    }
-  },
-  error: (err) => console.error('Fehler beim Unlock:', err)
-});
+  })
+  .subscribe({
+    next: (res: any) => {
+      if (res.unlocked) {
+        this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
+        console.log('✅ Achievement neu freigeschaltet:', res.name);
+      } else {
+        console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
+      }
+    },
+    error: (err) => console.error('Fehler beim Unlock:', err)
+  });
 }
-
 
 
 

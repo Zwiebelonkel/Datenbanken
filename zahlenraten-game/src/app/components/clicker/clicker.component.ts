@@ -49,15 +49,16 @@ export class ClickerComponent implements OnInit {
     });
   }
 
-  loadMoney() {
-   this.profileService.getUserStats(this.username).subscribe({
+loadMoney() {
+  this.profileService.getUserStats(this.username).subscribe({
     next: stats => {
-      this.money = stats.money; // 💰 Geld übernehmen
+      this.money = stats.money;
+      this.isLoading = false;
     },
     error: err => {
       console.error('Fehler beim Laden der Statistiken', err);
+      this.isLoading = false;
     }
-  this.isLoading = false;
   });
-  }
+}
 }

@@ -109,9 +109,15 @@ emojiRain(emoji: string, count: number = 20) {
 
     this.renderer.appendChild(container, span);
 
-    setTimeout(() => {
-      this.renderer.removeChild(container, span);
-    }, 3500);
+    const delay = Math.random() * 2;
+span.style.animationDelay = `${delay}s`;
+
+container.appendChild(span);
+
+// Emojis einzeln verzögert entfernen
+setTimeout(() => {
+  container.removeChild(span);
+}, (3 + delay) * 1000); // 3s anim + delay
   }
 }
 }

@@ -54,6 +54,7 @@ h2 {
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
   transition: transform 0.2s ease, background-color 0.3s ease;
   user-select: none;
+  overflow: hidden;
 }
 
 /* Shine-Layer */
@@ -64,6 +65,7 @@ h2 {
   left: -50%;
   width: 200%;
   height: 200%;
+  border-radius: 50%;
   background: linear-gradient(
     120deg,
     rgba(255, 255, 255, 0.1) 0%,

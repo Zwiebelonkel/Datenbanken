@@ -301,7 +301,7 @@ toggleSidebar() {
 loadAch() {
   this.profileService.getUserStats(this.username).subscribe({
     next: stats => {
-      this.achAmount = stats.achievements;
+      this.achAmount = stats.unlockedAchievements;
     },
     error: err => {
       console.error('Fehler beim Laden der Statistiken', err);

@@ -26,7 +26,8 @@ const ALL_ACHIEVEMENTS = [
   { name: 'Zahlenmeister', description: 'Du hast 75 Punkte erreicht!' },
   { name: 'Gambler', description: 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren' },
   { name: 'Arbeitswoche', description: 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren' },
-  { name: 'Strategieprofi', description: 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren' }
+  { name: 'Strategieprofi', description: 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren' },
+  { name: 'Magier', description: 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren' },
 ];
 
 // Registrierung

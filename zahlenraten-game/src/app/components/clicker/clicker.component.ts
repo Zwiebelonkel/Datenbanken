@@ -37,17 +37,28 @@ export class ClickerComponent implements OnInit {
   this.clickAmount += 1;
   this.deposited = false;
 
-  // Farbblitz aktivieren
+  // Farbblitz
   this.flashActive = true;
   setTimeout(() => this.flashActive = false, 400);
 
-  // 💸 fliegende Münze
   const button = document.querySelector('.click-button') as HTMLElement;
-  const rect = button.getBoundingClientRect();
-  const x = Math.random() * 40 + 60;
-  const y = Math.random() * 20 + 40;
+  const wrapper = document.querySelector('.click-wrapper') as HTMLElement;
+  if (!button || !wrapper) return;
 
-  this.floatingMoney.push({ x, y });
+  const buttonRect = button.getBoundingClientRect();
+  const wrapperRect = wrapper.getBoundingClientRect();
+
+  // 💸 Startposition ist Mitte des Buttons, relativ zum Wrapper
+  const centerX = buttonRect.left - wrapperRect.left + buttonRect.width / 2;
+  const centerY = buttonRect.top - wrapperRect.top + buttonRect.height / 2;
+
+  // Zufälliger Versatz (optischer Effekt)
+  const offsetX = (Math.random() - 0.5) * 80; // -40 bis +40
+  const offsetY = (Math.random() - 0.5) * 80; // -40 bis +40
+
+  this.floatingMoney.push({ x: centerX + offsetX, y: centerY + offsetY });
+
+  // Nach 1s entfernen
   setTimeout(() => this.floatingMoney.shift(), 1000);
 }
 

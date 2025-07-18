@@ -29,6 +29,7 @@ export class GameComponent implements OnInit {
   darkMode = false;
   isLoading = true;
   sidebarOpen = false;
+  achievementMessage: string | null = null;
 
 
   topScores: any[] = [];

@@ -1,3 +1,4 @@
+import { Renderer2 } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
@@ -94,20 +95,21 @@ emojiRain(emoji: string, count: number = 20) {
   if (!container) return;
 
   for (let i = 0; i < count; i++) {
-    const span = document.createElement('span');
-    span.classList.add('emoji-drop');
-    span.innerText = emoji;
+    const span = this.renderer.createElement('span');
+    const text = this.renderer.createText(emoji);
+    this.renderer.appendChild(span, text);
+    this.renderer.addClass(span, 'emoji-drop');
 
     const startX = Math.random() * window.innerWidth;
     const delay = Math.random() * 2;
 
-    span.style.left = `${startX}px`;
-    span.style.animationDelay = `${delay}s`;
+    this.renderer.setStyle(span, 'left', `${startX}px`);
+    this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
 
-    container.appendChild(span);
+    this.renderer.appendChild(container, span);
 
     setTimeout(() => {
-      container.removeChild(span);
+      this.renderer.removeChild(container, span);
     }, 3500);
   }
 }

@@ -99,7 +99,7 @@ app.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-// Scores abrufen
+// Scores abrufen (kann vielleicht weg wegen scores.js)
 app.get('/api/scores/all', async (req, res) => {
   try {
     const result = await db.execute('SELECT * FROM scores ORDER BY score DESC');

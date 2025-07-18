@@ -76,6 +76,7 @@ export class GameComponent implements OnInit {
       setTimeout(() => this.newRound(), 500);
     } else if (this.lives > 1) {
       this.lives--;
+      this.consecutiveWins = 0;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.newRound(), 500);
     } else {

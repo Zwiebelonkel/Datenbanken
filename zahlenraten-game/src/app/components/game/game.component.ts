@@ -293,6 +293,20 @@ getAchievementDescription(name: string): string {
 
 toggleSidebar() {
   this.sidebarOpen = !this.sidebarOpen;
+  if (sidebarOpen){
+    this.loadAch;
+  }
+}
+
+loadAch() {
+  this.profileService.getUserStats(this.username).subscribe({
+    next: stats => {
+      this.achAmount = stats.achievements;
+    },
+    error: err => {
+      console.error('Fehler beim Laden der Statistiken', err);
+    }
+  });
 }
 
 toggleDarkMode() {

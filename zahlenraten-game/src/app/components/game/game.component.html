@@ -39,10 +39,10 @@
     <div id="finalNumber"><p><strong>Test-Zahl:</strong> {{ testNum }}</p></div>
   </div>
 
-  <div class="buttons">
-    <button class="btn" (click)="guess('inside')">Zwischen</button>
-    <button class="btn" (click)="guess('outside')">Außerhalb</button>
-  </div>
+<div class="buttons">
+  <button class="btn" [disabled]="buttonsDisabled" (click)="guess('inside')">Zwischen</button>
+  <button class="btn" [disabled]="buttonsDisabled" (click)="guess('outside')">Außerhalb</button>
+</div>
 
   <p class="score">Punkte: <span>{{ score }}</span></p>
   <p class="money">💰 Geld: <span>{{ money }}€</span></p>

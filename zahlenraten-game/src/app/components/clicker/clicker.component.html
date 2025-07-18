@@ -1,14 +1,23 @@
 <div class="clicker-container">
   <h2>🖱️ Clicker-Modus</h2>
-  
+
   <div *ngIf="isLoading" class="loader-container">
-  <div class="loader"></div>
-</div>
+    <div class="loader"></div>
+  </div>
 
   <div class="money-display">💼 Gesamtguthaben: <strong>{{ money }} €</strong></div>
   <div class="click-amount">💸 Erspieltes Geld: <strong>{{ clickAmount }} €</strong></div>
 
-  <button class="btn" (click)="click()">+1€ verdienen</button>
+  <div class="click-wrapper">
+    <div class="click-flash" [class.active]="flashActive"></div>
+
+    <button class="click-button" (click)="click()">💸</button>
+
+    <div *ngFor="let m of floatingMoney" class="money-float" [style.left.px]="m.x" [style.top.px]="m.y">
+      +1€
+    </div>
+  </div>
+
   <button class="btn deposit" [disabled]="clickAmount === 0" (click)="deposit()">💰 Einzahlen</button>
 
   <div *ngIf="deposited" class="success-message">

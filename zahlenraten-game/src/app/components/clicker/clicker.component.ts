@@ -89,24 +89,26 @@ loadMoney() {
   });
 }
 
-startEmojiRain(emoji: string) {
-  const count = 30; // Anzahl der fallenden Emojis
+emojiRain(emoji: string, count: number = 20) {
+  const container = document.querySelector('.emoji-rain-container');
+  if (!container) return;
 
   for (let i = 0; i < count; i++) {
     const span = document.createElement('span');
-    span.textContent = emoji;
-    span.style.position = 'fixed';
-    span.style.top = '-50px';
-    span.style.left = `${Math.random() * 100}vw`;
-    span.style.fontSize = `${Math.random() * 20 + 24}px`;
-    span.style.pointerEvents = 'none';
-    span.style.zIndex = '9999';
-    span.style.animation = `emojiFall ${Math.random() * 2 + 3}s linear forwards`;
+    span.classList.add('emoji-drop');
+    span.innerText = emoji;
 
-    document.body.appendChild(span);
+    const startX = Math.random() * window.innerWidth;
+    const delay = Math.random() * 2;
 
-    // Entferne nach Animation
-    setTimeout(() => span.remove(), 6000);
+    span.style.left = `${startX}px`;
+    span.style.animationDelay = `${delay}s`;
+
+    container.appendChild(span);
+
+    setTimeout(() => {
+      container.removeChild(span);
+    }, 3500);
   }
 }
 }

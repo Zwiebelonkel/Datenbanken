@@ -213,6 +213,10 @@ howToPlay() {
   this.router.navigate(['/how-to-play']);
 }
 
+goToClicker() {
+  this.router.navigate(['/clicker']);
+}
+
 unlockAchievement(name: string) {
   this.http.post<{ unlocked: boolean; name: string }>(
     'https://outside-between.onrender.com/api/unlock',

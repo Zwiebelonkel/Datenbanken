@@ -1,0 +1,29 @@
+.clicker-page {
+  text-align: center;
+  padding: 2rem;
+}
+
+.clicker-button {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.clicker-button:hover {
+  transform: scale(1.1);
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}

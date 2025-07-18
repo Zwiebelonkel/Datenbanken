@@ -18,6 +18,8 @@ export class ClickerComponent implements OnInit {
   username: string = '';
   deposited = false;
   isLoading = true;
+  flashActive = false;
+  floatingMoney: { x: number; y: number }[] = [];
 
   constructor(
     public authService: AuthService,
@@ -32,9 +34,22 @@ export class ClickerComponent implements OnInit {
   }
 
   click() {
-    this.clickAmount += 1;
-    this.deposited = false;
-  }
+  this.clickAmount += 1;
+  this.deposited = false;
+
+  // Farbblitz aktivieren
+  this.flashActive = true;
+  setTimeout(() => this.flashActive = false, 400);
+
+  // 💸 fliegende Münze
+  const button = document.querySelector('.click-button') as HTMLElement;
+  const rect = button.getBoundingClientRect();
+  const x = Math.random() * 40 + 60;
+  const y = Math.random() * 20 + 40;
+
+  this.floatingMoney.push({ x, y });
+  setTimeout(() => this.floatingMoney.shift(), 1000);
+}
 
   deposit() {
     if (!this.username || this.clickAmount === 0) return;

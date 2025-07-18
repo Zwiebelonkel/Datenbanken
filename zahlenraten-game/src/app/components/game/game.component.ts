@@ -293,7 +293,7 @@ getAchievementDescription(name: string): string {
 
 toggleSidebar() {
   this.sidebarOpen = !this.sidebarOpen;
-  if (sidebarOpen){
+  if (this.sidebarOpen){
     this.loadAch;
   }
 }

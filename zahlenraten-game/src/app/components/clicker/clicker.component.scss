@@ -218,7 +218,7 @@ h2 {
 
 @keyframes emojiFall {
   0% {
-    transform: translateY(-100px) rotate(0deg);
+    transform: translateY(-200%) rotate(0deg);  /* ✅ deutlich weiter oben */
     opacity: 1;
   }
   100% {

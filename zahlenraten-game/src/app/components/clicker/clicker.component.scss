@@ -30,7 +30,11 @@ h2 {
 
 .click-wrapper {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .click-button {

@@ -33,7 +33,7 @@ export class ClickerComponent implements OnInit {
   ngOnInit(): void {
     this.username = this.authService.getUsername() || '';
     this.loadMoney();
-    this.emojiRain("❤️")
+    this.emojiRain("💵")
   }
 
   click() {

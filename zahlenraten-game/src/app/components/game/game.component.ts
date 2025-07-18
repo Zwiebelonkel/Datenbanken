@@ -284,4 +284,11 @@ toggleDarkMode() {
     body.classList.remove('dark-mode');
   }
 }
+
+showAchievementMessage(message: string) {
+  this.achievementMessage = message;
+  setTimeout(() => {
+    this.achievementMessage = null;
+  }, 3000); // 3 Sekunden sichtbar
+}
 }

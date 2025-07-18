@@ -320,3 +320,11 @@ body.dark-mode .sidebar {
   90% { opacity: 1; }
   100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
 }
+
+.sidebar button:disabled {
+  background-color: #cccccc !important;
+  color: #888888 !important;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

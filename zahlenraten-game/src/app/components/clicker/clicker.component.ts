@@ -5,13 +5,13 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-clicker-page',
+  selector: 'app-clicker',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './clicker-page.component.html',
   styleUrls: ['./clicker-page.component.scss']
 })
-export class ClickerPageComponent implements OnInit {
+export class ClickerComponent implements OnInit {
   clickAmount = 0;
   money = 0;
   username: string = '';

@@ -21,7 +21,7 @@ export class ClickerComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private moneyService: MoneyService,
-    private profileservice: ProfileService,
+    private profileService: ProfileService,
     private http: HttpClient
   ) {}
 

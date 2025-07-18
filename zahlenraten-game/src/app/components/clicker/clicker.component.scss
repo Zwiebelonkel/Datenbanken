@@ -38,6 +38,9 @@ h2 {
 }
 
 .click-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
   width: 160px;
   height: 160px;
   background-color: #4CAF50;
@@ -51,7 +54,35 @@ h2 {
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
   transition: transform 0.2s ease, background-color 0.3s ease;
   user-select: none;
-  z-index: 1;
+}
+
+/* Shine-Layer */
+.click-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.1) 40%,
+    transparent 60%
+  );
+  transform: rotate(25deg);
+  animation: shine 2.5s infinite ease-in-out;
+}
+
+/* Shine Animation */
+@keyframes shine {
+  0% {
+    transform: rotate(25deg) translate(-100%, -100%);
+  }
+  100% {
+    transform: rotate(25deg) translate(100%, 100%);
+  }
 }
 
 .click-button:hover {

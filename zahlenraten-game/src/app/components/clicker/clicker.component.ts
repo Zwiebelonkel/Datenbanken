@@ -37,7 +37,7 @@ export class ClickerComponent implements OnInit {
 
   deposit() {
     if (!this.username || this.clickAmount === 0) return;
-
+    this.isLoading = true;
     this.moneyService.updateMoney({ username: this.username, amount: this.clickAmount }).subscribe({
       next: () => {
         this.deposited = true;
@@ -56,6 +56,7 @@ export class ClickerComponent implements OnInit {
     error: err => {
       console.error('Fehler beim Laden der Statistiken', err);
     }
+  this.isLoading = false;
   });
   }
 }

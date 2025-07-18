@@ -31,6 +31,8 @@ export class GameComponent implements OnInit {
   sidebarOpen = false;
   achievementMessage: string | null = null;
 
+  buttonsDisabled = false;
+
 
   topScores: any[] = [];
   constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService) {}
@@ -88,15 +90,19 @@ export class GameComponent implements OnInit {
     this.checkForAchievements()
   }
 
-  showTestNum() {
-    const testNumElement = document.getElementById('finalNumber') as HTMLElement;
-    if (testNumElement) {
-      testNumElement.style.visibility = 'visible';
-      setTimeout(() => {
-        testNumElement.style.visibility = 'hidden';
-      }, 500); // Hide
-    }
+showTestNum() {
+  const testNumElement = document.getElementById('finalNumber') as HTMLElement;
+  this.buttonsDisabled = true;
+
+  if (testNumElement) {
+    testNumElement.style.visibility = 'visible';
+
+    setTimeout(() => {
+      testNumElement.style.visibility = 'hidden';
+      this.buttonsDisabled = false; // Wieder aktivieren
+    }, 500); // nach 0.5 Sekunde wieder aktiv
   }
+}
 
   flashBackground(element: HTMLElement, color: string) {
     if (element) {

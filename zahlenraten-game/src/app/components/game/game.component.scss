@@ -56,6 +56,14 @@ body.dark-mode .highscores {
   cursor: not-allowed;
 }
 
+button.btn:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .restart {
   background: #2196F3;
 }

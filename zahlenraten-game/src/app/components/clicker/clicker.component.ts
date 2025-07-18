@@ -47,9 +47,13 @@ export class ClickerComponent implements OnInit {
   }
 
   loadMoney() {
-    this.http.get<{ money: number }>(`https://outside-between.onrender.com/api/profile/${this.username}`).subscribe({
-      next: (res) => this.money = res.money,
-      error: (err) => console.error('❌ Fehler beim Laden des Gelds:', err)
-    });
+   this.profileService.getUserStats(username).subscribe({
+    next: stats => {
+      this.money = stats.money; // 💰 Geld übernehmen
+    },
+    error: err => {
+      console.error('Fehler beim Laden der Statistiken', err);
+    }
+  });
   }
 }

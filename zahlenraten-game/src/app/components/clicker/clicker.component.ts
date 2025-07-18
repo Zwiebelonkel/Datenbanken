@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-clicker',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './clicker-page.component.html',
-  styleUrls: ['./clicker-page.component.scss']
+  templateUrl: './clicker.component.html',
+  styleUrls: ['./clicker.component.scss']
 })
 export class ClickerComponent implements OnInit {
   clickAmount = 0;

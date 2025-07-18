@@ -218,6 +218,8 @@ unlockAchievement(name: string) {
   })
   .subscribe({
     next: (res: any) => {
+      console.log('SERVER-ANTWORT:', res); // ← wichtig zum Prüfen
+
       if (res.unlocked) {
         this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
         console.log('✅ Achievement neu freigeschaltet:', res.name);

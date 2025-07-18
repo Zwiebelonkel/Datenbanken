@@ -7,6 +7,7 @@
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
   text-align: center;
+  position: relative;
 }
 
 h2 {
@@ -25,6 +26,85 @@ h2 {
   font-size: 1.1rem;
   margin-bottom: 30px;
   color: #555;
+}
+
+.click-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.click-button {
+  width: 160px;
+  height: 160px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  user-select: none;
+  z-index: 1;
+}
+
+.click-button:hover {
+  background-color: #43a047;
+}
+
+.click-button:active {
+  animation: bounceClick 0.4s ease;
+}
+
+@keyframes bounceClick {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.85); }
+  60%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.click-flash {
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, #aaffaa 0%, transparent 70%);
+  opacity: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.click-flash.active {
+  animation: flashAnim 0.4s ease-out forwards;
+}
+
+@keyframes flashAnim {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+.money-float {
+  position: absolute;
+  font-size: 1.2rem;
+  color: #2ecc71;
+  font-weight: bold;
+  animation: flyUp 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes flyUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(1.5);
+  }
 }
 
 .btn {

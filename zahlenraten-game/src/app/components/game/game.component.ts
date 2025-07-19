@@ -96,10 +96,12 @@ export class GameComponent implements OnInit {
     } else if (this.lives > 1) {
       this.lives--;
       this.consecutiveWins = 0;
+      this.currentMultiplier = 1.0;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.newRound(), 500);
     } else {
       this.consecutiveWins = 0;
+      this.currentMultiplier = 1.0;
       this.lives = 0;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
       setTimeout(() => this.endGame(), 500);

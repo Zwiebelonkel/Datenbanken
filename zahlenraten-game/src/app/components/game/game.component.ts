@@ -344,7 +344,7 @@ showAchievementMessage(message: string) {
   }, 3000); // 3 Sekunden sichtbar
 }
 
-emojiRain(emoji: string, count: number = 20) {
+emojiRain(emoji: string, count: number = 50) {
   const container = document.querySelector('.emoji-rain-container');
   if (!container) return;
 

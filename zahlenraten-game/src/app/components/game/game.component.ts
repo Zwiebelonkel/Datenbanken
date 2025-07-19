@@ -32,6 +32,7 @@ export class GameComponent implements OnInit {
   sidebarOpen = false;
   achievementMessage: string | null = null;
   achAmount = 0;
+  floatingMoney: { x: number; y: number }[] = [];
 
   buttonsDisabled = false;
 

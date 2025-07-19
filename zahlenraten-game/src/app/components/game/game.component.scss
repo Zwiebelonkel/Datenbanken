@@ -330,15 +330,19 @@ body.dark-mode .sidebar {
 }
 
 .combo {
-  font-size: 1.2rem;
-  color: #e67e22;
+  font-size: 1.4rem;
+  color: #ff6f00;
   font-weight: bold;
-  animation: comboFlash 0.3s ease;
+  animation: fireWobble 1s infinite ease-in-out;
+  text-shadow: 0 0 8px #ffa726, 0 0 12px #ff9800;
+  transform-origin: center;
   margin-top: -10px;
 }
 
-@keyframes comboFlash {
-  0% { transform: scale(1); color: #f39c12; }
-  50% { transform: scale(1.2); color: #e67e22; }
-  100% { transform: scale(1); color: #e67e22; }
+@keyframes fireWobble {
+  0%   { transform: scale(1) rotate(0deg);    opacity: 1; }
+  25%  { transform: scale(1.05) rotate(-1deg); opacity: 0.95; }
+  50%  { transform: scale(0.98) rotate(1deg);  opacity: 1; }
+  75%  { transform: scale(1.03) rotate(-0.5deg); opacity: 0.97; }
+  100% { transform: scale(1) rotate(0deg);    opacity: 1; }
 }

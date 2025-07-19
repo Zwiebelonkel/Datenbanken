@@ -85,6 +85,9 @@ export class GameComponent implements OnInit {
       this.money += points;
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
       this.consecutiveWins++;
+      if (this.consecutiveWins == 5){
+        this.emojiRain("🔥");
+      }
 
       setTimeout(() => this.newRound(), 500);
     } else if (this.lives > 1) {
@@ -242,6 +245,7 @@ unlockAchievement(name: string) {
       if (res.unlocked) {
         this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
         console.log('✅ Achievement neu freigeschaltet:', res.name);
+        this.emojiRain("🎖️");
       } else {
         console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
       }
@@ -338,5 +342,30 @@ showAchievementMessage(message: string) {
   setTimeout(() => {
     this.achievementMessage = null;
   }, 3000); // 3 Sekunden sichtbar
+}
+
+emojiRain(emoji: string, count: number = 20) {
+  const container = document.querySelector('.emoji-rain-container');
+  if (!container) return;
+
+  for (let i = 0; i < count; i++) {
+    const span = this.renderer.createElement('span');
+    const text = this.renderer.createText(emoji);
+    this.renderer.appendChild(span, text);
+    this.renderer.addClass(span, 'emoji-drop');
+
+    const startX = Math.random() * window.innerWidth;
+    const delay = Math.random() * 2;
+
+    this.renderer.setStyle(span, 'left', `${startX}px`);
+    this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
+
+    this.renderer.appendChild(container, span);
+
+    // ❗ Timeout mit passendem Delay (nicht neu deklarieren)
+    setTimeout(() => {
+      this.renderer.removeChild(container, span);
+    }, (3 + delay) * 1000);
+  }
 }
 }

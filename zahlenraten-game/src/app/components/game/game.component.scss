@@ -328,3 +328,17 @@ body.dark-mode .sidebar {
   box-shadow: none;
   transform: none;
 }
+
+.combo {
+  font-size: 1.2rem;
+  color: #e67e22;
+  font-weight: bold;
+  animation: comboFlash 0.3s ease;
+  margin-top: -10px;
+}
+
+@keyframes comboFlash {
+  0% { transform: scale(1); color: #f39c12; }
+  50% { transform: scale(1.2); color: #e67e22; }
+  100% { transform: scale(1); color: #e67e22; }
+}

@@ -375,3 +375,16 @@ body.dark-mode .sidebar {
     opacity: 0;
   }
 }
+
+.multiplier-display {
+  font-size: 1.2rem;
+  color: #ff5722;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.1); }
+}

@@ -6,15 +6,43 @@
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   font-family: 'Nunito', sans-serif;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+
+  // Shine-Layer (wie beim Clicker)
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    border-radius: 50%;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.4) 20%,
+      rgba(255, 255, 255, 0.1) 40%,
+      transparent 60%
+    );
+    transform: rotate(25deg);
+    animation: shine 2.5s infinite ease-in-out;
+    z-index: 0;
+  }
 
   h2 {
     text-align: center;
     margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
   }
 
   ul {
     list-style: none;
     padding: 0;
+    position: relative;
+    z-index: 1;
   }
 
   li {
@@ -43,6 +71,8 @@
   display: flex;
   justify-content: center;
   margin: 1rem 0;
+  position: relative;
+  z-index: 2; // wichtig für Sichtbarkeit über Shine
 }
 
 .loader {
@@ -59,3 +89,11 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes shine {
+  0% {
+    transform: rotate(25deg) translate(-100%, -100%);
+  }
+  100% {
+    transform: rotate(25deg) translate(100%, 100%);
+  }
+}

@@ -236,6 +236,10 @@ goToClicker() {
   this.router.navigate(['/clicker']);
 }
 
+shop() {
+  this.router.navigate(['/card-shop']);
+}
+
 unlockAchievement(name: string) {
   this.http.post<{ unlocked: boolean; name: string }>(
     'https://outside-between.onrender.com/api/unlock',

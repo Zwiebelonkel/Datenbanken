@@ -40,3 +40,17 @@
     color: #777;
   }
 }
+
+  .coming-soon {
+    color: #ff9800;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 0.5rem;
+    display: inline-block;
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }

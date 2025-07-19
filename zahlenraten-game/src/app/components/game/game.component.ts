@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DarkModeService } from '../../services/dark.service';
 import { ProfileService } from '../../services/profile.service';
+import { Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-game',

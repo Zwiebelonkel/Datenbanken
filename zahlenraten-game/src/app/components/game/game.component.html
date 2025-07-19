@@ -47,6 +47,7 @@
 
   <p class="score">Punkte: <span>{{ score }}</span></p>
   <p class="money">💰 Geld: <span>{{ money }}€</span></p>
+  <p class="combo" *ngIf="consecutiveWins >= 2">🔥 Combo: {{ consecutiveWins }} !</p>
 </div>
 
 <!-- Spiel vorbei -->

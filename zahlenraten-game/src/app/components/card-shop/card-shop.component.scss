@@ -1,0 +1,41 @@
+.card-shop {
+  text-align: center;
+  padding: 2rem;
+
+  .packs {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .pack {
+    width: 160px;
+    cursor: pointer;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    transition: transform 0.2s ease;
+    user-select: none;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    &.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    &:hover:not(.disabled) {
+      transform: scale(1.05);
+    }
+  }
+
+  .warning {
+    color: red;
+    margin-top: 1rem;
+  }
+}

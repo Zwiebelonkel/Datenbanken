@@ -75,6 +75,7 @@ export class GameComponent implements OnInit {
     this.showTestNum();
 
     if (answer === correct) {
+      this.consecutiveWins++;
       // ✨ Bonus-Multiplikator basierend auf aufeinanderfolgenden Siegen
       const multiplier = this.consecutiveWins >= 2 ? 1 + (this.consecutiveWins - 1) * 0.2 : 1.0;
       this.currentMultiplier = multiplier
@@ -86,7 +87,6 @@ export class GameComponent implements OnInit {
       this.score += points;
       this.money += points;
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
-      this.consecutiveWins++;
       if (this.consecutiveWins % 5 === 0) {
         const intensity = Math.min(10 + this.consecutiveWins * 2, 50); // z.B. bei 5 = 20 Emojis, bei 10 = 30, max 50
         this.emojiRain("🔥", intensity);

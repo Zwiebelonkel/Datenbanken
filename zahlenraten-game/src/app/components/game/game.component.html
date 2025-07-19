@@ -10,6 +10,8 @@
   <span>👤 Welcome <strong>{{ authService.getUsername() }}</strong></span>
 </div>
 
+<div class="emoji-rain-container"></div>
+
 <!-- Falls nicht eingeloggt -->
 <div class="topbar" *ngIf="!authService.isLoggedIn()">
   <div class="topbar-buttons">

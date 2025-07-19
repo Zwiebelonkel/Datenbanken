@@ -15,6 +15,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { HowToPlayComponent } from './components/how-to-play/how-to-play.component';
 import { ClickerComponent } from './components/clicker/clicker.component';
 import { DarkModeService } from './services/dark.service';
+import { CardShopComponent } from './components/card-shop/card-shop.component';
+
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { DarkModeService } from './services/dark.service';
     ProfileComponent,
     HowToPlayComponent,
     ClickerComponent,
-    DarkModeService
+    DarkModeService,
+    CardShopComponent
   ],
   imports: [
     BrowserModule,

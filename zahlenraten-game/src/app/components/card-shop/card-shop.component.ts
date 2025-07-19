@@ -11,7 +11,7 @@ export class CardShopComponent {
   message = '';
 
   cardPacks = [
-    { name: 'Basic', price: 10, image: 'assets/packs/basic.PNG' },
+    { name: 'Basic', price: 10, image: 'assets/profile.png' },
     { name: 'Premium', price: 20, image: 'assets/packs/Premium.PNG' },
     { name: 'Ultra', price: 30, image: 'assets/packs/ultra.PNG' }
   ];

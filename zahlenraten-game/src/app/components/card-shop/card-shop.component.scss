@@ -18,6 +18,8 @@
     padding: 1rem;
     transition: transform 0.2s ease;
     user-select: none;
+    border: 2px dashed red;  // Sichtbar machen
+    background: yellow;     
 
     img {
       width: 100%;

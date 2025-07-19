@@ -72,8 +72,15 @@ export class GameComponent implements OnInit {
     this.showTestNum();
 
     if (answer === correct) {
-      this.score += 1 * this.lives;
-      this.money += 1 * this.lives;
+      // ✨ Bonus-Multiplikator basierend auf aufeinanderfolgenden Siegen
+      const multiplier = this.consecutiveWins >= 2 ? 1 + (this.consecutiveWins - 1) * 0.2 : 1.0;
+
+      // 🧮 Punkteberechnung mit Lives UND Bonus-Multiplikator
+      const points = Math.round(1 * this.lives * multiplier);
+
+      // 💰 Aufscore & Geldkonto anwenden
+      this.score += points;
+      this.money += points;
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
       this.consecutiveWins++;
 

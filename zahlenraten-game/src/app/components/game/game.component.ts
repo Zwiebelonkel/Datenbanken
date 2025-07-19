@@ -36,6 +36,7 @@ export class GameComponent implements OnInit {
   floatingMoney: { x: number; y: number }[] = [];
 
   buttonsDisabled = false;
+  currentMultiplier: number = 1.0;
 
 
   topScores: any[] = [];
@@ -76,6 +77,7 @@ export class GameComponent implements OnInit {
     if (answer === correct) {
       // ✨ Bonus-Multiplikator basierend auf aufeinanderfolgenden Siegen
       const multiplier = this.consecutiveWins >= 2 ? 1 + (this.consecutiveWins - 1) * 0.2 : 1.0;
+      this.currentMultiplier = multiplier
 
       // 🧮 Punkteberechnung mit Lives UND Bonus-Multiplikator
       const points = Math.round(1 * this.lives * multiplier);

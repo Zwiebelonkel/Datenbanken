@@ -1,6 +1,5 @@
 <div class="card-shop">
   <h2>🎴 Karten Shop</h2>
-<img [src]="'assets/packs/basic.PNG'" />
   <div class="packs">
     <div class="pack" *ngFor="let pack of cardPacks" (click)="buyPack(pack)" [class.disabled]="money < pack.price">
       <img [src]="pack.image" [alt]="pack.name" />

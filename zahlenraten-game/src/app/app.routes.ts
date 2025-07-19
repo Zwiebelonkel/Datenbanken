@@ -7,7 +7,7 @@ import { AchievementsComponent } from './components/achievements/achievements.co
 import { ProfileComponent } from './components/profile/profile.component';
 import { HowToPlayComponent } from './components/how-to-play/how-to-play.component';
 import { ClickerComponent } from './components/clicker/clicker.component';
-
+import { CardShopComponent } from './components/card-shop/card-shop.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -19,5 +19,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'how-to-play', component: HowToPlayComponent },
   { path: 'clicker', component: ClickerComponent },
+  { path: 'card-shop', component: CardShopComponent },
 
 ];

@@ -48,6 +48,9 @@
 </div>
 
   <p class="score">Punkte: <span>{{ score }}</span></p>
+    <div class="multiplier-display" *ngIf="currentMultiplier > 1">
+      🔥 Multiplikator: <strong>{{ currentMultiplier | number:'1.1-1' }}x</strong>
+    </div>
   <p class="money">💰 Geld: <span>{{ money }}€</span></p>
   <p class="combo" *ngIf="consecutiveWins >= 2">🔥 Combo: {{ consecutiveWins }} !</p>
 </div>

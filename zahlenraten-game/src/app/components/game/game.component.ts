@@ -39,7 +39,7 @@ export class GameComponent implements OnInit {
 
 
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService, private renderer: Renderer2) {}
 
   ngOnInit() {
     this.newRound();

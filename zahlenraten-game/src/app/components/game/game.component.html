@@ -27,6 +27,7 @@
   <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
   <button (click)="howToPlay()">❓ Tutorial</button>
   <button [disabled]="achAmount < 3" (click)="goToClicker()">💰</button>
+    <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="shop()">Shop</button>
   <button (click)="toggleDarkMode()">🌓</button>
   <button (click)="logout()">🚪 Logout</button>
 </div>

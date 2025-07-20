@@ -12,7 +12,7 @@ export class PackOpeningComponent implements OnInit {
   reveal = false;
 
   // Wahrscheinlichkeiten je Pack
-  chances: any = {
+  chances: Record<string, { multiplier: string; chance: number }[]> = {
     Basic: [
       { multiplier: '1.2x', chance: 70 },
       { multiplier: '1.5x', chance: 25 },
@@ -33,9 +33,14 @@ export class PackOpeningComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.packName = params['pack'];
-      this.drawCard();
+      this.packName = params['pack'] || 'Basic'; // fallback zu Basic
     });
+  }
+
+  revealCard() {
+    if (this.reveal) return; // Doppelklick verhindern
+    this.reveal = true;
+    this.drawCard();
   }
 
   drawCard() {
@@ -50,8 +55,5 @@ export class PackOpeningComponent implements OnInit {
         break;
       }
     }
-
-    // Animation verzögert starten
-    setTimeout(() => this.reveal = true, 1000);
   }
 }

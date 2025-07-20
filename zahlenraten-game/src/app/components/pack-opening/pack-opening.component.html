@@ -1,6 +1,14 @@
 <div class="opening-container">
   <h2>📦 Du öffnest ein {{ packName }} Pack...</h2>
 
+<img
+  *ngIf="showPack"
+  [src]="packImagePath"
+  alt="Pack Cover"
+  class="pack-overlay"
+  [class.drop]="packDropped"
+/>
+
   <div class="flip-card" [class.flipped]="reveal" (click)="revealCard()">
     <div class="flip-inner">
       <!-- Vorderseite -->

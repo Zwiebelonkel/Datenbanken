@@ -48,7 +48,7 @@ export class PackOpeningComponent implements OnInit {
     // Nach 0.5s Verpackung runterfallen lassen
     setTimeout(() => {
       this.packDropped = true;
-    }, 5000);
+    }, 1000);
   });
 }
 

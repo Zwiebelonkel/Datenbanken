@@ -1,7 +1,6 @@
 <div class="card-shop">
   <h2>🎴 Karten Shop</h2>
   <div class="packs">
-    <p>cardPacks: {{ cardPacks.length }}</p>
     <div class="pack" *ngFor="let pack of cardPacks" (click)="buyPack(pack)" [class.disabled]="money < pack.price">
       <img [src]="pack.image" [alt]="pack.name" />
       <h3>{{ pack.name }}</h3>

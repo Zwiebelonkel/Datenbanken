@@ -4,8 +4,15 @@
 
   h2 {
     font-size: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: #333;
+  }
+
+  .balance {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    color: #222;
   }
 
   .packs {
@@ -21,7 +28,6 @@
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
     padding: 1rem;
     text-align: center;
 
@@ -41,6 +47,27 @@
       font-size: 1rem;
       margin: 0.3rem 0 0;
       color: #666;
+    }
+
+    button {
+      margin-top: 0.6rem;
+      padding: 0.4rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s ease;
+
+      &:hover:not(.disabled) {
+        background-color: #388e3c;
+      }
+
+      &.disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
     }
 
     &:hover:not(.disabled) {

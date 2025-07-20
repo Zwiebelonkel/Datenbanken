@@ -1,8 +1,18 @@
 <div class="opening-container">
   <h2>📦 Du öffnest ein {{ packName }} Pack...</h2>
 
-  <div class="card" [class.reveal]="reveal">
-    <p *ngIf="reveal" class="multiplier-text">🎉 Du hast {{ result }} gezogen!</p>
-    <div class="sparkles" *ngIf="reveal"></div>
+  <div class="flip-card" [class.flipped]="reveal" (click)="revealCard()">
+    <div class="flip-inner">
+      <!-- Vorderseite -->
+      <div class="flip-front">
+        <p class="pack-label">{{ packName }} Pack</p>
+      </div>
+
+      <!-- Rückseite -->
+      <div class="flip-back">
+        <p class="multiplier-text">🎉 Du hast {{ result }} gezogen!</p>
+        <div class="sparkles"></div>
+      </div>
+    </div>
   </div>
 </div>

@@ -9,7 +9,7 @@
       </div>
 
       <!-- Rückseite -->
-      <div class="flip-back">
+  <div class="flip-back" [ngClass]="packName.toLowerCase()">
         <p class="multiplier-text">{{ result }}</p>
         <div class="sparkles"></div>
       </div>

@@ -1,0 +1,62 @@
+.card-shop {
+  text-align: center;
+  padding: 2rem;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+
+  .packs {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .pack {
+    width: 160px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    padding: 1rem;
+    text-align: center;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    h3 {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 0.3rem 0 0;
+      color: #666;
+    }
+
+    &:hover:not(.disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    &.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+
+  .warning {
+    color: #e74c3c;
+    margin-top: 1rem;
+    font-weight: 500;
+  }
+}

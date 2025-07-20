@@ -7,21 +7,25 @@
     margin-bottom: 2rem;
   }
 
-  .flip-card {
-    width: 220px;
-    height: 300px;
-    margin: 0 auto;
-    perspective: 1000px;
-    cursor: pointer;
-  }
+.flip-card {
+  width: 220px;
+  height: 300px;
+  margin: 0 auto;
+  perspective: 1000px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .flip-inner {
-    width: 100%;
-    height: 100%;
-    transition: transform 1s;
-    transform-style: preserve-3d;
-    position: relative;
-  }
+ .flip-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  transform-origin: center center;  // <- das zentriert die Rotation
+  position: relative;
+}}
 
   .flipped .flip-inner {
     transform: rotateY(180deg);
@@ -44,10 +48,15 @@
     padding: 1rem;
   }
 
-  .flip-front {
-    background: url('/assets/backFace.png') center center / cover no-repeat;
-    color: #333;
-  }
+.flip-front {
+  background: url('/assets/cardCover.png') center center / cover no-repeat;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
   .flip-back {
     background:

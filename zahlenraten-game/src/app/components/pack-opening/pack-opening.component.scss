@@ -52,6 +52,7 @@
 
 .flip-front {
   background: url('/assets/backFace.png') center center / cover no-repeat;
+  background: linear-gradient(145deg, rgba(86, 171, 47, 0.6), rgba(168, 224, 99, 0.6));
 }
 
 .flip-back {

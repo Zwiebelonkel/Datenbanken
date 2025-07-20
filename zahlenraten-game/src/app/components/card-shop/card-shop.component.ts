@@ -11,9 +11,9 @@ export class CardShopComponent {
   message = '';
 
   cardPacks = [
-    { name: 'Basic', price: 10, image: 'assets/packs/basic.png' },
-    { name: 'Premium', price: 20, image: 'assets/packs/premium.png' },
-    { name: 'Ultra', price: 30, image: 'assets/packs/ultra.png' }
+    { name: 'Basic', price: 10, image: 'packs/basic.png' },
+    { name: 'Premium', price: 20, image: 'packs/premium.png' },
+    { name: 'Ultra', price: 30, image: 'packs/ultra.png' }
   ];
 
   constructor(private router: Router) {}

@@ -1,0 +1,60 @@
+.opening-container {
+  text-align: center;
+  padding: 3rem;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    width: 220px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f8f8f8, #e0e0e0);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.5s ease;
+
+    &.reveal {
+      transform: scale(1.1) rotate(1deg);
+      background: linear-gradient(145deg, #56ab2f, #a8e063);
+    }
+
+    .multiplier-text {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: white;
+      margin-top: 120px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .sparkles {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      animation: sparkle 2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}

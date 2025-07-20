@@ -20,8 +20,8 @@ export class CardShopComponent implements OnInit {
 
   cardPacks = [
     { name: 'Basic', price: 0, image: 'assets/packs/basic.png' },
-    { name: 'Premium', price: 20, image: 'assets/packs/premium.png' },
-    { name: 'Ultra', price: 30, image: 'assets/packs/ultra.png' }
+    { name: 'Premium', price: 0, image: 'assets/packs/premium.png' },
+    { name: 'Ultra', price: 0, image: 'assets/packs/ultra.png' }
   ];
 
   constructor(

@@ -1,18 +1,27 @@
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 .card-shop {
   text-align: center;
   padding: 2rem;
 
   h2 {
     font-size: 2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     color: #333;
   }
 
   .money-display {
     font-size: 1.2rem;
-    margin-bottom: 2rem;
-    color: #444;
+    margin-bottom: 1.5rem;
     font-weight: 600;
+    color: #2d7d2d;
   }
 
   .packs {
@@ -27,7 +36,7 @@
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     padding: 1rem;
     text-align: center;
@@ -38,54 +47,38 @@
       width: 100%;
       height: auto;
       border-radius: 8px;
-      z-index: 1;
       position: relative;
+      z-index: 1;
     }
 
-    // ✨ Shiny Hover Effekt
+    // Shine effect
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
-      left: -75%;
-      width: 50%;
+      left: -100%;
+      width: 100%;
       height: 100%;
-      background: linear-gradient(
-        120deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.4) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shine 4s infinite;
       z-index: 2;
-      transform: skewX(-20deg);
-      transition: left 0.5s ease;
-      pointer-events: none;
-    }
-
-    &:hover:not(.disabled)::after {
-      left: 125%;
     }
 
     h3 {
-      margin-top: 0.8rem;
-      font-size: 1.3rem;
-      color: #222;
+      margin-top: 0.6rem;
+      font-size: 1.2rem;
+      color: #333;
     }
 
     p {
       font-size: 1rem;
-      margin: 0.4rem 0 0.8rem;
+      margin: 0.3rem 0 0;
       color: #666;
-    }
-
-    &.disabled {
-      opacity: 0.4;
-      pointer-events: none;
     }
 
     button {
       margin-top: 0.6rem;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1.2rem;
       border: none;
       border-radius: 10px;
       background: linear-gradient(145deg, #56ab2f, #a8e063);
@@ -93,22 +86,21 @@
       font-weight: 600;
       font-size: 0.95rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: all 0.25s ease;
+      transition: all 0.3s ease;
       cursor: pointer;
       position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
 
       &::before {
         content: "🛒";
-        position: absolute;
-        left: -1.6rem;
-        top: 50%;
-        transform: translateY(-50%);
         font-size: 1.1rem;
       }
 
       &:hover:not(.disabled) {
         background: linear-gradient(145deg, #3c8e20, #7dcf46);
-        transform: scale(1.05);
+        transform: scale(1.07);
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
       }
 
@@ -121,6 +113,16 @@
           content: "🚫";
         }
       }
+    }
+
+    &:hover:not(.disabled) {
+      transform: scale(1.05) rotate(-1deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    &.disabled {
+      opacity: 0.4;
+      pointer-events: none;
     }
   }
 

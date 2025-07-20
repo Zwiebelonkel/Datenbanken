@@ -1,5 +1,8 @@
 <div class="card-shop">
   <h2>🎴 Karten Shop</h2>
+  <div *ngIf="isLoading" class="loader-container">
+    <div class="loader"></div>
+  </div>
   <div class="money-display">💼 Dein Geld: {{ money }} €</div>
 
   <div class="packs">

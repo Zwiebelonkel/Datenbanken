@@ -50,36 +50,43 @@
     }
 
     button {
-      margin-top: 0.6rem;
-      padding: 0.4rem 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #4caf50;
-      color: white;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.3s ease;
+  margin-top: 0.6rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #56ab2f, #a8e063);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  position: relative;
 
-      &:hover:not(.disabled) {
-        background-color: #388e3c;
-      }
+  &::before {
+    content: "🛒";
+    position: absolute;
+    left: -1.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+  }
 
-      &.disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-      }
-    }
+  &:hover:not(.disabled) {
+    background: linear-gradient(145deg, #3c8e20, #7dcf46);
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
 
-    &:hover:not(.disabled) {
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    &.disabled {
-      opacity: 0.4;
-      pointer-events: none;
+  &.disabled {
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    &::before {
+      content: "🚫";
     }
   }
+}
 
   .warning {
     color: #e74c3c;

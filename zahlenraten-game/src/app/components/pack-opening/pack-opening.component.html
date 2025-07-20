@@ -2,7 +2,7 @@
   <h2>📦 Du öffnest ein {{ packName }} Pack...</h2>
 
   <!-- 🟦 NEU: Pack-Overlay unabhängig -->
-  <div class="pack-cover-container">
+  <div (click)="dropCardPack()" class="pack-cover-container">
     <img
       *ngIf="showPack"
       [src]="packImagePath"

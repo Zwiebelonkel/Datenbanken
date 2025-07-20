@@ -13,7 +13,6 @@
   height: 300px;
   margin: 0 auto;
   perspective: 1000px;
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,8 +21,8 @@
 .flip-inner {
   width: 100%;
   height: 100%;
-  transition: transform 1s;
   transform-style: preserve-3d;
+  transition: transform 1s;
   transform-origin: center center;
   position: relative;
 }
@@ -43,19 +42,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-align: center;
-  padding: 1rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.flip-front {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.flip-front {;
   background: url('/assets/backFace.png') center center / cover no-repeat;
-  border-radius: 12px;
-  backface-visibility: hidden;
 }
 
 .flip-back {

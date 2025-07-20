@@ -45,14 +45,13 @@
   }
 
   .flip-front {
-    background: linear-gradient(135deg, #f8f8f8, #e0e0e0);
+    background: url('/assets/backFace.png') center center / cover no-repeat;
     color: #333;
   }
 
   .flip-back {
     background:
-      linear-gradient(145deg, rgba(86, 171, 47, 0.6), rgba(168, 224, 99, 0.6)),
-      url('/assets/backFace.png') center center / cover no-repeat;
+      linear-gradient(145deg, rgba(86, 171, 47, 0.6), rgba(168, 224, 99, 0.6))
     color: white;
     transform: rotateY(180deg);
     position: relative;

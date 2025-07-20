@@ -16,6 +16,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative; // ← WICHTIG!
+  overflow: hidden;
 }
 
 .flip-inner {

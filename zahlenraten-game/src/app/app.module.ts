@@ -16,6 +16,7 @@ import { HowToPlayComponent } from './components/how-to-play/how-to-play.compone
 import { ClickerComponent } from './components/clicker/clicker.component';
 import { DarkModeService } from './services/dark.service';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
+import { PackOpeningComponent } from './components/card-shop/pack-opening.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { CardShopComponent } from './components/card-shop/card-shop.component';
     HowToPlayComponent,
     ClickerComponent,
     DarkModeService,
-    CardShopComponent
+    CardShopComponent,
+    PackOpeningComponent
   ],
   imports: [
     BrowserModule,

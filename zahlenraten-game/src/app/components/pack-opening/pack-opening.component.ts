@@ -44,11 +44,6 @@ export class PackOpeningComponent implements OnInit {
 
     // Bildpfad dynamisch setzen
     this.packImagePath = `assets/packs/${this.packName.toLowerCase()}Open.png`;
-
-    // Nach 0.5s Verpackung runterfallen lassen
-    setTimeout(() => {
-      this.packDropped = true;
-    }, 1000);
   });
 }
 
@@ -57,6 +52,10 @@ export class PackOpeningComponent implements OnInit {
     this.reveal = true;
     this.drawCard();
   }
+
+  dropCardPack(){
+    this.packDropped = true;
+}
 
   drawCard() {
     const pack = this.chances[this.packName];

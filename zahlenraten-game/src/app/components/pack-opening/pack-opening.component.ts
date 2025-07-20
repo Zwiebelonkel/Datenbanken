@@ -54,7 +54,9 @@ export class PackOpeningComponent implements OnInit {
   }
 
   dropCardPack(){
+    console.log("dropping");
     this.packDropped = true;
+    console.log("is dropped: "+this.packDropped);
 }
 
   drawCard() {

@@ -5,20 +5,19 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-card-shop',
   standalone: true,
-  imports: [CommonModule],  // ✅ wichtig für *ngFor und *ngIf
+  imports: [CommonModule],
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss']
 })
-
 export class CardShopComponent {
-  money = 30; // ← später dynamisch laden
+  money = 30;
   message = '';
 
-cardPacks = [
-  { name: 'Basic', price: 10, image: 'assets/packs/basic.png' },
-  { name: 'Premium', price: 20, image: 'assets/packs/premium.png' },
-  { name: 'Ultra', price: 30, image: 'assets/packs/ultra.png' }
-];
+  cardPacks = [
+    { name: 'Basic', price: 10, image: 'assets/packs/basic.png' },
+    { name: 'Premium', price: 20, image: 'assets/packs/premium.png' },
+    { name: 'Ultra', price: 30, image: 'assets/packs/ultra.png' }
+  ];
 
   constructor(private router: Router) {}
 
@@ -28,8 +27,10 @@ cardPacks = [
       return;
     }
 
+    this.money -= pack.price;
     this.message = '';
-    // ggf. Geld abziehen hier oder beim Öffnen
-    this.router.navigate(['/pack-opening'], { queryParams: { pack: pack.name } });
+    this.router.navigate(['/pack-opening'], {
+      queryParams: { pack: pack.name }
+    });
   }
 }

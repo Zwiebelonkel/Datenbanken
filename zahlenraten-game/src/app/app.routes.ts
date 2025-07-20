@@ -8,6 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { HowToPlayComponent } from './components/how-to-play/how-to-play.component';
 import { ClickerComponent } from './components/clicker/clicker.component';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
+import { PackOpeningComponent } from './components/card-shop/pack-opening.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'how-to-play', component: HowToPlayComponent },
   { path: 'clicker', component: ClickerComponent },
   { path: 'card-shop', component: CardShopComponent },
+  { path: 'pack-opening', component: PackOpeningComponent },
 
 ];

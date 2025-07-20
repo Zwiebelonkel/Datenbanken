@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MoneyService } from "link";
+import { ProfileService } from "link";
+import { AuthService } from "link";
 
 @Component({
   selector: 'app-card-shop',
@@ -10,7 +13,6 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./card-shop.component.scss']
 })
 export class CardShopComponent {
-  money = 30;
   message = '';
 
   cardPacks = [
@@ -19,18 +21,45 @@ export class CardShopComponent {
     { name: 'Ultra', price: 30, image: 'assets/packs/ultra.png' }
   ];
 
-  constructor(private router: Router) {}
+ngOnInit(){
+this.username = this.authService.getUsername();
+this.loadMoney();
+}
+
+  constructor(private router: Router, private moneyService: MoneyService, private profileService: ProfileService, private authService: AuthService) {}
 
   buyPack(pack: any) {
     if (this.money < pack.price) {
       this.message = '❌ Nicht genug Geld!';
       return;
-    }
 
-    this.money -= pack.price;
+    this.moneyService.updateMoney({ username: this.username, amount: -pack.price }).subscribe({
+      next: () => {
+        this.loadMoney(); // 💰 neu laden!
+      },
+      error: err => console.error('❌ Fehler beim kaufen:', err)
+    });
     this.message = '';
     this.router.navigate(['/pack-opening'], {
       queryParams: { pack: pack.name }
     });
-  }
+
+    }
+
+
+
+loadMoney() {
+  this.profileService.getUserStats(this.username).subscribe({
+    next: stats => {
+      this.money = stats.money;
+      this.isLoading = false;
+    },
+    error: err => {
+      console.error('Fehler beim Laden der Statistiken', err);
+      this.isLoading = false;
+    }
+  });
+}
+
+
 }

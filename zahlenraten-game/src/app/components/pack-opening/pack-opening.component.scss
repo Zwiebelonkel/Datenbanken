@@ -107,19 +107,19 @@
     z-index: 1;
   }
 
-  .pack-overlay {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 230px;
-    transform: translateX(-50%);
-    z-index: 2;
-    transition: transform 0.6s ease-in;
-  }
+.pack-overlay {
+  position: absolute;
+  top: 40px; // etwas über der Karte starten
+  left: 50%;
+  width: 220px; // gleich groß wie Karte
+  transform: translateX(-50%);
+  z-index: 2;
+  transition: transform 0.6s ease-in;
+}
 
-  .drop {
-    transform: translate(-50%, 600px); // nach unten gleiten
-  }
+.drop {
+  transform: translate(-50%, 600px); // fällt sauber runter
+}
 }
 
 @keyframes fadeInUp {

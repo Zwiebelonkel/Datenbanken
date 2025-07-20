@@ -50,7 +50,12 @@
 }
 
 .flip-front {
-  background: url('/assets/cardCover.png') center center / cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('/assets/backFace.png') center center / cover no-repeat;
+  border-radius: 12px;
+  backface-visibility: hidden;
 }
 
 .flip-back {

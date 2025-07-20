@@ -32,7 +32,7 @@ export class CardShopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.username = this.authService.getUsername();
+    this.username = this.authService.getUsername() || '';
     this.loadMoney();
   }
 

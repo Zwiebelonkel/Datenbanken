@@ -107,6 +107,11 @@
   height: 320px;
   z-index: 10;
   pointer-events: auto;
+  transition: opacity 0.3s ease;
+}
+
+.pack-cover-container.disabled {
+  pointer-events: none; // ❌ keine Klicks mehr möglich
 }
 
 .pack-overlay {

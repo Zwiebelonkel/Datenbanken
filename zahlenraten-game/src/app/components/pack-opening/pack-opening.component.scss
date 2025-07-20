@@ -99,11 +99,11 @@
 // 🟦 Neuer Container für das Pack-Overlay (unabhängig von der Flipcard)
 .pack-cover-container {
   position: absolute;
-  top: 300px; // ggf. leicht anpassen
+  top: 200px; // ggf. leicht anpassen
   left: 50%;
   transform: translateX(-50%);
-  width: 230px;
-  height: 310px;
+  width: 250px;
+  height: 320px;
   z-index: 10;
   pointer-events: none;
 }

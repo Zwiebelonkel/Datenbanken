@@ -1,10 +1,18 @@
 <div class="card-shop">
   <h2>🎴 Karten Shop</h2>
+  <p class="balance">💼 Dein Geld: {{ money }} €</p>
+
   <div class="packs">
-    <div class="pack" *ngFor="let pack of cardPacks" (click)="buyPack(pack)" [class.disabled]="money < pack.price">
+    <div class="pack" *ngFor="let pack of cardPacks">
       <img [src]="pack.image" [alt]="pack.name" />
       <h3>{{ pack.name }}</h3>
       <p>💰 {{ pack.price }} €</p>
+      <button 
+        (click)="buyPack(pack)" 
+        [disabled]="money < pack.price" 
+        [class.disabled]="money < pack.price">
+        Kaufen
+      </button>
     </div>
   </div>
 

@@ -14,6 +14,9 @@ export class PackOpeningComponent implements OnInit {
   packName: string = '';
   result: string = '';
   reveal = false;
+  packImagePath = 'assets/packs/basicOpen.png'; // dynamisch je nach Pack
+  showPack = true;
+  packDropped = false;
 
   // Wahrscheinlichkeiten je Pack
   chances: Record<string, { multiplier: string; chance: number }[]> = {
@@ -36,10 +39,18 @@ export class PackOpeningComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.packName = params['pack'] || 'Basic'; // fallback zu Basic
-    });
-  }
+  this.route.queryParams.subscribe(params => {
+    this.packName = params['pack'] || 'Basic';
+
+    // Bildpfad dynamisch setzen
+    this.packImagePath = `assets/packImages/${this.packName.toLowerCase()}Open.png`;
+
+    // Nach 0.5s Verpackung runterfallen lassen
+    setTimeout(() => {
+      this.packDropped = true;
+    }, 500);
+  });
+}
 
   revealCard() {
     if (this.reveal) return; // doppelklick vermeiden

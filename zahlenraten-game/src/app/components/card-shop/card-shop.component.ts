@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-card-shop',
+  standalone: true,
+  imports: [CommonModule],  // ✅ wichtig für *ngFor und *ngIf
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss']
-})
+})})
 export class CardShopComponent {
   money = 30; // ← später dynamisch laden
   message = '';

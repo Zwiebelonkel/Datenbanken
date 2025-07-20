@@ -1,0 +1,8 @@
+<div class="opening-container">
+  <h2>📦 Du öffnest ein {{ packName }} Pack...</h2>
+
+  <div class="card" [class.reveal]="reveal">
+    <p *ngIf="reveal" class="multiplier-text">🎉 Du hast {{ result }} gezogen!</p>
+    <div class="sparkles" *ngIf="reveal"></div>
+  </div>
+</div>

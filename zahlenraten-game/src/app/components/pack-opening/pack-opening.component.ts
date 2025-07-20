@@ -43,7 +43,7 @@ export class PackOpeningComponent implements OnInit {
     this.packName = params['pack'] || 'Basic';
 
     // Bildpfad dynamisch setzen
-    this.packImagePath = `assets/packImages/${this.packName.toLowerCase()}Open.png`;
+    this.packImagePath = `assets/packs/${this.packName.toLowerCase()}Open.png`;
 
     // Nach 0.5s Verpackung runterfallen lassen
     setTimeout(() => {

@@ -8,7 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { HowToPlayComponent } from './components/how-to-play/how-to-play.component';
 import { ClickerComponent } from './components/clicker/clicker.component';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
-import { PackOpeningComponent } from './components/card-shop/pack-opening.component';
+import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },

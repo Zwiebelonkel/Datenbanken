@@ -1,4 +1,5 @@
 .opening-container {
+  position: relative;
   text-align: center;
   padding: 3rem;
 
@@ -16,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative; // ← WICHTIG!
+  position: relative;
   overflow: hidden;
 }
 
@@ -49,7 +50,7 @@
   background-repeat: no-repeat;
 }
 
-.flip-front {;
+.flip-front {
   background: url('/assets/backFace.png') center center / cover no-repeat;
 }
 
@@ -59,6 +60,18 @@
   font-size: 3rem;
   transform: rotateY(180deg);
   position: relative;
+}
+
+.flip-back.basic {
+  background: linear-gradient(145deg, #FFD700, #FFEB3B); // Gelb
+}
+
+.flip-back.premium {
+  background: linear-gradient(145deg, #7B1FA2, #CE93D8); // Violett
+}
+
+.flip-back.ultra {
+  background: linear-gradient(145deg, #00ACC1, #80DEEA); // Türkis
 }
 
 .pack-label {
@@ -83,45 +96,24 @@
   z-index: 1;
 }
 
-.flip-back.basic {
-  background: linear-gradient(145deg, #FFD700, #FFEB3B); // Gelb
+// 🟦 Neuer Container für das Pack-Overlay (unabhängig von der Flipcard)
+.pack-cover-container {
+  position: absolute;
+  top: 140px; // je nach Layout anpassen
+  left: 50%;
+  transform: translateX(-50%);
+  width: 230px;
+  z-index: 10;
+  pointer-events: none; // verhindert Click-Blockade
 }
-
-.flip-back.premium {
-  background: linear-gradient(145deg, #7B1FA2, #CE93D8); // Violett
-}
-
-.flip-back.ultra {
-  background: linear-gradient(145deg, #00ACC1, #80DEEA); // Türkis
-}
-
-.pack-opening {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  overflow: hidden;
-
-  .card-img {
-    width: 220px;
-    margin-top: 120px;
-    position: relative;
-    z-index: 1;
-  }
 
 .pack-overlay {
-  position: absolute;
-  top: 40px; // etwas über der Karte starten
-  left: 50%;
-  width: 220px; // gleich groß wie Karte
-  transform: translateX(-50%);
-  z-index: 2;
+  width: 230px;
   transition: transform 0.6s ease-in;
 }
 
-.drop {
-  transform: translate(-50%, 600px); // fällt sauber runter
-}
+.pack-overlay.drop {
+  transform: translateY(600px);
 }
 
 @keyframes fadeInUp {

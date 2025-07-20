@@ -38,7 +38,7 @@ export class PackOpeningComponent implements OnInit {
   }
 
   revealCard() {
-    if (this.reveal) return; // Doppelklick verhindern
+    if (this.reveal) return; // doppelklick vermeiden
     this.reveal = true;
     this.drawCard();
   }

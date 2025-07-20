@@ -8,7 +8,8 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],  // ✅ wichtig für *ngFor und *ngIf
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss']
-})})
+})
+
 export class CardShopComponent {
   money = 30; // ← später dynamisch laden
   message = '';

@@ -1,5 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
+@NgModule({
+  declarations: [
+    PackOpeningComponent
+  ],
+  imports: [
+    CommonModule
+  ]
+})
 
 @Component({
   selector: 'app-pack-opening',

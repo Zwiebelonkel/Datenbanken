@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import scoresRoutes from './routes/scores.js';
 import profileRoutes from './routes/profile.js';
 import moneyRoutes from './routes/money.js';
+import cardsRoutes from './routes/cards.js';
 import db from './db.js';
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/scores', scoresRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/money', moneyRoutes);
+app.use('/api/cards', cardsRoutes);
 
 
 const ALL_ACHIEVEMENTS = [

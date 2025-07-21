@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CardsService } from '../../services/cards.service';  
 
 @Component({
   selector: 'app-pack-opening',
@@ -32,11 +33,12 @@ export class PackOpeningComponent implements OnInit {
     ],
     Ultra: [
       { multiplier: '2x', chance: 50 },
-      { multiplier: '5x', chance: 50 },
+      { multiplier: '5x', chance: 45 },
+      { multiplier: '10x', chance: 5 },
     ]
   };
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private cardsService: CardsService) {}
 
   ngOnInit() {
   this.route.queryParams.subscribe(params => {
@@ -59,17 +61,25 @@ export class PackOpeningComponent implements OnInit {
     console.log("is dropped: "+this.packDropped);
 }
 
-  drawCard() {
-    const pack = this.chances[this.packName];
-    const rand = Math.random() * 100;
-    let cumulative = 0;
+drawCard() {
+  const pack = this.chances[this.packName];
+  const rand = Math.random() * 100;
+  let cumulative = 0;
 
-    for (const entry of pack) {
-      cumulative += entry.chance;
-      if (rand <= cumulative) {
-        this.result = entry.multiplier;
-        break;
-      }
+  for (const entry of pack) {
+    cumulative += entry.chance;
+    if (rand <= cumulative) {
+      this.result = entry.multiplier;
+
+      // ⬇️ Direkt in DB speichern
+      this.cardsService.addCard(parseFloat(this.result)).subscribe({
+        next: () => console.log('Karte gespeichert:', this.result),
+        error: err => console.error('Fehler beim Speichern der Karte', err)
+      });
+
+      break;
     }
   }
+}
+
 }

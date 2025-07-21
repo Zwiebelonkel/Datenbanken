@@ -191,7 +191,7 @@ transform: rotateY(0deg);
   transform: translateY(500px) scale(1.02, 0.98); // leicht gestaucht beim Fallen
 }
 
-.flip-front::before, .flip-front::before {
+.flip-front::before, .flip-back::before {
   content: '';
   position: absolute;
   top: -50%;

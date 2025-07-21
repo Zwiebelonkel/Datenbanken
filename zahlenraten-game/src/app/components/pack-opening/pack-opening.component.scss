@@ -61,11 +61,36 @@
 }
 
 .flip-back {
-  background: linear-gradient(145deg, rgba(86, 171, 47, 0.6), rgba(168, 224, 99, 0.6));
-  color: white;
-  font-size: 3rem;
-  transform: rotateY(180deg);
   position: relative;
+  overflow: hidden;
+
+  .emoji {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .top-left {
+    top: 12px;
+    left: 12px;
+  }
+
+  .bottom-right {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .multiplier-text {
+    font-size: 3.6rem;
+    font-weight: bold;
+    color: #fff;
+    transform: rotate(-15deg);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    pointer-events: none;
+  }
 }
 
 .flip-back.basic {

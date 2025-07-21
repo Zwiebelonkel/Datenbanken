@@ -63,7 +63,8 @@
 .flip-back {
   position: relative;
   overflow: hidden;
-
+  background: linear-gradient(45deg, rgba(86, 171, 47, 0.6), rgba(168, 224, 99, 0.6));
+  transform: rotateY(180deg);
   .emoji {
     position: absolute;
     width: 42px;

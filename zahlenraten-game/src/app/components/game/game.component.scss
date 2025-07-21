@@ -356,6 +356,29 @@ body.dark-mode .sidebar {
   }
 }
 
+.card-selection {
+  margin-top: 1rem;
+  text-align: center;
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .dropdown {
+    padding: 0.4rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  button {
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+  }
+}
+
 .multiplier-display {
   font-size: 1.2rem;
   color: #ff5722;

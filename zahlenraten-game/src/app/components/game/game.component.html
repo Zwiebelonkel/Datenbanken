@@ -53,7 +53,19 @@
       🔥 Multiplikator: <strong>{{ currentMultiplier | number:'1.1-1' }}x</strong>
     </div>
   <p class="money">💰 Geld: <span>{{ money }}€</span></p>
+
+  <div class="card-selection" *ngIf="!gameStarted && cards.length > 0">
+  <label for="cardSelect">🎴 Karte wählen für nächste Runde:</label>
+  <select id="cardSelect" [(ngModel)]="selectedCard" class="dropdown">
+    <option *ngFor="let card of cards" [ngValue]="card">
+      {{ card.multiplier }}x (x{{ card.amount }})
+    </option>
+  </select>
+  <button (click)="useSelectedCard()" [disabled]="!selectedCard">✅ Einsetzen</button>
 </div>
+</div>
+
+
 
 <!-- Spiel vorbei -->
 <div class="game-over" *ngIf="gameOver">
@@ -70,6 +82,7 @@
 
   <button class="btn restart" (click)="restart()">🔄 Nochmal spielen</button>
 </div>
+
 
 <!-- Highscoreliste -->
 <div class="highscores">

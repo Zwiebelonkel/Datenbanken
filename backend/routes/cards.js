@@ -42,4 +42,39 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Alle Karten für einen Benutzer abrufen
+router.get('/', async (req, res) => {
+  const { username } = req.query;
+
+  if (!username) {
+    return res.status(400).json({ message: 'Username fehlt' });
+  }
+
+  try {
+    // User-ID abrufen
+    const userResult = await db.execute({
+      sql: 'SELECT id FROM users WHERE LOWER(username) = LOWER(?)',
+      args: [username],
+    });
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
+    }
+
+    const userId = userResult.rows[0].id;
+
+    // Karten für diesen User laden
+    const cardsResult = await db.execute({
+      sql: 'SELECT multiplier, amount FROM cards WHERE user_id = ?',
+      args: [userId],
+    });
+
+    res.json(cardsResult.rows || []);
+  } catch (err) {
+    console.error('❌ Fehler beim Abrufen der Karten:', err);
+    res.status(500).json({ message: 'Fehler beim Abrufen der Karten' });
+  }
+});
+
+
 export default router;

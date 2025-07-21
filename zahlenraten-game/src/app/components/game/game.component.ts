@@ -10,6 +10,7 @@ import { DarkModeService } from '../../services/dark.service';
 import { ProfileService } from '../../services/profile.service';
 import { Renderer2 } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponent
+import { CardsService } from '../../services/cards.service';
 
 @Component({
   selector: 'app-game',
@@ -35,17 +36,53 @@ export class GameComponent implements OnInit {
   achievementMessage: string | null = null;
   achAmount = 0;
   floatingMoney: { x: number; y: number }[] = [];
+  cards: any[] = [];
+  selectedCard: any = null;
+  gameStarted = false;
+
 
   buttonsDisabled = false;
   currentMultiplier: number = 1.0;
 
 
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService, private renderer: Renderer2) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService, private renderer: Renderer2, private cardsService: CardsService) {}
 
   ngOnInit() {
     this.newRound();
     this.loadHighscores();
+    this.loadCards();
+  }
+
+  loadCards() {
+    this.cardsService.getCards().subscribe({
+      next: (data) => {
+        this.cards = data;
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Karten:', err);
+      }
+    });
+  }
+
+  useSelectedCard() {
+    if (!this.selectedCard) return;
+
+    this.currentMultiplier = this.selectedCard.multiplier;
+
+    // Karte um 1 reduzieren
+    this.cardsService.useCard(this.selectedCard.multiplier).subscribe({
+      next: () => {
+        this.selectedCard.amount--;
+        if (this.selectedCard.amount <= 0) {
+          this.cards = this.cards.filter(c => c.multiplier !== this.selectedCard.multiplier);
+          this.selectedCard = null;
+        }
+      },
+      error: (err) => {
+        console.error('Fehler beim Verwenden der Karte:', err);
+      }
+    });
   }
 
   isDarkMode(): boolean {
@@ -70,6 +107,7 @@ export class GameComponent implements OnInit {
   }
 
   guess(answer: 'inside' | 'outside') {
+    this.gameStarted = true;
     const correct = this.isBetween() ? 'inside' : 'outside';
     const resultElement = document.querySelector('.game-container') as HTMLElement;
 
@@ -142,6 +180,7 @@ endGame() {
     return;
   }
 
+  this.gameStarted = false;
   this.gameOver = true;
 
   // ✅ total_score aktualisieren

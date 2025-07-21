@@ -57,6 +57,7 @@
   background-repeat: no-repeat;
   overflow: hidden;
   border-radius: 12px;
+transform: rotateY(0deg);
 
  &.basic {
   background: linear-gradient(145deg, #FFD700, #FFEB3B);

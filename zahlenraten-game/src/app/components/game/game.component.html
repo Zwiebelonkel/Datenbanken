@@ -108,7 +108,7 @@
 
   <h3>🏆 Top 10</h3>
   <ul>
-    <li *ngIf="topScores.length === 0">Noch keine Highscores vorhanden.</li>
+    <li *ngIf="topScores.length === 0">Highscores werden geladen...</li>
     <li *ngFor="let s of topScores">
       <span>{{ s.username }}</span><strong>{{ s.score }} Punkte</strong>
     </li>

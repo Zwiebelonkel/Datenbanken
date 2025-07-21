@@ -5,7 +5,7 @@
   </div>
   <div class="money-display">💼 Dein Geld: {{ money }} €</div>
 
-  <div class="packs">
+  <div *ngIf="!isLoading" class="packs">
     <div
       class="pack"
       *ngFor="let pack of cardPacks"

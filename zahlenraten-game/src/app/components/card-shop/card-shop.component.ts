@@ -20,9 +20,9 @@ export class CardShopComponent implements OnInit {
   message = '';
 
   cardPacks = [
-    { name: 'Basic', price: 0, image: 'assets/packs/basic.png' },
-    { name: 'Premium', price: 0, image: 'assets/packs/premium.png' },
-    { name: 'Ultra', price: 0, image: 'assets/packs/ultra.png' }
+    { name: 'Basic', price: 40, image: 'assets/packs/basic.png' },
+    { name: 'Premium', price: 120, image: 'assets/packs/premium.png' },
+    { name: 'Ultra', price: 360, image: 'assets/packs/ultra.png' }
   ];
 
   constructor(
@@ -51,24 +51,9 @@ export class CardShopComponent implements OnInit {
     });
   }
 
-  buyPack(pack: any) {
-    if (this.money < pack.price) {
-      this.message = '❌ Nicht genug Geld!';
-      return;
-    }
-
-    this.moneyService.updateMoney({ username: this.username, amount: -pack.price }).subscribe({
-      next: () => {
-        this.message = '';
-        this.loadMoney(); // 💰 aktualisieren
-        this.router.navigate(['/pack-opening'], {
-          queryParams: { pack: pack.name }
-        });
-      },
-      error: err => {
-        console.error('❌ Fehler beim Kaufen:', err);
-        this.message = '❌ Kauf fehlgeschlagen!';
-      }
-    });
-  }
+buyPack(pack: any) {
+  this.router.navigate(['/pack-opening'], {
+    queryParams: { pack: pack.name }
+  });
+}
 }

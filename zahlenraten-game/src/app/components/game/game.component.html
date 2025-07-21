@@ -27,9 +27,13 @@
   <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
   <button (click)="howToPlay()">❓ Tutorial</button>
   <button [disabled]="achAmount < 3" (click)="goToClicker()">💰</button>
-    <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="shop()">Shop</button>
+  <button (click)="shop()">🃏 Cards</button>
   <button (click)="toggleDarkMode()">🌓</button>
   <button (click)="logout()">🚪 Logout</button>
+</div>
+
+<div *ngIf="cardMultiplierUsed && cardMultiplier > 1.0" class="card-multiplier-banner">
+  🃏 Aktiver Karten-Multiplikator: <strong>x{{ cardMultiplier }}</strong>
 </div>
 
 <!-- Spiel läuft -->
@@ -49,21 +53,33 @@
 </div>
 
   <p class="score">Punkte: <span>{{ score }}</span></p>
+
     <div class="multiplier-display" *ngIf="currentMultiplier > 1">
       🔥 Multiplikator: <strong>{{ currentMultiplier | number:'1.1-1' }}x</strong>
     </div>
   <p class="money">💰 Geld: <span>{{ money }}€</span></p>
 
-  <div class="card-selection" *ngIf="!gameStarted && cards.length > 0">
-  <label for="cardSelect">🎴 Karte wählen für nächste Runde:</label>
-  <select id="cardSelect" [(ngModel)]="selectedCard" class="dropdown">
-    <option *ngFor="let card of cards" [ngValue]="card">
-      {{ card.multiplier }}x (x{{ card.amount }})
-    </option>
-  </select>
-  <button (click)="useSelectedCard()" [disabled]="!selectedCard">✅ Einsetzen</button>
 </div>
+
+<div 
+  *ngIf="authService.isLoggedIn() && cards.length > 0 && !cardMultiplierUsed" 
+  class="card-selection-block"
+>
+  <label for="cardSelect">🎴 Karte wählen:</label>
+  <div class="card-selection-inline">
+    <select id="cardSelect" [(ngModel)]="selectedCard" class="dropdown">
+      <option [ngValue]="null">– keine –</option>
+      <option 
+        *ngFor="let card of cards" 
+        [ngValue]="card" 
+        [disabled]="card.amount <= 0">
+        {{ card.multiplier }}x (x{{ card.amount }})
+      </option>
+    </select>
+    <button class="btn" (click)="useSelectedCard()">Einsetzen</button>
+  </div>
 </div>
+
 
 
 

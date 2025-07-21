@@ -1,4 +1,5 @@
 <div class="opening-container">
+    <p *ngIf="message" class="error">{{ message }}</p>
   <!-- 🟦 NEU: Pack-Overlay unabhängig -->
 <div
   (click)="dropCardPack()"
@@ -29,4 +30,5 @@
 </div>
     </div>
   </div>
+  <app-loader *ngIf="isLoading"></app-loader>
 </div>

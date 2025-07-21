@@ -39,6 +39,8 @@ export class GameComponent implements OnInit {
   cards: any[] = [];
   selectedCard: any = null;
   gameStarted = false;
+  cardMultiplierUsed = false;
+
 
 
   buttonsDisabled = false;
@@ -70,6 +72,7 @@ export class GameComponent implements OnInit {
     if (!this.selectedCard) return;
 
     this.cardMultiplier = this.selectedCard.multiplier;
+    this.cardMultiplierUsed = true;
 
     // Karte um 1 reduzieren
     this.cardsService.useCard(this.selectedCard.multiplier).subscribe({
@@ -127,7 +130,7 @@ guess(answer: 'inside' | 'outside') {
     const points = Math.round(1 * this.lives * totalMultiplier);
 
     this.score += points;
-    this.money += points;
+    this.money += this.lives;
 
     this.flashBackground(resultElement, 'rgb(177, 255, 168)');
 
@@ -244,6 +247,8 @@ loadHighscores() {
     this.lives = 3;
     this.score = 0;
     this.money = 0;
+    this.cardMultiplier = 1.0;
+    this.cardMultiplierUsed = false;
     this.newRound();
   }
 

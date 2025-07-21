@@ -391,3 +391,62 @@ body.dark-mode .sidebar {
   from { transform: scale(1); }
   to   { transform: scale(1.1); }
 }
+
+.card-multiplier-banner {
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  background-color: #fff2f8;
+  color: #e91e63;
+  padding: 0.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #e91e6355;
+  margin-bottom: 1rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-selection-block {
+  text-align: center;
+  margin-top: 1.5rem;
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-selection-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dropdown {
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  .btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btn:hover {
+    background: #45a049;
+  }
+}
+
+
+
+

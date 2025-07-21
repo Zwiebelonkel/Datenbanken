@@ -19,7 +19,7 @@
   <!-- 🔄 Flip-Card bleibt wie gehabt -->
   <div class="flip-card" [class.flipped]="reveal" (click)="revealCard()">
     <div class="flip-inner">
-      <div class="flip-front">
+      <div class="flip-front" [ngClass]="packName.toLowerCase()">
         <img src="assets/logo.png" class="logo center" />
         <p class="pack-label"></p>
       </div>

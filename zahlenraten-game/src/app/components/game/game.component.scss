@@ -215,26 +215,6 @@ body.dark-mode .topbar {
   visibility: hidden;
 }
 
-.loader-container {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-}
-
-.loader {
-  border: 6px solid #ccc;
-  border-top: 6px solid #4CAF50;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .money {
   font-size: 1.3rem;
   color: #2ecc71;
@@ -367,7 +347,7 @@ body.dark-mode .sidebar {
 
 @keyframes emojiFall {
   0% {
-    transform: translateY(-200%) rotate(0deg);  /* ✅ deutlich weiter oben */
+    transform: translateY(-200%) rotate(0deg);
     opacity: 1;
   }
   100% {

@@ -5,11 +5,12 @@ import { MoneyService } from '../../services/money.service';
 import { ProfileService } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-clicker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './clicker.component.html',
   styleUrls: ['./clicker.component.scss']
 })

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MoneyService } from '../../services/money.service';      // ← Pfad anpassen!
-import { ProfileService } from '../../services/profile.service';    // ← Pfad anpassen!
-import { AuthService } from '../../services/auth.service';       // ← Pfad anpassen!
+import { MoneyService } from '../../services/money.service';
+import { ProfileService } from '../../services/profile.service';
+import { AuthService } from '../../services/auth.service';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-card-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss']
 })

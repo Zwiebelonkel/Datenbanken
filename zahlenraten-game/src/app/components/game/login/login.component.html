@@ -6,9 +6,8 @@
   <input type="text" [(ngModel)]="username" placeholder="Benutzername">
   <input type="password" [(ngModel)]="password" placeholder="Passwort">
   <button (click)="login()" [disabled]="!username || !password">Einloggen</button>
-<div *ngIf="isLoading" class="loader-container">
-  <div class="loader"></div>
-</div>
+
+<app-loader *ngIf="isLoading"></app-loader>
   <div *ngIf="error" class="error-msg">Login fehlgeschlagen</div>
 
   <p>Noch kein Konto? <a routerLink="/register">Hier registrieren</a></p>

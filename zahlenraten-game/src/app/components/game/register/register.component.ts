@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { LoaderComponent } from '../../loader/loader.component';
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [FormsModule, CommonModule, RouterModule]
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent]
 })
 
 export class RegisterComponent {
@@ -19,10 +20,12 @@ export class RegisterComponent {
   error = false;
   errorMessage = '';
   success = false;
+  isLoading = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
 register() {
+  this.isLoading = true;
   this.http.post(
     'https://outside-between.onrender.com/api/register',
     {
@@ -36,6 +39,7 @@ register() {
     next: () => {
       this.success = true;
       this.error = false;
+      this.isLoading = false;
       this.errorMessage = '';
       this.username = '';
       this.password = '';

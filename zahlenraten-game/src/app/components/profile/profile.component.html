@@ -3,10 +3,8 @@
     <img src="assets/profile.png" alt="Profilbild" />
     <h2>{{username}}</h2>
   </div>
-<div *ngIf="isLoading" class="loader-container">
-  <div class="loader"></div>
-</div>
-  <div class="profile-card">
+<app-loader *ngIf="isLoading"></app-loader>
+  <div *ngIf="!isLoading" class="profile-card">
     <h3>📊 Statistiken</h3>
     <div class="stat-row">
       <span>💠 Highscore</span>

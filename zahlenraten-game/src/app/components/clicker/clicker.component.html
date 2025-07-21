@@ -2,11 +2,9 @@
 <div class="clicker-container">
   <h2>🖱️ Clicker-Modus</h2>
 
-  <div *ngIf="isLoading" class="loader-container">
-    <div class="loader"></div>
-  </div>
+<app-loader *ngIf="isLoading"></app-loader>
 
-  <div class="money-display">💼 Gesamtguthaben: <strong>{{ money }} €</strong></div>
+  <div *ngIf="!isLoading" class="money-display">💼 Gesamtguthaben: <strong>{{ money }} €</strong></div>
   <div class="click-amount">💸 Erspieltes Geld: <strong>{{ clickAmount }} €</strong></div>
 
   <div class="click-wrapper">

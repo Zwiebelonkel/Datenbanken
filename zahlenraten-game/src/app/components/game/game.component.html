@@ -74,9 +74,9 @@
 <!-- Highscoreliste -->
 <div class="highscores">
   <!-- Loading Spinner -->
-<div *ngIf="isLoading" class="loader-container">
-  <div class="loader"></div>
-</div>
+
+<app-loader *ngIf="isLoading"></app-loader>
+
   <h3>🏆 Top 10</h3>
   <ul>
     <li *ngIf="topScores.length === 0">Noch keine Highscores vorhanden.</li>

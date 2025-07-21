@@ -9,12 +9,13 @@ import { HttpClient } from '@angular/common/http';
 import { DarkModeService } from '../../services/dark.service';
 import { ProfileService } from '../../services/profile.service';
 import { Renderer2 } from '@angular/core';
+import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponent
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
   encapsulation: ViewEncapsulation.None
 })
 export class GameComponent implements OnInit {

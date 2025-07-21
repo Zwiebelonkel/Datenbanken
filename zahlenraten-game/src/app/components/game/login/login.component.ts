@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router'; // <--- HINZUFÜGEN
+import { LoaderComponent } from '../../loader/loader.component';
 
 @Component({
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [FormsModule, CommonModule, RouterModule]
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent]
 })
 
 export class LoginComponent {
@@ -22,7 +23,7 @@ export class LoginComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
 login() {
-  this.isLoading = true; // Spinner starten
+  this.isLoading = true;
 
   this.http.post<{ success: boolean, token?: string, message?: string }>(
     'https://outside-between.onrender.com/api/login',
@@ -35,7 +36,7 @@ login() {
     }
   ).subscribe({
     next: (res) => {
-      this.isLoading = false; // Spinner stoppen
+      this.isLoading = false;
 
       if (res.success) {
         if (res.token) {
@@ -47,7 +48,7 @@ login() {
       }
     },
     error: (err) => {
-      this.isLoading = false; // Spinner stoppen auch bei Fehler
+      this.isLoading = false;
       this.error = true;
       console.error('Login-Fehler:', err);
     }

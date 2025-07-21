@@ -11,4 +11,5 @@
   <div *ngIf="error" class="error-msg">{{ errorMessage }}</div>
 
   <p>Schon registriert?! <a routerLink="/login">Hier einloggen</a></p>
+  <app-loader *ngIf="isLoading"></app-loader>
 </div>

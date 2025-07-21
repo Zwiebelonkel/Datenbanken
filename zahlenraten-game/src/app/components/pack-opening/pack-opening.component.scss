@@ -191,6 +191,25 @@ transform: rotateY(0deg);
   transform: translateY(500px) scale(1.02, 0.98); // leicht gestaucht beim Fallen
 }
 
+.flip-front::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  animation: shine 2.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
 @keyframes fadeInUp {
   0% {
     opacity: 0;

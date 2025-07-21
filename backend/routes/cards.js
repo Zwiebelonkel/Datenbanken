@@ -76,5 +76,44 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Karte verbrauchen (1 abziehen)
+router.put('/use', async (req, res) => {
+  const { username, multiplier } = req.body;
+
+  if (!username || typeof multiplier !== 'number') {
+    return res.status(400).json({ message: 'Fehlende oder ungültige Felder' });
+  }
+
+  try {
+    // User-ID holen
+    const userResult = await db.execute({
+      sql: 'SELECT id FROM users WHERE LOWER(username) = LOWER(?)',
+      args: [username],
+    });
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
+    }
+
+    const userId = userResult.rows[0].id;
+
+    // Karte um 1 verringern (falls vorhanden)
+    await db.execute({
+      sql: `
+        UPDATE cards
+        SET amount = amount - 1
+        WHERE user_id = ? AND multiplier = ? AND amount > 0
+      `,
+      args: [userId, multiplier],
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('❌ Fehler beim Verwenden der Karte:', err);
+    res.status(500).json({ message: 'Fehler beim Verwenden der Karte' });
+  }
+});
+
+
 
 export default router;

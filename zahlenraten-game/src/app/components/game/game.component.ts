@@ -43,6 +43,7 @@ export class GameComponent implements OnInit {
 
   buttonsDisabled = false;
   currentMultiplier: number = 1.0;
+  cardMultiplier = 1.0;
 
 
   topScores: any[] = [];
@@ -68,7 +69,7 @@ export class GameComponent implements OnInit {
   useSelectedCard() {
     if (!this.selectedCard) return;
 
-    this.currentMultiplier = this.selectedCard.multiplier;
+    this.cardMultiplier = this.selectedCard.multiplier;
 
     // Karte um 1 reduzieren
     this.cardsService.useCard(this.selectedCard.multiplier).subscribe({
@@ -106,47 +107,54 @@ export class GameComponent implements OnInit {
     return this.testNum > min && this.testNum < max;
   }
 
-  guess(answer: 'inside' | 'outside') {
-    this.gameStarted = true;
-    const correct = this.isBetween() ? 'inside' : 'outside';
-    const resultElement = document.querySelector('.game-container') as HTMLElement;
+guess(answer: 'inside' | 'outside') {
+  this.gameStarted = true;
+  const correct = this.isBetween() ? 'inside' : 'outside';
+  const resultElement = document.querySelector('.game-container') as HTMLElement;
 
-    this.showTestNum();
+  this.showTestNum();
 
-    if (answer === correct) {
-      this.consecutiveWins++;
-      // ✨ Bonus-Multiplikator basierend auf aufeinanderfolgenden Siegen
-      const multiplier = this.consecutiveWins >= 2 ? 1 + (this.consecutiveWins - 1) * 0.2 : 1.0;
-      this.currentMultiplier = multiplier
+  if (answer === correct) {
+    this.consecutiveWins++;
 
-      // 🧮 Punkteberechnung mit Lives UND Bonus-Multiplikator
-      const points = Math.round(1 * this.lives * multiplier);
+    // Serien-Multiplikator bleibt sichtbar
+    const seriesMultiplier = this.consecutiveWins >= 2 ? 1 + (this.consecutiveWins - 1) * 0.2 : 1.0;
+    this.currentMultiplier = seriesMultiplier;
 
-      // 💰 Aufscore & Geldkonto anwenden
-      this.score += points;
-      this.money += points;
-      this.flashBackground(resultElement, 'rgb(177, 255, 168)');
-      if (this.consecutiveWins % 5 === 0) {
-        const intensity = Math.min(10 + this.consecutiveWins * 2, 50); // z.B. bei 5 = 20 Emojis, bei 10 = 30, max 50
-        this.emojiRain("🔥", intensity);
-      }
+    // Gesamt-Multiplikator nur intern für Punkteberechnung
+    const totalMultiplier = seriesMultiplier * this.cardMultiplier;
 
-      setTimeout(() => this.newRound(), 500);
-    } else if (this.lives > 1) {
-      this.lives--;
-      this.consecutiveWins = 0;
-      this.currentMultiplier = 1.0;
-      this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-      setTimeout(() => this.newRound(), 500);
-    } else {
-      this.consecutiveWins = 0;
-      this.currentMultiplier = 1.0;
-      this.lives = 0;
-      this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-      setTimeout(() => this.endGame(), 500);
+    const points = Math.round(1 * this.lives * totalMultiplier);
+
+    this.score += points;
+    this.money += points;
+
+    this.flashBackground(resultElement, 'rgb(177, 255, 168)');
+
+    if (this.consecutiveWins % 5 === 0) {
+      const intensity = Math.min(10 + this.consecutiveWins * 2, 50);
+      this.emojiRain("🔥", intensity);
     }
-    this.checkForAchievements()
+
+    setTimeout(() => this.newRound(), 500);
+  } else if (this.lives > 1) {
+    this.lives--;
+    this.consecutiveWins = 0;
+    this.currentMultiplier = 1.0;
+    this.flashBackground(resultElement, 'rgb(255, 168, 168)');
+    setTimeout(() => this.newRound(), 500);
+  } else {
+    this.consecutiveWins = 0;
+    this.currentMultiplier = 1.0;
+    this.lives = 0;
+    this.flashBackground(resultElement, 'rgb(255, 168, 168)');
+    setTimeout(() => this.endGame(), 500);
   }
+
+  this.checkForAchievements();
+}
+
+
 
 showTestNum() {
   const testNumElement = document.getElementById('finalNumber') as HTMLElement;

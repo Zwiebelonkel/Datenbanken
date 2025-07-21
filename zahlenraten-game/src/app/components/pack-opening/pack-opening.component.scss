@@ -200,14 +200,17 @@ transform: rotateY(0deg);
   height: 200%;
   background: linear-gradient(
     120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    transparent 100%
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.1) 70%,
+    rgba(255, 255, 255, 0) 100%
   );
   transform: rotate(25deg);
-  animation: shine 2.2s ease-in-out infinite;
+  animation: shine 2.5s ease-in-out infinite;
   pointer-events: none;
   z-index: 5;
+  mix-blend-mode: screen;
 }
 
 @keyframes shine {

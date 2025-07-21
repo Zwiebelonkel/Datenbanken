@@ -22,10 +22,12 @@
       <div class="flip-front">
         <p class="pack-label"></p>
       </div>
-      <div class="flip-back" [ngClass]="packName.toLowerCase()">
-        <p class="multiplier-text">{{ result }}</p>
+        <div class="flip-back" [ngClass]="packName.toLowerCase()">
+          <img src="/assets/icons/emoji.png" class="emoji top-left" />
+          <img src="/assets/icons/emoji.png" class="emoji bottom-right" />
+          <p class="multiplier-text">{{ result }}</p>
         <div class="sparkles"></div>
-      </div>
+</div>
     </div>
   </div>
 </div>

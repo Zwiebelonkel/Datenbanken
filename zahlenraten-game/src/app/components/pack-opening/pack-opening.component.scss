@@ -1,16 +1,20 @@
-body{
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  background: #ffffff;
+  color: #222;
   overflow: hidden;
 }
 
 .opening-container {
-  position: relative;
   text-align: center;
-  padding: 3rem;
+  padding: 3rem 1rem;
+}
 
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
+h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
 .flip-card {
@@ -18,19 +22,14 @@ body{
   height: 300px;
   margin: 0 auto;
   perspective: 1000px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
-  overflow: visible;
 }
 
 .flip-inner {
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
   transition: transform 1s;
-  transform-origin: center center;
+  transform-style: preserve-3d;
   position: relative;
 }
 
@@ -45,119 +44,89 @@ body{
   height: 100%;
   border-radius: 12px;
   backface-visibility: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
 .flip-front {
-  background: linear-gradient(145deg, #FFD700, #FFEB3B);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: hidden;
-  border-radius: 12px;
   transform: rotateY(0deg);
-  animation: fadeInUp 1s ease-out;
+  background: linear-gradient(145deg, #FFD700, #FFEB3B);
+}
 
- &.basic {
+.flip-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, #FFD700, #FFEB3B);
+  position: relative;
+}
+
+.flip-front.basic {
   background: linear-gradient(145deg, #FFD700, #FFEB3B);
   box-shadow: inset 0 0 0 6px #b8860b;
 }
 
-&.premium {
+.flip-front.premium {
   background: linear-gradient(145deg, #7B1FA2, #CE93D8);
   box-shadow: inset 0 0 0 6px #6a1b9a;
 }
 
-&.ultra {
+.flip-front.ultra {
   background: linear-gradient(145deg, #00ACC1, #80DEEA);
   box-shadow: inset 0 0 0 6px #007c91;
 }
 
-  .logo {
-    position: absolute;
-    width: 42px;
-    height: 42px;
-    opacity: 0.9;
-    pointer-events: none;
-  }
-
-  .center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 70px;
-    height: 70px;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.95;
-  }
-}
-
-.flip-back {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(45deg, rgba(86, 171, 47, 0.6), rgba(168, 224, 99, 0.6));
-  transform: rotateY(180deg);
-  .emoji {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    opacity: 0.9;
-    pointer-events: none;
-  }
-
-  .top-left {
-    top: 12px;
-    left: 12px;
-  }
-
-  .bottom-right {
-    bottom: 12px;
-    right: 12px;
-  }
-
-  .multiplier-text {
-    font-size: 3.6rem;
-    font-weight: bold;
-    color: #fff;
-    transform: rotate(-15deg);
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    z-index: 2;
-    pointer-events: none;
-  }
-}
-
 .flip-back.basic {
-  background: linear-gradient(145deg, #FFD700, #FFEB3B); // Gelb
-  box-shadow: inset 0 0 0 6px #b8860b
+  background: linear-gradient(145deg, #FFD700, #FFEB3B);
+  box-shadow: inset 0 0 0 6px #b8860b;
 }
 
 .flip-back.premium {
-  background: linear-gradient(145deg, #7B1FA2, #CE93D8); // Violett
+  background: linear-gradient(145deg, #7B1FA2, #CE93D8);
   box-shadow: inset 0 0 0 6px #6a1b9a;
 }
 
 .flip-back.ultra {
-  background: linear-gradient(145deg, #00ACC1, #80DEEA); // Türkis
+  background: linear-gradient(145deg, #00ACC1, #80DEEA);
   box-shadow: inset 0 0 0 6px #007c91;
 }
 
-.pack-label {
-  font-size: 1.2rem;
-  color: #555;
+.logo.center {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+.emoji {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.top-left {
+  top: 12px;
+  left: 12px;
+}
+
+.bottom-right {
+  bottom: 12px;
+  right: 12px;
 }
 
 .multiplier-text {
-  font-size: 1.6rem;
-  animation: fadeInUp 1s ease-out;
-  animation: bounce 1s ease-in-out infinite;
+  font-size: 3.6rem;
+  font-weight: bold;
+  color: white;
+  transform: rotate(-15deg);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 2;
 }
 
@@ -167,15 +136,14 @@ body{
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
   animation: sparkle 2s ease-in-out infinite;
   z-index: 1;
 }
 
-// 🟦 Neuer Container für das Pack-Overlay (unabhängig von der Flipcard)
 .pack-cover-container {
   position: absolute;
-  top: 100px; // ggf. leicht anpassen
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   width: 255px;
@@ -186,21 +154,23 @@ body{
 }
 
 .pack-cover-container.disabled {
-  pointer-events: none; // ❌ keine Klicks mehr möglich
+  pointer-events: none;
 }
 
 .pack-overlay {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 2s
+  transition: transform 2s;
 }
 
 .pack-overlay.drop {
-  transform: translateY(500px) scale(1.02, 0.98); // leicht gestaucht beim Fallen
+  transform: translateY(500px) scale(1.02, 0.98);
 }
 
-.flip-front::before, .flip-back::before, .pack-overlay::before{
+/* Shine Effekt */
+.flip-front::before,
+.flip-back::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -222,6 +192,7 @@ body{
   mix-blend-mode: screen;
 }
 
+/* Keyframes */
 @keyframes shine {
   0% {
     transform: rotate(25deg) translate(-100%, -100%);
@@ -231,31 +202,7 @@ body{
   }
 }
 
-@keyframes fadeInUp {
-  0% {
-    opacity: 1;
-    transform: translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes sparkle {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    scale: 1.3;
-  }
-  50% {
-    scale: 1;
-  }
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
 }

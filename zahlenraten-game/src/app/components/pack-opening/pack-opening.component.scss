@@ -200,7 +200,7 @@ body{
   transform: translateY(500px) scale(1.02, 0.98); // leicht gestaucht beim Fallen
 }
 
-.flip-front::before, .flip-back::before, .pack-cover-container::before{
+.flip-front::before, .flip-back::before, .pack-overlay::before{
   content: '';
   position: absolute;
   top: -50%;

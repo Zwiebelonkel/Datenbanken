@@ -62,7 +62,7 @@
 </div>
 
 <div 
-  *ngIf="authService.isLoggedIn() && cards.length > 0 && !cardMultiplierUsed" 
+  *ngIf="authService.isLoggedIn() && cards.length > 0 && !cardMultiplierUsed && !gameStarted" 
   class="card-selection-block"
 >
   <label for="cardSelect">🎴 Karte wählen:</label>

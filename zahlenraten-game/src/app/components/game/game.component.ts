@@ -226,7 +226,16 @@ submitScore() {
     this.loadHighscores();
     this.restart();
   });
-  this.checkForChampion;
+this.scoreService.isHighscore(this.score).subscribe({
+  next: (res) => {
+    if (res.isHighscore) {
+      this.unlockAchievement('Champion 🏆');
+    }
+  },
+  error: (err) => {
+    console.error('❌ Fehler bei Highscore-Prüfung:', err);
+  }
+});
 }
 
 
@@ -414,21 +423,6 @@ showAchievementMessage(message: string) {
   setTimeout(() => {
     this.achievementMessage = null;
   }, 3000); // 3 Sekunden sichtbar
-}
-
-checkForChampion() {
-  this.http.get<any[]>('/api/scores/top').subscribe({
-    next: topScores => {
-      const usernames = topScores.map(s => s.username.toLowerCase());
-      const currentUser = this.authService.getUsername()?.toLowerCase();
-      if (usernames.includes(currentUser)) {
-        this.unlockAchievement('Champion 🏆');
-      }
-    },
-    error: err => {
-      console.error('❌ Fehler beim Leaderboard-Check:', err);
-    }
-  });
 }
 
 emojiRain(emoji: string, count: number = 50) {

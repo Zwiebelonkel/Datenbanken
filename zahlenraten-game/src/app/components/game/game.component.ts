@@ -354,9 +354,6 @@ checkForAchievements() {
   if (this.consecutiveWins >= 20) {
     this.unlockAchievement('Magier 🪄');
   }
-  if (this.consecutiveWins >= 20) {
-    this.unlockAchievement('Magier 🪄');
-  }
 }
 
 

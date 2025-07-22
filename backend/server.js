@@ -26,10 +26,13 @@ const ALL_ACHIEVEMENTS = [
   { name: 'Newbie 🐣', description: 'Du hast 10 Punkte erreicht!' },
   { name: 'Glückspilz 🍄', description: 'Du hast 50 Punkte erreicht!' },
   { name: 'Zahlenmeister 💯', description: 'Du hast 75 Punkte erreicht!' },
+  { name: 'Rund 🥸', description: 'Du hast 100 Punkte erreicht!' },
+  { name: 'Göttlicher Segen 👼🏻', description: 'Du hast 500 Punkte erreicht!' },
   { name: 'Gambler 🎲', description: 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren' },
   { name: 'Arbeitswoche 🛠️', description: 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren' },
   { name: 'Strategieprofi 🧭', description: 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren' },
   { name: 'Magier 🪄', description: 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren' },
+  { name: 'Champion 🏆', description: 'Sei auf dem Leaderboard' },
 ];
 
 // Registrierung

@@ -226,6 +226,7 @@ submitScore() {
     this.loadHighscores();
     this.restart();
   });
+  this.checkForChampion;
 }
 
 
@@ -355,9 +356,6 @@ checkForAchievements() {
   }
   if (this.consecutiveWins >= 20) {
     this.unlockAchievement('Magier 🪄');
-  }
-  if (this.checkForChampion) {
-    this.unlockAchievement('Champion 🏆');
   }
 }
 

@@ -335,6 +335,12 @@ checkForAchievements() {
   if (this.score >= 75) {
     this.unlockAchievement('Zahlenmeister 💯');
   }
+  if (this.score >= 100) {
+    this.unlockAchievement('Rund 🥸');
+  }
+  if (this.score >= 500) {
+    this.unlockAchievement('Göttlicher Segen 👼🏻');
+  }
   if (this.consecutiveWins >= 3) {
     this.unlockAchievement('Gambler 🎲');
   }
@@ -343,6 +349,9 @@ checkForAchievements() {
   }
   if (this.consecutiveWins >= 10) {
     this.unlockAchievement('Strategieprofi 🧭');
+  }
+  if (this.consecutiveWins >= 20) {
+    this.unlockAchievement('Magier 🪄');
   }
   if (this.consecutiveWins >= 20) {
     this.unlockAchievement('Magier 🪄');
@@ -357,10 +366,13 @@ getAchievementDescription(name: string): string {
     'Newbie 🐣': 'Du hast 10 Punkte erreicht!',
     'Glückspilz 🍄': 'Du hast 50 Punkte erreicht!',
     'Zahlenmeister 💯': 'Du hast 75 Punkte erreicht!',
+    'Rund 🥸': 'Du hast 100 Punkte erreicht!',
+    'Göttlicher Segen 👼🏻': 'Du hast 500 Punkte erreicht!',
     'Gambler 🎲': 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren',
     'Arbeitswoche 🛠️': 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
     'Strategieprofi 🧭': 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
-    'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren'
+    'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren',
+    'Champion 🏆': 'Sei auf dem Leaderboard',
   };
   return descriptions[name] || 'Erfolg freigeschaltet';
 }

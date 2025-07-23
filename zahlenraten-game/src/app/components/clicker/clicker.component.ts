@@ -6,6 +6,7 @@ import { ProfileService } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { LoaderComponent } from '../loader/loader.component';
+import { SoundsService } from '../../services/sound.service';
 
 @Component({
   selector: 'app-clicker',
@@ -28,7 +29,8 @@ export class ClickerComponent implements OnInit {
     private moneyService: MoneyService,
     private profileService: ProfileService,
     private http: HttpClient,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private soundService: SoundsService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class ClickerComponent implements OnInit {
 
   click() {
   this.clickAmount += 1;
+  this.soundService.playSound('hardPop.wav'); // Klick-Sound abspielen
   this.deposited = false;
 
   // Farbblitz
@@ -74,6 +77,7 @@ export class ClickerComponent implements OnInit {
         this.deposited = true;
         this.clickAmount = 0;
         this.loadMoney(); // 💰 neu laden!
+        this.soundService.playSound('win.wav', 0.5); // Sound beim Einzahlen abspielen
       },
       error: err => console.error('❌ Fehler beim Einzahlen:', err)
     });

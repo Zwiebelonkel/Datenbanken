@@ -61,26 +61,6 @@
 
 </div>
 
-<div 
-  *ngIf="authService.isLoggedIn() && cards.length > 0 && !cardMultiplierUsed" 
-  class="card-selection-block"
->
-  <label for="cardSelect">🎴 Karte wählen:</label>
-  <div class="card-selection-inline">
-    <select id="cardSelect" [(ngModel)]="selectedCard" class="dropdown">
-      <option [ngValue]="null">– keine –</option>
-      <option 
-        *ngFor="let card of cards" 
-        [ngValue]="card" 
-        [disabled]="card.amount <= 0">
-        {{ card.multiplier }}x (x{{ card.amount }})
-      </option>
-    </select>
-    <button class="btn" (click)="useSelectedCard()">Einsetzen</button>
-  </div>
-</div>
-
-
 
 
 <!-- Spiel vorbei -->
@@ -99,21 +79,41 @@
   <button class="btn restart" (click)="restart()">🔄 Nochmal spielen</button>
 </div>
 
+<div 
+  *ngIf="authService.isLoggedIn() && cards.length > 0 && !cardMultiplierUsed && !gameOver" 
+  class="card-selection-block"
+>
+  <label for="cardSelect">🎴 Karte wählen:</label>
+  <div class="card-selection-inline">
+    <select id="cardSelect" [(ngModel)]="selectedCard" class="dropdown">
+      <option [ngValue]="null">– keine –</option>
+      <option 
+        *ngFor="let card of cards" 
+        [ngValue]="card" 
+        [disabled]="card.amount <= 0">
+        {{ card.multiplier }}x (x{{ card.amount }})
+      </option>
+    </select>
+    <button class="btn" (click)="useSelectedCard()">Einsetzen</button>
+  </div>
+</div>
 
-<!-- Highscoreliste -->
 <div class="highscores">
   <!-- Loading Spinner -->
-
-<app-loader *ngIf="isLoading"></app-loader>
+  <app-loader *ngIf="isLoading"></app-loader>
 
   <h3>🏆 Top 10</h3>
   <ul>
     <li *ngIf="topScores.length === 0">Highscores werden geladen...</li>
-    <li *ngFor="let s of topScores">
-      <span>{{ s.username }}</span><strong>{{ s.score }} Punkte</strong>
+    <li *ngFor="let s of topScores; index as i">
+      <span>
+        {{ getMedal(i) }} {{ s.username }}
+      </span>
+      <strong>{{ s.score }} Punkte</strong>
     </li>
   </ul>
 </div>
+
 
 <div class="toast" *ngIf="achievementMessage">
   {{ achievementMessage }}

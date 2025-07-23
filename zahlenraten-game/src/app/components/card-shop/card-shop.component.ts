@@ -5,6 +5,7 @@ import { MoneyService } from '../../services/money.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
 import { LoaderComponent } from '../loader/loader.component';
+import { SoundsService } from '../../services/sound.service';
 
 @Component({
   selector: 'app-card-shop',
@@ -29,7 +30,8 @@ export class CardShopComponent implements OnInit {
     private router: Router,
     private moneyService: MoneyService,
     private profileService: ProfileService,
-    private authService: AuthService
+    private authService: AuthService,
+    private soundService: SoundsService
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +54,7 @@ export class CardShopComponent implements OnInit {
   }
 
 buyPack(pack: any) {
+  this.soundService.playSound('coin.wav'); // Sound beim Kauf abspielen
   this.router.navigate(['/pack-opening'], {
     queryParams: { pack: pack.name }
   });

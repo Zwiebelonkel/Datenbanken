@@ -11,6 +11,7 @@ import { ProfileService } from '../../services/profile.service';
 import { Renderer2 } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponent
 import { CardsService } from '../../services/cards.service';
+import { SoundsService } from '../../services/sound.service';
 
 @Component({
   selector: 'app-game',
@@ -49,7 +50,7 @@ export class GameComponent implements OnInit {
 
 
   topScores: any[] = [];
-  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService, private renderer: Renderer2, private cardsService: CardsService) {}
+  constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService, private renderer: Renderer2, private cardsService: CardsService, private soundService: SoundsService) {}
 
   ngOnInit() {
     this.newRound();
@@ -73,6 +74,7 @@ export class GameComponent implements OnInit {
 
     this.cardMultiplier = this.selectedCard.multiplier;
     this.cardMultiplierUsed = true;
+    this.soundService.playSound('hardPop.wav'); // Sound beim Verwenden der Karte abspielen
 
     // Karte um 1 reduzieren
     this.cardsService.useCard(this.selectedCard.multiplier).subscribe({
@@ -112,12 +114,14 @@ export class GameComponent implements OnInit {
 
 guess(answer: 'inside' | 'outside') {
   this.gameStarted = true;
+  this.soundService.playSound('softClick.mp3');
   const correct = this.isBetween() ? 'inside' : 'outside';
   const resultElement = document.querySelector('.game-container') as HTMLElement;
 
   this.showTestNum();
 
   if (answer === correct) {
+    this.soundService.playSound('correct.wav', 0.25); // Sound für richtige Antwort abspielen
     this.consecutiveWins++;
 
     // Serien-Multiplikator bleibt sichtbar
@@ -137,6 +141,7 @@ guess(answer: 'inside' | 'outside') {
     if (this.consecutiveWins % 5 === 0) {
       const intensity = Math.min(10 + this.consecutiveWins * 2, 50);
       this.emojiRain("🔥", intensity);
+      this.soundService.playSound('fire.wav', 0.3); // Sound für Emoji-Regen abspielen
     }
 
     setTimeout(() => this.newRound(), 500);
@@ -145,8 +150,11 @@ guess(answer: 'inside' | 'outside') {
     this.consecutiveWins = 0;
     this.currentMultiplier = 1.0;
     this.flashBackground(resultElement, 'rgb(255, 168, 168)');
+    this.soundService.playSound('damage.wav', 0.3); // Sound für falsche Antwort abspielen
     setTimeout(() => this.newRound(), 500);
   } else {
+    this.gameOver = true;
+    this.soundService.playSound('end.mp3', 0.5); // Sound für Spielende abspielen
     this.consecutiveWins = 0;
     this.currentMultiplier = 1.0;
     this.lives = 0;
@@ -156,8 +164,6 @@ guess(answer: 'inside' | 'outside') {
 
   this.checkForAchievements();
 }
-
-
 
 showTestNum() {
   const testNumElement = document.getElementById('finalNumber') as HTMLElement;
@@ -215,6 +221,7 @@ this.moneyService.updateMoney({ username, amount: this.score }).subscribe({
 
 
 submitScore() {
+  this.soundService.playSound('hardPop.wav'); // Sound beim Einreichen des Scores abspielen
   const username = this.authService.getUsername();
   if (!username) {
     console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
@@ -318,6 +325,7 @@ unlockAchievement(name: string) {
         this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
         console.log('✅ Achievement neu freigeschaltet:', res.name);
         this.emojiRain("🎖️");
+        this.soundService.playSound('message.wav'); // Sound beim Freischalten des Achievements abspielen
       } else {
         console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
       }
@@ -386,6 +394,7 @@ getAchievementDescription(name: string): string {
 
 
 toggleSidebar() {
+  this.soundService.playSound('pop.wav'); // Sound beim Öffnen/Schließen der Sidebar abspielen
   this.sidebarOpen = !this.sidebarOpen;
   if (this.sidebarOpen){
     this.loadAch();
@@ -449,4 +458,14 @@ emojiRain(emoji: string, count: number = 50) {
     }, (3 + delay) * 1000);
   }
 }
+
+getMedal(index: number): string {
+  switch (index) {
+    case 0: return '🥇';
+    case 1: return '🥈';
+    case 2: return '🥉';
+    default: return `${index + 1}.`;
+  }
+}
+
 }

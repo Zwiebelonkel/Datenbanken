@@ -6,6 +6,7 @@ import { MoneyService } from '../../services/money.service';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { LoaderComponent } from '../loader/loader.component';
+import { SoundsService } from '../../services/sound.service';
 
 @Component({
   selector: 'app-pack-opening',
@@ -57,7 +58,8 @@ export class PackOpeningComponent implements OnInit {
     private cardsService: CardsService,
     private moneyService: MoneyService,
     private authService: AuthService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private soundService: SoundsService
   ) {}
 
   ngOnInit() {
@@ -127,6 +129,7 @@ export class PackOpeningComponent implements OnInit {
     const pack = this.chances[this.packName];
     const rand = Math.random() * 100;
     let cumulative = 0;
+    this.soundService.playSound('win.wav', 0.5); // Sound beim Öffnen abspielen
 
     for (const entry of pack) {
       cumulative += entry.chance;

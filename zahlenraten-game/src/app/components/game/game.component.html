@@ -38,6 +38,7 @@
 
 <!-- Spiel läuft -->
 <div class="game-container" *ngIf="!gameOver">
+
   <div class="hearts">
   <span *ngFor="let life of getLivesArray()">❤</span>
 </div>
@@ -58,6 +59,8 @@
       🔥 Multiplikator: <strong>{{ currentMultiplier | number:'1.1-1' }}x</strong>
     </div>
   <p class="money">💰 Geld: <span>{{ money }}€</span></p>
+
+<!-- Nur anzeigen, wenn multiplier aktiv -->
 
 </div>
 
@@ -113,6 +116,22 @@
     </li>
   </ul>
 </div>
+
+<div 
+  class="lava-fill" 
+  [class.lava-enter]="justAppeared"
+  *ngIf="currentMultiplier > 1"
+  [ngStyle]="{
+    height: getLavaHeight(),
+    opacity: getLavaOpacity()
+  }"
+>
+  <svg class="lava-wave" viewBox="0 0 100 10" preserveAspectRatio="none">
+    <path d="M0,5 C30,0 70,10 100,5 L100,10 L0,10 Z" fill="#ff8a00"></path>
+  </svg>
+</div>
+
+
 
 
 <div class="toast" *ngIf="achievementMessage">

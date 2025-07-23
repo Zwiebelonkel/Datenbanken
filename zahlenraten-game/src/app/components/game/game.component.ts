@@ -41,6 +41,7 @@ export class GameComponent implements OnInit {
   selectedCard: any = null;
   gameStarted = false;
   cardMultiplierUsed = false;
+  justAppeared = false; // Für Lava-Animation
 
 
 
@@ -57,6 +58,17 @@ export class GameComponent implements OnInit {
     this.loadHighscores();
     this.loadCards();
   }
+
+  ngOnChanges(): void {
+  if (this.currentMultiplier > 1 && !this.justAppeared) {
+    this.justAppeared = true;
+
+    // Kleine Pause, dann "hochfahren"
+    setTimeout(() => {
+      this.justAppeared = false;
+    }, 50); // 50 ms Delay reicht für Transition-Start
+  }
+}
 
   loadCards() {
     this.cardsService.getCards().subscribe({
@@ -121,7 +133,6 @@ guess(answer: 'inside' | 'outside') {
   this.showTestNum();
 
   if (answer === correct) {
-    this.soundService.playSound('correct.wav', 0.25); // Sound für richtige Antwort abspielen
     this.consecutiveWins++;
 
     // Serien-Multiplikator bleibt sichtbar
@@ -467,5 +478,18 @@ getMedal(index: number): string {
     default: return `${index + 1}.`;
   }
 }
+
+getLavaHeight(): string {
+  const base = 10;
+  const multiplierFactor = Math.min(this.currentMultiplier - 1, 4);
+  return `${base + multiplierFactor * 15}%`;
+}
+
+getLavaOpacity(): number {
+  return Math.min((this.currentMultiplier - 1) / 3 + 0.2, 1);
+}
+
+
+
 
 }

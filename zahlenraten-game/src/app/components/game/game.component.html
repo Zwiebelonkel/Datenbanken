@@ -109,9 +109,9 @@
     <button (click)="nextLeaderboard()">➡</button>
   </div>
 
-  <app-loader *ngIf="isLoading"></app-loader>
+  <app-loader *ngIf="isLoading "></app-loader>
 
-  <ul *ngIf="!isLoading">
+<ul *ngIf="!isLoading && currentLeaderboard">
     <li *ngIf="currentLeaderboard.length === 0">Keine Daten verfügbar...</li>
     <li *ngFor="let entry of currentLeaderboard; index as i">
       <span>{{ getMedal(i) }} {{ entry.username }}</span>

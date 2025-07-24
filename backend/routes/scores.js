@@ -96,10 +96,10 @@ router.get('/userTotalScore/:username', async (req, res) => {
 });
 
 // 🔹 Längste Serien
-router.get('/top-streaks', async (req, res) => {
+router.get('/topStreaks', async (req, res) => {
   try {
     const result = await db.execute(
-      'SELECT username, MAX(consecutive_wins) AS streak FROM scores GROUP BY username ORDER BY streak DESC LIMIT 10'
+      'SELECT username, MAX(consecutive_wins) AS consecutive_wins FROM scores GROUP BY username ORDER BY consecutive_wins DESC LIMIT 10'
     );
     res.json(result.rows);
   } catch (err) {
@@ -108,10 +108,10 @@ router.get('/top-streaks', async (req, res) => {
 });
 
 // 🔹 Meistes Geld pro Runde
-router.get('/top-money-per-round', async (req, res) => {
+router.get('/topMoneyPerRound', async (req, res) => {
   try {
     const result = await db.execute(
-      'SELECT username, ROUND(AVG(money_per_round), 2) AS avgMoney FROM scores GROUP BY username ORDER BY avgMoney DESC LIMIT 10'
+      'SELECT username, ROUND((money_per_round), 2) AS money_per_round FROM scores GROUP BY username ORDER BY money_per_round DESC LIMIT 10'
     );
     res.json(result.rows);
   } catch (err) {

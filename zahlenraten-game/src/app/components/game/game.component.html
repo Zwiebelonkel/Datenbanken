@@ -131,7 +131,17 @@
       >
         <ul>
           <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
-          <li *ngFor="let entry of board; index as j">
+          <li 
+  *ngFor="let entry of board; index as j"
+  [ngClass]="{
+    'gold-bg': j === 0,
+    'silver-bg': j === 1,
+    'bronze-bg': j === 2
+  }"
+>
+  <span>{{ getMedal(j) }} {{ entry.username }}</span>
+  <strong>{{ entry.value }}</strong>
+</li>
             <span>{{ getMedal(j) }} {{ entry.username }}</span>
             <strong>{{ entry.value }}</strong>
           </li>

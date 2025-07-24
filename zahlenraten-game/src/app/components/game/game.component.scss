@@ -554,7 +554,10 @@ body.dark-mode .sidebar {
 
 
 
-
+.leaderboard-wrapper {
+  touch-action: pan-y; // erlaubt horizontales Swipen ohne Scrollblock
+  overflow: hidden;
+}
 
 
 

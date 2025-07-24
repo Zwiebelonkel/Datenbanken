@@ -101,21 +101,25 @@
   </div>
 </div>
 
-<div class="highscores">
-  <!-- Loading Spinner -->
+<div class="highscores-carousel">
+  <h3>🏆 {{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
+
+  <div class="arrow-buttons">
+    <button (click)="prevLeaderboard()">⬅</button>
+    <button (click)="nextLeaderboard()">➡</button>
+  </div>
+
   <app-loader *ngIf="isLoading"></app-loader>
 
-  <h3>🏆 Top 10</h3>
-  <ul>
-    <li *ngIf="topScores.length === 0">Highscores werden geladen...</li>
-    <li *ngFor="let s of topScores; index as i">
-      <span>
-        {{ getMedal(i) }} {{ s.username }}
-      </span>
-      <strong>{{ s.score }} Punkte</strong>
+  <ul *ngIf="!isLoading">
+    <li *ngIf="currentLeaderboard.length === 0">Keine Daten verfügbar...</li>
+    <li *ngFor="let entry of currentLeaderboard; index as i">
+      <span>{{ getMedal(i) }} {{ entry.username }}</span>
+      <strong>{{ entry.value }}</strong>
     </li>
   </ul>
 </div>
+
 
 <!-- <div 
   class="lava-fill" 

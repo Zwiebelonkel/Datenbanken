@@ -12,6 +12,7 @@ import { Renderer2 } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponent
 import { CardsService } from '../../services/cards.service';
 import { SoundsService } from '../../services/sound.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -42,6 +43,11 @@ export class GameComponent implements OnInit {
   gameStarted = false;
   cardMultiplierUsed = false;
   // justAppeared = false; // Für Lava-Animation
+  leaderboardTitles = ['Top Punkte', 'Längste Streak', 'Geld pro Runde'];
+  currentLeaderboardIndex = 0;
+  currentLeaderboard: { username: string; value: string }[] = [];
+  allLeaderboards: { username: string; value: string }[][] = [];
+
 
 
 
@@ -269,6 +275,40 @@ loadHighscores() {
       this.isLoading = false;
     }
   );
+}
+
+loadLeaderboards() {
+  this.isLoading = true;
+
+  Promise.all([
+    firstValueFrom(this.scoreService.getTopScores()),
+    firstValueFrom(this.scoreService.getTopStreaks()),
+    firstValueFrom(this.scoreService.getTopMoneyPerRound())
+  ]).then(([scores, streaks, money]) => {
+    this.allLeaderboards = [
+      scores.map(s => ({ username: s.username, value: `${s.score} Punkte` })),
+      streaks.map(s => ({ username: s.username, value: `${s.consecutive_wins} 🔁` })),
+      money.map(s => ({ username: s.username, value: `${s.money_per_round}€ 💰` }))
+    ];
+
+    this.setLeaderboard(0);
+    this.isLoading = false;
+  });
+}
+
+setLeaderboard(index: number) {
+  this.currentLeaderboardIndex = index;
+  this.currentLeaderboard = this.allLeaderboards[index];
+}
+
+nextLeaderboard() {
+  const nextIndex = (this.currentLeaderboardIndex + 1) % this.leaderboardTitles.length;
+  this.setLeaderboard(nextIndex);
+}
+
+prevLeaderboard() {
+  const prevIndex = (this.currentLeaderboardIndex - 1 + this.leaderboardTitles.length) % this.leaderboardTitles.length;
+  this.setLeaderboard(prevIndex);
 }
 
   restart() {

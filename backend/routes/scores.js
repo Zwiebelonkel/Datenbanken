@@ -4,19 +4,21 @@ import db from '../db.js';
 const router = express.Router();
 
 router.post('/submit', async (req, res) => {
-  const { username, score, money } = req.body;
-  const date = new Date().toISOString();
+  const { username, score, consecutive_wins, money_per_round } = req.body;
+  const date = new Date();
 
   try {
-    await db.execute({
-      sql: 'INSERT INTO scores (username, score, created_at) VALUES (?, ?, ?)',
-      args: [username, score, date],
-    });
+    await db.execute(
+      `INSERT INTO scores (username, score, created_at, consecutive_wins, money_per_round)
+       VALUES (?, ?, ?, ?, ?)`,
+      [username, score, date.toISOString(), consecutive_wins, money_per_round]
+    );
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 
 //Gesamtpunktzahl aktualisieren
@@ -92,5 +94,30 @@ router.get('/userTotalScore/:username', async (req, res) => {
     res.status(500).json({ error: 'Fehler beim Laden' });
   }
 });
+
+// 🔹 Längste Serien
+router.get('/top-streaks', async (req, res) => {
+  try {
+    const result = await db.execute(
+      'SELECT username, MAX(consecutive_wins) AS streak FROM scores GROUP BY username ORDER BY streak DESC LIMIT 10'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 🔹 Meistes Geld pro Runde
+router.get('/top-money-per-round', async (req, res) => {
+  try {
+    const result = await db.execute(
+      'SELECT username, ROUND(AVG(money_per_round), 2) AS avgMoney FROM scores GROUP BY username ORDER BY avgMoney DESC LIMIT 10'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 export default router;

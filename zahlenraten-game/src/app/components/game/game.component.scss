@@ -482,6 +482,50 @@ body.dark-mode .sidebar {
 //   100% { transform: translateX(0); }
 // }
 
+.highscores-carousel {
+  text-align: center;
+  margin-top: 2rem;
+
+  .arrow-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    button {
+      background: #4285f4;
+      color: white;
+      padding: 0.4rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    max-width: 500px;
+    margin: auto;
+
+    li {
+      background: #fff;
+      padding: 0.8rem;
+      border-bottom: 1px dashed #ccc;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    span {
+      font-weight: bold;
+    }
+  }
+}
+
+
 
 
 

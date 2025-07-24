@@ -172,7 +172,7 @@ guess(answer: 'inside' | 'outside') {
     this.consecutiveWins = 0;
     this.currentMultiplier = 1.0;
     this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-    this.soundService.playSound('damage.aac', 0.2); // Sound für falsche Antwort abspielen
+    this.soundService.playSound('damage.aac', 0.1); // Sound für falsche Antwort abspielen
     setTimeout(() => this.newRound(), 500);
   } else {
     this.gameOver = true;

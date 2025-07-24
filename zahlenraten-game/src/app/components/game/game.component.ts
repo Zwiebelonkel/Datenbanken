@@ -48,6 +48,7 @@ export class GameComponent implements OnInit {
   currentLeaderboardIndex = 0;
   currentLeaderboard: { username: string; value: string }[] = [];
   allLeaderboards: { username: string; value: string }[][] = [];
+  touchStartX = 0;
 
 
 

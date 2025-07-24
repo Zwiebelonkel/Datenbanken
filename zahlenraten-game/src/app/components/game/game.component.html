@@ -100,7 +100,11 @@
     <button class="btn" (click)="useSelectedCard()">Einsetzen</button>
   </div>
 </div>
-
+<div
+  class="leaderboard-wrapper"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)"
+>
 <div class="highscores-carousel">
   <h3>🏆 {{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
 
@@ -119,6 +123,7 @@
       <strong>{{ entry.value }}</strong>
     </li>
   </ul>
+</div>
 </div>
 
 

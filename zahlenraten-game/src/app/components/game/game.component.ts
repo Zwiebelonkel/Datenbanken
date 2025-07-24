@@ -27,6 +27,7 @@ export class GameComponent implements OnInit {
   testNum = 0;
   score = 0;
   money = 0;
+  highestStreak = 0;
   lives = 3;
   hasPlayedYet: boolean = false;
   gameOver = false;
@@ -61,7 +62,7 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
     this.newRound();
-    this.loadHighscores();
+    this.loadLeaderboards();
     this.loadCards();
   }
 
@@ -140,6 +141,9 @@ guess(answer: 'inside' | 'outside') {
 
   if (answer === correct) {
     this.consecutiveWins++;
+    if (this.consecutiveWins > this.highestStreak) {
+      this.highestStreak = this.consecutiveWins;
+    }
 
     // Serien-Multiplikator bleibt sichtbar
     const seriesMultiplier = this.consecutiveWins >= 2 ? 1 + (this.consecutiveWins - 1) * 0.2 : 1.0;
@@ -245,9 +249,9 @@ submitScore() {
     return;
   }
 
-    this.scoreService.submitScore({ username, score: this.score }).subscribe(() => {
+    this.scoreService.submitScore({ username, score: this.score, consecutive_wins: this.highestStreak, money_per_round: this.money }).subscribe(() => {
 
-    this.loadHighscores();
+    this.loadLeaderboards();
     this.restart();
   });
 this.scoreService.isHighscore(this.score).subscribe({
@@ -263,19 +267,19 @@ this.scoreService.isHighscore(this.score).subscribe({
 }
 
 
-loadHighscores() {
-  this.isLoading = true;
-  this.scoreService.getTopScores().subscribe(
-    (scores) => {
-      this.topScores = scores;
-      this.isLoading = false;
-    },
-    (error) => {
-      console.error('Fehler beim Laden der Highscores', error);
-      this.isLoading = false;
-    }
-  );
-}
+// loadHighscores() {
+//   this.isLoading = true;
+//   this.scoreService.getTopScores().subscribe(
+//     (scores) => {
+//       this.topScores = scores;
+//       this.isLoading = false;
+//     },
+//     (error) => {
+//       console.error('Fehler beim Laden der Highscores', error);
+//       this.isLoading = false;
+//     }
+//   );
+// }
 
 loadLeaderboards() {
   this.isLoading = true;
@@ -287,10 +291,9 @@ loadLeaderboards() {
   ]).then(([scores, streaks, money]) => {
     this.allLeaderboards = [
       scores.map(s => ({ username: s.username, value: `${s.score} Punkte` })),
-      streaks.map(s => ({ username: s.username, value: `${s.consecutive_wins} 🔁` })),
-      money.map(s => ({ username: s.username, value: `${s.money_per_round}€ 💰` }))
+      streaks.map(s => ({ username: s.username, value: `${s.consecutive_wins} 🔁` })),              // ← geändert
+      money.map(s => ({ username: s.username, value: `${s.money_per_round}€ 💰` }))             // ← geändert
     ];
-
     this.setLeaderboard(0);
     this.isLoading = false;
   });

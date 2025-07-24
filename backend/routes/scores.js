@@ -111,7 +111,7 @@ router.get('/topStreaks', async (req, res) => {
 router.get('/topMoneyPerRound', async (req, res) => {
   try {
     const result = await db.execute(
-      'SELECT username, ROUND((money_per_round), 2) AS money_per_round FROM scores GROUP BY username ORDER BY money_per_round DESC LIMIT 10'
+      'SELECT username, MAX(money_per_round) AS money_per_round FROM scores GROUP BY username ORDER BY money_per_round DESC LIMIT 10'
     );
     res.json(result.rows);
   } catch (err) {

@@ -104,10 +104,11 @@
 <div class="highscores-carousel">
   <h3>🏆 {{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
 
-  <div class="arrow-buttons">
-    <button (click)="prevLeaderboard()">⬅</button>
-    <button (click)="nextLeaderboard()">➡</button>
-  </div>
+<div class="arrow-container">
+  <button class="arrow" (click)="prevLeaderboard()">⬅</button>
+  <button class="arrow" (click)="nextLeaderboard()">➡</button>
+</div>
+
 
   <app-loader *ngIf="isLoading "></app-loader>
 

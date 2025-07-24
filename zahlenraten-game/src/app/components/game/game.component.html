@@ -120,33 +120,29 @@
     class="leaderboard-slider"
   />
 
-  <div class="slider-wrapper">
+ <div class="slider-wrapper">
+  <div
+    class="slider"
+    [style.transform]="'translateX(-' + currentLeaderboardIndex * 100 + '%)'"
+  >
     <div
-      class="slider"
-      [style.transform]="'translateX(-' + currentLeaderboardIndex * 100 + '%)'"
+      class="leaderboard"
+      *ngFor="let board of allLeaderboards; index as i"
     >
-      <div
-        class="leaderboard"
-        *ngFor="let board of allLeaderboards; index as i"
-      >
-        <ul>
-          <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
-          <li 
-  *ngFor="let entry of board; index as j"
-  [ngClass]="{
-    'gold-bg': j === 0,
-    'silver-bg': j === 1,
-    'bronze-bg': j === 2
-  }"
->
-  <span>{{ getMedal(j) }} {{ entry.username }}</span>
-  <strong>{{ entry.value }}</strong>
-</li>
-            <span>{{ getMedal(j) }} {{ entry.username }}</span>
-            <strong>{{ entry.value }}</strong>
-          </li>
-        </ul>
-      </div>
+      <ul>
+        <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
+        <li 
+          *ngFor="let entry of board; index as j"
+          [ngClass]="{
+            'gold-bg': j === 0,
+            'silver-bg': j === 1,
+            'bronze-bg': j === 2
+          }"
+        >
+          <span>{{ getMedal(j) }} {{ entry.username }}</span>
+          <strong>{{ entry.value }}</strong>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

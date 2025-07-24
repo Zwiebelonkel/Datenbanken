@@ -561,7 +561,20 @@ body.dark-mode .sidebar {
 }
 
 
+.gold-bg {
+  background: linear-gradient(90deg, #ffd700 0%, #ffea70 100%);
+  color: #000;
+}
 
+.silver-bg {
+  background: linear-gradient(90deg, #c0c0c0 0%, #e0e0e0 100%);
+  color: #000;
+}
+
+.bronze-bg {
+  background: linear-gradient(90deg, #cd7f32 0%, #f4a460 100%);
+  color: #000;
+}
 
 
 .leaderboard-wrapper {

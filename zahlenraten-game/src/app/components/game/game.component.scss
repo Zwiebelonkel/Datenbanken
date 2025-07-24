@@ -387,11 +387,6 @@ body.dark-mode .sidebar {
   animation: pulse 1s infinite alternate;
 }
 
-@keyframes pulse {
-  from { transform: scale(1); }
-  to   { transform: scale(1.1); }
-}
-
 .card-multiplier-banner {
   margin: 2rem auto;
   padding: 2rem;
@@ -446,41 +441,6 @@ body.dark-mode .sidebar {
     background: #45a049;
   }
 }
-
-// .lava-fill {
-//   position: fixed;
-//   bottom: 0;
-//   left: 0;
-//   width: 100%;
-//   background: linear-gradient(to top, #ff6f00, #ffa726);
-//   z-index: -1000;
-//   overflow: hidden;
-//   transition: height 0.6s ease, opacity 0.3s ease;
-//   filter: blur(4px);
-//   border-top-left-radius: 30% 20px;
-//   border-top-right-radius: 30% 20px;
-
-//   &.lava-enter {
-//     height: 0% !important;
-//   }
-// }
-
-// .lava-wave {
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 30px;
-//   animation: waveMotion 4s infinite ease-in-out;
-//   z-index: 1;
-//   opacity: 0.7;
-// }
-
-// @keyframes waveMotion {
-//   0% { transform: translateX(0); }
-//   50% { transform: translateX(-5%); }
-//   100% { transform: translateX(0); }
-// }
 
 .highscores-carousel {
   text-align: center;
@@ -560,7 +520,6 @@ body.dark-mode .sidebar {
   }
 }
 
-
 .highscores-carousel li.gold-bg {
   background: linear-gradient(90deg, #ffd700 0%, #ffea70 100%) !important;
   color: black !important;
@@ -581,10 +540,3 @@ body.dark-mode .sidebar {
   touch-action: pan-y; // erlaubt horizontales Swipen ohne Scrollblock
   overflow: hidden;
 }
-
-
-
-
-
-
-

@@ -6,7 +6,7 @@ name: Deploy to Firebase Hosting on merge
 on:
   push:
     branches:
-      - Turso
+      - Leaderboards
 
 jobs:
   build_and_deploy:

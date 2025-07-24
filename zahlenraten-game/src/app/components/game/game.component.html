@@ -102,6 +102,11 @@
 </div>
 <app-loader *ngIf="isLoading"></app-loader>
 
+<div
+  class="leaderboard-wrapper"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)"
+>
 <div class="highscores-carousel">
   <h3>{{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
 
@@ -137,6 +142,17 @@
 </div>
 
 
+  <app-loader *ngIf="isLoading "></app-loader>
+
+<ul *ngIf="!isLoading && currentLeaderboard">
+    <li *ngIf="currentLeaderboard.length === 0">Keine Daten verfügbar...</li>
+    <li *ngFor="let entry of currentLeaderboard; index as i">
+      <span>{{ getMedal(i) }} {{ entry.username }}</span>
+      <strong>{{ entry.value }}</strong>
+    </li>
+  </ul>
+</div>
+</div>
 
 
 <!-- <div 

@@ -134,11 +134,12 @@
         <li 
           *ngFor="let entry of board; index as j"
           [ngClass]="{
-            'gold-bg': j === 0,
-            'silver-bg': j === 1,
-            'bronze-bg': j === 2
+            'gold-bg shimmer-effect': j === 0,
+            'silver-bg shimmer-effect': j === 1,
+            'bronze-bg shimmer-effect': j === 2
           }"
         >
+
           <span>{{ getMedal(j) }} {{ entry.username }}</span>
           <strong>{{ entry.value }}</strong>
         </li>

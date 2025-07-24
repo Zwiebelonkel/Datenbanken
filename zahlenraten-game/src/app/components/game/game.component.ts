@@ -44,7 +44,7 @@ export class GameComponent implements OnInit {
   gameStarted = false;
   cardMultiplierUsed = false;
   // justAppeared = false; // Für Lava-Animation
-  leaderboardTitles = ['Top Punkte', 'Längste Streak', 'Geld pro Runde'];
+  leaderboardTitles = ['🏆 Top Punkte', '🔥 Längste Streak', '💵 Geld pro Runde'];
   currentLeaderboardIndex = 0;
   currentLeaderboard: { username: string; value: string }[] = [];
   allLeaderboards: { username: string; value: string }[][] = [];
@@ -300,9 +300,9 @@ loadLeaderboards() {
 }
 
 setLeaderboard(index: number) {
-  this.currentLeaderboardIndex = index;
-  this.currentLeaderboard = this.allLeaderboards[index];
+  this.currentLeaderboard = this.allLeaderboards[index] || [];
 }
+
 
 nextLeaderboard() {
   const nextIndex = (this.currentLeaderboardIndex + 1) % this.leaderboardTitles.length;

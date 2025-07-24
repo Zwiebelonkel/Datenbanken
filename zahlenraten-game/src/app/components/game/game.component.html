@@ -100,26 +100,43 @@
     <button class="btn" (click)="useSelectedCard()">Einsetzen</button>
   </div>
 </div>
+<app-loader *ngIf="isLoading"></app-loader>
 
 <div class="highscores-carousel">
-  <h3>🏆 {{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
+  <h3>{{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
 
-<div class="arrow-container">
-  <button class="arrow" (click)="prevLeaderboard()">⬅</button>
-  <button class="arrow" (click)="nextLeaderboard()">➡</button>
+  <!-- SLIDER -->
+  <input
+    type="range"
+    min="0"
+    [max]="allLeaderboards.length - 1"
+    [(ngModel)]="currentLeaderboardIndex"
+    (input)="setLeaderboard(currentLeaderboardIndex)"
+    class="leaderboard-slider"
+  />
+
+  <div class="slider-wrapper">
+    <div
+      class="slider"
+      [style.transform]="'translateX(-' + currentLeaderboardIndex * 100 + '%)'"
+    >
+      <div
+        class="leaderboard"
+        *ngFor="let board of allLeaderboards; index as i"
+      >
+        <ul>
+          <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
+          <li *ngFor="let entry of board; index as j">
+            <span>{{ getMedal(j) }} {{ entry.username }}</span>
+            <strong>{{ entry.value }}</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
 
-  <app-loader *ngIf="isLoading "></app-loader>
-
-<ul *ngIf="!isLoading && currentLeaderboard">
-    <li *ngIf="currentLeaderboard.length === 0">Keine Daten verfügbar...</li>
-    <li *ngFor="let entry of currentLeaderboard; index as i">
-      <span>{{ getMedal(i) }} {{ entry.username }}</span>
-      <strong>{{ entry.value }}</strong>
-    </li>
-  </ul>
-</div>
 
 
 <!-- <div 

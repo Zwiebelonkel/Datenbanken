@@ -482,26 +482,67 @@ body.dark-mode .sidebar {
 //   100% { transform: translateX(0); }
 // }
 
-.highscores-carousel-carousel {
+.highscores-carousel {
   text-align: center;
   margin-top: 2rem;
+  max-width: 500px;
 
-    button {
-      background: #4285f4;
-      color: white;
-      padding: 0.4rem 1rem;
-      border: none;
-      border-radius: 8px;
+  h3 {
+    margin-bottom: 1rem;
+  }
+
+  .leaderboard-slider {
+    width: 300px;
+    margin: 1rem auto;
+    appearance: none;
+    height: 8px;
+    border-radius: 5px;
+    background: #4caf50;
+    outline: none;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border: 2px solid #4caf50;
+      border-radius: 50%;
       cursor: pointer;
-      font-size: 1.1rem;
+      transition: background 0.3s ease;
     }
-  
+
+    &::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border: 2px solid #4caf50;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+  }
+
+  .slider-wrapper {
+    overflow: hidden;
+    width: 500px;
+    margin: auto;
+    border-radius: 10px;
+    max-width: 100%;
+  }
+
+  .slider {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+  }
+
+  .leaderboard {
+    min-width: 100%;
+  }
 
   ul {
     list-style: none;
     padding: 0;
-    max-width: 500px;
-    margin: auto;
+    margin: 0;
 
     li {
       background: #fff;
@@ -519,38 +560,7 @@ body.dark-mode .sidebar {
   }
 }
 
-.arrow-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #4CAF50; // dein grüner Hintergrund
-  padding: 0;
-  border-radius: 10px;
-  margin: 1rem 0;
-  transition: transform 0.2s ease;
 
-}
-
-.arrow {
-  font-size: 2rem;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  background: #67db6b;
-  border: none;
-  border-radius: 5px;
-  padding: 0rem 1rem;
-}
-
-.arrow:hover {
-  font-size: 2rem;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  background: #58bd5b;
-  border: none;
-  border-radius: 5px;
-  padding: 0rem 1rem;
-  scale: 1.1;
-}
 
 
 

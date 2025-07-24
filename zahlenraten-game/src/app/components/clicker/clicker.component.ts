@@ -41,7 +41,7 @@ export class ClickerComponent implements OnInit {
 
   click() {
   this.clickAmount += 1;
-  this.soundService.playSound('hardPop.wav'); // Klick-Sound abspielen
+  this.soundService.playSound('hardPop.aac', 0.6); // Klick-Sound abspielen
   this.deposited = false;
 
   // Farbblitz
@@ -77,7 +77,7 @@ export class ClickerComponent implements OnInit {
         this.deposited = true;
         this.clickAmount = 0;
         this.loadMoney(); // 💰 neu laden!
-        this.soundService.playSound('win.wav', 0.5); // Sound beim Einzahlen abspielen
+        this.soundService.playSound('win.aac', 0.5); // Sound beim Einzahlen abspielen
       },
       error: err => console.error('❌ Fehler beim Einzahlen:', err)
     });

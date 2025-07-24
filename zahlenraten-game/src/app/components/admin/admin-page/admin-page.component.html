@@ -1,25 +1,41 @@
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+<div class="admin-layout">
+  <!-- Linke Seite: Hauptinhalte -->
+  <div class="admin-main">
+    <div class="admin-container">
+      <h1>🔧 Admin Panel</h1>
 
-<div class="admin-container">
-  <h1>🔧 Admin Panel</h1>
+      <section class="admin-section">
+        <h2>👥 Benutzerverwaltung</h2>
+        <ul class="admin-list">
+          <li *ngFor="let user of users">
+            <span class="username">{{ user.username }}</span>
+            <div class="button-group">
+              <button class="delete-btn" (click)="deleteUser(user.id)">❌ Löschen</button>
+              <button class="inspect-btn" (click)="showProfile(user.username)">🔎 Anzeigen</button>
+            </div>
+          </li>
+        </ul>
+      </section>
 
-  <section class="admin-section">
-    <h2>👥 Benutzerverwaltung</h2>
-    <ul class="admin-list">
-      <li *ngFor="let user of users">
-        <span class="username">{{ user.username }}</span>
-        <button class="delete-btn" (click)="deleteUser(user.id)">❌ Löschen</button>
-      </li>
-    </ul>
-  </section>
+      <section class="admin-section">
+        <h2>🏆 Highscores verwalten</h2>
+        <ul class="admin-list">
+          <li *ngFor="let score of scores">
+            <span class="score-entry">{{ score.username }} – {{ score.score }} Punkte</span>
+            <button class="delete-btn" (click)="deleteScore(score.id)">❌ Löschen</button>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
 
-  <section class="admin-section">
-    <h2>🏆 Highscores verwalten</h2>
-    <ul class="admin-list">
-      <li *ngFor="let score of scores">
-        <span class="score-entry">{{ score.username }} – {{ score.score }} Punkte</span>
-        <button class="delete-btn" (click)="deleteScore(score.id)">❌ Löschen</button>
-      </li>
-    </ul>
-  </section>
+  <!-- Rechte Seite: Fixierte Profilstatistik -->
+  <div class="admin-sidebar" *ngIf="selectedStats">
+    <h2>📊 Profil von {{ selectedUser }}</h2>
+    <div class="stat-box">💠 Highscore: {{ selectedStats.highscore }}</div>
+    <div class="stat-box">🏆 Punkte: {{ selectedStats.totalScore }}</div>
+    <div class="stat-box">🎮 Partien: {{ selectedStats.totalGames }}</div>
+    <div class="stat-box">😊 Erfolge: {{ selectedStats.unlockedAchievements }}</div>
+    <div class="stat-box">💰 Geld: {{ selectedStats.money }} €</div>
+  </div>
 </div>

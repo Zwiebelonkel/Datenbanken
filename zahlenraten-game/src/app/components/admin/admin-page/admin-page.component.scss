@@ -1,6 +1,15 @@
+.admin-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.admin-main {
+  flex: 1;
+}
+
 .admin-container {
   max-width: 800px;
-  margin: 0 auto;
   padding: 30px;
   font-family: 'Nunito Sans', sans-serif;
   background: #f9f9f9;
@@ -44,18 +53,69 @@ h1 {
       color: #333;
     }
 
-    .delete-btn {
-      background: #e74c3c;
-      color: white;
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .delete-btn,
+    .inspect-btn {
+      font-size: 14px;
+      padding: 6px 16px;
+      min-width: 90px;
+      text-align: center;
       border: none;
-      padding: 5px 12px;
       border-radius: 6px;
       cursor: pointer;
       transition: background 0.2s ease;
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+      color: white;
 
       &:hover {
         background: #c0392b;
       }
     }
+
+    .inspect-btn {
+      background: #5cf163;
+      color: white;
+
+      &:hover {
+        background: #2a7a31;
+      }
+    }
+  }
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 30px;
+  width: 280px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+
+  h2 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #222;
+  }
+
+  .stat-box {
+    background: #f9f9f9;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    font-weight: 500;
+    display: flex;
+    gap: 10px;
+    align-items: center;
   }
 }

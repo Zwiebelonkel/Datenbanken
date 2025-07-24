@@ -129,7 +129,7 @@ export class PackOpeningComponent implements OnInit {
     const pack = this.chances[this.packName];
     const rand = Math.random() * 100;
     let cumulative = 0;
-    this.soundService.playSound('win.wav', 0.5); // Sound beim Öffnen abspielen
+    this.soundService.playSound('win.aac', 0.5); // Sound beim Öffnen abspielen
 
     for (const entry of pack) {
       cumulative += entry.chance;

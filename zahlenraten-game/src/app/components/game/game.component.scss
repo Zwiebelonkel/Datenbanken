@@ -447,40 +447,40 @@ body.dark-mode .sidebar {
   }
 }
 
-.lava-fill {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: linear-gradient(to top, #ff6f00, #ffa726);
-  z-index: -1000;
-  overflow: hidden;
-  transition: height 0.6s ease, opacity 0.3s ease;
-  filter: blur(4px);
-  border-top-left-radius: 30% 20px;
-  border-top-right-radius: 30% 20px;
+// .lava-fill {
+//   position: fixed;
+//   bottom: 0;
+//   left: 0;
+//   width: 100%;
+//   background: linear-gradient(to top, #ff6f00, #ffa726);
+//   z-index: -1000;
+//   overflow: hidden;
+//   transition: height 0.6s ease, opacity 0.3s ease;
+//   filter: blur(4px);
+//   border-top-left-radius: 30% 20px;
+//   border-top-right-radius: 30% 20px;
 
-  &.lava-enter {
-    height: 0% !important;
-  }
-}
+//   &.lava-enter {
+//     height: 0% !important;
+//   }
+// }
 
-.lava-wave {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  animation: waveMotion 4s infinite ease-in-out;
-  z-index: 1;
-  opacity: 0.7;
-}
+// .lava-wave {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 30px;
+//   animation: waveMotion 4s infinite ease-in-out;
+//   z-index: 1;
+//   opacity: 0.7;
+// }
 
-@keyframes waveMotion {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(-5%); }
-  100% { transform: translateX(0); }
-}
+// @keyframes waveMotion {
+//   0% { transform: translateX(0); }
+//   50% { transform: translateX(-5%); }
+//   100% { transform: translateX(0); }
+// }
 
 
 

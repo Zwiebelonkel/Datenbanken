@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-interface UserStats {
+export interface UserStats {
   totalScore: number;
   totalGames: number;
   unlockedAchievements: number;

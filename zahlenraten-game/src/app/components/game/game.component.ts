@@ -41,7 +41,7 @@ export class GameComponent implements OnInit {
   selectedCard: any = null;
   gameStarted = false;
   cardMultiplierUsed = false;
-  justAppeared = false; // Für Lava-Animation
+  // justAppeared = false; // Für Lava-Animation
 
 
 
@@ -59,16 +59,16 @@ export class GameComponent implements OnInit {
     this.loadCards();
   }
 
-  ngOnChanges(): void {
-  if (this.currentMultiplier > 1 && !this.justAppeared) {
-    this.justAppeared = true;
+//   ngOnChanges(): void {
+//   if (this.currentMultiplier > 1 && !this.justAppeared) {
+//     this.justAppeared = true;
 
-    // Kleine Pause, dann "hochfahren"
-    setTimeout(() => {
-      this.justAppeared = false;
-    }, 50); // 50 ms Delay reicht für Transition-Start
-  }
-}
+//     // Kleine Pause, dann "hochfahren"
+//     setTimeout(() => {
+//       this.justAppeared = false;
+//     }, 50); // 50 ms Delay reicht für Transition-Start
+//   }
+// }
 
   loadCards() {
     this.cardsService.getCards().subscribe({
@@ -86,7 +86,7 @@ export class GameComponent implements OnInit {
 
     this.cardMultiplier = this.selectedCard.multiplier;
     this.cardMultiplierUsed = true;
-    this.soundService.playSound('hardPop.wav'); // Sound beim Verwenden der Karte abspielen
+    this.soundService.playSound('hardPop.aac', 0.6); // Sound beim Verwenden der Karte abspielen
 
     // Karte um 1 reduzieren
     this.cardsService.useCard(this.selectedCard.multiplier).subscribe({
@@ -126,7 +126,7 @@ export class GameComponent implements OnInit {
 
 guess(answer: 'inside' | 'outside') {
   this.gameStarted = true;
-  this.soundService.playSound('softClick.mp3');
+  this.soundService.playSound('softClick.aac');
   const correct = this.isBetween() ? 'inside' : 'outside';
   const resultElement = document.querySelector('.game-container') as HTMLElement;
 
@@ -152,7 +152,7 @@ guess(answer: 'inside' | 'outside') {
     if (this.consecutiveWins % 5 === 0) {
       const intensity = Math.min(10 + this.consecutiveWins * 2, 50);
       this.emojiRain("🔥", intensity);
-      this.soundService.playSound('fire.wav', 0.3); // Sound für Emoji-Regen abspielen
+      this.soundService.playSound('fire.aac', 0.3); // Sound für Emoji-Regen abspielen
     }
 
     setTimeout(() => this.newRound(), 500);
@@ -161,11 +161,11 @@ guess(answer: 'inside' | 'outside') {
     this.consecutiveWins = 0;
     this.currentMultiplier = 1.0;
     this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-    this.soundService.playSound('damage.wav', 0.3); // Sound für falsche Antwort abspielen
+    this.soundService.playSound('damage.aac', 0.2); // Sound für falsche Antwort abspielen
     setTimeout(() => this.newRound(), 500);
   } else {
     this.gameOver = true;
-    this.soundService.playSound('end.mp3', 0.5); // Sound für Spielende abspielen
+    this.soundService.playSound('end.aac', 0.2); // Sound für Spielende abspielen
     this.consecutiveWins = 0;
     this.currentMultiplier = 1.0;
     this.lives = 0;
@@ -232,7 +232,7 @@ this.moneyService.updateMoney({ username, amount: this.score }).subscribe({
 
 
 submitScore() {
-  this.soundService.playSound('hardPop.wav'); // Sound beim Einreichen des Scores abspielen
+  this.soundService.playSound('hardPop.aac', 0.6); // Sound beim Einreichen des Scores abspielen
   const username = this.authService.getUsername();
   if (!username) {
     console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
@@ -336,7 +336,7 @@ unlockAchievement(name: string) {
         this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
         console.log('✅ Achievement neu freigeschaltet:', res.name);
         this.emojiRain("🎖️");
-        this.soundService.playSound('message.wav'); // Sound beim Freischalten des Achievements abspielen
+        this.soundService.playSound('message.aac'); // Sound beim Freischalten des Achievements abspielen
       } else {
         console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
       }
@@ -405,7 +405,7 @@ getAchievementDescription(name: string): string {
 
 
 toggleSidebar() {
-  this.soundService.playSound('pop.wav'); // Sound beim Öffnen/Schließen der Sidebar abspielen
+  this.soundService.playSound('pop.aac'); // Sound beim Öffnen/Schließen der Sidebar abspielen
   this.sidebarOpen = !this.sidebarOpen;
   if (this.sidebarOpen){
     this.loadAch();
@@ -479,15 +479,15 @@ getMedal(index: number): string {
   }
 }
 
-getLavaHeight(): string {
-  const base = 10;
-  const multiplierFactor = Math.min(this.currentMultiplier - 1, 4);
-  return `${base + multiplierFactor * 15}%`;
-}
+// getLavaHeight(): string {
+//   const base = 10;
+//   const multiplierFactor = Math.min(this.currentMultiplier - 1, 4);
+//   return `${base + multiplierFactor * 15}%`;
+// }
 
-getLavaOpacity(): number {
-  return Math.min((this.currentMultiplier - 1) / 3 + 0.2, 1);
-}
+// getLavaOpacity(): number {
+//   return Math.min((this.currentMultiplier - 1) / 3 + 0.2, 1);
+// }
 
 
 

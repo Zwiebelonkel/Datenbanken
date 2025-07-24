@@ -54,7 +54,7 @@ export class CardShopComponent implements OnInit {
   }
 
 buyPack(pack: any) {
-  this.soundService.playSound('coin.wav'); // Sound beim Kauf abspielen
+  this.soundService.playSound('coin.aac'); // Sound beim Kauf abspielen
   this.router.navigate(['/pack-opening'], {
     queryParams: { pack: pack.name }
   });

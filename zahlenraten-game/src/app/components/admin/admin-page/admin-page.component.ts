@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // <--- hinzufügen
 import { AuthService } from '../../../services/auth.service';
+import { ProfileService } from '../../../services/profile.service';
 import { Router } from '@angular/router';
+import { UserStats } from '../../../services/profile.service'; // Importiere UserStats
 
 
 @Component({
@@ -15,8 +17,11 @@ import { Router } from '@angular/router';
 export class AdminPageComponent implements OnInit {
   users: any[] = [];
   scores: any[] = [];
+  selectedStats: UserStats | null = null;
+  selectedUser: string | null = null;
 
-  constructor(private http: HttpClient, public authService: AuthService, private router: Router) {}
+
+  constructor(private http: HttpClient, public authService: AuthService, private router: Router, private profileService: ProfileService) {}
 
 ngOnInit(): void {
   const role = this.authService.getRole()?.toLowerCase();
@@ -47,6 +52,19 @@ deleteUser(id: number) {
     this.users = this.users.filter(user => user.id !== id);
   });
 }
+
+showProfile(username: string) {
+  this.profileService.getUserStats(username).subscribe(
+    (stats) => {
+      this.selectedStats = stats;
+      this.selectedUser = username;
+    },
+    (error) => {
+      console.error('Fehler beim Laden der Stats:', error);
+    }
+  );
+}
+
 
 
   deleteScore(id: number) {

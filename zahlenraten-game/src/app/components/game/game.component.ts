@@ -533,7 +533,24 @@ getMedal(index: number): string {
 //   return Math.min((this.currentMultiplier - 1) / 3 + 0.2, 1);
 // }
 
+onTouchStart(event: TouchEvent) {
+  this.touchStartX = event.changedTouches[0].screenX;
+}
 
+onTouchEnd(event: TouchEvent) {
+  const touchEndX = event.changedTouches[0].screenX;
+  const deltaX = this.touchStartX - touchEndX;
+
+  if (Math.abs(deltaX) > 50) {
+    if (deltaX > 0) {
+      // Nach links gewischt → nächstes Leaderboard
+      this.nextLeaderboard();
+    } else {
+      // Nach rechts gewischt → vorheriges Leaderboard
+      this.prevLeaderboard();
+    }
+  }
+}
 
 
 }

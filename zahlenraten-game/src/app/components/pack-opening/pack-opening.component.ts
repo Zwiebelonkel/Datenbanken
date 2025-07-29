@@ -19,6 +19,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 export class PackOpeningComponent implements OnInit {
   packName: string = '';
   result: string = '';
+  displayResult: string = ''
   reveal = false;
   packImagePath = 'assets/packs/basicOpen.png';
   showPack = true;
@@ -29,23 +30,26 @@ export class PackOpeningComponent implements OnInit {
   isLoading = true;
 
   // Wahrscheinlichkeiten je Pack
-  chances: Record<string, { multiplier: string; chance: number }[]> = {
-    Basic: [
-      { multiplier: '1.2x', chance: 70 },
-      { multiplier: '1.5x', chance: 25 },
-      { multiplier: '2x', chance: 5 },
-    ],
-    Premium: [
-      { multiplier: '1.5x', chance: 60 },
-      { multiplier: '2x', chance: 30 },
-      { multiplier: '5x', chance: 10 },
-    ],
-    Ultra: [
-      { multiplier: '2x', chance: 50 },
-      { multiplier: '5x', chance: 45 },
-      { multiplier: '10x', chance: 5 },
-    ]
-  };
+chances: Record<string, { multiplier: string; chance: number }[]> = {
+  Basic: [
+    { multiplier: '1.2x', chance: 65 },
+    { multiplier: '1.5x', chance: 20 },
+    { multiplier: '2x', chance: 7.5 },
+    { multiplier: '-1', chance: 7.5 },
+  ],
+  Premium: [
+    { multiplier: '1.5x', chance: 50 },
+    { multiplier: '2x', chance: 20 },
+    { multiplier: '5x', chance: 15 },
+    { multiplier: '-1', chance: 15 },
+  ],
+  Ultra: [
+    { multiplier: '2x', chance: 40 },
+    { multiplier: '5x', chance: 35 },
+    { multiplier: '10x', chance: 5 },
+    { multiplier: '-1', chance: 20 },
+  ]
+};
 
   packPrices: Record<string, number> = {
     Basic: 40,
@@ -126,25 +130,27 @@ export class PackOpeningComponent implements OnInit {
     this.drawCard();
   }
 
-  drawCard() {
-    const pack = this.chances[this.packName];
-    const rand = Math.random() * 100;
-    let cumulative = 0;
-    this.soundService.playSound('win.aac', 0.5); // Sound beim Öffnen abspielen
+drawCard() {
+  const pack = this.chances[this.packName];
+  const rand = Math.random() * 100;
+  let cumulative = 0;
+  this.soundService.playSound('win.aac', 0.5);
 
-    for (const entry of pack) {
-      cumulative += entry.chance;
-      if (rand <= cumulative) {
-        this.result = entry.multiplier;
+  for (const entry of pack) {
+    cumulative += entry.chance;
+    if (rand <= cumulative) {
+      this.result = entry.multiplier;
+      this.displayResult = this.result === '-1' ? '❤️' : this.result;
 
-        // 💾 Karte speichern
-        this.cardsService.addCard(parseFloat(this.result)).subscribe({
-          next: () => console.log('Karte gespeichert:', this.result),
-          error: err => console.error('❌ Fehler beim Speichern der Karte:', err)
-        });
+      // 💾 Karte speichern (als Zahl)
+      this.cardsService.addCard(parseFloat(this.result)).subscribe({
+        next: () => console.log('Karte gespeichert:', this.result),
+        error: err => console.error('❌ Fehler beim Speichern der Karte:', err)
+      });
 
-        break;
-      }
+      break;
     }
   }
+}
+
 }

@@ -45,6 +45,9 @@ export class GameComponent implements OnInit {
   selectedCard: any = null;
   gameStarted = false;
   cardMultiplierUsed = false;
+  selectedHeartCard: any = null;
+  heartCardUsed: boolean = false;
+
   // justAppeared = false; // Für Lava-Animation
   leaderboardTitles = ['🏆 Top Punkte', '🔥 Längste Streak', '💵 Geld pro Runde'];
   currentLeaderboardIndex = 0;
@@ -57,7 +60,7 @@ export class GameComponent implements OnInit {
 
   buttonsDisabled = false;
   currentMultiplier: number = 1.0;
-  cardMultiplier = 1.0;
+  cardMultiplier: any = 1.0;
 
 
   topScores: any[] = [];
@@ -91,27 +94,36 @@ export class GameComponent implements OnInit {
     });
   }
 
-  useSelectedCard() {
-    if (!this.selectedCard) return;
+useSelectedCard() {
+  if (!this.selectedCard) return;
 
-    this.cardMultiplier = this.selectedCard.multiplier;
-    this.cardMultiplierUsed = true;
-    this.soundService.playSound('hardPop.aac', 0.6); // Sound beim Verwenden der Karte abspielen
+  const mult = this.selectedCard.multiplier;
+  this.cardMultiplierUsed = true;
 
-    // Karte um 1 reduzieren
-    this.cardsService.useCard(this.selectedCard.multiplier).subscribe({
-      next: () => {
-        this.selectedCard.amount--;
-        if (this.selectedCard.amount <= 0) {
-          this.cards = this.cards.filter(c => c.multiplier !== this.selectedCard.multiplier);
-          this.selectedCard = null;
-        }
-      },
-      error: (err) => {
-        console.error('Fehler beim Verwenden der Karte:', err);
-      }
-    });
+  // ❤️ Spezialeffekt: 4 Leben
+  if (mult === -1) {
+    this.lives = 4;
+    this.cardMultiplier = 1; // Kein Score-Multiplikator
+  } else {
+    this.cardMultiplier = mult;
   }
+
+  this.soundService.playSound('hardPop.aac', 0.6);
+
+  this.cardsService.useCard(mult).subscribe({
+    next: () => {
+      this.selectedCard.amount--;
+      if (this.selectedCard.amount <= 0) {
+        this.cards = this.cards.filter(c => c.multiplier !== mult);
+        this.selectedCard = null;
+      }
+    },
+    error: (err) => {
+      console.error('Fehler beim Verwenden der Karte:', err);
+    }
+  });
+}
+
 
   isDarkMode(): boolean {
   return this.darkModeService.isDarkMode();
@@ -552,6 +564,41 @@ onTouchEnd(event: TouchEvent) {
       this.prevLeaderboard();
     }
   }
+}
+
+hasHeartCard(): boolean {
+  return this.cards.some(c => c.multiplier === -1 && c.amount > 0);
+}
+
+get heartCards() {
+  return this.cards.filter(c => c.multiplier === -1);
+}
+
+get multiplierCards() {
+  return this.cards.filter(c => c.multiplier !== -1);
+}
+
+
+
+useHeartCard() {
+  if (!this.selectedHeartCard) return;
+
+  this.lives = 4;
+  this.heartCardUsed = true;
+  this.soundService.playSound('hardPop.aac', 0.6);
+
+  this.cardsService.useCard(-1).subscribe({
+    next: () => {
+      this.selectedHeartCard.amount--;
+      if (this.selectedHeartCard.amount <= 0) {
+        this.cards = this.cards.filter(c => c.multiplier !== -1);
+        this.selectedHeartCard = null;
+      }
+    },
+    error: (err) => {
+      console.error('Fehler beim Verwenden der Herzkarte:', err);
+    }
+  });
 }
 
 

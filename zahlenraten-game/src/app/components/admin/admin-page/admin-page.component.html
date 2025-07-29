@@ -11,8 +11,8 @@
           <li *ngFor="let user of users">
             <span class="username">{{ user.username }}</span>
             <div class="button-group">
-              <button class="delete-btn" (click)="deleteUser(user.id)">❌ Löschen</button>
-              <button class="inspect-btn" (click)="showProfile(user.username)">🔎 Anzeigen</button>
+              <button class="delete-btn" (click)="deleteUser(user.id)">❌</button>
+              <button class="inspect-btn" (click)="showProfile(user.username)">🔎</button>
             </div>
           </li>
         </ul>
@@ -23,7 +23,7 @@
         <ul class="admin-list">
           <li *ngFor="let score of scores">
             <span class="score-entry">{{ score.username }} – {{ score.score }} Punkte</span>
-            <button class="delete-btn" (click)="deleteScore(score.id)">❌ Löschen</button>
+            <button class="delete-btn" (click)="deleteScore(score.id)">❌</button>
           </li>
         </ul>
       </section>

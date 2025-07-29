@@ -26,8 +26,12 @@
 <!-- Spiel läuft -->
 <div class="game-container" *ngIf="!gameOver">
 
-  <div class="hearts">
-  <span *ngFor="let life of getLivesArray()">❤</span>
+<div class="hearts">
+  <span 
+    *ngFor="let life of getLivesArray(); index as i" 
+    class="heart"
+    [style.animationDelay]="i * 0.2 + 's'"
+  >❤</span>
 </div>
   <div class="numbers">
     <p><strong>Zahl 1:</strong> {{ num1 }}</p>

@@ -47,6 +47,8 @@ export class GameComponent implements OnInit {
   cardMultiplierUsed = false;
   selectedHeartCard: any = null;
   heartCardUsed: boolean = false;
+  cardUsed: boolean = false;
+
 
   // justAppeared = false; // Für Lava-Animation
   leaderboardTitles = ['🏆 Top Punkte', '🔥 Längste Streak', '💵 Geld pro Runde'];
@@ -93,37 +95,6 @@ export class GameComponent implements OnInit {
       }
     });
   }
-
-useSelectedCard() {
-  if (!this.selectedCard) return;
-
-  const mult = this.selectedCard.multiplier;
-  this.cardMultiplierUsed = true;
-
-  // ❤️ Spezialeffekt: 4 Leben
-  if (mult === -1) {
-    this.lives = 4;
-    this.cardMultiplier = 1; // Kein Score-Multiplikator
-  } else {
-    this.cardMultiplier = mult;
-  }
-
-  this.soundService.playSound('hardPop.aac', 0.6);
-
-  this.cardsService.useCard(mult).subscribe({
-    next: () => {
-      this.selectedCard.amount--;
-      if (this.selectedCard.amount <= 0) {
-        this.cards = this.cards.filter(c => c.multiplier !== mult);
-        this.selectedCard = null;
-      }
-    },
-    error: (err) => {
-      console.error('Fehler beim Verwenden der Karte:', err);
-    }
-  });
-}
-
 
   isDarkMode(): boolean {
   return this.darkModeService.isDarkMode();
@@ -403,6 +374,15 @@ unlockAchievement(name: string) {
   });
 }
 
+useSelectedCards() {
+  if (this.selectedCard && this.selectedCard.multiplier !== -1) {
+    this.useSelectedCard(); // bestehende Methode für Multikarte
+  }
+  if (this.selectedHeartCard && this.selectedHeartCard.multiplier === -1) {
+    this.useHeartCard(); // bestehende Methode für ❤️
+  }
+}
+
 
 
 checkForAchievements() {
@@ -578,13 +558,37 @@ get multiplierCards() {
   return this.cards.filter(c => c.multiplier !== -1);
 }
 
+useSelectedCard() {
+  if (!this.selectedCard) return;
 
+  const mult = this.selectedCard.multiplier;
+  this.cardMultiplierUsed = true;
+  this.cardUsed = true
+
+    this.cardMultiplier = mult;
+
+  this.soundService.playSound('hardPop.aac', 0.6);
+
+  this.cardsService.useCard(mult).subscribe({
+    next: () => {
+      this.selectedCard.amount--;
+      if (this.selectedCard.amount <= 0) {
+        this.cards = this.cards.filter(c => c.multiplier !== mult);
+        this.selectedCard = null;
+      }
+    },
+    error: (err) => {
+      console.error('Fehler beim Verwenden der Karte:', err);
+    }
+  });
+}
 
 useHeartCard() {
   if (!this.selectedHeartCard) return;
 
   this.lives = 4;
   this.heartCardUsed = true;
+  this.cardUsed = true
   this.soundService.playSound('hardPop.aac', 0.6);
 
   this.cardsService.useCard(-1).subscribe({

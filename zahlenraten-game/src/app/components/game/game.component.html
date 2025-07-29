@@ -69,41 +69,44 @@
   <button class="btn restart" (click)="restart()">🔄 Nochmal spielen</button>
 </div>
 
-<div class="card-selection-wrapper" *ngIf="authService.isLoggedIn() && !gameOver && !gameStarted">
-  <!-- 🎴 Multiplikator-Karte -->
-  <div *ngIf="cards.length > 0 && !cardMultiplierUsed && multiplierCards.length > 0" class="card-selection-block">
-    <label for="cardSelect">🎴 Karte wählen:</label>
-    <div class="card-selection-inline">
-      <select id="cardSelect" [(ngModel)]="selectedCard" class="dropdown">
-        <option [ngValue]="null">– keine –</option>
-        <option 
-          *ngFor="let card of multiplierCards"
-          [ngValue]="card" 
-          [disabled]="card.amount <= 0">
-            {{ card.multiplier + 'x' }} (x{{ card.amount }})
-        </option>
-      </select>
-      <button class="btn" (click)="useSelectedCard()">Einsetzen</button>
-    </div>
-  </div>
+<div 
+  *ngIf="authService.isLoggedIn() && !gameOver && !gameStarted && !cardUsed" 
+  class="card-combined-box"
+>
+  <label class="combined-label">🎴 Karten wählen:</label>
+  <div class="card-combined-inline">
+    
+    <!-- Multiplikator-Karten -->
+    <div class="symbol-label">🃏</div>
+    <select [(ngModel)]="selectedCard" class="dropdown">
+      <option [ngValue]="null">– keine –</option>
+      <option 
+        *ngFor="let card of multiplierCards"
+        [ngValue]="card"
+        [disabled]="card.amount <= 0">
+        {{ card.multiplier + 'x' }} (x{{ card.amount }})
+      </option>
+    </select>
 
-  <!-- ❤️ Leben-Karte -->
-  <div *ngIf="!heartCardUsed && hasHeartCard()" class="card-selection-block">
-    <label for="heartCardSelect">❤️ Zusätzliche Leben:</label>
-    <div class="card-selection-inline">
-      <select id="heartCardSelect" [(ngModel)]="selectedHeartCard" class="dropdown">
-        <option [ngValue]="null">– keine –</option>
-        <option 
-          *ngFor="let card of heartCards"
-          [ngValue]="card"
-          [disabled]="card.amount <= 0">
-          ❤️ Extra-Leben (x{{ card.amount }})
-        </option>
-      </select>
-      <button class="btn" (click)="useHeartCard()">Einsetzen</button>
-    </div>
+    <!-- Lebenskarte -->
+    <div class="symbol-label heart">❤️</div>
+    <select [(ngModel)]="selectedHeartCard" class="dropdown">
+      <option [ngValue]="null">– keine –</option>
+      <option 
+        *ngFor="let card of heartCards"
+        [ngValue]="card"
+        [disabled]="card.amount <= 0">
+        +❤️ (x{{ card.amount }})
+      </option>
+    </select>
+
+    <!-- Einsetzen-Button -->
+    <button class="btn" (click)="useSelectedCards()">Einsetzen</button>
   </div>
 </div>
+
+
+
 
 
 <app-loader *ngIf="isLoading"></app-loader>

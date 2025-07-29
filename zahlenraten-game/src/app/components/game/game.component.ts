@@ -10,6 +10,7 @@ import { DarkModeService } from '../../services/dark.service';
 import { ProfileService } from '../../services/profile.service';
 import { Renderer2 } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponent
+import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CardsService } from '../../services/cards.service';
 import { SoundsService } from '../../services/sound.service';
 import { firstValueFrom } from 'rxjs';
@@ -17,8 +18,9 @@ import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
+  standalone: true,
   styleUrls: ['./game.component.scss'],
-  imports: [CommonModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, SidebarComponent],
   encapsulation: ViewEncapsulation.None
 })
 export class GameComponent implements OnInit {

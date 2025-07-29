@@ -5,6 +5,7 @@ import { AuthService } from '../../../services/auth.service';
 import { ProfileService } from '../../../services/profile.service';
 import { Router } from '@angular/router';
 import { UserStats } from '../../../services/profile.service'; // Importiere UserStats
+import { SidebarComponent } from '../../sidebar/sidebar.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { UserStats } from '../../../services/profile.service'; // Importiere Use
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.scss'], 
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SidebarComponent],
 })
 export class AdminPageComponent implements OnInit {
   users: any[] = [];

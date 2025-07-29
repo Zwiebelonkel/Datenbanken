@@ -6,11 +6,12 @@ import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-card-shop',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, SidebarComponent],
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss']
 })

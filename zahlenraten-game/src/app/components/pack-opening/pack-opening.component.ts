@@ -7,11 +7,12 @@ import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-pack-opening',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, SidebarComponent],
   templateUrl: './pack-opening.component.html',
   styleUrls: ['./pack-opening.component.scss']
 })

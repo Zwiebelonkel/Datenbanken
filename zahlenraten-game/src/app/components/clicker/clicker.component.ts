@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-clicker',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, SidebarComponent],
   templateUrl: './clicker.component.html',
   styleUrls: ['./clicker.component.scss']
 })

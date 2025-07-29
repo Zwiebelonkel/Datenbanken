@@ -18,6 +18,7 @@ import { DarkModeService } from './services/dark.service';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { LoaderComponent } from './components/loader/loader.component';
     DarkModeService,
     CardShopComponent,
     PackOpeningComponent,
-    LoaderComponent
+    LoaderComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

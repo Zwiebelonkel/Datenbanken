@@ -1,7 +1,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
-
+<app-sidebar></app-sidebar>
 <div class="topbar" *ngIf="authService.isLoggedIn()">
   <!-- <div class="user-info">
     <span>👤 Eingeloggt als: <strong>{{ authService.getUsername() }}</strong></span>
@@ -17,19 +17,6 @@
   <div class="topbar-buttons">
     <button (click)="goToLogin()">🔐 Login</button>
   </div>
-</div>
-<div class="sidebar-toggle" *ngIf="authService.isLoggedIn()" (click)="toggleSidebar()">☰</div>
-
-<div class="sidebar" [class.open]="sidebarOpen">
-  <p> </p>
-  <button (click)="goToAchievements()">🎖️ Erfolge</button>
-  <button (click)="goToProfile()">👤 Profil</button>
-  <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="admin()">🛠️ Admin</button>
-  <button (click)="howToPlay()">❓ Tutorial</button>
-  <button [disabled]="achAmount < 3" (click)="goToClicker()">💰</button>
-  <button (click)="shop()">🃏 Cards</button>
-  <button (click)="toggleDarkMode()">🌓</button>
-  <button (click)="logout()">🚪 Logout</button>
 </div>
 
 <div *ngIf="cardMultiplierUsed && cardMultiplier > 1.0" class="card-multiplier-banner">

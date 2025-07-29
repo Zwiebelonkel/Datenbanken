@@ -607,5 +607,13 @@ useHeartCard() {
   });
 }
 
+getHeartSpeed(): string {
+  const livesLeft = this.lives;
+  if (livesLeft >= 4) return '1.5s';  // entspannt
+  if (livesLeft === 3) return '1.2s';
+  if (livesLeft === 2) return '0.9s';
+  if (livesLeft === 1) return '0.6s';  // Panik
+  return '1.5s';
+}
 
 }

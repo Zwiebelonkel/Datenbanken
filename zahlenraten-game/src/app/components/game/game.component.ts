@@ -306,6 +306,8 @@ prevLeaderboard() {
     this.money = 0;
     this.cardMultiplier = 1.0;
     this.cardMultiplierUsed = false;
+    this.heartCardUsed = false;
+    this.cardUsed = false;
     this.newRound();
   }
 

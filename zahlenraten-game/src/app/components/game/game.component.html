@@ -30,6 +30,7 @@
   <span 
     *ngFor="let life of getLivesArray(); index as i" 
     class="heart"
+    [ngStyle]="{ animationDuration: getHeartSpeed() }"
     [style.animationDelay]="i * 0.15 + 's'"
   >❤</span>
 </div>

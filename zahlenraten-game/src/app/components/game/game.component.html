@@ -70,7 +70,7 @@
 </div>
 
 <div 
-  *ngIf="authService.isLoggedIn() && !gameOver && !gameStarted && !cardUsed" 
+  *ngIf="authService.isLoggedIn() && !gameOver && !gameStarted && !cardUsed && !isLoading" 
   class="card-combined-box"
 >
   <label class="combined-label">🎴 Karten wählen:</label>

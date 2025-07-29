@@ -4,7 +4,7 @@
   <button (click)="goHome()">🏠 Home</button>
   <button (click)="goToAchievements()">🎖️ Erfolge</button>
   <button (click)="goToProfile()">👤 Profil</button>
-  <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="howToPlay()">🛠️ Admin</button>
+  <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="goToAdmin()">🛠️ Admin</button>
   <button (click)="howToPlay()">❓ Tutorial</button>
   <button [disabled]="achAmount < 3" (click)="goToClicker()">💰 Clicker</button>
   <button (click)="shop()">🃏 Karten</button>

@@ -36,6 +36,12 @@ body.dark-mode .highscores-carousel {
       automatisch an die verfügbare Breite anpasst.  Eine kleine
       Randabstände sorgen für visuelle Trennung von den anderen Elementen.
     */
+    /*
+      Die alte Darstellung mit .number-axis wird zurzeit nicht mehr verwendet,
+      da wir die Zahlen auf einem flexiblen Zahlenstrahl (.number-scale) platzieren.
+      Diese Styles bleiben auskommentiert, falls sie später erneut benötigt werden.
+    */
+    /*
     .number-axis {
       display: flex;
       align-items: center;
@@ -53,6 +59,7 @@ body.dark-mode .highscores-carousel {
       margin: 0 0.5rem;
       border-radius: 2px;
     }
+    */
 
     /*
       Zahlenstrahl von 0 bis 100. Dieser Balken dient als visuelle Achse,
@@ -77,10 +84,17 @@ body.dark-mode .highscores-carousel {
       font-weight: bold;
       white-space: nowrap;
       /* optional kleine farbige Kreise hinter den Zahlen */
+      /* sanfte Animation, wenn sich der left-Wert ändert */
+      transition: left 0.4s ease;
     }
     /* spezielle Darstellung für die Testzahl */
     .number-scale .number-marker.test-num {
       color: #e91e63; /* abgesetzte Farbe für die Testzahl */
+    }
+
+    /* wenn Marker nach unten verschoben werden soll, z.B. bei Überlappung */
+    .number-scale .number-marker.below {
+      top: 1rem; /* unterhalb der Leiste platzieren */
     }
 
 .buttons {
@@ -112,11 +126,18 @@ body.dark-mode .highscores-carousel {
 }
 
 button.btn:disabled {
-  background: #ccc;
+  /*
+    Dieses Styling war ursprünglich eine Duplikation zu .btn:disabled. Die
+    notwendigen Eigenschaften (Hintergrundfarbe und Cursor) sind dort
+    bereits definiert. Wir kommentieren diese Block aus, um Redundanz zu
+    vermeiden. Falls zusätzliche Anpassungen (z. B. Farbänderungen) nötig
+    werden, kann dieser Block wieder aktiviert werden.
+  */
+  /*background: #ccc;
   color: #888;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
+  box-shadow: none;*/
 }
 
 .restart {

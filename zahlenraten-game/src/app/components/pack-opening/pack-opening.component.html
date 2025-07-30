@@ -1,12 +1,12 @@
 <app-sidebar></app-sidebar>
 <div class="opening-container">
     <p *ngIf="message" class="error">{{ message }}</p>
-  <!-- 🟦 NEU: Pack-Overlay unabhängig -->
-<div
-  (click)="dropCardPack()"
-  class="pack-cover-container"
-  [class.disabled]="packDropped"
->
+  <!-- 🗾 NEU: Pack-Overlay unabhängig -->
+  <div
+    (click)="dropCardPack()"
+    class="pack-cover-container"
+    [class.disabled]="packDropped"
+  >
     <img
       *ngIf="showPack"
       [src]="packImagePath"
@@ -23,13 +23,48 @@
         <img src="assets/logo.png" class="logo center" />
         <p class="pack-label"></p>
       </div>
-        <div class="flip-back" [ngClass]="packName.toLowerCase()">
-          <img src="assets/logo.png" class="emoji top-left" />
-          <img src="assets/logo.png" class="emoji bottom-right" />
-          <p class="multiplier-text">{{ displayResult }}</p>
+      <div class="flip-back" [ngClass]="packName.toLowerCase()">
+        <img src="assets/logo.png" class="emoji top-left" />
+        <img src="assets/logo.png" class="emoji bottom-right" />
+        <p class="multiplier-text">{{ displayResult }}</p>
         <div class="sparkles"></div>
-</div>
+      </div>
     </div>
   </div>
+
+  <!-- 📜 Zeige die Liste der möglichen Karten im Pack, solange das Pack noch
+       nicht geöffnet wurde. Nach dem Öffnen verschwinden die Wahrscheinlichkeiten. -->
+  <ul class="pack-contents" *ngIf="!packDropped && chances[packName]">
+    <li *ngFor="let entry of chances[packName]">
+      <span class="content-label">
+        <!-- Stelle negative Multipliers als Herzen dar -->
+        <ng-container *ngIf="entry.multiplier.startsWith('-'); else multiplierText">
+          {{ entry.multiplier | slice:1 }}❤️
+        </ng-container>
+        <ng-template #multiplierText>{{ entry.multiplier }}</ng-template>
+      </span>
+      <span class="content-chance">{{ entry.chance }}%</span>
+    </li>
+  </ul>
+
+  <!-- 🔁 Button zum direkten Umdrehen der nächsten Karte -->
+  <button
+    class="next-button"
+    *ngIf="packDropped && cardsRemaining > 0 && reveal"
+    (click)="revealNextCard()"
+  >
+    Nächste Karte
+  </button>
+
+  <!-- ✅ Hinweis, wenn alle Karten eines Packs aufgedeckt wurden -->
+  <p class="finished" *ngIf="packDropped && cardsRemaining === 0">
+    🎉 Alle Karten enthüllt!
+  </p>
+
+  <!-- 🃏 Zeige die bisher gezogenen Karten in einer Liste -->
+  <ul class="drawn-cards" *ngIf="drawnCards.length > 0">
+    <li *ngFor="let card of drawnCards">{{ card }}</li>
+  </ul>
+
   <app-loader *ngIf="isLoading"></app-loader>
 </div>

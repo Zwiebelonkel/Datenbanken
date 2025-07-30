@@ -128,7 +128,7 @@
       </option>
     </select>
 
-    <!-- Lebenskarte -->
+    <!-- Lebenskarte(n): negative multiplier bedeutet zusätzliche Leben -->
     <div class="symbol-label heart">❤️</div>
     <select [(ngModel)]="selectedHeartCard" class="dropdown">
       <option [ngValue]="null">– keine –</option>
@@ -136,7 +136,7 @@
         *ngFor="let card of heartCards"
         [ngValue]="card"
         [disabled]="card.amount <= 0">
-        +❤️ (x{{ card.amount }})
+        +{{ -card.multiplier }}❤️ (x{{ card.amount }})
       </option>
     </select>
 
@@ -218,3 +218,4 @@
 <div class="toast" *ngIf="achievementMessage">
   {{ achievementMessage }}
 </div>
+

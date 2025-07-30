@@ -22,9 +22,40 @@ export class CardShopComponent implements OnInit {
   message = '';
 
   cardPacks = [
-    { name: 'Basic', price: 40, image: 'assets/packs/basic.png' },
-    { name: 'Premium', price: 120, image: 'assets/packs/premium.png' },
-    { name: 'Ultra', price: 360, image: 'assets/packs/ultra.png' }
+    {     {
+      name: 'Basic',
+      price: 40,
+      image: 'assets/packs/basic.png',
+      contents: [
+        { type: '1.2x', chance: 65 },
+        { type: '1.5x', chance: 20 },
+        { type: '2x', chance: 7.5 },
+        { type: '1 heart', chance: 7.5 },
+      ]
+    },
+    {
+      name: 'Premium',
+      price: 120,
+      image: 'assets/packs/premium.png',
+      contents: [
+        { type: '1.5x', chance: 50 },
+        { type: '2x', chance: 20 },
+        { type: '5x', chance: 15 },
+        { type: '1 heart', chance: 15 },
+      ]
+    },
+    {
+      name: 'Ultra',
+      price: 360,
+      image: 'assets/packs/ultra.png',
+      contents: [
+        { type: '2x', chance: 40 },
+        { type: '5x', chance: 35 },
+        { type: '10x', chance: 5 },
+        { type: '1 heart', chance: 20 },
+      ]
+    }
+  
   ];
 
   constructor(

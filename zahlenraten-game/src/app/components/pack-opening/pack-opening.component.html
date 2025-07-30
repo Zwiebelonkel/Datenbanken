@@ -20,12 +20,12 @@
 <div class="card-stack" *ngIf="packDropped">
   <div
     class="flip-card"
-    *ngFor="let card of cardStack; let i = index"
-    [style.zIndex]="cardStack.length - i"
-    [class.top-card]="i === cardStack.length - 1"
-    [class.flipped]="i === cardStack.length - 1 && reveal"
-    [class.fly-away]="i === cardStack.length - 1 && lastCardOut"
-    (click)="i === cardStack.length - 1 ? revealCard() : null"
+    *ngFor="let card of cardStack; let i = index; let last = last"
+    [style.zIndex]="i + 1"
+    [class.top-card]="last"
+    [class.flipped]="last && reveal"
+    [class.fly-away]="last && lastCardOut"
+    (click)="last ? revealCard() : null"
   >
     <div class="flip-inner">
       <div class="flip-front" [ngClass]="packName.toLowerCase()">

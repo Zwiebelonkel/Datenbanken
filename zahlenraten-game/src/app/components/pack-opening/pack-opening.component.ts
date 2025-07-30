@@ -148,7 +148,7 @@ drawCard() {
       this.result = entry.multiplier;
 
       // ❤️ Symbolanzeige je nach Multiplikator
-      const heartMap = {
+      const heartMap: Record<string, string> = {
         '-1': '❤️',
         '-2': '❤️❤️',
         '-3': '❤️❤️❤️',

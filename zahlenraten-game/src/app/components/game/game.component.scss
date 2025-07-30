@@ -78,6 +78,10 @@ body.dark-mode .highscores-carousel {
       white-space: nowrap;
       /* optional kleine farbige Kreise hinter den Zahlen */
     }
+    /* spezielle Darstellung für die Testzahl */
+    .number-scale .number-marker.test-num {
+      color: #e91e63; /* abgesetzte Farbe für die Testzahl */
+    }
 
 .buttons {
   margin: 1.5rem 0;

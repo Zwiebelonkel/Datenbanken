@@ -261,7 +261,7 @@ endGame() {
   });
 
 // 💰 money aktualisieren
-this.moneyService.updateMoney({ username, amount: this.score }).subscribe({
+this.moneyService.updateMoney({ username, amount: this.money }).subscribe({
   next: () => console.log('💰 Geld aktualisiert'),
   error: err => console.error('❌ Fehler beim Geld-Update:', err)
 });

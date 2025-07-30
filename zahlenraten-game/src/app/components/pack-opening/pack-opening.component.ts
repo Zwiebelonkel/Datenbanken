@@ -17,6 +17,9 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   styleUrls: ['./pack-opening.component.scss']
 })
 export class PackOpeningComponent implements OnInit {
+  lastCardText: string = '';
+lastCardOut = false;
+
   packName: string = '';
   result: string = '';
   displayResult: string = ''
@@ -174,15 +177,18 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
    * Dreht direkt die nächste Karte um. Wird von einem Button im Template
    * aufgerufen. Wenn keine Karten mehr übrig sind, wird nichts gemacht.
    */
-  revealNextCard() {
-    if (!this.packDropped || this.cardsRemaining <= 0) return;
-    // Setze die Karte zurück zur Vorderseite, um den Flip-Effekt zu resetten
-    this.reveal = false;
-    // Ziehe eine neue Karte
-    this.drawCard();
-    // Zeige diese sofort auf der Rückseite
+revealNextCard() {
+  this.lastCardText = this.displayResult;
+  this.lastCardOut = true;
+  this.reveal = false;
+
+  setTimeout(() => {
+    this.drawCard(); // ✅ Statt drawNextCard()
     this.reveal = true;
-  }
+    this.lastCardOut = false;
+  }, 600);
+}
+
 
 drawCard() {
   const pack = this.chances[this.packName];

@@ -30,7 +30,7 @@ export class CardShopComponent implements OnInit {
     // { name: 'Hearts', price: 200, image: 'assets/packs/hearts.png' }
   ];
 
-chances: Record<string, { multiplier: string; chance: number }[]> = {
+  chances: Record<string, { multiplier: string; chance: number }[]> = {
   Basic: [
     { multiplier: '1.2x', chance: 65 },
     { multiplier: '1.5x', chance: 20 },
@@ -56,7 +56,6 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
     { multiplier: '-3', chance: 0.5 },
   ]
 };
-
 
   constructor(
     private router: Router,

@@ -17,7 +17,7 @@
       <h3>{{ pack.name }}</h3>
       <p>💰 {{ pack.price }} €</p>
 
-       <!-- 📊 Zeige die Chancen für das Pack -->
+        <!-- 📊 Zeige die Chancen für das Pack -->
   <ul class="chances" *ngIf="chances[pack.name]">
     <li *ngFor="let entry of chances[pack.name]">
       <span class="label">

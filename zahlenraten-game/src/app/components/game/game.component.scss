@@ -572,3 +572,21 @@ body.dark-mode {
 .symbol-label{
   font-size: 1.8rem;
 }
+.number-axis {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+.number-axis .axis-number {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.number-axis .axis-line {
+  flex-grow: 1;
+  height: 4px;
+  background-color: #ccc;
+  margin: 0 0.5rem;
+  border-radius: 2px;
+}
+

@@ -47,7 +47,9 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
     { multiplier: '2x', chance: 40 },
     { multiplier: '5x', chance: 35 },
     { multiplier: '10x', chance: 5 },
-    { multiplier: '-1', chance: 20 },
+    { multiplier: '-1', chance: 18.5 },
+    { multiplier: '-2', chance: 1 },
+    { multiplier: '-3', chance: 0.5 },
   ]
 };
 

@@ -59,19 +59,22 @@
             class="number-marker" 
             [ngStyle]="{'left.%': getOffset(num1)}"
             [ngClass]="{'below': shouldPlaceBelow(num1)}"
-          >{{ num1 }}</span>
+          >{{ num1 }}
+        <div class="marker"></div></span>
           <span 
             class="number-marker" 
             [ngStyle]="{'left.%': getOffset(num2)}"
             [ngClass]="{'below': shouldPlaceBelow(num2)}"
-          >{{ num2 }}</span>
+          >{{ num2 }}<div class="marker"></div>
+        </span>
           <!-- Testzahl wird auf der gleichen Leiste angezeigt, sobald geschätzt wurde -->
           <span 
             *ngIf="showTest" 
             class="number-marker" 
             [ngStyle]="{'left.%': getOffset(testNum)}"
             [ngClass]="{'test-num': true, 'below': shouldPlaceBelow(testNum)}"
-          >{{ testNum }}</span>
+          >{{ testNum }}
+        <div class="marker"></div></span>
         </div>
       </div>
 

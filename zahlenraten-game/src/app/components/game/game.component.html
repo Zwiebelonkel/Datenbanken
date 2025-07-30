@@ -34,11 +34,16 @@
     [style.animationDelay]="i * 0.1 + 's'"
   >❤</span>
 </div>
-  <div class="numbers">
-    <p><strong>Zahl 1:</strong> {{ num1 }}</p>
-    <p><strong>Zahl 2:</strong> {{ num2 }}</p>
-    <div id="finalNumber"><p><strong>Test-Zahl:</strong> {{ testNum }}</p></div>
+<div class="numbers">
+  <div class="number-axis">
+    <span class="axis-number">{{ num1 }}</span>
+    <div class="axis-line"></div>
+    <span class="axis-number">{{ num2 }}</span>
   </div>
+  <div id="finalNumber">
+    <p><strong>Test-Zahl:</strong> {{ testNum }}</p>
+  </div>
+</div>
 
 <div class="buttons">
   <button class="btn" [disabled]="buttonsDisabled" (click)="guess('inside')">Zwischen</button>

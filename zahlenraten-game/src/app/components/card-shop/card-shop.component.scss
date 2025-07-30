@@ -150,3 +150,24 @@
     font-weight: 500;
   }
 }
+
+.chances {
+  margin: 0.5rem 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.1rem 0;
+  }
+
+  .label {
+    font-weight: bold;
+  }
+
+  .percentage {
+    color: #ccc;
+  }
+}

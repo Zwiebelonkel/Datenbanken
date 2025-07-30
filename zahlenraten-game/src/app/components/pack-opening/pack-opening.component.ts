@@ -52,26 +52,32 @@ export class PackOpeningComponent implements OnInit {
    * kennzeichnen Herz‑Karten (Lebenspunkte), positive Multipliers sind klassische
    * Gewinnfaktoren. Die Summe der Chancen pro Pack sollte 100 ergeben.
    */
-  chances: Record<string, { multiplier: string; chance: number }[]> = {
-    Basic: [
-      { multiplier: '1.2x', chance: 65 },
-      { multiplier: '1.5x', chance: 20 },
-      { multiplier: '2x',   chance: 7.5 },
-      { multiplier: '-1',  chance: 7.5 },
-    ],
-    Premium: [
-      { multiplier: '1.5x', chance: 50 },
-      { multiplier: '2x',   chance: 20 },
-      { multiplier: '5x',   chance: 15 },
-      { multiplier: '-1',  chance: 15 },
-    ],
-    Ultra: [
-      { multiplier: '2x',   chance: 40 },
-      { multiplier: '5x',   chance: 35 },
-      { multiplier: '10x',  chance: 5 },
-      { multiplier: '-1',  chance: 20 },
-    ],
-  };
+chances: Record<string, { multiplier: string; chance: number }[]> = {
+  Basic: [
+    { multiplier: '1.2x', chance: 65 },
+    { multiplier: '1.5x', chance: 20 },
+    { multiplier: '2x', chance: 7.5 },
+    { multiplier: '-1', chance: 7.5 },
+    { multiplier: '-2', chance: 0 },
+    { multiplier: '-3', chance: 0 },
+  ],
+  Premium: [
+    { multiplier: '1.5x', chance: 50 },
+    { multiplier: '2x', chance: 20 },
+    { multiplier: '5x', chance: 15 },
+    { multiplier: '-1', chance: 13 },
+    { multiplier: '-2', chance: 2 },
+    { multiplier: '-3', chance: 0 },
+  ],
+  Ultra: [
+    { multiplier: '2x', chance: 40 },
+    { multiplier: '5x', chance: 35 },
+    { multiplier: '10x', chance: 5 },
+    { multiplier: '-1', chance: 18.5 },
+    { multiplier: '-2', chance: 1 },
+    { multiplier: '-3', chance: 0.5 },
+  ]
+};
 
   /**
    * Preise der einzelnen Packs. Der Hearts‑Pack wurde entfernt, da die

@@ -14,13 +14,21 @@
         <img [src]="pack.image" [alt]="pack.name" />
       </div>
 
-              <ul class="pack-contents">
-          <l*i *ngFor="let content of pack.contents">
-            {{ content.type }} ({{ content.chance }}%)
-          </li>
-        </ul>
       <h3>{{ pack.name }}</h3>
       <p>💰 {{ pack.price }} €</p>
+
+       <!-- 📊 Zeige die Chancen für das Pack -->
+  <ul class="chances" *ngIf="chances[pack.name]">
+    <li *ngFor="let entry of chances[pack.name]">
+      <span class="label">
+        <ng-container *ngIf="entry.multiplier.startsWith('-'); else normalText">
+          {{ entry.multiplier | slice:1 }}❤️
+        </ng-container>
+        <ng-template #normalText>{{ entry.multiplier }}</ng-template>
+      </span>
+      <span class="percentage">{{ entry.chance }}%</span>
+    </li>
+  </ul>
 
       <button
         (click)="buyPack(pack)"

@@ -22,41 +22,41 @@ export class CardShopComponent implements OnInit {
   message = '';
 
   cardPacks = [
-    {     {
-      name: 'Basic',
-      price: 40,
-      image: 'assets/packs/basic.png',
-      contents: [
-        { type: '1.2x', chance: 65 },
-        { type: '1.5x', chance: 20 },
-        { type: '2x', chance: 7.5 },
-        { type: '1 heart', chance: 7.5 },
-      ]
-    },
-    {
-      name: 'Premium',
-      price: 120,
-      image: 'assets/packs/premium.png',
-      contents: [
-        { type: '1.5x', chance: 50 },
-        { type: '2x', chance: 20 },
-        { type: '5x', chance: 15 },
-        { type: '1 heart', chance: 15 },
-      ]
-    },
-    {
-      name: 'Ultra',
-      price: 360,
-      image: 'assets/packs/ultra.png',
-      contents: [
-        { type: '2x', chance: 40 },
-        { type: '5x', chance: 35 },
-        { type: '10x', chance: 5 },
-        { type: '1 heart', chance: 20 },
-      ]
-    }
-  
+    { name: 'Basic', price: 40, image: 'assets/packs/basic.png' },
+    { name: 'Premium', price: 120, image: 'assets/packs/premium.png' },
+    { name: 'Ultra', price: 360, image: 'assets/packs/ultra.png' }
+    ,
+    // Neues Pack speziell für Herz‑Karten
+    // { name: 'Hearts', price: 200, image: 'assets/packs/hearts.png' }
   ];
+
+chances: Record<string, { multiplier: string; chance: number }[]> = {
+  Basic: [
+    { multiplier: '1.2x', chance: 65 },
+    { multiplier: '1.5x', chance: 20 },
+    { multiplier: '2x', chance: 7.5 },
+    { multiplier: '-1', chance: 7.5 },
+    { multiplier: '-2', chance: 0 },
+    { multiplier: '-3', chance: 0 },
+  ],
+  Premium: [
+    { multiplier: '1.5x', chance: 50 },
+    { multiplier: '2x', chance: 20 },
+    { multiplier: '5x', chance: 15 },
+    { multiplier: '-1', chance: 13 },
+    { multiplier: '-2', chance: 2 },
+    { multiplier: '-3', chance: 0 },
+  ],
+  Ultra: [
+    { multiplier: '2x', chance: 40 },
+    { multiplier: '5x', chance: 35 },
+    { multiplier: '10x', chance: 5 },
+    { multiplier: '-1', chance: 18.5 },
+    { multiplier: '-2', chance: 1 },
+    { multiplier: '-3', chance: 0.5 },
+  ]
+};
+
 
   constructor(
     private router: Router,

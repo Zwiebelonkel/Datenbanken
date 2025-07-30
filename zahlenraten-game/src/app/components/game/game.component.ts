@@ -117,6 +117,20 @@ export class GameComponent implements OnInit {
     return this.testNum > min && this.testNum < max;
   }
 
+  /**
+   * Berechnet die Position einer Zahl auf einem Zahlenstrahl von 0 bis 100.
+   * Der Rückgabewert ist ein Prozentwert für das CSS‑left‑Attribut. Werte
+   * außerhalb des Bereichs [0,100] werden entsprechend an die Grenzen
+   * angeglichen. Durch diese Methode können num1 und num2 relativ zueinander
+   * positioniert werden, sodass kleine Werte links und große Werte rechts
+   * erscheinen.
+   * @param num Der zu positionierende Zahlenwert
+   */
+  getOffset(num: number): number {
+    const clamped = Math.max(0, Math.min(num, 100));
+    return clamped;
+  }
+
 guess(answer: 'inside' | 'outside') {
   this.gameStarted = true;
   this.soundService.playSound('softClick.aac');

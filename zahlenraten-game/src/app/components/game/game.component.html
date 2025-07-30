@@ -55,10 +55,23 @@
         -->
         <div class="number-scale">
           <!-- Endpunkte des Zahlenstrahls: die beiden Zufallszahlen -->
-          <span class="number-marker" [ngStyle]="{'left.%': getOffset(num1)}">{{ num1 }}</span>
-          <span class="number-marker" [ngStyle]="{'left.%': getOffset(num2)}">{{ num2 }}</span>
+          <span 
+            class="number-marker" 
+            [ngStyle]="{'left.%': getOffset(num1)}"
+            [ngClass]="{'below': shouldPlaceBelow(num1)}"
+          >{{ num1 }}</span>
+          <span 
+            class="number-marker" 
+            [ngStyle]="{'left.%': getOffset(num2)}"
+            [ngClass]="{'below': shouldPlaceBelow(num2)}"
+          >{{ num2 }}</span>
           <!-- Testzahl wird auf der gleichen Leiste angezeigt, sobald geschätzt wurde -->
-          <span *ngIf="showTest" class="number-marker test-num" [ngStyle]="{'left.%': getOffset(testNum)}">{{ testNum }}</span>
+          <span 
+            *ngIf="showTest" 
+            class="number-marker" 
+            [ngStyle]="{'left.%': getOffset(testNum)}"
+            [ngClass]="{'test-num': true, 'below': shouldPlaceBelow(testNum)}"
+          >{{ testNum }}</span>
         </div>
       </div>
 

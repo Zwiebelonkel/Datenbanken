@@ -143,6 +143,10 @@ drawCard() {
     if (rand <= cumulative) {
       this.result = entry.multiplier;
       this.displayResult = this.result === '-1' ? '❤️' : this.result;
+      this.displayResult = this.result === '-2' ? '❤️❤️' : this.result;
+      this.displayResult = this.result === '-3' ? '❤️❤️❤️' : this.result;
+
+
 
       // 💾 Karte speichern (als Zahl)
       this.cardsService.addCard(parseFloat(this.result)).subscribe({

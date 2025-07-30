@@ -139,20 +139,20 @@ export class PackOpeningComponent implements OnInit {
     this.reveal = true;
   }
 
-  revealNextCard() {
-    if (this.cardStack.length === 0 || this.reveal) return;
+revealNextCard() {
+  if (this.cardStack.length === 0 || !this.reveal || this.cardsRemaining <= 0) return;
 
-    this.lastCardText = this.displayResult;
-    this.lastCardOut = true;
-    this.reveal = false;
+  this.lastCardText = this.displayResult;
+  this.lastCardOut = true;
+  this.reveal = false;
 
-    setTimeout(() => {
-      this.cardStack.pop();
-      this.drawCard();
-      this.reveal = true;
-      this.lastCardOut = false;
-    }, 600);
-  }
+  setTimeout(() => {
+    this.cardStack.pop(); // oberste Karte entfernen
+    this.drawCard();      // neue Karte ziehen
+    this.reveal = true;
+    this.lastCardOut = false;
+  }, 600); // Warte, bis Fly-Away-Animation vorbei ist
+}
 
   drawCard() {
     const pack = this.chances[this.packName];

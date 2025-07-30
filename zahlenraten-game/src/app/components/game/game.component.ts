@@ -71,6 +71,29 @@ export class GameComponent implements OnInit {
    */
   showTest = false;
 
+  /**
+   * Bestimmt, ob ein Marker unterhalb der Leiste platziert werden soll.
+   * Um Überlappungen zu vermeiden, verschieben wir einen Marker nach
+   * unten, wenn die Werte sehr nah beieinander liegen. Es wird
+   * vorzugsweise der größere der beiden Zufallszahlen verschoben oder
+   * die Testzahl, wenn sie sich nahe an einer der Zufallszahlen
+   * befindet.
+   *
+   * @param value Der Zahlenwert des zu prüfenden Markers
+   */
+  shouldPlaceBelow(value: number): boolean {
+    const threshold = 5; // Ab welcher Differenz Werte als überlappend gelten
+    // Wenn Testzahl sichtbar ist und nahe an einer der Zufallszahlen liegt
+    if (this.showTest && value === this.testNum) {
+      return (Math.abs(this.testNum - this.num1) < threshold) || (Math.abs(this.testNum - this.num2) < threshold);
+    }
+    // Prüfe nahe beieinander liegende Zufallszahlen und verschiebe den größeren Wert
+    if (value === this.num2 && Math.abs(this.num1 - this.num2) < threshold) {
+      return true;
+    }
+    return false;
+  }
+
 
   topScores: any[] = [];
   constructor(private scoreService: ScoreService, public authService: AuthService, private router: Router, private http: HttpClient, public darkModeService: DarkModeService, private moneyService: MoneyService, private profileService: ProfileService, private renderer: Renderer2, private cardsService: CardsService, private soundService: SoundsService) {}

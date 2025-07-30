@@ -28,6 +28,57 @@ body.dark-mode .highscores-carousel {
   margin: 0.5rem 0;
 }
 
+    /*
+      Darstellung für die horizontale Achse, auf der die beiden Zufallszahlen
+      nebeneinander angezeigt werden. Die Zahlen werden jeweils an den
+      Enden der Achse positioniert und der Balken in der Mitte füllt den
+      übrigen Platz aus. Durch flexbox wird erreicht, dass die Achse sich
+      automatisch an die verfügbare Breite anpasst.  Eine kleine
+      Randabstände sorgen für visuelle Trennung von den anderen Elementen.
+    */
+    .number-axis {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1rem 0;
+    }
+    .number-axis .axis-number {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .number-axis .axis-line {
+      flex-grow: 1;
+      height: 4px;
+      background-color: #ccc;
+      margin: 0 0.5rem;
+      border-radius: 2px;
+    }
+
+    /*
+      Zahlenstrahl von 0 bis 100. Dieser Balken dient als visuelle Achse,
+      auf der die Zufallszahlen relativ zu ihrem Wert positioniert werden.
+      Die Marker werden absolut positioniert, zentriert und oberhalb der Leiste
+      angezeigt. Bei nah beieinander liegenden Werten liegen die Marker
+      entsprechend nah beieinander; bei weit auseinander liegenden Werten
+      entsprechend weit entfernt.
+    */
+    .number-scale {
+      position: relative;
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+    .number-scale .number-marker {
+      position: absolute;
+      top: -1.2rem;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      font-weight: bold;
+      white-space: nowrap;
+      /* optional kleine farbige Kreise hinter den Zahlen */
+    }
+
 .buttons {
   margin: 1.5rem 0;
   transition: 0.2s;
@@ -572,21 +623,3 @@ body.dark-mode {
 .symbol-label{
   font-size: 1.8rem;
 }
-.number-axis {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 1rem 0;
-}
-.number-axis .axis-number {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-.number-axis .axis-line {
-  flex-grow: 1;
-  height: 4px;
-  background-color: #ccc;
-  margin: 0 0.5rem;
-  border-radius: 2px;
-}
-

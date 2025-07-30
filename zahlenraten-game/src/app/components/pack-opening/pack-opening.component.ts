@@ -29,38 +29,59 @@ export class PackOpeningComponent implements OnInit {
   username: string = '';
   isLoading = true;
 
-  // Wahrscheinlichkeiten je Pack
-chances: Record<string, { multiplier: string; chance: number }[]> = {
-  Basic: [
-    { multiplier: '1.2x', chance: 65 },
-    { multiplier: '1.5x', chance: 20 },
-    { multiplier: '2x', chance: 7.5 },
-    { multiplier: '-1', chance: 7.5 },
-    { multiplier: '-2', chance: 0 },
-    { multiplier: '-3', chance: 0 },
-  ],
-  Premium: [
-    { multiplier: '1.5x', chance: 50 },
-    { multiplier: '2x', chance: 20 },
-    { multiplier: '5x', chance: 15 },
-    { multiplier: '-1', chance: 13 },
-    { multiplier: '-2', chance: 2 },
-    { multiplier: '-3', chance: 0 },
-  ],
-  Ultra: [
-    { multiplier: '2x', chance: 40 },
-    { multiplier: '5x', chance: 35 },
-    { multiplier: '10x', chance: 5 },
-    { multiplier: '-1', chance: 18.5 },
-    { multiplier: '-2', chance: 1 },
-    { multiplier: '-3', chance: 0.5 },
-  ]
-};
+  /** Anzahl der Karten in einem Pack. Jede Packöffnung enthält mehrere
+   * Karten, die nacheinander umgedreht werden können.
+   */
+  maxCards: number = 5;
 
+  /**
+   * Wie viele Karten im aktuellen Pack noch nicht aufgedeckt wurden. Dieses
+   * Zählwerk wird beim Kauf eines Packs initialisiert und bei jedem Ziehen
+   * dekrementiert.
+   */
+  cardsRemaining: number = 0;
+
+  /**
+   * Liste der bisher gezogenen Karten (Textdarstellung). Kann später für die
+   * Anzeige der Ausbeute oder Debugging verwendet werden.
+   */
+  drawnCards: string[] = [];
+
+  /**
+   * Die Wahrscheinlichkeitstabellen für jede Packart. Negative Werte
+   * kennzeichnen Herz‑Karten (Lebenspunkte), positive Multipliers sind klassische
+   * Gewinnfaktoren. Die Summe der Chancen pro Pack sollte 100 ergeben.
+   */
+  chances: Record<string, { multiplier: string; chance: number }[]> = {
+    Basic: [
+      { multiplier: '1.2x', chance: 65 },
+      { multiplier: '1.5x', chance: 20 },
+      { multiplier: '2x',   chance: 7.5 },
+      { multiplier: '-1',  chance: 7.5 },
+    ],
+    Premium: [
+      { multiplier: '1.5x', chance: 50 },
+      { multiplier: '2x',   chance: 20 },
+      { multiplier: '5x',   chance: 15 },
+      { multiplier: '-1',  chance: 15 },
+    ],
+    Ultra: [
+      { multiplier: '2x',   chance: 40 },
+      { multiplier: '5x',   chance: 35 },
+      { multiplier: '10x',  chance: 5 },
+      { multiplier: '-1',  chance: 20 },
+    ],
+  };
+
+  /**
+   * Preise der einzelnen Packs. Der Hearts‑Pack wurde entfernt, da die
+   * Herz‑Karten nun als negative Multipliers in den regulären Packs
+   * enthalten sind.
+   */
   packPrices: Record<string, number> = {
     Basic: 40,
     Premium: 120,
-    Ultra: 360
+    Ultra: 360,
   };
 
   constructor(
@@ -121,6 +142,11 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
         this.money -= price;
         this.packDropped = true;
         this.message = '';
+        // Initialisiere den Kartenvorrat und setze den Flip-Status zurück
+        this.cardsRemaining = this.maxCards;
+        this.drawnCards = [];
+        this.reveal = false;
+        this.displayResult = '';
       },
       error: err => {
         console.error('❌ Fehler beim Geldabzug:', err);
@@ -130,10 +156,26 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
   }
 
   revealCard() {
-    if (this.reveal || !this.packDropped) return;
-
-    this.reveal = true;
+    // Die erste Karte wird durch Klick auf die Karte aufgedeckt. Weitere Karten
+    // werden über den "Nächste Karte"-Button aufgedeckt. Hat der Benutzer keine
+    // Karten mehr oder ist bereits aufgedeckt, passiert nichts.
+    if (this.reveal || !this.packDropped || this.cardsRemaining <= 0) return;
     this.drawCard();
+    this.reveal = true;
+  }
+
+  /**
+   * Dreht direkt die nächste Karte um. Wird von einem Button im Template
+   * aufgerufen. Wenn keine Karten mehr übrig sind, wird nichts gemacht.
+   */
+  revealNextCard() {
+    if (!this.packDropped || this.cardsRemaining <= 0) return;
+    // Setze die Karte zurück zur Vorderseite, um den Flip-Effekt zu resetten
+    this.reveal = false;
+    // Ziehe eine neue Karte
+    this.drawCard();
+    // Zeige diese sofort auf der Rückseite
+    this.reveal = true;
   }
 
 drawCard() {
@@ -146,25 +188,28 @@ drawCard() {
     cumulative += entry.chance;
     if (rand <= cumulative) {
       this.result = entry.multiplier;
-
-      // ❤️ Symbolanzeige je nach Multiplikator
-      const heartMap: Record<string, string> = {
-        '-1': '❤️',
-        '-2': '❤️❤️',
-        '-3': '❤️❤️❤️',
-      };
-      this.displayResult = heartMap[this.result] || this.result;
+      // Darstellung je nach Art der Karte (Herz-Karten haben negative Multipliers)
+      const numericVal = parseFloat(this.result);
+      if (!isNaN(numericVal) && numericVal < 0) {
+        // Negative Zahlen stehen für Herz-Karten; zeige Anzahl Herzen
+        this.displayResult = `${Math.abs(numericVal)}❤️`;
+      } else {
+        this.displayResult = this.result;
+      }
 
       // 💾 Karte speichern (als Zahl)
-      this.cardsService.addCard(parseFloat(this.result)).subscribe({
+      this.cardsService.addCard(numericVal).subscribe({
         next: () => console.log('Karte gespeichert:', this.result),
         error: err => console.error('❌ Fehler beim Speichern der Karte:', err)
       });
 
+      // Füge die gezogene Karte zur Liste hinzu
+      this.drawnCards.push(this.displayResult);
+      // Verringere die Anzahl der verbleibenden Karten im Pack
+      this.cardsRemaining--;
       break;
     }
   }
 }
-
 
 }

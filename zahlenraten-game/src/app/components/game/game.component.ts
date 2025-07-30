@@ -427,7 +427,7 @@ useSelectedCards() {
   if (this.selectedCard && this.selectedCard.multiplier !== -1) {
     this.useSelectedCard(); // bestehende Methode für Multikarte
   }
-  if (this.selectedHeartCard && this.selectedHeartCard.multiplier === -1) {
+  if (this.selectedHeartCard && this.selectedHeartCard.multiplier === -1 || -2 || -3) {
     this.useHeartCard(); // bestehende Methode für ❤️
   }
 }

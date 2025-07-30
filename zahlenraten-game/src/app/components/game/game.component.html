@@ -34,16 +34,33 @@
     [style.animationDelay]="i * 0.1 + 's'"
   >❤</span>
 </div>
-<div class="numbers">
-  <div class="number-axis">
-    <span class="axis-number">{{ num1 }}</span>
-    <div class="axis-line"></div>
-    <span class="axis-number">{{ num2 }}</span>
-  </div>
-  <div id="finalNumber">
-    <p><strong>Test-Zahl:</strong> {{ testNum }}</p>
-  </div>
-</div>
+      <!--
+        Die beiden Zufallszahlen (num1 und num2) werden jetzt nicht mehr
+        untereinander angezeigt. Stattdessen platzieren wir sie auf einer
+        gemeinsamen Achse. Zwischen den Zahlen befindet sich eine waagrechte
+        Leiste (Balken). Dadurch wirken die Zahlen wie Endpunkte einer Linie
+        beziehungsweise eines Zahlenstrahls. Die Test‑Zahl bleibt weiterhin
+        innerhalb des Elements mit der ID "finalNumber" und wird erst nach
+        einer Schätzung sichtbar, wie zuvor.
+      -->
+      <div class="numbers">
+        <!--
+          Visualisierung der beiden Zufallszahlen auf einem Zahlenstrahl (0–100).
+          Jede Zahl wird anhand ihres Wertes relativ zur Breite der Leiste
+          positioniert. Kleinere Werte erscheinen weiter links, größere weiter
+          rechts. Die Position wird durch getOffset(num) berechnet und als
+          Prozentwert an das left‑Attribut gebunden. Durch transform: translateX(-50%)
+          werden die Marker zentriert, sodass der Mittelpunkt exakt auf der
+          berechneten Position liegt.
+        -->
+        <div class="number-scale">
+          <span class="number-marker" [ngStyle]="{'left.%': getOffset(num1)}">{{ num1 }}</span>
+          <span class="number-marker" [ngStyle]="{'left.%': getOffset(num2)}">{{ num2 }}</span>
+        </div>
+        <div id="finalNumber">
+          <p><strong>Test-Zahl:</strong> {{ testNum }}</p>
+        </div>
+      </div>
 
 <div class="buttons">
   <button class="btn" [disabled]="buttonsDisabled" (click)="guess('inside')">Zwischen</button>

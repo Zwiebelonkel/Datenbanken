@@ -36,12 +36,16 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
     { multiplier: '1.5x', chance: 20 },
     { multiplier: '2x', chance: 7.5 },
     { multiplier: '-1', chance: 7.5 },
+    { multiplier: '-2', chance: 0 },
+    { multiplier: '-3', chance: 0 },
   ],
   Premium: [
     { multiplier: '1.5x', chance: 50 },
     { multiplier: '2x', chance: 20 },
     { multiplier: '5x', chance: 15 },
-    { multiplier: '-1', chance: 15 },
+    { multiplier: '-1', chance: 13 },
+    { multiplier: '-2', chance: 2 },
+    { multiplier: '-3', chance: 0 },
   ],
   Ultra: [
     { multiplier: '2x', chance: 40 },
@@ -142,11 +146,14 @@ drawCard() {
     cumulative += entry.chance;
     if (rand <= cumulative) {
       this.result = entry.multiplier;
-      this.displayResult = this.result === '-1' ? '❤️' : this.result;
-      this.displayResult = this.result === '-2' ? '❤️❤️' : this.result;
-      this.displayResult = this.result === '-3' ? '❤️❤️❤️' : this.result;
 
-
+      // ❤️ Symbolanzeige je nach Multiplikator
+      const heartMap = {
+        '-1': '❤️',
+        '-2': '❤️❤️',
+        '-3': '❤️❤️❤️',
+      };
+      this.displayResult = heartMap[this.result] || this.result;
 
       // 💾 Karte speichern (als Zahl)
       this.cardsService.addCard(parseFloat(this.result)).subscribe({
@@ -158,5 +165,6 @@ drawCard() {
     }
   }
 }
+
 
 }

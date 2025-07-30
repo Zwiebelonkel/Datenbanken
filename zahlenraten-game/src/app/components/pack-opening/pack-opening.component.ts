@@ -17,9 +17,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   styleUrls: ['./pack-opening.component.scss']
 })
 export class PackOpeningComponent implements OnInit {
-  lastCardText: string = '';
-lastCardOut = false;
-
   packName: string = '';
   result: string = '';
   displayResult: string = ''
@@ -32,61 +29,41 @@ lastCardOut = false;
   username: string = '';
   isLoading = true;
 
-  /** Anzahl der Karten in einem Pack. Jede Packöffnung enthält mehrere
-   * Karten, die nacheinander umgedreht werden können.
-   */
   maxCards: number = 5;
-
-  /**
-   * Wie viele Karten im aktuellen Pack noch nicht aufgedeckt wurden. Dieses
-   * Zählwerk wird beim Kauf eines Packs initialisiert und bei jedem Ziehen
-   * dekrementiert.
-   */
   cardsRemaining: number = 0;
-
-  /**
-   * Liste der bisher gezogenen Karten (Textdarstellung). Kann später für die
-   * Anzeige der Ausbeute oder Debugging verwendet werden.
-   */
   drawnCards: string[] = [];
 
-  /**
-   * Die Wahrscheinlichkeitstabellen für jede Packart. Negative Werte
-   * kennzeichnen Herz‑Karten (Lebenspunkte), positive Multipliers sind klassische
-   * Gewinnfaktoren. Die Summe der Chancen pro Pack sollte 100 ergeben.
-   */
-chances: Record<string, { multiplier: string; chance: number }[]> = {
-  Basic: [
-    { multiplier: '1.2x', chance: 65 },
-    { multiplier: '1.5x', chance: 20 },
-    { multiplier: '2x', chance: 7.5 },
-    { multiplier: '-1', chance: 7.5 },
-    { multiplier: '-2', chance: 0 },
-    { multiplier: '-3', chance: 0 },
-  ],
-  Premium: [
-    { multiplier: '1.5x', chance: 50 },
-    { multiplier: '2x', chance: 20 },
-    { multiplier: '5x', chance: 15 },
-    { multiplier: '-1', chance: 13 },
-    { multiplier: '-2', chance: 2 },
-    { multiplier: '-3', chance: 0 },
-  ],
-  Ultra: [
-    { multiplier: '2x', chance: 40 },
-    { multiplier: '5x', chance: 35 },
-    { multiplier: '10x', chance: 5 },
-    { multiplier: '-1', chance: 18.5 },
-    { multiplier: '-2', chance: 1 },
-    { multiplier: '-3', chance: 0.5 },
-  ]
-};
+  lastCardText: string = '';
+  lastCardOut = false;
+  cardStack: string[] = [];
 
-  /**
-   * Preise der einzelnen Packs. Der Hearts‑Pack wurde entfernt, da die
-   * Herz‑Karten nun als negative Multipliers in den regulären Packs
-   * enthalten sind.
-   */
+  chances: Record<string, { multiplier: string; chance: number }[]> = {
+    Basic: [
+      { multiplier: '1.2x', chance: 65 },
+      { multiplier: '1.5x', chance: 20 },
+      { multiplier: '2x', chance: 7.5 },
+      { multiplier: '-1', chance: 7.5 },
+      { multiplier: '-2', chance: 0 },
+      { multiplier: '-3', chance: 0 },
+    ],
+    Premium: [
+      { multiplier: '1.5x', chance: 50 },
+      { multiplier: '2x', chance: 20 },
+      { multiplier: '5x', chance: 15 },
+      { multiplier: '-1', chance: 13 },
+      { multiplier: '-2', chance: 2 },
+      { multiplier: '-3', chance: 0 },
+    ],
+    Ultra: [
+      { multiplier: '2x', chance: 40 },
+      { multiplier: '5x', chance: 35 },
+      { multiplier: '10x', chance: 5 },
+      { multiplier: '-1', chance: 18.5 },
+      { multiplier: '-2', chance: 1 },
+      { multiplier: '-3', chance: 0.5 },
+    ]
+  };
+
   packPrices: Record<string, number> = {
     Basic: 40,
     Premium: 120,
@@ -104,8 +81,6 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
   ) {}
 
   ngOnInit() {
-    const price = this.packPrices[this.packName] || 0;
-
     this.username = this.authService.getUsername() || '';
     this.loadMoney();
 
@@ -113,11 +88,6 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
       this.packName = params['pack'] || 'Basic';
       this.packImagePath = `assets/packs/${this.packName.toLowerCase()}Open.png`;
     });
-        if (this.money < price) {
-      this.message = '❌ Nicht genug Geld!';
-      this.router.navigate(['/card-shop']);
-      return;
-    }
   }
 
   loadMoney() {
@@ -145,17 +115,16 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
       return;
     }
 
-    // 💰 Geld abziehen
     this.moneyService.updateMoney({ username: this.username, amount: -price }).subscribe({
       next: () => {
         this.money -= price;
         this.packDropped = true;
         this.message = '';
-        // Initialisiere den Kartenvorrat und setze den Flip-Status zurück
         this.cardsRemaining = this.maxCards;
         this.drawnCards = [];
         this.reveal = false;
         this.displayResult = '';
+        this.cardStack = Array(this.maxCards).fill('🃏');
       },
       error: err => {
         console.error('❌ Fehler beim Geldabzug:', err);
@@ -165,63 +134,52 @@ chances: Record<string, { multiplier: string; chance: number }[]> = {
   }
 
   revealCard() {
-    // Die erste Karte wird durch Klick auf die Karte aufgedeckt. Weitere Karten
-    // werden über den "Nächste Karte"-Button aufgedeckt. Hat der Benutzer keine
-    // Karten mehr oder ist bereits aufgedeckt, passiert nichts.
     if (this.reveal || !this.packDropped || this.cardsRemaining <= 0) return;
     this.drawCard();
     this.reveal = true;
   }
 
-  /**
-   * Dreht direkt die nächste Karte um. Wird von einem Button im Template
-   * aufgerufen. Wenn keine Karten mehr übrig sind, wird nichts gemacht.
-   */
-revealNextCard() {
-  this.lastCardText = this.displayResult;
-  this.lastCardOut = true;
-  this.reveal = false;
+  revealNextCard() {
+    if (this.cardStack.length === 0 || this.reveal) return;
 
-  setTimeout(() => {
-    this.drawCard(); // ✅ Statt drawNextCard()
-    this.reveal = true;
-    this.lastCardOut = false;
-  }, 600);
-}
+    this.lastCardText = this.displayResult;
+    this.lastCardOut = true;
+    this.reveal = false;
 
+    setTimeout(() => {
+      this.cardStack.pop();
+      this.drawCard();
+      this.reveal = true;
+      this.lastCardOut = false;
+    }, 600);
+  }
 
-drawCard() {
-  const pack = this.chances[this.packName];
-  const rand = Math.random() * 100;
-  let cumulative = 0;
-  this.soundService.playSound('win.aac', 0.5);
+  drawCard() {
+    const pack = this.chances[this.packName];
+    const rand = Math.random() * 100;
+    let cumulative = 0;
+    this.soundService.playSound('win.aac', 0.5);
 
-  for (const entry of pack) {
-    cumulative += entry.chance;
-    if (rand <= cumulative) {
-      this.result = entry.multiplier;
-      // Darstellung je nach Art der Karte (Herz-Karten haben negative Multipliers)
-      const numericVal = parseFloat(this.result);
-      if (!isNaN(numericVal) && numericVal < 0) {
-        // Negative Zahlen stehen für Herz-Karten; zeige Anzahl Herzen
-        this.displayResult = `${Math.abs(numericVal)}❤️`;
-      } else {
-        this.displayResult = this.result;
+    for (const entry of pack) {
+      cumulative += entry.chance;
+      if (rand <= cumulative) {
+        this.result = entry.multiplier;
+        const numericVal = parseFloat(this.result);
+        if (!isNaN(numericVal) && numericVal < 0) {
+          this.displayResult = `${Math.abs(numericVal)}❤️`;
+        } else {
+          this.displayResult = this.result;
+        }
+
+        this.cardsService.addCard(numericVal).subscribe({
+          next: () => console.log('Karte gespeichert:', this.result),
+          error: err => console.error('❌ Fehler beim Speichern der Karte:', err)
+        });
+
+        this.drawnCards.push(this.displayResult);
+        this.cardsRemaining--;
+        break;
       }
-
-      // 💾 Karte speichern (als Zahl)
-      this.cardsService.addCard(numericVal).subscribe({
-        next: () => console.log('Karte gespeichert:', this.result),
-        error: err => console.error('❌ Fehler beim Speichern der Karte:', err)
-      });
-
-      // Füge die gezogene Karte zur Liste hinzu
-      this.drawnCards.push(this.displayResult);
-      // Verringere die Anzahl der verbleibenden Karten im Pack
-      this.cardsRemaining--;
-      break;
     }
   }
-}
-
 }

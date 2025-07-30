@@ -63,6 +63,13 @@ export class GameComponent implements OnInit {
   buttonsDisabled = false;
   currentMultiplier: number = 1.0;
   cardMultiplier: any = 1.0;
+  /**
+   * Steuert, ob die Testzahl auf dem Zahlenstrahl angezeigt wird.
+   * Wird beim Raten auf true gesetzt und nach kurzer Zeit wieder
+   * auf false zurückgesetzt. Dies verhindert, dass die Testzahl
+   * vorzeitig im DOM existiert und so via Entwicklertools sichtbar wird.
+   */
+  showTest = false;
 
 
   topScores: any[] = [];
@@ -186,19 +193,22 @@ guess(answer: 'inside' | 'outside') {
   this.checkForAchievements();
 }
 
-showTestNum() {
-  const testNumElement = document.getElementById('finalNumber') as HTMLElement;
-  this.buttonsDisabled = true;
-
-  if (testNumElement) {
-    testNumElement.style.visibility = 'visible';
-
+  /**
+   * Zeigt die Testzahl kurzzeitig an. Statt über CSS visibility zu arbeiten,
+   * wird eine boolsche Variable verwendet, die ein *ngIf in der Vorlage
+   * steuert. So wird der DOM-Knoten nur erzeugt, wenn die Testzahl
+   * tatsächlich angezeigt werden soll. Nach Ablauf der Anzeigezeit wird
+   * die Variable wieder zurückgesetzt und die Knöpfe reaktiviert.
+   */
+  showTestNum() {
+    this.buttonsDisabled = true;
+    this.showTest = true;
+    // Nach 0.5 Sekunden Testzahl ausblenden und Buttons reaktivieren
     setTimeout(() => {
-      testNumElement.style.visibility = 'hidden';
-      this.buttonsDisabled = false; // Wieder aktivieren
-    }, 500); // nach 0.5 Sekunde wieder aktiv
+      this.showTest = false;
+      this.buttonsDisabled = false;
+    }, 500);
   }
-}
 
   flashBackground(element: HTMLElement, color: string) {
     if (element) {

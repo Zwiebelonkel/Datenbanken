@@ -599,13 +599,15 @@ hasHeartCard(): boolean {
   return this.cards.some(c => c.multiplier === -1 && c.amount > 0);
 }
 
-get heartCards() {
-  return this.cards.filter(c => c.multiplier === -1);
-}
+  // Negative multipliers repräsentieren Herz-Karten. Alle Werte < 0 gehören dazu.
+  get heartCards() {
+    return this.cards.filter(c => c.multiplier < 0);
+  }
 
-get multiplierCards() {
-  return this.cards.filter(c => c.multiplier !== -1);
-}
+  // Multiplikator-Karten sind alle Karten mit multipliers >= 0.
+  get multiplierCards() {
+    return this.cards.filter(c => c.multiplier >= 0);
+  }
 
 useSelectedCard() {
   if (!this.selectedCard) return;
@@ -632,27 +634,31 @@ useSelectedCard() {
   });
 }
 
-useHeartCard() {
-  if (!this.selectedHeartCard) return;
+  useHeartCard() {
+    if (!this.selectedHeartCard) return;
 
-  this.lives = 4;
-  this.heartCardUsed = true;
-  this.cardUsed = true
-  this.soundService.playSound('hardPop.aac', 0.6);
+    // Die Anzahl der hinzuzufügenden Leben entspricht dem absoluten Wert des Multipliers
+    const heartsToAdd = Math.abs(this.selectedHeartCard.multiplier);
+    this.lives += heartsToAdd;
+    this.heartCardUsed = true;
+    this.cardUsed = true;
+    this.soundService.playSound('hardPop.aac', 0.6);
 
-  this.cardsService.useCard(-1).subscribe({
-    next: () => {
-      this.selectedHeartCard.amount--;
-      if (this.selectedHeartCard.amount <= 0) {
-        this.cards = this.cards.filter(c => c.multiplier !== -1);
-        this.selectedHeartCard = null;
+    // Ausgewählte Herzkarte beim Backend einlösen
+    this.cardsService.useCard(this.selectedHeartCard.multiplier).subscribe({
+      next: () => {
+        this.selectedHeartCard.amount--;
+        if (this.selectedHeartCard.amount <= 0) {
+          // Karte aus dem Array entfernen
+          this.cards = this.cards.filter(c => c.multiplier !== this.selectedHeartCard.multiplier);
+          this.selectedHeartCard = null;
+        }
+      },
+      error: (err) => {
+        console.error('Fehler beim Verwenden der Herzkarte:', err);
       }
-    },
-    error: (err) => {
-      console.error('Fehler beim Verwenden der Herzkarte:', err);
-    }
-  });
-}
+    });
+  }
 
 getHeartSpeed(): string {
   const livesLeft = this.lives;

@@ -98,5 +98,5 @@ Das Spiel ist inspiriert von klassischen Ratespielen, kombiniert mit modernen Be
 ## 🧑‍💻 Autor
 
 **Dein Name**  
-[🔗 dein-linkedin.com](https://www.linkedin.com/in/deinprofil)  
+[🔗 LinkedIn](https://www.linkedin.com/in/deinprofil)  
 [📧 dein@email.de](mailto:dein@email.de)

@@ -151,7 +151,7 @@ revealNextCard() {
     this.drawCard();      // neue Karte ziehen
     this.reveal = true;
     this.lastCardOut = false;
-  }, 600); // Warte, bis Fly-Away-Animation vorbei ist
+  }, 300); // Warte, bis Fly-Away-Animation vorbei ist
 }
 
   drawCard() {

@@ -18,15 +18,18 @@
 
 <!-- 🎴 Gestapelte Karten -->
 <div class="card-stack">
-  <div
-    class="flip-card"
-    *ngFor="let card of cardStack; let i = index; let last = last"
-    [style.zIndex]="i + 1"
-    [class.top-card]="last"
-    [class.flipped]="last && reveal"
-    [class.fly-away]="last && lastCardOut"
-    (click)="last ? revealCard() : null"
-  >
+<div
+  class="flip-card"
+  *ngFor="let card of cardStack; let i = index; let last = last"
+  [style.zIndex]="i + 1"
+  [style.top.px]="i * 4"
+  [style.left.px]="i * 2"
+  [class.top-card]="last"
+  [class.flipped]="last && reveal"
+  [class.fly-away]="last && lastCardOut"
+  (click)="last ? revealCard() : null"
+>
+
     <div class="flip-inner">
       <div class="flip-front" [ngClass]="packName.toLowerCase()">
         <img src="assets/logo.png" class="logo center" />

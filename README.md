@@ -1,4 +1,4 @@
-# 🎮 ZahlenRaten Game
+# 🎮 CardCore 🎴
 
 Ein interaktives Webspiel, bei dem du zwischen zwei zufälligen Zahlen raten musst, ob eine dritte Zahl **dazwischen** oder **außerhalb** liegt. Sammle Punkte, verdiene Geld, nutze **Multiplikator-Karten** und kämpfe dich in die **Leaderboards**!
 
@@ -6,17 +6,12 @@ Ein interaktives Webspiel, bei dem du zwischen zwei zufälligen Zahlen raten mus
 
 - 🔢 Zahlenraten mit steigendem Schwierigkeitsgrad
 - 🎴 Karten-Shop mit Packs (Basic, Premium, Ultra)
-- ✨ Multiplikator-Karten (1.2x bis 5x)
-- 🏅 Achievement-System mit Erfolgen
+- ✨ Multiplikator-Karten (1.2x bis 10x)
+- ❤️ Herz-Karten (1 bis 3)
+- 🏅 Achievement-System
 - 📈 Drei Leaderboards: Punkte, Streaks, Geld
-- 🌙 Dark Mode Toggle
-- 📱 Mobile Swipe-Support
 - 👤 Login-System mit Benutzerprofil
-- 💼 Geldsystem mit Einlösen-Funktion
-
-## 📸 Screenshots
-
-> *(Screenshots hier einfügen)*
+- 💼 Geldsystem
 
 ## 🚀 Technologien
 
@@ -98,5 +93,4 @@ Das Spiel ist inspiriert von klassischen Ratespielen, kombiniert mit modernen Be
 ## 🧑‍💻 Autor
 
 **Dein Name**  
-[🔗 dein-linkedin.com](https://www.linkedin.com/in/deinprofil)  
-[📧 dein@email.de](mailto:dein@email.de)
+[🔗 dein-linkedin.com](https://www.linkedin.com/in/luca-m%C3%BCller-a182ab323/)  

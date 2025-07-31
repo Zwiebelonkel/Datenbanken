@@ -93,4 +93,4 @@ Das Spiel ist inspiriert von klassischen Ratespielen, kombiniert mit modernen Be
 ## 🧑‍💻 Autor
 
 **Dein Name**  
-[🔗 dein-linkedin.com](https://www.linkedin.com/in/luca-m%C3%BCller-a182ab323/)  
+[🔗 LinkedIn](https://www.linkedin.com/in/luca-m%C3%BCller-a182ab323/)  

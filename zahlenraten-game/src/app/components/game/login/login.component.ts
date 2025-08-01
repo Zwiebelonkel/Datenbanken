@@ -39,11 +39,15 @@ export class LoginComponent {
         next: (res) => {
           this.isLoading = false;
 
-          if (res.success) {
-            if (res.token) {
-              localStorage.setItem('token', res.token);
-            }
-            this.router.navigate(['/']); // z. B. Spielseite oder Dashboard
+          if (res.success && res.token) {
+            localStorage.setItem('token', res.token);
+
+            // Ablaufzeit aus dem JWT speichern
+            const payload = JSON.parse(atob(res.token.split('.')[1]));
+            const expiry = payload.exp * 1000;
+            localStorage.setItem('tokenExpiry', expiry.toString());
+
+            this.router.navigate(['/']); // z. B. Dashboard oder Game
           } else {
             this.error = true;
           }

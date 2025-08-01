@@ -30,47 +30,6 @@ body.dark-mode .highscores-carousel {
   margin: 0.5rem 0;
 }
 
-/*
-      Darstellung für die horizontale Achse, auf der die beiden Zufallszahlen
-      nebeneinander angezeigt werden. Die Zahlen werden jeweils an den
-      Enden der Achse positioniert und der Balken in der Mitte füllt den
-      übrigen Platz aus. Durch flexbox wird erreicht, dass die Achse sich
-      automatisch an die verfügbare Breite anpasst.  Eine kleine
-      Randabstände sorgen für visuelle Trennung von den anderen Elementen.
-    */
-/*
-      Die alte Darstellung mit .number-axis wird zurzeit nicht mehr verwendet,
-      da wir die Zahlen auf einem flexiblen Zahlenstrahl (.number-scale) platzieren.
-      Diese Styles bleiben auskommentiert, falls sie später erneut benötigt werden.
-    */
-/*
-    .number-axis {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 1rem 0;
-    }
-    .number-axis .axis-number {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .number-axis .axis-line {
-      flex-grow: 1;
-      height: 4px;
-      background-color: #ccc;
-      margin: 0 0.5rem;
-      border-radius: 2px;
-    }
-    */
-
-/*
-      Zahlenstrahl von 0 bis 100. Dieser Balken dient als visuelle Achse,
-      auf der die Zufallszahlen relativ zu ihrem Wert positioniert werden.
-      Die Marker werden absolut positioniert, zentriert und oberhalb der Leiste
-      angezeigt. Bei nah beieinander liegenden Werten liegen die Marker
-      entsprechend nah beieinander; bei weit auseinander liegenden Werten
-      entsprechend weit entfernt.
-    */
 .number-scale {
   position: relative;
   height: 8px;
@@ -86,13 +45,11 @@ body.dark-mode .highscores-carousel {
   font-size: 0.9rem;
   font-weight: bold;
   white-space: nowrap;
-  /* optional kleine farbige Kreise hinter den Zahlen */
-  /* sanfte Animation, wenn sich der left-Wert ändert */
   transition: left 0.4s ease;
 }
-/* spezielle Darstellung für die Testzahl */
+
 .number-scale .number-marker.test-num {
-  color: #e91e63; /* abgesetzte Farbe für die Testzahl */
+  color: #e91e63;
 }
 
 .number-scale .marker {
@@ -105,9 +62,8 @@ body.dark-mode .highscores-carousel {
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.62);
 }
 
-/* wenn Marker nach unten verschoben werden soll, z.B. bei Überlappung */
 .number-scale .number-marker.below {
-  top: 1rem; /* unterhalb der Leiste platzieren */
+  top: 1rem;
 }
 
 .buttons {
@@ -137,21 +93,6 @@ body.dark-mode .highscores-carousel {
 .btn:disabled {
   background: #ccc;
   cursor: not-allowed;
-}
-
-button.btn:disabled {
-  /*
-    Dieses Styling war ursprünglich eine Duplikation zu .btn:disabled. Die
-    notwendigen Eigenschaften (Hintergrundfarbe und Cursor) sind dort
-    bereits definiert. Wir kommentieren diese Block aus, um Redundanz zu
-    vermeiden. Falls zusätzliche Anpassungen (z. B. Farbänderungen) nötig
-    werden, kann dieser Block wieder aktiviert werden.
-  */
-  /*background: #ccc;
-  color: #888;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;*/
 }
 
 .restart {

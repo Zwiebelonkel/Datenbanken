@@ -1,13 +1,13 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   background: #ffffff;
   color: #222;
   overflow: hidden;
 }
 
-html{
+html {
   overflow: hidden !important;
 }
 
@@ -57,42 +57,42 @@ h2 {
 
 .flip-front {
   transform: rotateY(0deg);
-  background: linear-gradient(145deg, #FFD700, #FFEB3B);
+  background: linear-gradient(145deg, #ffd700, #ffeb3b);
 }
 
 .flip-back {
   transform: rotateY(180deg);
-  background: linear-gradient(145deg, #FFD700, #FFEB3B);
+  background: linear-gradient(145deg, #ffd700, #ffeb3b);
   position: relative;
 }
 
 .flip-front.basic {
-  background: linear-gradient(145deg, #FFD700, #FFEB3B);
+  background: linear-gradient(145deg, #ffd700, #ffeb3b);
   box-shadow: inset 0 0 0 6px #b8860b;
 }
 
 .flip-front.premium {
-  background: linear-gradient(145deg, #7B1FA2, #CE93D8);
+  background: linear-gradient(145deg, #7b1fa2, #ce93d8);
   box-shadow: inset 0 0 0 6px #6a1b9a;
 }
 
 .flip-front.ultra {
-  background: linear-gradient(145deg, #00ACC1, #80DEEA);
+  background: linear-gradient(145deg, #00acc1, #80deea);
   box-shadow: inset 0 0 0 6px #007c91;
 }
 
 .flip-back.basic {
-  background: linear-gradient(145deg, #FFD700, #FFEB3B);
+  background: linear-gradient(145deg, #ffd700, #ffeb3b);
   box-shadow: inset 0 0 0 6px #b8860b;
 }
 
 .flip-back.premium {
-  background: linear-gradient(145deg, #7B1FA2, #CE93D8);
+  background: linear-gradient(145deg, #7b1fa2, #ce93d8);
   box-shadow: inset 0 0 0 6px #6a1b9a;
 }
 
 .flip-back.ultra {
-  background: linear-gradient(145deg, #00ACC1, #80DEEA);
+  background: linear-gradient(145deg, #00acc1, #80deea);
   box-shadow: inset 0 0 0 6px #007c91;
 }
 
@@ -140,7 +140,11 @@ h2 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 70%
+  );
   animation: sparkle 2s ease-in-out infinite;
   z-index: 1;
 }
@@ -248,7 +252,7 @@ h2 {
 /* Shine Effekt */
 .flip-front::before,
 .flip-back::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
@@ -280,8 +284,13 @@ h2 {
 }
 
 @keyframes sparkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .old-card {
@@ -343,4 +352,3 @@ h2 {
     opacity: 0;
   }
 }
-

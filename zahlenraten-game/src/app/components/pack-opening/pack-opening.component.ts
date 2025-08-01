@@ -14,12 +14,12 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   standalone: true,
   imports: [CommonModule, LoaderComponent, SidebarComponent],
   templateUrl: './pack-opening.component.html',
-  styleUrls: ['./pack-opening.component.scss']
+  styleUrls: ['./pack-opening.component.scss'],
 })
 export class PackOpeningComponent implements OnInit {
   packName: string = '';
   result: string = '';
-  displayResult: string = ''
+  displayResult: string = '';
   reveal = false;
   packImagePath = 'assets/packs/basicOpen.png';
   showPack = true;
@@ -61,7 +61,7 @@ export class PackOpeningComponent implements OnInit {
       { multiplier: '-1', chance: 18.5 },
       { multiplier: '-2', chance: 1 },
       { multiplier: '-3', chance: 0.5 },
-    ]
+    ],
   };
 
   packPrices: Record<string, number> = {
@@ -84,7 +84,7 @@ export class PackOpeningComponent implements OnInit {
     this.username = this.authService.getUsername() || '';
     this.loadMoney();
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.packName = params['pack'] || 'Basic';
       this.packImagePath = `assets/packs/${this.packName.toLowerCase()}Open.png`;
     });
@@ -93,14 +93,14 @@ export class PackOpeningComponent implements OnInit {
   loadMoney() {
     this.isLoading = true;
     this.profileService.getUserStats(this.username).subscribe({
-      next: stats => {
+      next: (stats) => {
         this.money = stats.money;
         this.isLoading = false;
       },
-      error: err => {
+      error: (err) => {
         console.error('❌ Fehler beim Laden der Statistiken:', err);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -115,22 +115,24 @@ export class PackOpeningComponent implements OnInit {
       return;
     }
 
-    this.moneyService.updateMoney({ username: this.username, amount: -price }).subscribe({
-      next: () => {
-        this.money -= price;
-        this.packDropped = true;
-        this.message = '';
-        this.cardsRemaining = this.maxCards;
-        this.drawnCards = [];
-        this.reveal = false;
-        this.displayResult = '';
-        this.cardStack = Array(this.maxCards).fill('🃏');
-      },
-      error: err => {
-        console.error('❌ Fehler beim Geldabzug:', err);
-        this.message = '❌ Kauf fehlgeschlagen!';
-      }
-    });
+    this.moneyService
+      .updateMoney({ username: this.username, amount: -price })
+      .subscribe({
+        next: () => {
+          this.money -= price;
+          this.packDropped = true;
+          this.message = '';
+          this.cardsRemaining = this.maxCards;
+          this.drawnCards = [];
+          this.reveal = false;
+          this.displayResult = '';
+          this.cardStack = Array(this.maxCards).fill('🃏');
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Geldabzug:', err);
+          this.message = '❌ Kauf fehlgeschlagen!';
+        },
+      });
   }
 
   revealCard() {
@@ -139,20 +141,21 @@ export class PackOpeningComponent implements OnInit {
     this.reveal = true;
   }
 
-revealNextCard() {
-  if (this.cardStack.length === 0 || !this.reveal || this.cardsRemaining <= 0) return;
+  revealNextCard() {
+    if (this.cardStack.length === 0 || !this.reveal || this.cardsRemaining <= 0)
+      return;
 
-  this.lastCardText = this.displayResult;
-  this.lastCardOut = true;
-  this.reveal = false;
+    this.lastCardText = this.displayResult;
+    this.lastCardOut = true;
+    this.reveal = false;
 
-  setTimeout(() => {
-    this.cardStack.pop(); // oberste Karte entfernen
-    this.drawCard();      // neue Karte ziehen
-    this.reveal = true;
-    this.lastCardOut = false;
-  }, 300); // Warte, bis Fly-Away-Animation vorbei ist
-}
+    setTimeout(() => {
+      this.cardStack.pop(); // oberste Karte entfernen
+      this.drawCard(); // neue Karte ziehen
+      this.reveal = true;
+      this.lastCardOut = false;
+    }, 300); // Warte, bis Fly-Away-Animation vorbei ist
+  }
 
   drawCard() {
     const pack = this.chances[this.packName];
@@ -173,7 +176,8 @@ revealNextCard() {
 
         this.cardsService.addCard(numericVal).subscribe({
           next: () => console.log('Karte gespeichert:', this.result),
-          error: err => console.error('❌ Fehler beim Speichern der Karte:', err)
+          error: (err) =>
+            console.error('❌ Fehler beim Speichern der Karte:', err),
         });
 
         this.drawnCards.push(this.displayResult);

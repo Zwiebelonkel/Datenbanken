@@ -11,9 +11,8 @@ import { LoaderComponent } from '../../loader/loader.component';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent]
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent],
 })
-
 export class RegisterComponent {
   username = '';
   password = '';
@@ -24,36 +23,37 @@ export class RegisterComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-register() {
-  this.isLoading = true;
-  this.http.post(
-    'https://outside-between.onrender.com/api/register',
-    {
-      username: this.username,
-      password: this.password
-    },
-    {
-      headers: { 'Content-Type': 'application/json' }
-    }
-  ).subscribe({
-    next: () => {
-      this.success = true;
-      this.error = false;
-      this.isLoading = false;
-      this.errorMessage = '';
-      this.username = '';
-      this.password = '';
-    },
-    error: (err) => {
-      this.success = false;
-      this.error = true;
-      if (err.status === 409) {
-        this.errorMessage = 'Benutzername bereits vergeben';
-      } else {
-        this.errorMessage = 'Registrierung fehlgeschlagen';
-      }
-    }
-  });
-}
-
+  register() {
+    this.isLoading = true;
+    this.http
+      .post(
+        'https://outside-between.onrender.com/api/register',
+        {
+          username: this.username,
+          password: this.password,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
+      .subscribe({
+        next: () => {
+          this.success = true;
+          this.error = false;
+          this.isLoading = false;
+          this.errorMessage = '';
+          this.username = '';
+          this.password = '';
+        },
+        error: (err) => {
+          this.success = false;
+          this.error = true;
+          if (err.status === 409) {
+            this.errorMessage = 'Benutzername bereits vergeben';
+          } else {
+            this.errorMessage = 'Registrierung fehlgeschlagen';
+          }
+        },
+      });
+  }
 }

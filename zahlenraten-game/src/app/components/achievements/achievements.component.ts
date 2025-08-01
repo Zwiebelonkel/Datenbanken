@@ -9,7 +9,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   templateUrl: './achievements.component.html',
   styleUrls: ['./achievements.component.scss'],
   imports: [CommonModule, SidebarComponent],
-  standalone: true
+  standalone: true,
 })
 export class AchievementsComponent implements OnInit {
   achievements: any[] = [];
@@ -17,17 +17,22 @@ export class AchievementsComponent implements OnInit {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-ngOnInit(): void {
-  const username = this.authService.getUsername();
-  this.http.get<any[]>(`https://outside-between.onrender.com/api/achievements?username=${username}`)
-    .subscribe(data => {
-      console.log('Erhaltene Achievements:', data);
-      this.achievements = data;
-      this.isLoading = false;
-    }, error => {
-      console.error('Fehler beim Laden der Achievements', error);
-      this.isLoading = false;
-    });
-}
-
+  ngOnInit(): void {
+    const username = this.authService.getUsername();
+    this.http
+      .get<any[]>(
+        `https://outside-between.onrender.com/api/achievements?username=${username}`
+      )
+      .subscribe(
+        (data) => {
+          console.log('Erhaltene Achievements:', data);
+          this.achievements = data;
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Fehler beim Laden der Achievements', error);
+          this.isLoading = false;
+        }
+      );
+  }
 }

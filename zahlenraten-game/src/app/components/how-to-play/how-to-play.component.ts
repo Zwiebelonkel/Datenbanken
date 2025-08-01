@@ -5,6 +5,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   selector: 'app-how-to-play',
   templateUrl: './how-to-play.component.html',
   styleUrls: ['./how-to-play.component.scss'],
-  imports:[SidebarComponent]
+  imports: [SidebarComponent],
 })
 export class HowToPlayComponent {}

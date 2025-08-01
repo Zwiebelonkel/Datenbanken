@@ -20,7 +20,6 @@ import { PackOpeningComponent } from './components/pack-opening/pack-opening.com
 import { LoaderComponent } from './components/loader/loader.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
-
 @NgModule({
   declarations: [
     RegisterComponent,
@@ -36,16 +35,16 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     CardShopComponent,
     PackOpeningComponent,
     LoaderComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     CommonModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

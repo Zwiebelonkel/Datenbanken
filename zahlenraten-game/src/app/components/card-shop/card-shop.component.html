@@ -1,7 +1,7 @@
 <app-sidebar></app-sidebar>
 <div class="card-shop">
   <h2>🎴 Karten Shop</h2>
-<app-loader *ngIf="isLoading"></app-loader>
+  <app-loader *ngIf="isLoading"></app-loader>
   <div class="money-display">💼 Dein Geld: {{ money }} €</div>
 
   <div *ngIf="!isLoading" class="packs">
@@ -17,18 +17,20 @@
       <h3>{{ pack.name }}</h3>
       <p>💰 {{ pack.price }} €</p>
 
-        <!-- 📊 Zeige die Chancen für das Pack -->
-  <ul class="chances" *ngIf="chances[pack.name]">
-    <li *ngFor="let entry of chances[pack.name]">
-      <span class="label">
-        <ng-container *ngIf="entry.multiplier.startsWith('-'); else normalText">
-          {{ entry.multiplier | slice:1 }}❤️
-        </ng-container>
-        <ng-template #normalText>{{ entry.multiplier }}</ng-template>
-      </span>
-      <span class="percentage">{{ entry.chance }}%</span>
-    </li>
-  </ul>
+      <!-- 📊 Zeige die Chancen für das Pack -->
+      <ul class="chances" *ngIf="chances[pack.name]">
+        <li *ngFor="let entry of chances[pack.name]">
+          <span class="label">
+            <ng-container
+              *ngIf="entry.multiplier.startsWith('-'); else normalText"
+            >
+              {{ entry.multiplier | slice : 1 }}❤️
+            </ng-container>
+            <ng-template #normalText>{{ entry.multiplier }}</ng-template>
+          </span>
+          <span class="percentage">{{ entry.chance }}%</span>
+        </li>
+      </ul>
 
       <button
         (click)="buyPack(pack)"

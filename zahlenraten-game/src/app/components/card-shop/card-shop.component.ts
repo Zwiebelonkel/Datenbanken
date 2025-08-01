@@ -13,7 +13,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   standalone: true,
   imports: [CommonModule, LoaderComponent, SidebarComponent],
   templateUrl: './card-shop.component.html',
-  styleUrls: ['./card-shop.component.scss']
+  styleUrls: ['./card-shop.component.scss'],
 })
 export class CardShopComponent implements OnInit {
   money: number = 0;
@@ -24,38 +24,37 @@ export class CardShopComponent implements OnInit {
   cardPacks = [
     { name: 'Basic', price: 40, image: 'assets/packs/basic.png' },
     { name: 'Premium', price: 120, image: 'assets/packs/premium.png' },
-    { name: 'Ultra', price: 360, image: 'assets/packs/ultra.png' }
-    ,
+    { name: 'Ultra', price: 360, image: 'assets/packs/ultra.png' },
     // Neues Pack speziell für Herz‑Karten
     // { name: 'Hearts', price: 200, image: 'assets/packs/hearts.png' }
   ];
 
   chances: Record<string, { multiplier: string; chance: number }[]> = {
-  Basic: [
-    { multiplier: '1.2x', chance: 65 },
-    { multiplier: '1.5x', chance: 20 },
-    { multiplier: '2x', chance: 7.5 },
-    { multiplier: '-1', chance: 7.5 },
-    { multiplier: '-2', chance: 0 },
-    { multiplier: '-3', chance: 0 },
-  ],
-  Premium: [
-    { multiplier: '1.5x', chance: 50 },
-    { multiplier: '2x', chance: 20 },
-    { multiplier: '5x', chance: 15 },
-    { multiplier: '-1', chance: 13 },
-    { multiplier: '-2', chance: 2 },
-    { multiplier: '-3', chance: 0 },
-  ],
-  Ultra: [
-    { multiplier: '2x', chance: 40 },
-    { multiplier: '5x', chance: 35 },
-    { multiplier: '10x', chance: 5 },
-    { multiplier: '-1', chance: 18.5 },
-    { multiplier: '-2', chance: 1 },
-    { multiplier: '-3', chance: 0.5 },
-  ]
-};
+    Basic: [
+      { multiplier: '1.2x', chance: 65 },
+      { multiplier: '1.5x', chance: 20 },
+      { multiplier: '2x', chance: 7.5 },
+      { multiplier: '-1', chance: 7.5 },
+      { multiplier: '-2', chance: 0 },
+      { multiplier: '-3', chance: 0 },
+    ],
+    Premium: [
+      { multiplier: '1.5x', chance: 50 },
+      { multiplier: '2x', chance: 20 },
+      { multiplier: '5x', chance: 15 },
+      { multiplier: '-1', chance: 13 },
+      { multiplier: '-2', chance: 2 },
+      { multiplier: '-3', chance: 0 },
+    ],
+    Ultra: [
+      { multiplier: '2x', chance: 40 },
+      { multiplier: '5x', chance: 35 },
+      { multiplier: '10x', chance: 5 },
+      { multiplier: '-1', chance: 18.5 },
+      { multiplier: '-2', chance: 1 },
+      { multiplier: '-3', chance: 0.5 },
+    ],
+  };
 
   constructor(
     private router: Router,
@@ -73,21 +72,21 @@ export class CardShopComponent implements OnInit {
   loadMoney() {
     this.isLoading = true;
     this.profileService.getUserStats(this.username).subscribe({
-      next: stats => {
+      next: (stats) => {
         this.money = stats.money;
         this.isLoading = false;
       },
-      error: err => {
+      error: (err) => {
         console.error('❌ Fehler beim Laden der Statistiken:', err);
         this.isLoading = false;
-      }
+      },
     });
   }
 
-buyPack(pack: any) {
-  this.soundService.playSound('coin.aac'); // Sound beim Kauf abspielen
-  this.router.navigate(['/pack-opening'], {
-    queryParams: { pack: pack.name }
-  });
-}
+  buyPack(pack: any) {
+    this.soundService.playSound('coin.aac'); // Sound beim Kauf abspielen
+    this.router.navigate(['/pack-opening'], {
+      queryParams: { pack: pack.name },
+    });
+  }
 }

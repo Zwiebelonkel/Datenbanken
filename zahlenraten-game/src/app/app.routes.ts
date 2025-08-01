@@ -22,5 +22,4 @@ export const routes: Routes = [
   { path: 'clicker', component: ClickerComponent },
   { path: 'card-shop', component: CardShopComponent },
   { path: 'pack-opening', component: PackOpeningComponent },
-
 ];

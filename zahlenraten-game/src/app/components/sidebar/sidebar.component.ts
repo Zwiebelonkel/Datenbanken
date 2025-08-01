@@ -8,12 +8,11 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
   sidebarOpen = false;
   achAmount = 0;
-
 
   constructor(
     public authService: AuthService,
@@ -28,18 +27,18 @@ export class SidebarComponent implements OnInit {
   }
 
   loadAch() {
-  const username = this.authService.getUsername();
-  if (!username) return; // Sicherheit: nicht einloggen -> abbrechen
+    const username = this.authService.getUsername();
+    if (!username) return; // Sicherheit: nicht einloggen -> abbrechen
 
-  this.profileService.getUserStats(username).subscribe({
-    next: stats => {
-      this.achAmount = stats.unlockedAchievements;
-    },
-    error: err => {
-      console.error('Fehler beim Laden der Statistiken', err);
-    }
-  });
-}
+    this.profileService.getUserStats(username).subscribe({
+      next: (stats) => {
+        this.achAmount = stats.unlockedAchievements;
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Statistiken', err);
+      },
+    });
+  }
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;

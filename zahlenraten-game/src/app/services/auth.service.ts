@@ -9,7 +9,10 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(username: string, password: string) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { username, password });
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, {
+      username,
+      password,
+    });
   }
 
   register(username: string, password: string) {
@@ -40,16 +43,15 @@ export class AuthService {
   }
 
   getUserId(): number | null {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.id;
-  } catch (e) {
-    return null;
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id;
+    } catch (e) {
+      return null;
+    }
   }
-}
-
 
   getRole(): string | null {
     const token = localStorage.getItem('token');

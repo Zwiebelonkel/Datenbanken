@@ -21,7 +21,6 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   text-align: center;
 
-
   h2 {
     font-size: 2rem;
     margin-bottom: 2rem;
@@ -64,22 +63,22 @@
 
     // Shine effect
     &::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 120%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  transform: rotateZ(20deg);
-  animation: shine 3.5s ease-in-out infinite;
-  z-index: 2;
-  pointer-events: none;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 120%;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+      transform: rotateZ(20deg);
+      animation: shine 3.5s ease-in-out infinite;
+      z-index: 2;
+      pointer-events: none;
     }
 
     h3 {

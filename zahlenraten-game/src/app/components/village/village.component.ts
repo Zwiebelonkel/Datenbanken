@@ -88,12 +88,13 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 ngAfterViewInit() {
   const canvas = this.canvasRef.nativeElement;
 
-  // Höhe berechnen
   const neededRows = Math.ceil(this.villageLevel / 3);
   const canvasHeight = Math.max(400, neededRows * 80 + 100);
 
-  // 🎯 Wichtig: Beides setzen – intern + visuell
+  canvas.width = 400; // Optional, falls nicht gesetzt
   canvas.height = canvasHeight;
+
+  // 🔥 Wichtig! Entfernt CSS-Auto-Höhe und setzt echte visuelle Höhe:
   canvas.style.height = canvasHeight + 'px';
 
   this.ctx = canvas.getContext('2d')!;

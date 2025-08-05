@@ -77,6 +77,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           dy: (Math.random() - 0.5) * 2,
         }));
 
+        this.setCanvasHeight();
         this.startEarningLoop();
         this.isLoading = false;
       },
@@ -87,48 +88,49 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-ngAfterViewInit() {
-  const canvas = this.canvasRef.nativeElement;
-
-  // Höhe dynamisch berechnen: 1 Haus pro Level, 3 pro Zeile
-  const neededRows = Math.ceil(this.villageLevel / 3);
-  const canvasHeight = Math.max(400, neededRows * 80 + 100);
-  canvas.height = canvasHeight;
-
-  this.ctx = canvas.getContext('2d')!;
-  this.animate();
-}
-
-  animate = () => {
-  this.animationId = requestAnimationFrame(this.animate);
-  this.ctx.clearRect(0, 0, 400, this.canvasRef.nativeElement.height);
-
-  // 🏠 Häuser zeichnen (1 pro Level)
-  for (let i = 0; i < this.villageLevel; i++) {
-    const col = i % 3;
-    const row = Math.floor(i / 3);
-    const x = 40 + col * 120;
-    const y = 50 + row * 80;
-
-    this.ctx.fillStyle = '#000000';
-    this.ctx.fillRect(x, y, 60, 60);
+  ngAfterViewInit() {
+    this.setCanvasHeight();
+    this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
+    this.animate();
   }
 
-  // 👥 Bewohner animieren
-  this.villagersPositions.forEach((v) => {
-    v.x += v.dx;
-    v.y += v.dy;
+  setCanvasHeight() {
+    const canvas = this.canvasRef.nativeElement;
+    const neededRows = Math.ceil(this.villageLevel / 3);
+    const canvasHeight = Math.max(400, neededRows * 80 + 100);
+    canvas.height = canvasHeight;
+  }
 
+  animate = () => {
+    this.animationId = requestAnimationFrame(this.animate);
     const height = this.canvasRef.nativeElement.height;
-    if (v.x < 10 || v.x > 390) v.dx *= -1;
-    if (v.y < 10 || v.y > height - 10) v.dy *= -1;
+    this.ctx.clearRect(0, 0, 400, height);
 
-    this.ctx.beginPath();
-    this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-    this.ctx.fillStyle = '#000000';
-    this.ctx.fill();
-  });
-};
+    // 🏠 Häuser zeichnen (1 pro Level)
+    for (let i = 0; i < this.villageLevel; i++) {
+      const col = i % 3;
+      const row = Math.floor(i / 3);
+      const x = 40 + col * 120;
+      const y = 50 + row * 80;
+
+      this.ctx.fillStyle = '#000000';
+      this.ctx.fillRect(x, y, 60, 60);
+    }
+
+    // 👥 Bewohner animieren
+    this.villagersPositions.forEach((v) => {
+      v.x += v.dx;
+      v.y += v.dy;
+
+      if (v.x < 10 || v.x > 390) v.dx *= -1;
+      if (v.y < 10 || v.y > height - 10) v.dy *= -1;
+
+      this.ctx.beginPath();
+      this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
+      this.ctx.fillStyle = '#000000';
+      this.ctx.fill();
+    });
+  };
 
   upgrade() {
     this.isLoading = true;
@@ -137,6 +139,8 @@ ngAfterViewInit() {
       next: (res) => {
         this.villageLevel = res.newLevel;
         this.money -= 100 * (res.newLevel - 1);
+
+        this.setCanvasHeight();
 
         this.villageService.collectIncome().subscribe({
           next: (res) => {
@@ -154,6 +158,7 @@ ngAfterViewInit() {
               dy: (Math.random() - 0.5) * 2,
             }));
 
+            this.setCanvasHeight();
             this.isLoading = false;
           },
           error: () => (this.isLoading = false),

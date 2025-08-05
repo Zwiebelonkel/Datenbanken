@@ -295,7 +295,7 @@ app.get("/api/collect", verifyToken, async (req, res) => {
       args: [now.toISOString(), village.id],
     });
 
-    res.json({ earned: income, minutesPassed });
+res.json({ earned: income, minutesPassed, villageLevel: village.level, villagers: villagersResult.rows });
   } catch (err) {
     console.error("💥 Fehler bei /api/collect:", err);
     res.status(500).json({ message: "Serverfehler" });

@@ -95,13 +95,13 @@ this.villageService.collectIncome().subscribe({
     this.animationId = requestAnimationFrame(this.animate);
     this.ctx.clearRect(0, 0, 400, 400);
 
-    // 🏠 Häuser zeichnen (2 pro Level)
-    for (let i = 0; i < this.villageLevel * 2; i++) {
-      const x = 40 + (i % 3) * 120;
-      const y = 300 + Math.floor(i / 3) * -70;
-      this.ctx.fillStyle = '#000000';
-      this.ctx.fillRect(x, y, 60, 60);
-    }
+// 🏠 Häuser zeichnen (1 pro Level)
+for (let i = 0; i < this.villageLevel; i++) {
+  const x = 40 + (i % 3) * 120;
+  const y = 300 + Math.floor(i / 3) * -70;
+  this.ctx.fillStyle = '#000000';
+  this.ctx.fillRect(x, y, 60, 60);
+}}
 
     // 👥 Bewohner animieren
     this.villagersPositions.forEach((v) => {

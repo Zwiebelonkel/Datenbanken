@@ -34,6 +34,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   villageLevel = 1;
   villagers: Villager[] = [];
+  incomePerMinute = 0;
 
   animationId = 0;
   villagersPositions: { x: number; y: number; dx: number; dy: number }[] = [];
@@ -50,39 +51,39 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     const username = this.auth.getUsername();
     if (!username) return;
 
-    // 💰 Aktuelles Geld laden
     this.profileService.getUserStats(username).subscribe({
       next: (stats) => {
         this.money = stats.money;
       },
     });
 
-    // 📈 Einkommen + Dorf laden
-this.villageService.collectIncome().subscribe({
-  next: (res) => {
-    console.log("🐣 Antwort von collectIncome:", res); // <--- DAS HIER!
+    this.villageService.collectIncome().subscribe({
+      next: (res) => {
+        console.log("🐣 Antwort von collectIncome:", res);
 
-    this.earned = res.earned;
-    this.minutesPassed = res.minutesPassed;
-    this.money += res.earned;
+        this.earned = res.earned;
+        this.minutesPassed = res.minutesPassed;
+        this.money += res.earned;
 
-    this.villageLevel = res.villageLevel || 1;
-    this.villagers = res.villagers || [];
+        this.villageLevel = res.villageLevel || 1;
+        this.villagers = res.villagers || [];
+        this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
 
-    this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
-      x: Math.random() * 380,
-      y: Math.random() * 380,
-      dx: (Math.random() - 0.5) * 2,
-      dy: (Math.random() - 0.5) * 2,
-    }));
+        this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
+          x: Math.random() * 380,
+          y: Math.random() * 380,
+          dx: (Math.random() - 0.5) * 2,
+          dy: (Math.random() - 0.5) * 2,
+        }));
 
-    this.isLoading = false;
-  },
-  error: (err) => {
-    console.error('❌ Fehler bei collectIncome:', err);
-    this.isLoading = false;
-  },
-});
+        this.startEarningLoop();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('❌ Fehler bei collectIncome:', err);
+        this.isLoading = false;
+      },
+    });
   }
 
   ngAfterViewInit() {
@@ -95,15 +96,13 @@ this.villageService.collectIncome().subscribe({
     this.animationId = requestAnimationFrame(this.animate);
     this.ctx.clearRect(0, 0, 400, 400);
 
-// 🏠 Häuser zeichnen (1 pro Level)
-for (let i = 0; i < this.villageLevel; i++) {
-  const x = 40 + (i % 3) * 120;
-  const y = 300 + Math.floor(i / 3) * -70;
-  this.ctx.fillStyle = '#000000';
-  this.ctx.fillRect(x, y, 60, 60);
-}
+    for (let i = 0; i < this.villageLevel; i++) {
+      const x = 40 + (i % 3) * 120;
+      const y = 300 + Math.floor(i / 3) * -70;
+      this.ctx.fillStyle = '#000000';
+      this.ctx.fillRect(x, y, 60, 60);
+    }
 
-    // 👥 Bewohner animieren
     this.villagersPositions.forEach((v) => {
       v.x += v.dx;
       v.y += v.dy;
@@ -118,41 +117,47 @@ for (let i = 0; i < this.villageLevel; i++) {
     });
   };
 
-upgrade() {
-  this.isLoading = true;
+  upgrade() {
+    this.isLoading = true;
 
-  this.villageService.upgradeVillage().subscribe({
-    next: (res) => {
-      this.villageLevel = res.newLevel;
-      this.money -= 100 * (res.newLevel - 1);
+    this.villageService.upgradeVillage().subscribe({
+      next: (res) => {
+        this.villageLevel = res.newLevel;
+        this.money -= 100 * (res.newLevel - 1);
 
-      // Neue Daten + Bewohner laden
-      this.villageService.collectIncome().subscribe({
-        next: (res) => {
-          this.earned = res.earned;
-          this.minutesPassed = res.minutesPassed;
-          this.money += res.earned;
-          this.villageLevel = res.villageLevel;
-          this.villagers = res.villagers;
+        this.villageService.collectIncome().subscribe({
+          next: (res) => {
+            this.earned = res.earned;
+            this.minutesPassed = res.minutesPassed;
+            this.money += res.earned;
+            this.villageLevel = res.villageLevel;
+            this.villagers = res.villagers;
+            this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
 
-          this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
-            x: Math.random() * 380,
-            y: Math.random() * 380,
-            dx: (Math.random() - 0.5) * 2,
-            dy: (Math.random() - 0.5) * 2,
-          }));
+            this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
+              x: Math.random() * 380,
+              y: Math.random() * 380,
+              dx: (Math.random() - 0.5) * 2,
+              dy: (Math.random() - 0.5) * 2,
+            }));
 
-          this.isLoading = false;
-        },
-        error: () => (this.isLoading = false),
-      });
-    },
-    error: () => (this.isLoading = false),
-  });
-}
+            this.isLoading = false;
+          },
+          error: () => (this.isLoading = false),
+        });
+      },
+      error: () => (this.isLoading = false),
+    });
+  }
+
+  startEarningLoop() {
+    setInterval(() => {
+      const perSecond = this.incomePerMinute / 60;
+      this.money += perSecond;
+    }, 1000);
+  }
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
   }
-
 }

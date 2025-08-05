@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { VillageService } from '../../services/village.service';
 import { CommonModule } from '@angular/common';
+import { VillageService } from '../../services/village.service';
 
 @Component({
+  standalone: true,
   selector: 'app-village',
   templateUrl: './village.component.html',
-  styleUrls: ['./village.component.scss']
+  styleUrls: ['./village.component.scss'],
+  imports: [CommonModule]
 })
 export class VillageComponent implements OnInit {
   money = 0;
@@ -17,16 +19,16 @@ export class VillageComponent implements OnInit {
 
   ngOnInit() {
     this.villageService.collectIncome().subscribe({
-  next: (res: { earned: number; minutesPassed: number }) => {
-    this.money += res.earned;
-    this.earned = res.earned;
-    this.minutesPassed = res.minutesPassed;
-    this.isLoading = false;
-  },
-  error: (err: any) => {
-    console.error('Fehler:', err);
-    this.isLoading = false;
-  }
-});
+      next: (res: { earned: number; minutesPassed: number }) => {
+        this.money += res.earned;
+        this.earned = res.earned;
+        this.minutesPassed = res.minutesPassed;
+        this.isLoading = false;
+      },
+      error: (err: any) => {
+        console.error('Fehler beim Abrufen des Einkommens:', err);
+        this.isLoading = false;
+      }
+    });
   }
 }

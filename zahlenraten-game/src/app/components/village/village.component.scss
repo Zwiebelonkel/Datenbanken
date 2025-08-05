@@ -1,0 +1,19 @@
+.village-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #f0f0f0;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1.2rem;
+  font-weight: bold;
+  background: #ccc;
+  border: none;
+  border-radius: 6px;
+  cursor: not-allowed;
+}

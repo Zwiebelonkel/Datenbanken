@@ -16,16 +16,16 @@ export class VillageComponent implements OnInit {
 
   ngOnInit() {
     this.villageService.collectIncome().subscribe({
-      next: (res) => {
-        this.earned = res.earned;
-        this.minutesPassed = res.minutesPassed;
-        this.money += res.earned;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('❌ Fehler beim Laden:', err);
-        this.isLoading = false;
-      }
-    });
+  next: (res: { earned: number; minutesPassed: number }) => {
+    this.money += res.earned;
+    this.earned = res.earned;
+    this.minutesPassed = res.minutesPassed;
+    this.isLoading = false;
+  },
+  error: (err: any) => {
+    console.error('Fehler:', err);
+    this.isLoading = false;
+  }
+});
   }
 }

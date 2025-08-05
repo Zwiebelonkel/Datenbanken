@@ -94,44 +94,55 @@ router.post("/upgrade", verifyToken, async (req, res) => {
   const userId = req.user.id;
 
   try {
+    // Dorf holen
     const villageResult = await db.execute({
       sql: "SELECT * FROM village WHERE user_id = ?",
       args: [userId],
     });
 
     if (villageResult.rows.length === 0) {
-      return res.status(404).json({ error: "Dorf nicht gefunden" });
+      return res.status(404).json({ message: "Dorf nicht gefunden" });
     }
 
     const village = villageResult.rows[0];
-    const upgradeCost = 100 * village.level; // z. B. 100€/Level
+    const upgradeCost = village.level * 100;
 
+    // Prüfe ob Nutzer genug Geld hat
     const userResult = await db.execute({
       sql: "SELECT money FROM users WHERE id = ?",
       args: [userId],
     });
 
-    const userMoney = userResult.rows[0].money;
-
-    if (userMoney < upgradeCost) {
-      return res.status(400).json({ error: "Nicht genug Geld fürs Upgrade" });
+    const user = userResult.rows[0];
+    if (user.money < upgradeCost) {
+      return res.status(400).json({ message: "Nicht genug Geld" });
     }
 
-    // Geld abziehen + Level erhöhen
+    const newLevel = village.level + 1;
+
+    // Upgrade durchführen
+    await db.execute({
+      sql: "UPDATE village SET level = ? WHERE id = ?",
+      args: [newLevel, village.id],
+    });
+
     await db.execute({
       sql: "UPDATE users SET money = money - ? WHERE id = ?",
       args: [upgradeCost, userId],
     });
 
-    await db.execute({
-      sql: "UPDATE village SET level = level + 1 WHERE id = ?",
-      args: [village.id],
-    });
+    // 2 neue Bewohner anlegen
+    for (let i = 0; i < 2; i++) {
+      await db.execute({
+        sql: "INSERT INTO villagers (village_id, income, x, y) VALUES (?, 1, ?, ?)",
+        args: [village.id, Math.random() * 400, Math.random() * 400],
+      });
+    }
 
-    res.json({ success: true, newLevel: village.level + 1 });
+    res.json({ newLevel });
   } catch (err) {
-    console.error("❌ Fehler beim Dorf-Upgrade:", err);
-    res.status(500).json({ error: "Serverfehler beim Upgrade" });
+    console.error("❌ Fehler beim Upgrade:", err);
+    res.status(500).json({ message: "Serverfehler beim Upgrade" });
   }
 });
 

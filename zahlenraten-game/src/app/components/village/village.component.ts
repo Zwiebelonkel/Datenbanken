@@ -99,7 +99,7 @@ this.villageService.collectIncome().subscribe({
     for (let i = 0; i < this.villageLevel * 2; i++) {
       const x = 40 + (i % 3) * 120;
       const y = 300 + Math.floor(i / 3) * -70;
-      this.ctx.fillStyle = '#8B4513';
+      this.ctx.fillStyle = '#000000';
       this.ctx.fillRect(x, y, 60, 60);
     }
 
@@ -113,7 +113,7 @@ this.villageService.collectIncome().subscribe({
 
       this.ctx.beginPath();
       this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-      this.ctx.fillStyle = '#3498db';
+      this.ctx.fillStyle = '#000000';
       this.ctx.fill();
     });
   };

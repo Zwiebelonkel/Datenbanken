@@ -9,6 +9,7 @@ import { GameComponent } from './components/game/game.component';
 import { routes } from './app.routes';
 import { RegisterComponent } from './components/game/register/register.component';
 import { LoginComponent } from './components/game/login/login.component';
+import { VillageComponent } from './components/village/village.component';
 import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
 import { ProfileComponent } from './components/profile/profile.component';

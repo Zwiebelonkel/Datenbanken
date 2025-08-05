@@ -3,13 +3,14 @@ import { VillageService } from '../../services/village.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../loader/loader.component'; // Pfad an
 
 @Component({
   standalone: true,
   selector: 'app-village',
   templateUrl: './village.component.html',
   styleUrls: ['./village.component.scss'],
-  imports: [CommonModule]
+  imports: [CommonModule, LoaderComponent]
 })
 export class VillageComponent implements OnInit {
   money = 0;

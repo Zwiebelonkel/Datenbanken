@@ -1,6 +1,6 @@
 import express from "express";
 import db from "../db.js";
-import { verifyToken } from "../auth.js"; // oder ggf. requireAuth Middleware
+import { verifyToken } from "../auth.js";
 
 const router = express.Router();
 
@@ -24,11 +24,11 @@ router.get("/collect", verifyToken, async (req, res) => {
 
       const villageId = createVillage.lastInsertRowid;
 
-      // 4 Bewohner einfügen mit zufälligen Startpositionen
+      // 4 Bewohner einfügen
       for (let i = 0; i < 4; i++) {
         await db.execute({
-          sql: "INSERT INTO villagers (village_id, income, x, y) VALUES (?, 1, ?, ?)",
-          args: [villageId, Math.random() * 400, Math.random() * 400],
+          sql: "INSERT INTO villagers (village_id, income) VALUES (?, 1)",
+          args: [villageId],
         });
       }
 
@@ -42,11 +42,30 @@ router.get("/collect", verifyToken, async (req, res) => {
     const village = villageResult.rows[0];
 
     // 2. Bewohner holen
-    const villagersResult = await db.execute({
+    let villagersResult = await db.execute({
       sql: "SELECT id, income FROM villagers WHERE village_id = ?",
       args: [village.id],
     });
-    const villagers = villagersResult.rows;
+
+    let villagers = villagersResult.rows;
+
+    // 🔁 Falls keine Bewohner vorhanden sind (z. B. aus alten Daten), neue erstellen
+    if (villagers.length === 0) {
+      console.log("⚠️ Keine Bewohner gefunden – neue werden erstellt");
+      for (let i = 0; i < 4; i++) {
+        await db.execute({
+          sql: "INSERT INTO villagers (village_id, income) VALUES (?, 1)",
+          args: [village.id],
+        });
+      }
+
+      villagersResult = await db.execute({
+        sql: "SELECT id, income FROM villagers WHERE village_id = ?",
+        args: [village.id],
+      });
+
+      villagers = villagersResult.rows;
+    }
 
     const villagersIncome = villagers.reduce((sum, v) => sum + v.income, 0);
 

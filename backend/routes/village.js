@@ -90,7 +90,7 @@ console.log("📦 Village ID im Code:", village.id);
   }
 });
 
-router.post("/village/upgrade", verifyToken, async (req, res) => {
+router.post("/upgrade", verifyToken, async (req, res) => {
   const userId = req.user.id;
 
   try {

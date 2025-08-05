@@ -12,13 +12,13 @@ export class VillageService {
   /**
    * Holt passives Einkommen seit dem letzten Collect
    */
-  collectIncome(): Observable<{ earned: number; minutesPassed: number }> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<{ earned: number; minutesPassed: number }>(
-      `${this.baseUrl}/collect`,
-      { headers }
-    );
-  }
+collectIncome() {
+  const token = this.auth.getToken();
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.get<{ earned: number; minutesPassed: number; villageLevel: number; villagers: any[] }>(
+    this.apiUrl, { headers }
+  );
+}
 
   /**
    * (Für später) Holt aktuelle Dorf-Daten

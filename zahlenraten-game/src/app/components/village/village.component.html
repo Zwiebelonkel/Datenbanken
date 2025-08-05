@@ -1,20 +1,42 @@
-
-<div class="village-container" *ngIf="!isLoading">
+<!-- Box: Dorfinfo -->
+<div class="village-box" *ngIf="!isLoading">
   <h2>🏡 Dein Dorf</h2>
 
-  <p>💰 Aktuelles Geld: {{ money | number:'1.2-2' }} €</p>
-
-  <div *ngIf="earned > 0">
-    <p>⏱️ Inaktivzeit: {{ minutesPassed }} Minuten</p>
-    <p>📈 Einkommen in dieser Zeit: +{{ earned | number:'1.2-2' }} €</p>
+  <div class="info-row">
+    <span>💰 Aktuelles Geld:</span>
+    <span><strong>{{ money | number:'1.2-2' }} €</strong></span>
   </div>
 
-  <p>🏘️ Dorf-Level: {{ villageLevel }}</p>
-  <p>👥 Bewohner: {{ villagers.length }}</p>
+  <div class="info-row" *ngIf="earned > 0">
+    <span>⏱️ Inaktivzeit:</span>
+    <span>{{ minutesPassed }} Minuten</span>
+  </div>
 
-  <button disabled class="btn">Dorf verbessern (kommt bald)</button>
-  <button disabled class="btn">Bewohner verbessern (kommt bald)</button>
+  <div class="info-row" *ngIf="earned > 0">
+    <span>📈 Einkommen in dieser Zeit:</span>
+    <span>+{{ earned | number:'1.2-2' }} €</span>
+  </div>
+
+  <div class="info-row">
+    <span>🏘️ Dorf-Level:</span>
+    <span>{{ villageLevel }}</span>
+  </div>
+
+  <div class="info-row">
+    <span>👥 Bewohner:</span>
+    <span>{{ villagers.length }}</span>
+  </div>
 </div>
-  <!-- 👉 CANVAS NACH UNTEN -->
+
+<!-- Box: Canvas -->
+<div class="village-box canvas-box">
   <canvas #villageCanvas width="400" height="400"></canvas>
+</div>
+
+<!-- Box: Buttons (später aktivierbar) -->
+<div class="village-box">
+  <button disabled class="btn">⬆️ Dorf verbessern (kommt bald)</button>
+  <button disabled class="btn">💪 Bewohner verbessern (kommt bald)</button>
+</div>
+
 <app-loader *ngIf="isLoading" />

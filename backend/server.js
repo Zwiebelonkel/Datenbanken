@@ -7,6 +7,7 @@ import profileRoutes from "./routes/profile.js";
 import moneyRoutes from "./routes/money.js";
 import cardsRoutes from "./routes/cards.js";
 import db from "./db.js";
+import { verifyToken } from './auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

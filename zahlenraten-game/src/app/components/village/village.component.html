@@ -34,8 +34,16 @@
 </div>
 
 <!-- Box: Buttons (später aktivierbar) -->
+<!-- Box: Buttons -->
 <div class="village-box">
-  <button disabled class="btn">⬆️ Dorf verbessern (kommt bald)</button>
+  <button
+    class="btn"
+    [disabled]="money < villageLevel * 100 || isLoading"
+    (click)="upgrade()"
+  >
+    ⬆️ Dorf verbessern ({{ villageLevel * 100 }} €)
+  </button>
+
   <button disabled class="btn">💪 Bewohner verbessern (kommt bald)</button>
 </div>
 

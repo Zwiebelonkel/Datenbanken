@@ -90,4 +90,49 @@ console.log("📦 Village ID im Code:", village.id);
   }
 });
 
+router.post("/upgrade", verifyToken, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const villageResult = await db.execute({
+      sql: "SELECT * FROM village WHERE user_id = ?",
+      args: [userId],
+    });
+
+    if (villageResult.rows.length === 0) {
+      return res.status(404).json({ error: "Dorf nicht gefunden" });
+    }
+
+    const village = villageResult.rows[0];
+    const upgradeCost = 100 * village.level; // z. B. 100€/Level
+
+    const userResult = await db.execute({
+      sql: "SELECT money FROM users WHERE id = ?",
+      args: [userId],
+    });
+
+    const userMoney = userResult.rows[0].money;
+
+    if (userMoney < upgradeCost) {
+      return res.status(400).json({ error: "Nicht genug Geld fürs Upgrade" });
+    }
+
+    // Geld abziehen + Level erhöhen
+    await db.execute({
+      sql: "UPDATE users SET money = money - ? WHERE id = ?",
+      args: [upgradeCost, userId],
+    });
+
+    await db.execute({
+      sql: "UPDATE village SET level = level + 1 WHERE id = ?",
+      args: [village.id],
+    });
+
+    res.json({ success: true, newLevel: village.level + 1 });
+  } catch (err) {
+    console.error("❌ Fehler beim Dorf-Upgrade:", err);
+    res.status(500).json({ error: "Serverfehler beim Upgrade" });
+  }
+});
+
 export default router;

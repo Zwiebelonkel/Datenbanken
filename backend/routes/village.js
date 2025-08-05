@@ -24,7 +24,7 @@ router.get("/collect", verifyToken, async (req, res) => {
 
       const villageId = createVillage.lastInsertRowid;
 
-      // 4 Bewohner einfügen
+      // 4 Bewohner einfügen (ohne x/y)
       for (let i = 0; i < 4; i++) {
         await db.execute({
           sql: "INSERT INTO villagers (village_id, income) VALUES (?, 1)",
@@ -42,30 +42,11 @@ router.get("/collect", verifyToken, async (req, res) => {
     const village = villageResult.rows[0];
 
     // 2. Bewohner holen
-    let villagersResult = await db.execute({
+    const villagersResult = await db.execute({
       sql: "SELECT id, income FROM villagers WHERE village_id = ?",
       args: [village.id],
     });
-
-    let villagers = villagersResult.rows;
-
-    // 🔁 Falls keine Bewohner vorhanden sind (z. B. aus alten Daten), neue erstellen
-    if (villagers.length === 0) {
-      console.log("⚠️ Keine Bewohner gefunden – neue werden erstellt");
-      for (let i = 0; i < 4; i++) {
-        await db.execute({
-          sql: "INSERT INTO villagers (village_id, income) VALUES (?, 1)",
-          args: [village.id],
-        });
-      }
-
-      villagersResult = await db.execute({
-        sql: "SELECT id, income FROM villagers WHERE village_id = ?",
-        args: [village.id],
-      });
-
-      villagers = villagersResult.rows;
-    }
+    const villagers = villagersResult.rows;
 
     const villagersIncome = villagers.reduce((sum, v) => sum + v.income, 0);
 

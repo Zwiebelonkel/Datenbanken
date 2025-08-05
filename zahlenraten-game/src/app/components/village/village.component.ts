@@ -1,22 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../loader/loader.component';
 import { VillageService } from '../../services/village.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../loader/loader.component'; // Pfad an
 
 @Component({
   standalone: true,
   selector: 'app-village',
   templateUrl: './village.component.html',
   styleUrls: ['./village.component.scss'],
-  imports: [CommonModule, LoaderComponent]
+  imports: [CommonModule, LoaderComponent],
 })
-export class VillageComponent implements OnInit {
+export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('villageCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+
   money = 0;
   earned = 0;
   minutesPassed = 0;
   isLoading = true;
+
+  animationId = 0;
+  villagers = 4;
+  houses = 2;
+  villagersPositions: { x: number; y: number; dx: number; dy: number }[] = [];
+
+  ctx!: CanvasRenderingContext2D;
 
   constructor(
     private villageService: VillageService,
@@ -28,25 +44,70 @@ export class VillageComponent implements OnInit {
     const username = this.auth.getUsername();
     if (!username) return;
 
-    // 1. Geld vom Server (Userprofil)
+    // 💰 User-Geld holen
     this.profileService.getUserStats(username).subscribe({
       next: (stats) => {
         this.money = stats.money;
-      }
+      },
     });
 
-    // 2. Einkommen seit letztem Collect
+    // 📈 Einkommen berechnen
     this.villageService.collectIncome().subscribe({
       next: (res) => {
         this.earned = res.earned;
         this.minutesPassed = res.minutesPassed;
-        this.money += res.earned; // Optional direkt anzeigen
+        this.money += res.earned;
         this.isLoading = false;
       },
       error: (err) => {
         console.error('❌ Fehler bei collectIncome:', err);
         this.isLoading = false;
-      }
+      },
     });
+
+    // Bewohner zufällig positionieren
+    this.villagersPositions = Array.from({ length: this.villagers }, () => ({
+      x: Math.random() * 380,
+      y: Math.random() * 380,
+      dx: (Math.random() - 0.5) * 2,
+      dy: (Math.random() - 0.5) * 2,
+    }));
+  }
+
+  ngAfterViewInit() {
+    const canvas = this.canvasRef.nativeElement;
+    this.ctx = canvas.getContext('2d')!;
+    this.animate();
+  }
+
+  animate = () => {
+    this.animationId = requestAnimationFrame(this.animate);
+    this.ctx.clearRect(0, 0, 400, 400);
+
+    // 🏠 Häuser zeichnen
+    for (let i = 0; i < this.houses; i++) {
+      const x = 50 + i * 150;
+      const y = 300;
+      this.ctx.fillStyle = '#8B4513';
+      this.ctx.fillRect(x, y, 60, 60);
+    }
+
+    // 👥 Bewohner animieren
+    this.villagersPositions.forEach((v) => {
+      v.x += v.dx;
+      v.y += v.dy;
+
+      if (v.x < 10 || v.x > 390) v.dx *= -1;
+      if (v.y < 10 || v.y > 390) v.dy *= -1;
+
+      this.ctx.beginPath();
+      this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
+      this.ctx.fillStyle = '#3498db';
+      this.ctx.fill();
+    });
+  };
+
+  ngOnDestroy() {
+    cancelAnimationFrame(this.animationId);
   }
 }

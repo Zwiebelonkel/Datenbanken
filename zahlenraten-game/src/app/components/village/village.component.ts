@@ -11,6 +11,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { VillageService } from '../../services/village.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 interface Villager {
   id: number;
@@ -22,7 +23,7 @@ interface Villager {
   selector: 'app-village',
   templateUrl: './village.component.html',
   styleUrls: ['./village.component.scss'],
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, SideBarComponent],
 })
 export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('villageCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;

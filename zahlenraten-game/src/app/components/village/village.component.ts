@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 import { VillageService } from '../../services/village.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
-import { SidebarComponent } from '../sidebar/sidebar.component';
 
 interface Villager {
   id: number;
@@ -60,8 +60,6 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.villageService.collectIncome().subscribe({
       next: (res) => {
-        console.log("🐣 Antwort von collectIncome:", res);
-
         this.earned = res.earned;
         this.minutesPassed = res.minutesPassed;
         this.money += res.earned;
@@ -77,9 +75,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           dy: (Math.random() - 0.5) * 2,
         }));
 
-        this.setCanvasHeight();
-        this.startEarningLoop();
         this.isLoading = false;
+        this.startEarningLoop();
       },
       error: (err) => {
         console.error('❌ Fehler bei collectIncome:', err);
@@ -89,12 +86,12 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.setCanvasHeight();
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
+    this.updateCanvasHeight();
     this.animate();
   }
 
-  setCanvasHeight() {
+  updateCanvasHeight() {
     const canvas = this.canvasRef.nativeElement;
     const neededRows = Math.ceil(this.villageLevel / 3);
     const canvasHeight = Math.max(400, neededRows * 80 + 100);
@@ -103,10 +100,11 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   animate = () => {
     this.animationId = requestAnimationFrame(this.animate);
-    const height = this.canvasRef.nativeElement.height;
-    this.ctx.clearRect(0, 0, 400, height);
 
-    // 🏠 Häuser zeichnen (1 pro Level)
+    const canvas = this.canvasRef.nativeElement;
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 🏠 Häuser zeichnen
     for (let i = 0; i < this.villageLevel; i++) {
       const col = i % 3;
       const row = Math.floor(i / 3);
@@ -123,7 +121,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       v.y += v.dy;
 
       if (v.x < 10 || v.x > 390) v.dx *= -1;
-      if (v.y < 10 || v.y > height - 10) v.dy *= -1;
+      if (v.y < 10 || v.y > canvas.height - 10) v.dy *= -1;
 
       this.ctx.beginPath();
       this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
@@ -140,13 +138,12 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.villageLevel = res.newLevel;
         this.money -= 100 * (res.newLevel - 1);
 
-        this.setCanvasHeight();
-
         this.villageService.collectIncome().subscribe({
           next: (res) => {
             this.earned = res.earned;
             this.minutesPassed = res.minutesPassed;
             this.money += res.earned;
+
             this.villageLevel = res.villageLevel;
             this.villagers = res.villagers;
             this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
@@ -158,7 +155,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
               dy: (Math.random() - 0.5) * 2,
             }));
 
-            this.setCanvasHeight();
+            this.updateCanvasHeight();
             this.isLoading = false;
           },
           error: () => (this.isLoading = false),

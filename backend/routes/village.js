@@ -90,59 +90,38 @@ console.log("📦 Village ID im Code:", village.id);
   }
 });
 
-router.post("/upgrade", verifyToken, async (req, res) => {
+router.post("/village/upgrade", verifyToken, async (req, res) => {
   const userId = req.user.id;
 
   try {
-    // Dorf holen
+    // 1. Dorf holen
     const villageResult = await db.execute({
       sql: "SELECT * FROM village WHERE user_id = ?",
       args: [userId],
     });
 
-    if (villageResult.rows.length === 0) {
-      return res.status(404).json({ message: "Dorf nicht gefunden" });
-    }
-
     const village = villageResult.rows[0];
-    const upgradeCost = village.level * 100;
+    if (!village) return res.status(404).json({ message: "Kein Dorf gefunden" });
 
-    // Prüfe ob Nutzer genug Geld hat
-    const userResult = await db.execute({
-      sql: "SELECT money FROM users WHERE id = ?",
-      args: [userId],
-    });
-
-    const user = userResult.rows[0];
-    if (user.money < upgradeCost) {
-      return res.status(400).json({ message: "Nicht genug Geld" });
-    }
-
+    // 2. Level erhöhen
     const newLevel = village.level + 1;
-
-    // Upgrade durchführen
     await db.execute({
       sql: "UPDATE village SET level = ? WHERE id = ?",
       args: [newLevel, village.id],
     });
 
-    await db.execute({
-      sql: "UPDATE users SET money = money - ? WHERE id = ?",
-      args: [upgradeCost, userId],
-    });
-
-    // 2 neue Bewohner anlegen
+    // 3. 2 neue Bewohner hinzufügen
     for (let i = 0; i < 2; i++) {
       await db.execute({
-        sql: "INSERT INTO villagers (village_id, income, x, y) VALUES (?, 1, ?, ?)",
-        args: [village.id, Math.random() * 400, Math.random() * 400],
+        sql: "INSERT INTO villagers (village_id, income) VALUES (?, ?)",
+        args: [village.id, 1],
       });
     }
 
-    res.json({ newLevel });
+    res.json({ message: "Dorf verbessert", newLevel });
   } catch (err) {
-    console.error("❌ Fehler beim Upgrade:", err);
-    res.status(500).json({ message: "Serverfehler beim Upgrade" });
+    console.error("❌ Fehler bei Dorf-Upgrade:", err);
+    res.status(500).json({ error: "Upgrade fehlgeschlagen" });
   }
 });
 

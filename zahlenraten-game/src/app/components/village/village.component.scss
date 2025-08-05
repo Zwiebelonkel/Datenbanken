@@ -30,15 +30,14 @@
   background-color: #f5f5f5;
 
   canvas {
-    width: 100%;
-    max-width: 380px;
+    display: block;
 
-    // ❌ Diese beiden bitte entfernen
+    // 💣 Diese zwei bitte komplett WEG!
     // height: auto;
     // aspect-ratio: 1 / 1;
 
-    // ✅ Damit style.height aus TS wirkt:
-    display: block;
+    width: 100%;
+    max-width: 380px;
 
     border: 2px solid #000;
     border-radius: 8px;

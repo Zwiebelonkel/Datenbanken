@@ -23,7 +23,7 @@ interface Villager {
   selector: 'app-village',
   templateUrl: './village.component.html',
   styleUrls: ['./village.component.scss'],
-  imports: [CommonModule, LoaderComponent, SideBarComponent],
+  imports: [CommonModule, LoaderComponent, SidebarComponent],
 })
 export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('villageCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;

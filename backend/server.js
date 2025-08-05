@@ -47,20 +47,44 @@ const ALL_ACHIEVEMENTS = [
   { name: "Champion 🏆", description: "Sei auf dem Leaderboard" },
 ];
 
-// Registrierung
+// Registrierung mit Dorf und Bewohnern
 app.post("/api/register", async (req, res) => {
   const { username, password } = req.body;
+
   try {
     const hash = await bcrypt.hash(password, 10);
-    await db.execute({
+
+    // 1. Nutzer anlegen
+    const result = await db.execute({
       sql: "INSERT INTO users (username, password) VALUES (?, ?)",
       args: [username, hash],
     });
-    res.status(201).json({ message: "Registrierung erfolgreich" });
+
+    const userId = result.lastInsertRowid;
+
+    // 2. Dorf anlegen
+    const villageResult = await db.execute({
+      sql: "INSERT INTO village (user_id) VALUES (?)",
+      args: [userId],
+    });
+
+    const villageId = villageResult.lastInsertRowid;
+
+    // 3. 4 Bewohner anlegen
+    for (let i = 1; i <= 4; i++) {
+      await db.execute({
+        sql: "INSERT INTO villagers (village_id, name, level, income) VALUES (?, ?, ?, ?)",
+        args: [villageId, `Bewohner ${i}`, 1, 0.5],
+      });
+    }
+
+    res.status(201).json({ message: "Registrierung & Dorf erfolgreich" });
+
   } catch (err) {
     if (err.message.includes("UNIQUE")) {
       return res.status(409).json({ message: "Benutzername bereits vergeben" });
     }
+    console.error("❌ Fehler bei Registrierung:", err);
     res.status(500).json({ message: "Fehler beim Registrieren" });
   }
 });

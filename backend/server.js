@@ -229,6 +229,54 @@ app.patch("/api/users/password", async (req, res) => {
   }
 });
 
+// Automatisches Einkommen (passiv)
+app.get("/api/collect", verifyToken, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const villageResult = await db.execute({
+      sql: "SELECT * FROM village WHERE user_id = ?",
+      args: [userId],
+    });
+    const village = villageResult.rows[0];
+    if (!village)
+      return res.status(404).json({ message: "Kein Dorf gefunden" });
+
+    const villagersResult = await db.execute({
+      sql: "SELECT income FROM villagers WHERE village_id = ?",
+      args: [village.id],
+    });
+    const villagersIncome = villagersResult.rows.reduce(
+      (sum, row) => sum + row.income,
+      0
+    );
+
+    const now = new Date();
+    const lastCollected = new Date(village.last_collected || now);
+    const minutesPassed = Math.floor((now - lastCollected) / 60000);
+    if (minutesPassed <= 0) {
+      return res.json({ earned: 0, minutesPassed: 0 });
+    }
+
+    const income = (village.base_income + villagersIncome) * minutesPassed;
+
+    await db.execute({
+      sql: "UPDATE users SET money = money + ? WHERE id = ?",
+      args: [income, userId],
+    });
+
+    await db.execute({
+      sql: "UPDATE village SET last_collected = ? WHERE id = ?",
+      args: [now.toISOString(), village.id],
+    });
+
+    res.json({ earned: income, minutesPassed });
+  } catch (err) {
+    console.error("💥 Fehler bei /api/collect:", err);
+    res.status(500).json({ message: "Serverfehler" });
+  }
+});
+
 // Server starten
 app.listen(PORT, () => {
   console.log(`✅ Server läuft auf http://localhost:${PORT}`);

@@ -101,7 +101,7 @@ for (let i = 0; i < this.villageLevel; i++) {
   const y = 300 + Math.floor(i / 3) * -70;
   this.ctx.fillStyle = '#000000';
   this.ctx.fillRect(x, y, 60, 60);
-}}
+}
 
     // 👥 Bewohner animieren
     this.villagersPositions.forEach((v) => {

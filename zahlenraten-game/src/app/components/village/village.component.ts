@@ -119,7 +119,7 @@ updateCanvasHeight() {
 
   canvas.style.width = renderWidth + 'px';
   canvas.style.height = renderHeight + 'px';
-}}
+}
 
   animate = () => {
     this.animationId = requestAnimationFrame(this.animate);

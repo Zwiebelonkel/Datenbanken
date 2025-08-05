@@ -8,6 +8,9 @@
     <p>📈 Einkommen in dieser Zeit: +{{ earned | number:'1.2-2' }} €</p>
   </div>
 
+  <p>🏘️ Dorf-Level: {{ villageLevel }}</p>
+  <p>👥 Bewohner: {{ villagers.length }}</p>
+
   <canvas #villageCanvas width="400" height="400"></canvas>
 
   <button disabled class="btn">Dorf verbessern (kommt bald)</button>

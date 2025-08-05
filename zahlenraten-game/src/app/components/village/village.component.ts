@@ -91,22 +91,35 @@ ngAfterViewInit() {
   const neededRows = Math.ceil(this.villageLevel / 3);
   const canvasHeight = Math.max(400, neededRows * 80 + 100);
 
-  canvas.width = 400; // Optional, falls nicht gesetzt
-  canvas.height = canvasHeight;
+  // Canvas-Rendering-Größe
+  const renderWidth = 380; // exakt wie in SCSS max-width!
+  const renderHeight = canvasHeight;
 
-  // 🔥 Wichtig! Entfernt CSS-Auto-Höhe und setzt echte visuelle Höhe:
-  canvas.style.height = canvasHeight + 'px';
+  canvas.width = renderWidth;
+  canvas.height = renderHeight;
+
+  // Optisch exakt gleiche Größe setzen
+  canvas.style.width = renderWidth + 'px';
+  canvas.style.height = renderHeight + 'px';
 
   this.ctx = canvas.getContext('2d')!;
   this.animate();
 }
 
-  updateCanvasHeight() {
-    const canvas = this.canvasRef.nativeElement;
-    const neededRows = Math.ceil(this.villageLevel / 3);
-    const canvasHeight = Math.max(400, neededRows * 80 + 100);
-    canvas.height = canvasHeight;
-  }
+updateCanvasHeight() {
+  const canvas = this.canvasRef.nativeElement;
+  const neededRows = Math.ceil(this.villageLevel / 3);
+  const canvasHeight = Math.max(400, neededRows * 80 + 100);
+
+  const renderWidth = 380;
+  const renderHeight = canvasHeight;
+
+  canvas.width = renderWidth;
+  canvas.height = renderHeight;
+
+  canvas.style.width = renderWidth + 'px';
+  canvas.style.height = renderHeight + 'px';
+}}
 
   animate = () => {
     this.animationId = requestAnimationFrame(this.animate);

@@ -9,6 +9,7 @@ import { HowToPlayComponent } from './components/how-to-play/how-to-play.compone
 import { ClickerComponent } from './components/clicker/clicker.component';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
+import { VillageComponent } from './components/village/village.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -22,4 +23,5 @@ export const routes: Routes = [
   { path: 'clicker', component: ClickerComponent },
   { path: 'card-shop', component: CardShopComponent },
   { path: 'pack-opening', component: PackOpeningComponent },
+  { path: 'village', component: VillageComponent },
 ];

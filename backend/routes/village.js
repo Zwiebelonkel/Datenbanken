@@ -113,9 +113,9 @@ router.post("/upgrade", verifyToken, async (req, res) => {
     // 3. 2 neue Bewohner hinzufügen
     for (let i = 0; i < 2; i++) {
       await db.execute({
-        sql: "INSERT INTO villagers (village_id, income) VALUES (?, ?)",
-        args: [village.id, 1],
-      });
+  sql: "INSERT INTO villagers (village_id, name, income) VALUES (?, ?, ?)",
+  args: [village.id, `Bewohner ${Date.now()}`, 1],
+});
     }
 
     res.json({ message: "Dorf verbessert", newLevel });

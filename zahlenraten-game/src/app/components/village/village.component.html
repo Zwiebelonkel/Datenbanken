@@ -1,3 +1,4 @@
+
 <!-- Box: Dorfinfo -->
 <div class="village-box" *ngIf="!isLoading">
   <h2>🏡 Dein Dorf</h2>
@@ -5,6 +6,11 @@
   <div class="info-row">
     <span>💰 Aktuelles Geld:</span>
     <span><strong>{{ money | number:'1.2-2' }} €</strong></span>
+  </div>
+
+  <div class="info-row">
+    <span>📊 Einkommen pro Minute:</span>
+    <span>+{{ incomePerMinute | number:'1.2-2' }} €</span>
   </div>
 
   <div class="info-row" *ngIf="earned > 0">

@@ -120,16 +120,34 @@ this.villageService.collectIncome().subscribe({
 
 upgrade() {
   this.isLoading = true;
+
   this.villageService.upgradeVillage().subscribe({
     next: (res) => {
       this.villageLevel = res.newLevel;
-      this.money -= 100 * (res.newLevel - 1); // gleiche Formel wie im Backend
-      this.isLoading = false;
+      this.money -= 100 * (res.newLevel - 1);
+
+      // Neue Daten + Bewohner laden
+      this.villageService.collectIncome().subscribe({
+        next: (res) => {
+          this.earned = res.earned;
+          this.minutesPassed = res.minutesPassed;
+          this.money += res.earned;
+          this.villageLevel = res.villageLevel;
+          this.villagers = res.villagers;
+
+          this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
+            x: Math.random() * 380,
+            y: Math.random() * 380,
+            dx: (Math.random() - 0.5) * 2,
+            dy: (Math.random() - 0.5) * 2,
+          }));
+
+          this.isLoading = false;
+        },
+        error: () => (this.isLoading = false),
+      });
     },
-    error: (err) => {
-      console.error("❌ Upgrade-Fehler:", err);
-      this.isLoading = false;
-    }
+    error: () => (this.isLoading = false),
   });
 }
 

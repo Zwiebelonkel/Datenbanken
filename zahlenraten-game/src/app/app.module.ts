@@ -37,6 +37,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     PackOpeningComponent,
     LoaderComponent,
     SidebarComponent,
+    VillageComponent
   ],
   imports: [
     BrowserModule,

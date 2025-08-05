@@ -38,10 +38,14 @@ export class VillageService {
   /**
    * Upgradet das Dorf
    */
-  upgradeVillage(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.post(`${this.baseUrl}/village/upgrade`, {}, { headers });
-  }
+upgradeVillage(): Observable<{ success: boolean; newLevel: number }> {
+  const headers = this.getAuthHeaders();
+  return this.http.post<{ success: boolean; newLevel: number }>(
+    `${this.baseUrl}/upgrade`,
+    {},
+    { headers }
+  );
+}
 
   /**
    * Baut Authorization-Header mit gespeichertem Token

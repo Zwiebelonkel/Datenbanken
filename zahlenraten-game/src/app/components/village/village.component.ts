@@ -58,30 +58,31 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // 📈 Einkommen + Dorf laden
-    this.villageService.collectIncome().subscribe({
-      next: (res) => {
-        this.earned = res.earned;
-        this.minutesPassed = res.minutesPassed;
-        this.money += res.earned;
+this.villageService.collectIncome().subscribe({
+  next: (res) => {
+    console.log("🐣 Antwort von collectIncome:", res); // <--- DAS HIER!
 
-        this.villageLevel = res.villageLevel || 1;
-        this.villagers = res.villagers || [];
+    this.earned = res.earned;
+    this.minutesPassed = res.minutesPassed;
+    this.money += res.earned;
 
-        // Bewohner zufällig positionieren
-        this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
-          x: Math.random() * 380,
-          y: Math.random() * 380,
-          dx: (Math.random() - 0.5) * 2,
-          dy: (Math.random() - 0.5) * 2,
-        }));
+    this.villageLevel = res.villageLevel || 1;
+    this.villagers = res.villagers || [];
 
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('❌ Fehler bei collectIncome:', err);
-        this.isLoading = false;
-      },
-    });
+    this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
+      x: Math.random() * 380,
+      y: Math.random() * 380,
+      dx: (Math.random() - 0.5) * 2,
+      dy: (Math.random() - 0.5) * 2,
+    }));
+
+    this.isLoading = false;
+  },
+  error: (err) => {
+    console.error('❌ Fehler bei collectIncome:', err);
+    this.isLoading = false;
+  },
+});
   }
 
   ngAfterViewInit() {

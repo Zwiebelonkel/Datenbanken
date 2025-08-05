@@ -118,7 +118,23 @@ this.villageService.collectIncome().subscribe({
     });
   };
 
+upgrade() {
+  this.isLoading = true;
+  this.villageService.upgradeVillage().subscribe({
+    next: (res) => {
+      this.villageLevel = res.newLevel;
+      this.money -= 100 * (res.newLevel - 1); // gleiche Formel wie im Backend
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error("❌ Upgrade-Fehler:", err);
+      this.isLoading = false;
+    }
+  });
+}
+
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
   }
+
 }

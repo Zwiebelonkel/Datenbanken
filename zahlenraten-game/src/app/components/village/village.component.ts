@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VillageService } from '../../services/village.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-village',

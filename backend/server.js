@@ -131,15 +131,52 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
-// Benutzer löschen
+// Benutzer + alle abhängigen Daten löschen
 app.delete("/api/users/:id", async (req, res) => {
+  const userId = req.params.id;
+
   try {
+    // 1. Alle villagers löschen, die zu einem village des Users gehören
+    await db.execute({
+      sql: `DELETE FROM villagers WHERE village_id IN (
+               SELECT id FROM village WHERE user_id = ?
+             )`,
+      args: [userId],
+    });
+
+    // 2. Dorf löschen
+    await db.execute({
+      sql: "DELETE FROM village WHERE user_id = ?",
+      args: [userId],
+    });
+
+    // 3. Achievements löschen
+    await db.execute({
+      sql: "DELETE FROM achievements WHERE user_id = ?",
+      args: [userId],
+    });
+
+    // 4. Scores löschen
+    await db.execute({
+      sql: "DELETE FROM scores WHERE user_id = ?",
+      args: [userId],
+    });
+
+    // 5. Karten löschen
+    await db.execute({
+      sql: "DELETE FROM cards WHERE user_id = ?",
+      args: [userId],
+    });
+
+    // 6. Benutzer selbst löschen
     await db.execute({
       sql: "DELETE FROM users WHERE id = ?",
-      args: [req.params.id],
+      args: [userId],
     });
+
     res.status(200).json({ success: true });
   } catch (err) {
+    console.error("❌ Fehler beim Benutzerlöschen:", err);
     res.status(500).json({ error: "Fehler beim Löschen des Benutzers" });
   }
 });

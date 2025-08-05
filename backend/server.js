@@ -8,6 +8,8 @@ import moneyRoutes from "./routes/money.js";
 import cardsRoutes from "./routes/cards.js";
 import db from "./db.js";
 import { verifyToken } from './auth.js';
+import villageRoutes from './routes/village.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +21,7 @@ app.use("/api/scores", scoresRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/money", moneyRoutes);
 app.use("/api/cards", cardsRoutes);
+app.use('/api/village', villageRoutes);
 
 const ALL_ACHIEVEMENTS = [
   { name: "First Game 1️⃣", description: "Dein erstes Spiel!" },

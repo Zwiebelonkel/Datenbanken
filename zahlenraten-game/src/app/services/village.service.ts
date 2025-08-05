@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class VillageService {
-  private baseUrl = 'https://outside-between.onrender.com/api';
+  private baseUrl = 'https://outside-between.onrender.com/api/village';
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 

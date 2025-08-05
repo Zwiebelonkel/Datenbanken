@@ -74,7 +74,7 @@ app.post("/api/register", async (req, res) => {
     const villageId = villageResult.lastInsertRowid;
 
     // 3. 4 Bewohner anlegen
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 2; i++) {
       await db.execute({
         sql: "INSERT INTO villagers (village_id, name, level, income) VALUES (?, ?, ?, ?)",
         args: [villageId, `Bewohner ${i}`, 1, 0.5],

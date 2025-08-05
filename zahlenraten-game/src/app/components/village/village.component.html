@@ -1,0 +1,17 @@
+<div class="village-container" *ngIf="!isLoading">
+  <h2>🏡 Dein Dorf</h2>
+
+  <p>💰 Aktuelles Geld: {{ money | number:'1.2-2' }} €</p>
+
+  <div *ngIf="earned > 0">
+    <p>⏱️ Inaktivzeit: {{ minutesPassed }} Minuten</p>
+    <p>📈 Einkommen in dieser Zeit: +{{ earned | number:'1.2-2' }} €</p>
+  </div>
+
+  <button disabled class="btn">Dorf verbessern (kommt bald)</button>
+  <button disabled class="btn">Bewohner verbessern (kommt bald)</button>
+</div>
+
+<div *ngIf="isLoading">
+  <p>⏳ Lade dein Dorf...</p>
+</div>

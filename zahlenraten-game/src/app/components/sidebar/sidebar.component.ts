@@ -65,6 +65,11 @@ export class SidebarComponent implements OnInit {
     this.sidebarOpen = false;
   }
 
+  goToVillage() {
+    this.router.navigate(['/village']);
+    this.sidebarOpen = false;
+  }
+
   shop() {
     this.router.navigate(['/card-shop']);
     this.sidebarOpen = false;

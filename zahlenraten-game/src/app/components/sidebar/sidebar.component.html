@@ -16,10 +16,7 @@
   >
     🛠️ Admin
   </button>
-<button
-    *ngIf="authService.getRole()?.toLowerCase() === 'admin'"
-    (click)="goToVillage()"
-  >
+<button (click)="goToVillage()">
     🛖 Dorf
   </button>
   <button (click)="howToPlay()">❓ Tutorial</button>

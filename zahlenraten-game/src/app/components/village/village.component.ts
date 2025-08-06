@@ -93,8 +93,12 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           const houseIndex = Math.floor(i / 2);
           const col = houseIndex % 3;
           const row = Math.floor(houseIndex / 3);
-          const homeX = 40 + col * 120 + 30;
-          const homeY = 70 + row * 80 + 30;
+          const baseHomeX = 40 + col * 120 + 30;
+          const baseHomeY = 70 + row * 80 + 30; // z.B. mit Verschiebung nach unten
+
+          // Jetzt Bewohner horizontal versetzt positionieren, z.B. +/- 8px
+          const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
+          const homeY = baseHomeY;
 
           return {
             ...v,

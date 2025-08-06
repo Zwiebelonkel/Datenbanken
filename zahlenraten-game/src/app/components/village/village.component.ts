@@ -293,7 +293,7 @@ collectEarnings() {
 
       this.ctx.beginPath();
       this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-      this.ctx.fillStyle = '#fff';
+      this.ctx.fillStyle = '##2ecc71';
       this.ctx.fill();
     });
   };

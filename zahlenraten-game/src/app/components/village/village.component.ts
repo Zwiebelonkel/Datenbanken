@@ -161,6 +161,7 @@ ngAfterViewInit() {
     canvas.height = canvasHeight;
     canvas.style.width = renderWidth + 'px';
     canvas.style.height = canvasHeight + 'px';
+    console.log("resizing")
   }
 
   getUpgradeCost(level: number): number {

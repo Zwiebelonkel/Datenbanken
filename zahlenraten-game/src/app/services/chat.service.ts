@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  private apiUrl = 'https://outside-between.onrender.com/api/chat'; // API-URL für den Chat-Service
-
+  private apiUrl = 'https://outside-between.onrender.com/api/chat';
   constructor(private http: HttpClient) {}
 
   // Nachricht senden
@@ -15,7 +14,7 @@ export class ChatService {
   // Die letzten Nachrichten abrufen
   getLatestMessages(limit = 50) {
     return this.http.get(`${this.apiUrl}/latest`, {
-      params: { limit: limit.toString() }
+      params: { limit: limit.toString() },
     });
   }
 }

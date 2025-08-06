@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ChatService } from '../../services/chat.service'; // ggf. Pfad anpassen
 
 interface ChatMessage {
   username: string;
@@ -21,7 +22,7 @@ export class ChatComponent implements OnInit {
   username = 'Gpt'; // Optional: aus AuthService holen
   loading = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private chatService: ChatService) {}
 
   ngOnInit() {
     this.loadMessages();
@@ -29,8 +30,8 @@ export class ChatComponent implements OnInit {
   }
 
   loadMessages() {
-    this.http.get<ChatMessage[]>('/api/chat/latest').subscribe(data => {
-      this.messages = data;
+    this.chatService.getLatestMessages().subscribe((data) => {
+      this.messages = data as ChatMessage[];
     });
   }
 
@@ -39,11 +40,10 @@ export class ChatComponent implements OnInit {
 
     const msg = this.newMessage;
     this.newMessage = '';
-    this.http.post('/api/chat/send', {
-      username: this.username,
-      message: msg
-    }).subscribe(() => {
-      this.loadMessages();
-    });
+    this.chatService
+      .sendMessage({ username: this.username, message: msg })
+      .subscribe(() => {
+        this.loadMessages();
+      });
   }
 }

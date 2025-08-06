@@ -131,11 +131,14 @@ getUpgradeCost(level: number): number {
 upgradeVillager(villager: Villager) {
   this.isLoading = true;
 
+  const oldLevel = villager.level;
+  const upgradeCost = this.getUpgradeCost(oldLevel);
+
   this.villageService.upgradeVillager(villager.id).subscribe({
     next: (res) => {
       villager.level = res.newLevel;
       villager.income = res.newIncome;
-      this.money -= 100 * res.newLevel; // optional
+      this.money -= upgradeCost;
       this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
       this.isLoading = false;
     },

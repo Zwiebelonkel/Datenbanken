@@ -86,17 +86,19 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.incomePerMinute = res.villagers.reduce((sum, v) => sum + v.income, 0);
 
         this.villagers = res.villagers.map((v, i) => {
-          const col = i % 3;
-          const row = Math.floor(i / 3);
+          const houseIndex = Math.floor(i / 2);
+          const col = houseIndex % 3;
+          const row = Math.floor(houseIndex / 3);
           const homeX = 40 + col * 120 + 30;
           const homeY = 50 + row * 80 + 30;
+
           return {
             ...v,
             x: homeX,
             y: homeY,
             state: 'goingToMine',
-            targetX: this.mine.x,
-            targetY: this.mine.y,
+            targetX: this.mine.x + (i % 2) * 10,
+            targetY: this.mine.y + Math.floor(i % 2) * 10,
             workTimer: 0,
             restTimer: 0,
             homeX,
@@ -174,7 +176,9 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // 🏠 Häuser
-    for (let i = 0; i < this.villageLevel; i++) {
+    const numHouses = Math.ceil(this.villagers.length / 2);
+
+    for (let i = 0; i < numHouses; i++) {
       const col = i % 3;
       const row = Math.floor(i / 3);
       const x = 40 + col * 120;
@@ -217,8 +221,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
             v.workTimer--;
             if (v.workTimer <= 0) {
               v.state = 'goingToMarket';
-              v.targetX = this.market.x;
-              v.targetY = this.market.y;
+              v.targetX = this.market.x + (v.id % 2) * 10;
+              v.targetY = this.market.y + (v.id % 2) * 10;
             }
             break;
           case 'goingToMarket':
@@ -279,8 +283,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
                 x: homeX,
                 y: homeY,
                 state: 'goingToMine',
-                targetX: this.mine.x,
-                targetY: this.mine.y,
+                targetX: this.mine.x + (i % 2) * 10,
+                targetY: this.mine.y + Math.floor(i % 2) * 10,
                 workTimer: 0,
                 restTimer: 0,
                 homeX,

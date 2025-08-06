@@ -63,9 +63,20 @@
       <li *ngFor="let v of villagers">
         <strong>{{ v.name }}</strong>
         <span>⭐ {{ v.level }}</span>
-        <button (click)="upgradeVillager(v)">⬆️</button>
+
+        <!-- 💸 Upgrade-Kosten anzeigen -->
+        <span class="cost">💰 {{ getUpgradeCost(v.level) }} €</span>
+
+        <!-- ⬆️ Button nur aktiv, wenn genug Geld -->
+        <button
+          (click)="upgradeVillager(v)"
+          [disabled]="money < getUpgradeCost(v.level)"
+        >
+          ⬆️
+        </button>
       </li>
     </ul>
+
     <button class="btn close-btn" (click)="showVillagerPopup = false">✖️ Schließen</button>
   </div>
 </div>

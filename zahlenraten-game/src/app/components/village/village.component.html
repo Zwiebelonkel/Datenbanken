@@ -51,7 +51,23 @@
   </button>
 
   <button class="btn" disabled>💪 Bewohner verbessern (kommt bald)</button>
+  <button class="btn" (click)="showVillagerPopup = true">
+  👤 Bewohner anzeigen & verbessern
+</button>
 </div>
 
+<div class="popup-backdrop" *ngIf="showVillagerPopup">
+  <div class="popup">
+    <h3>👥 Bewohnerliste</h3>
+    <ul>
+      <li *ngFor="let v of villagers">
+        <strong>{{ v.name }}</strong>
+        <span>⭐ {{ v.level }}</span>
+        <button (click)="upgradeVillager(v)">⬆️</button>
+      </li>
+    </ul>
+    <button class="btn close-btn" (click)="showVillagerPopup = false">✖️ Schließen</button>
+  </div>
+</div>
 <!-- 🔄 Loader -->
 <app-loader *ngIf="isLoading" />

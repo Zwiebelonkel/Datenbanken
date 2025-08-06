@@ -109,7 +109,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.isLoading = false;
-        this.startEarningLoop();
+        //this.startEarningLoop();
       },
       error: (err) => {
         console.error('❌ Fehler bei collectIncome:', err);

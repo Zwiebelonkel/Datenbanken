@@ -124,30 +124,30 @@ const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmi
   }
 
 ngAfterViewInit() {
-  const canvas = this.canvasRef.nativeElement;
+  if (!this.isLoading) {  // Stelle sicher, dass die Daten geladen sind
+    const canvas = this.canvasRef.nativeElement;
+    const neededRows = Math.ceil(this.villageLevel / 3);
+    const canvasHeight = Math.max(400, neededRows * 80 + 100);
 
-  const neededRows = Math.ceil(this.villageLevel / 3);
-  const canvasHeight = Math.max(400, neededRows * 80 + 100);
+    const renderWidth = 380;
+    canvas.width = renderWidth;
+    canvas.height = canvasHeight;
 
-  const renderWidth = 380;
-  canvas.width = renderWidth;
-  canvas.height = canvasHeight;
+    canvas.style.width = renderWidth + 'px';
+    canvas.style.height = canvasHeight + 'px';
 
-  canvas.style.width = renderWidth + 'px';
-  canvas.style.height = canvasHeight + 'px';
+    this.ctx = canvas.getContext('2d')!;
+    this.updateCanvasHeight();
 
-  this.ctx = canvas.getContext('2d')!;
-  this.updateCanvasHeight();
+    // ➕ Zentriere Mine und Markt
+    this.mine.x = renderWidth / 2 - 60;
+    this.market.x = renderWidth / 2 + 20;
+    this.mine.y = 10;
+    this.market.y = 10;
 
-  // ➕ Zentriere Mine und Markt
-  this.mine.x = renderWidth / 2 - 60;
-  this.market.x = renderWidth / 2 + 20;
-  this.mine.y = 10;
-  this.market.y = 10;
-  
-  this.updateCanvasHeight();
-  this.animate();
-
+    this.updateCanvasHeight();
+    this.animate();
+  }
 }
 
 

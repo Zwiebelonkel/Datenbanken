@@ -50,7 +50,7 @@ collectIncome(): Observable<{
    */
 upgradeVillage(): Observable<{ success?: boolean; newLevel: number; newMoney: number }> {
   const headers = this.getAuthHeaders();
-  return this.http.post<{ success: boolean; newLevel: number }>(
+  return this.http.post<{ success?: boolean; newLevel: number; newMoney: number }>(
     `${this.baseUrl}/upgrade`,
     {},
     { headers }
@@ -59,12 +59,13 @@ upgradeVillage(): Observable<{ success?: boolean; newLevel: number; newMoney: nu
 
 upgradeVillager(id: number): Observable<{ newLevel: number; newIncome: number; newMoney: number }> {
   const headers = this.getAuthHeaders();
-  return this.http.post<{ newLevel: number; newIncome: number }>(
+  return this.http.post<{ newLevel: number; newIncome: number; newMoney: number }>(
     `${this.baseUrl}/upgrade-villager`,
     { villagerId: id },
     { headers }
   );
 }
+
 
   /**
    * Baut Authorization-Header mit gespeichertem Token

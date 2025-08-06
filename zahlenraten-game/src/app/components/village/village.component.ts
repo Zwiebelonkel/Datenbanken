@@ -6,6 +6,7 @@ import {
   AfterViewInit,
   OnDestroy,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
@@ -40,7 +41,7 @@ interface VillagerAnim extends Villager {
   selector: 'app-village',
   templateUrl: './village.component.html',
   styleUrls: ['./village.component.scss'],
-  imports: [CommonModule, LoaderComponent, SidebarComponent],
+  imports: [CommonModule, LoaderComponent, SidebarComponent, FormsModule],
 })
 export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('villageCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;

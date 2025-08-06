@@ -94,7 +94,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           const col = houseIndex % 3;
           const row = Math.floor(houseIndex / 3);
           const homeX = 40 + col * 120 + 30;
-          const homeY = 50 + row * 80 + 30;
+          const homeY = 70 + row * 80 + 30;
 
           return {
             ...v,
@@ -327,7 +327,7 @@ collectEarnings() {
               const col = i % 3;
               const row = Math.floor(i / 3);
               const homeX = 40 + col * 120 + 30;
-              const homeY = 50 + row * 80 + 30;
+              const homeY = 70 + row * 80 + 30;
               return {
                 ...v,
                 x: homeX,

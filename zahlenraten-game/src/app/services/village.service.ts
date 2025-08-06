@@ -57,6 +57,15 @@ upgradeVillage(): Observable<{ success: boolean; newLevel: number }> {
   );
 }
 
+upgradeVillager(id: number): Observable<{ newLevel: number; newIncome: number }> {
+  const headers = this.getAuthHeaders();
+  return this.http.post<{ newLevel: number; newIncome: number }>(
+    `${this.baseUrl}/upgrade-villager`,
+    { villagerId: id },
+    { headers }
+  );
+}
+
   /**
    * Baut Authorization-Header mit gespeichertem Token
    */

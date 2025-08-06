@@ -1,32 +1,21 @@
-// services/chat.service.js
-import db from '../db.js';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-export const ChatService = {
-  sendMessage(username, message) {
-    return new Promise((resolve, reject) => {
-      if (!username || !message || message.length > 200) {
-        return reject('Ungültige Nachricht');
-      }
+@Injectable({ providedIn: 'root' })
+export class ChatService {
+  private apiUrl = 'https://dein-api-endpoint.com/api/chat';  // API-URL für den Chat-Service
 
-      const sql = 'INSERT INTO chat_messages (username, message) VALUES (?, ?)';
-      db.run(sql, [username, message], function (err) {
-        if (err) return reject(err);
-        resolve({ success: true });
-      });
-    });
-  },
+  constructor(private http: HttpClient) {}
 
+  // Nachricht senden
+  sendMessage(data: { username: string; message: string }) {
+    return this.http.post(`${this.apiUrl}/send`, data);
+  }
+
+  // Die letzten Nachrichten abrufen
   getLatestMessages(limit = 50) {
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT username, message, created_at
-                   FROM chat_messages
-                   ORDER BY created_at DESC
-                   LIMIT ?`;
-
-      db.all(sql, [limit], (err, rows) => {
-        if (err) return reject(err);
-        resolve(rows.reverse()); // Jüngste zuletzt
-      });
+    return this.http.get(`${this.apiUrl}/latest`, {
+      params: { limit: limit.toString() }
     });
   }
-};
+}

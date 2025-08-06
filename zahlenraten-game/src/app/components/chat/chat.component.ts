@@ -12,7 +12,8 @@ interface ChatMessage {
 @Component({
   selector: 'app-global-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
+  imports: [CommonModule, FormsModule],
 })
 export class ChatComponent implements OnInit {
   messages: ChatMessage[] = [];

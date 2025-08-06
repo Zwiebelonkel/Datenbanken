@@ -145,7 +145,7 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
     const villager = result.rows[0];
     if (!villager) return res.status(404).json({ message: "Bewohner nicht gefunden" });
 
-    const upgradeCost = 100 * (villager.level + 1);
+    const upgradeCost = 10 * (villager.level + 1);
     if (villager.money < upgradeCost) {
       return res.status(400).json({ message: "Nicht genug Geld" });
     }

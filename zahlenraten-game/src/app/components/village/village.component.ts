@@ -315,6 +315,7 @@ collectEarnings() {
       this.ctx.lineWidth = 2;
       this.ctx.strokeStyle = '#000000'; // schwarze Umrandung
       this.ctx.stroke();
+      this.updateCanvasHeight();
     });
   };
 

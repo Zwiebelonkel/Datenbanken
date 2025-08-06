@@ -23,7 +23,7 @@ export class VillageService {
       earned: number;
       minutesPassed: number;
       villageLevel: number;
-      villagers: { id: number; income: number }[];
+      villagers: { id: number; name: string; level: number; income: number }[];
     }>(`${this.baseUrl}/collect`, { headers });
   }
 

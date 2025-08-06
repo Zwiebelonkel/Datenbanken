@@ -15,11 +15,16 @@
   <span><strong>{{ unsavedEarnings | number: '1.2-2' }} €</strong></span>
 </div>
 
-<div class="info-row" *ngIf="unsavedEarnings > 0">
-  <button class="btn small" (click)="collectEarnings()" [disabled]="isLoading">
+<div class="info-row">
+  <button
+    class="btn small"
+    (click)="collectEarnings()"
+    [disabled]="isLoading || unsavedEarnings <= 0"
+  >
     💵 Geld abholen
   </button>
 </div>
+
 
   <div class="info-row" *ngIf="earned > 0">
     <span>⏱️ Inaktivzeit:</span>

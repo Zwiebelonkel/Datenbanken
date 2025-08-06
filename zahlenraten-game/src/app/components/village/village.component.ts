@@ -36,6 +36,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   villageLevel = 1;
   villagers: Villager[] = [];
   incomePerMinute = 0;
+  showVillagerPopup = false;
 
   animationId = 0;
   villagersPositions: { x: number; y: number; dx: number; dy: number }[] = [];
@@ -120,6 +121,12 @@ updateCanvasHeight() {
   canvas.style.width = renderWidth + 'px';
   canvas.style.height = renderHeight + 'px';
 }
+
+  upgradeVillager(villager: Villager) {
+  villager.level += 1;
+  villager.income += 0.2;
+  // Hier evtl. Backend-Update einfügen!
+  }
 
   animate = () => {
     this.animationId = requestAnimationFrame(this.animate);

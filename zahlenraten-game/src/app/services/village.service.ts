@@ -67,10 +67,13 @@ upgradeVillager(id: number): Observable<{ newLevel: number; newIncome: number; n
 }
 
 renameVillager(id: number, name: string) {
-  return this.http.patch<{ newName: string }>(`/api/village/villager/${id}/rename`, { name });
+  const headers = this.getAuthHeaders(); // Falls Auth nötig ist
+  return this.http.patch<{ newName: string }>(
+    `${this.baseUrl}/villager/${id}/rename`,
+    { name },
+    { headers }
+  );
 }
-
-
 
 
   /**

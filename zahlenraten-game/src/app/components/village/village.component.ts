@@ -12,6 +12,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { VillageService } from '../../services/village.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
+import { MoneyService } from '../../services/money.service';
 
 interface Villager {
   id: number;
@@ -65,7 +66,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private villageService: VillageService,
     private profileService: ProfileService,
-    private auth: AuthService
+    private auth: AuthService,
+    private moneyService: MoneyService
   ) {}
 
   ngOnInit() {
@@ -152,10 +154,28 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     return 10 * (level + 1);
   }
 
-  collectEarnings() {
-  this.money += this.unsavedEarnings;
-  this.unsavedEarnings = 0;
+collectEarnings() {
+  const username = this.auth.getUsername();
+  const newAmount = this.money + this.unsavedEarnings;
+
+  if (!username) return;
+
+  this.isLoading = true;
+
+  this.moneyService.updateMoney({ username, amount: newAmount }).subscribe({
+    next: () => {
+      this.money = newAmount;
+      this.unsavedEarnings = 0;
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('❌ Fehler beim Speichern des Geldes:', err);
+      alert('Fehler beim Aktualisieren deines Geldes.');
+      this.isLoading = false;
+    },
+  });
 }
+
 
   upgradeVillager(villager: VillagerAnim) {
     this.isLoading = true;

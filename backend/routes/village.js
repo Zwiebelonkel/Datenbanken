@@ -43,7 +43,7 @@ router.get("/collect", verifyToken, async (req, res) => {
 console.log("📦 Village ID im Code:", village.id);
     // 2. Bewohner holen
     const villagersResult = await db.execute({
-      sql: "SELECT id, income FROM villagers WHERE village_id = ?",
+      sql: "SELECT id, name, level, income FROM villagers WHERE village_id = ?",
       args: [village.id],
     });
     const villagers = villagersResult.rows;

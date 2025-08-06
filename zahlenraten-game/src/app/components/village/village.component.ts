@@ -50,6 +50,9 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   minutesPassed = 0;
   isLoading = true;
   unsavedEarnings = 0;
+  editingVillagerId: number | null = null;
+  newName = '';
+
 
 
   villageLevel = 1;
@@ -373,6 +376,35 @@ const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmi
 //      this.unsavedEarnings += perSecond;
 //    }, 1000);
 //  }
+enableRename(v: VillagerAnim) {
+  this.editingVillagerId = v.id;
+  this.newName = v.name;
+  setTimeout(() => {
+    // Fokussiert das Input-Feld nach dem Anzeigen (optional)
+    const inputs = document.querySelectorAll('input');
+    const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
+    lastInput?.focus();
+  });
+}
+
+  renameVillager(v: VillagerAnim) {
+  if (!this.newName.trim() || this.newName === v.name) {
+    this.editingVillagerId = null;
+    return;
+  }
+
+  this.villageService.renameVillager(v.id, this.newName.trim()).subscribe({
+    next: (res) => {
+      v.name = res.newName; // vom Backend zurückgegeben
+      this.editingVillagerId = null;
+    },
+    error: (err) => {
+      console.error('Fehler beim Umbennen:', err);
+      alert('Name konnte nicht geändert werden.');
+      this.editingVillagerId = null;
+    },
+  });
+}
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);

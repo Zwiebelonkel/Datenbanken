@@ -60,8 +60,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   animationId = 0;
   ctx!: CanvasRenderingContext2D;
 
-  mine = { x: 160, y: 0 };
-  market = { x: 260, y: 0 };
+  mine = { x: 0, y: 0 };
+  market = { x: 0, y: 0 };
 
   constructor(
     private villageService: VillageService,
@@ -120,23 +120,31 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
-    const canvas = this.canvasRef.nativeElement;
+ngAfterViewInit() {
+  const canvas = this.canvasRef.nativeElement;
 
-    const neededRows = Math.ceil(this.villageLevel / 3);
-    const canvasHeight = Math.max(400, neededRows * 80 + 100);
+  const neededRows = Math.ceil(this.villageLevel / 3);
+  const canvasHeight = Math.max(400, neededRows * 80 + 100);
 
-    const renderWidth = 380;
-    canvas.width = renderWidth;
-    canvas.height = canvasHeight;
+  const renderWidth = 380;
+  canvas.width = renderWidth;
+  canvas.height = canvasHeight;
 
-    canvas.style.width = renderWidth + 'px';
-    canvas.style.height = canvasHeight + 'px';
+  canvas.style.width = renderWidth + 'px';
+  canvas.style.height = canvasHeight + 'px';
 
-    this.ctx = canvas.getContext('2d')!;
-    this.updateCanvasHeight();
-    this.animate();
-  }
+  this.ctx = canvas.getContext('2d')!;
+  this.updateCanvasHeight();
+
+  // ➕ Zentriere Mine und Markt
+  this.mine.x = renderWidth / 2 - 60;
+  this.market.x = renderWidth / 2 + 20;
+  this.mine.y = 10;
+  this.market.y = 10;
+
+  this.animate();
+}
+
 
   updateCanvasHeight() {
     const canvas = this.canvasRef.nativeElement;
@@ -263,8 +271,8 @@ collectEarnings() {
             v.workTimer--;
             if (v.workTimer <= 0) {
               v.state = 'goingToMarket';
-              v.targetX = this.market.x + (v.id % 2) * 10;
-              v.targetY = this.market.y + (v.id % 2) * 10;
+              v.targetX = this.market.x + 20;
+              v.targetY = this.market.y + 20;
             }
             break;
           case 'goingToMarket':
@@ -284,8 +292,8 @@ collectEarnings() {
             v.restTimer--;
             if (v.restTimer <= 0) {
               v.state = 'goingToMine';
-              v.targetX = this.mine.x;
-              v.targetY = this.mine.y;
+              v.targetX = this.mine.x + 20;
+              v.targetY = this.mine.y + 20;
             }
             break;
         }

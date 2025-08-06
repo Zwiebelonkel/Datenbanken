@@ -94,36 +94,65 @@ router.post("/upgrade", verifyToken, async (req, res) => {
   const userId = req.user.id;
 
   try {
-    // 1. Dorf holen
-    const villageResult = await db.execute({
-      sql: "SELECT * FROM village WHERE user_id = ?",
+    // 1. Dorf und Geld holen
+    const result = await db.execute({
+      sql: `
+        SELECT v.id as villageId, v.level, u.money 
+        FROM village v 
+        JOIN users u ON v.user_id = u.id 
+        WHERE v.user_id = ?
+      `,
       args: [userId],
     });
 
-    const village = villageResult.rows[0];
-    if (!village) return res.status(404).json({ message: "Kein Dorf gefunden" });
+    const data = result.rows[0];
+    if (!data) return res.status(404).json({ message: "Kein Dorf gefunden" });
 
-    // 2. Level erhöhen
-    const newLevel = village.level + 1;
-    await db.execute({
-      sql: "UPDATE village SET level = ? WHERE id = ?",
-      args: [newLevel, village.id],
-    });
+    const currentLevel = data.level;
+    const upgradeCost = 100 * currentLevel;
 
-    // 3. 2 neue Bewohner hinzufügen
-    for (let i = 0; i < 2; i++) {
-      await db.execute({
-  sql: "INSERT INTO villagers (village_id, name, income) VALUES (?, ?, ?)",
-  args: [village.id, `Bewohner ${Date.now()}`, 1],
-});
+    if (data.money < upgradeCost) {
+      return res.status(400).json({ message: "Nicht genug Geld" });
     }
 
-    res.json({ message: "Dorf verbessert", newLevel });
+    const newLevel = currentLevel + 1;
+
+    // 2. Geld abziehen + Level erhöhen (Transaktion empfohlen, falls verfügbar)
+    await db.execute({
+      sql: "UPDATE users SET money = money - ? WHERE id = ?",
+      args: [upgradeCost, userId],
+    });
+
+    await db.execute({
+      sql: "UPDATE village SET level = ? WHERE id = ?",
+      args: [newLevel, data.villageId],
+    });
+
+    // 3. Neue Bewohner hinzufügen
+    for (let i = 0; i < 2; i++) {
+      await db.execute({
+        sql: "INSERT INTO villagers (village_id, name, income) VALUES (?, ?, ?)",
+        args: [data.villageId, `Bewohner ${Date.now()}`, 1],
+      });
+    }
+
+    // 4. Neuen Geldstand abrufen und zurückgeben
+    const moneyRes = await db.execute({
+      sql: "SELECT money FROM users WHERE id = ?",
+      args: [userId],
+    });
+
+    res.json({
+      message: "Dorf verbessert",
+      newLevel,
+      newMoney: moneyRes.rows[0].money,
+    });
   } catch (err) {
     console.error("❌ Fehler bei Dorf-Upgrade:", err);
     res.status(500).json({ error: "Upgrade fehlgeschlagen" });
   }
 });
+
 
 router.post("/upgrade-villager", verifyToken, async (req, res) => {
   const userId = req.user.id;
@@ -164,7 +193,19 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
       args: [upgradeCost, userId],
     });
 
-    res.json({ message: "Upgrade erfolgreich", newLevel, newIncome });
+    // Aktuellen Geldstand abfragen
+const moneyRes = await db.execute({
+  sql: "SELECT money FROM users WHERE id = ?",
+  args: [userId],
+});
+
+res.json({
+  message: "Upgrade erfolgreich",
+  newLevel,
+  newIncome,
+  newMoney: moneyRes.rows[0].money,
+});
+
   } catch (err) {
     console.error("❌ Fehler bei Bewohner-Upgrade:", err);
     res.status(500).json({ error: "Upgrade fehlgeschlagen" });

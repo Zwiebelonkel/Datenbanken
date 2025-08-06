@@ -15,6 +15,8 @@ import { AuthService } from '../../services/auth.service';
 
 interface Villager {
   id: number;
+  name: string;
+  level: number;
   income: number;
 }
 

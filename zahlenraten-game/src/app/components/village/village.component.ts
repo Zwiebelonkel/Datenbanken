@@ -237,7 +237,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
             v.state = 'selling';
             break;
           case 'selling':
-            this.unsavedEarnings += v.income; // ✅ NEU            v.state = 'goingHome';
+            this.unsavedEarnings += v.income; // ✅ NEU
+            v.state = 'goingHome';
             v.targetX = v.homeX;
             v.targetY = v.homeY;
             break;

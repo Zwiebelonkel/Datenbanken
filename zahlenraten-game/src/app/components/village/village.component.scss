@@ -74,3 +74,53 @@
     margin: 1.2rem 1rem;
   }
 }
+
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 90%;
+  width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+  h3 {
+    margin-top: 0;
+    text-align: center;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      align-items: center;
+
+      button {
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.3rem 0.6rem;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .close-btn {
+    margin-top: 1rem;
+    background: #e74c3c;
+  }
+}

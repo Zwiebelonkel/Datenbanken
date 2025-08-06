@@ -124,7 +124,6 @@ const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmi
   }
 
 ngAfterViewInit() {
-  if (!this.isLoading) {  // Stelle sicher, dass die Daten geladen sind
     const canvas = this.canvasRef.nativeElement;
     const neededRows = Math.ceil(this.villageLevel / 3);
     const canvasHeight = Math.max(400, neededRows * 80 + 100);
@@ -147,7 +146,6 @@ ngAfterViewInit() {
 
     this.updateCanvasHeight();
     this.animate();
-  }
 }
 
 

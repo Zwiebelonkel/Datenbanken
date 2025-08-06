@@ -48,6 +48,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   earned = 0;
   minutesPassed = 0;
   isLoading = true;
+  unsavedEarnings = 0;
+
 
   villageLevel = 1;
   villagers: VillagerAnim[] = [];
@@ -150,6 +152,11 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     return 10 * (level + 1);
   }
 
+  collectEarnings() {
+  this.money += this.unsavedEarnings;
+  this.unsavedEarnings = 0;
+}
+
   upgradeVillager(villager: VillagerAnim) {
     this.isLoading = true;
 
@@ -230,8 +237,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
             v.state = 'selling';
             break;
           case 'selling':
-            this.money += v.income;
-            v.state = 'goingHome';
+            this.unsavedEarnings += v.income; // ✅ NEU            v.state = 'goingHome';
             v.targetX = v.homeX;
             v.targetY = v.homeY;
             break;

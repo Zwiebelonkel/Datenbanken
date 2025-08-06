@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  private apiUrl = 'https://dein-api-endpoint.com/api/chat';  // API-URL für den Chat-Service
+  private apiUrl = 'https://outside-between.onrender.com/api/chat'; // API-URL für den Chat-Service
 
   constructor(private http: HttpClient) {}
 

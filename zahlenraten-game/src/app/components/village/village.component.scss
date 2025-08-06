@@ -102,6 +102,10 @@
     list-style: none;
     padding: 0;
 
+    // 🔧 Neue Scrollbar-Funktionalität
+    max-height: 300px;
+    overflow-y: auto;
+
     li {
       display: flex;
       justify-content: space-between;
@@ -125,7 +129,18 @@
   }
 }
 
+// 🔒 Disabled Button im Popup
 .popup button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+// 🎨 Optional: Schönere Scrollbar für WebKit-Browser
+.popup ul::-webkit-scrollbar {
+  width: 8px;
+}
+
+.popup ul::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
 }

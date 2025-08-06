@@ -12,20 +12,30 @@ export class VillageService {
   /**
    * Holt passives Einkommen seit dem letzten Collect
    */
-  collectIncome(): Observable<{
+collectIncome(): Observable<{
+  earned: number;
+  minutesPassed: number;
+  villageLevel: number;
+  villagers: {
+    id: number;
+    name: string;
+    level: number;
+    income: number;
+  }[];
+}> {
+  const headers = this.getAuthHeaders();
+  return this.http.get<{
     earned: number;
     minutesPassed: number;
     villageLevel: number;
-    villagers: { id: number; income: number }[];
-  }> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<{
-      earned: number;
-      minutesPassed: number;
-      villageLevel: number;
-      villagers: { id: number; name: string; level: number; income: number }[];
-    }>(`${this.baseUrl}/collect`, { headers });
-  }
+    villagers: {
+      id: number;
+      name: string;
+      level: number;
+      income: number;
+    }[];
+  }>(`${this.baseUrl}/collect`, { headers });
+}
 
   /**
    * Holt aktuelle Dorf-Daten

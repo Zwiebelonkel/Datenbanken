@@ -238,7 +238,7 @@ collectEarnings() {
     // 💰 Markt
     this.ctx.fillStyle = '#999';
     this.ctx.fillRect(this.market.x, this.market.y, 40, 40);
-    this.ctx.fillStyle = '#fff';
+    this.ctx.fillStyle = '#2ecc71';
     this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
 
     // 👥 Bewohner-Logik

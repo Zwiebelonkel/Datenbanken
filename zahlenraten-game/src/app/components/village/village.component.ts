@@ -20,6 +20,20 @@ interface Villager {
   income: number;
 }
 
+type VillagerState = 'goingToMine' | 'working' | 'goingToMarket' | 'selling' | 'goingHome' | 'resting';
+
+interface VillagerAnim extends Villager {
+  x: number;
+  y: number;
+  state: VillagerState;
+  targetX: number;
+  targetY: number;
+  workTimer: number;
+  restTimer: number;
+  homeX: number;
+  homeY: number;
+}
+
 @Component({
   standalone: true,
   selector: 'app-village',
@@ -36,14 +50,15 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = true;
 
   villageLevel = 1;
-  villagers: Villager[] = [];
+  villagers: VillagerAnim[] = [];
   incomePerMinute = 0;
   showVillagerPopup = false;
 
   animationId = 0;
-  villagersPositions: { x: number; y: number; dx: number; dy: number }[] = [];
-
   ctx!: CanvasRenderingContext2D;
+
+  mine = { x: 160, y: 20 };
+  market = { x: 260, y: 20 };
 
   constructor(
     private villageService: VillageService,
@@ -68,15 +83,26 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.money += res.earned;
 
         this.villageLevel = res.villageLevel || 1;
-        this.villagers = res.villagers || [];
-        this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+        this.incomePerMinute = res.villagers.reduce((sum, v) => sum + v.income, 0);
 
-        this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
-          x: Math.random() * 380,
-          y: Math.random() * 380,
-          dx: (Math.random() - 0.5) * 2,
-          dy: (Math.random() - 0.5) * 2,
-        }));
+        this.villagers = res.villagers.map((v, i) => {
+          const col = i % 3;
+          const row = Math.floor(i / 3);
+          const homeX = 40 + col * 120 + 30;
+          const homeY = 50 + row * 80 + 30;
+          return {
+            ...v,
+            x: homeX,
+            y: homeY,
+            state: 'goingToMine',
+            targetX: this.mine.x,
+            targetY: this.mine.y,
+            workTimer: 0,
+            restTimer: 0,
+            homeX,
+            homeY,
+          };
+        });
 
         this.isLoading = false;
         this.startEarningLoop();
@@ -88,66 +114,58 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-ngAfterViewInit() {
-  const canvas = this.canvasRef.nativeElement;
+  ngAfterViewInit() {
+    const canvas = this.canvasRef.nativeElement;
 
-  const neededRows = Math.ceil(this.villageLevel / 3);
-  const canvasHeight = Math.max(400, neededRows * 80 + 100);
+    const neededRows = Math.ceil(this.villageLevel / 3);
+    const canvasHeight = Math.max(400, neededRows * 80 + 100);
 
-  // Canvas-Rendering-Größe
-  const renderWidth = 380; // exakt wie in SCSS max-width!
-  const renderHeight = canvasHeight;
+    const renderWidth = 380;
+    canvas.width = renderWidth;
+    canvas.height = canvasHeight;
 
-  canvas.width = renderWidth;
-  canvas.height = renderHeight;
+    canvas.style.width = renderWidth + 'px';
+    canvas.style.height = canvasHeight + 'px';
 
-  // Optisch exakt gleiche Größe setzen
-  canvas.style.width = renderWidth + 'px';
-  canvas.style.height = renderHeight + 'px';
+    this.ctx = canvas.getContext('2d')!;
+    this.animate();
+  }
 
-  this.ctx = canvas.getContext('2d')!;
-  this.animate();
-}
+  updateCanvasHeight() {
+    const canvas = this.canvasRef.nativeElement;
+    const neededRows = Math.ceil(this.villageLevel / 3);
+    const canvasHeight = Math.max(400, neededRows * 80 + 100);
 
-updateCanvasHeight() {
-  const canvas = this.canvasRef.nativeElement;
-  const neededRows = Math.ceil(this.villageLevel / 3);
-  const canvasHeight = Math.max(400, neededRows * 80 + 100);
+    const renderWidth = 380;
+    canvas.width = renderWidth;
+    canvas.height = canvasHeight;
+    canvas.style.width = renderWidth + 'px';
+    canvas.style.height = canvasHeight + 'px';
+  }
 
-  const renderWidth = 380;
-  const renderHeight = canvasHeight;
+  getUpgradeCost(level: number): number {
+    return 10 * (level + 1);
+  }
 
-  canvas.width = renderWidth;
-  canvas.height = renderHeight;
+  upgradeVillager(villager: VillagerAnim) {
+    this.isLoading = true;
 
-  canvas.style.width = renderWidth + 'px';
-  canvas.style.height = renderHeight + 'px';
-}
+    const upgradeCost = this.getUpgradeCost(villager.level);
 
-getUpgradeCost(level: number): number {
-  return 10 * (level + 1);
-}
-
-upgradeVillager(villager: Villager) {
-  this.isLoading = true;
-
-  const oldLevel = villager.level;
-  const upgradeCost = this.getUpgradeCost(oldLevel);
-
-  this.villageService.upgradeVillager(villager.id).subscribe({
-    next: (res) => {
-      villager.level = res.newLevel;
-      villager.income = res.newIncome;
-      this.money -= upgradeCost;
-      this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
-      this.isLoading = false;
-    },
-    error: (err) => {
-      alert(err.error.message || "Fehler beim Upgrade");
-      this.isLoading = false;
-    },
-  });
-}
+    this.villageService.upgradeVillager(villager.id).subscribe({
+      next: (res) => {
+        villager.level = res.newLevel;
+        villager.income = res.newIncome;
+        this.money -= upgradeCost;
+        this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        alert(err.error.message || 'Fehler beim Upgrade');
+        this.isLoading = false;
+      },
+    });
+  }
 
   animate = () => {
     this.animationId = requestAnimationFrame(this.animate);
@@ -155,28 +173,81 @@ upgradeVillager(villager: Villager) {
     const canvas = this.canvasRef.nativeElement;
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 🏠 Häuser zeichnen
+    // 🏠 Häuser
     for (let i = 0; i < this.villageLevel; i++) {
       const col = i % 3;
       const row = Math.floor(i / 3);
       const x = 40 + col * 120;
       const y = 50 + row * 80;
-
       this.ctx.fillStyle = '#000000';
       this.ctx.fillRect(x, y, 60, 60);
     }
 
-    // 👥 Bewohner animieren
-    this.villagersPositions.forEach((v) => {
-      v.x += v.dx;
-      v.y += v.dy;
+    // ⛏ Mine
+    this.ctx.fillStyle = '#666';
+    this.ctx.fillRect(this.mine.x, this.mine.y, 40, 40);
+    this.ctx.fillStyle = '#fff';
+    this.ctx.fillText('⛏', this.mine.x + 10, this.mine.y + 25);
 
-      if (v.x < 10 || v.x > 390) v.dx *= -1;
-      if (v.y < 10 || v.y > canvas.height - 10) v.dy *= -1;
+    // 💰 Markt
+    this.ctx.fillStyle = '#999';
+    this.ctx.fillRect(this.market.x, this.market.y, 40, 40);
+    this.ctx.fillStyle = '#fff';
+    this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
+
+    // 👥 Bewohner-Logik
+    this.villagers.forEach((v) => {
+      const speed = 1;
+
+      // Bewegung
+      const dx = v.targetX - v.x;
+      const dy = v.targetY - v.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist > 1) {
+        v.x += (dx / dist) * speed;
+        v.y += (dy / dist) * speed;
+      } else {
+        switch (v.state) {
+          case 'goingToMine':
+            v.state = 'working';
+            v.workTimer = 60;
+            break;
+          case 'working':
+            v.workTimer--;
+            if (v.workTimer <= 0) {
+              v.state = 'goingToMarket';
+              v.targetX = this.market.x;
+              v.targetY = this.market.y;
+            }
+            break;
+          case 'goingToMarket':
+            v.state = 'selling';
+            break;
+          case 'selling':
+            this.money += v.income;
+            v.state = 'goingHome';
+            v.targetX = v.homeX;
+            v.targetY = v.homeY;
+            break;
+          case 'goingHome':
+            v.state = 'resting';
+            v.restTimer = 60;
+            break;
+          case 'resting':
+            v.restTimer--;
+            if (v.restTimer <= 0) {
+              v.state = 'goingToMine';
+              v.targetX = this.mine.x;
+              v.targetY = this.mine.y;
+            }
+            break;
+        }
+      }
 
       this.ctx.beginPath();
       this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-      this.ctx.fillStyle = '#000000';
+      this.ctx.fillStyle = '#000';
       this.ctx.fill();
     });
   };
@@ -196,15 +267,26 @@ upgradeVillager(villager: Villager) {
             this.money += res.earned;
 
             this.villageLevel = res.villageLevel;
-            this.villagers = res.villagers;
-            this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+            this.incomePerMinute = res.villagers.reduce((sum, v) => sum + v.income, 0);
 
-            this.villagersPositions = Array.from({ length: this.villagers.length }, () => ({
-              x: Math.random() * 380,
-              y: Math.random() * 380,
-              dx: (Math.random() - 0.5) * 2,
-              dy: (Math.random() - 0.5) * 2,
-            }));
+            this.villagers = res.villagers.map((v, i) => {
+              const col = i % 3;
+              const row = Math.floor(i / 3);
+              const homeX = 40 + col * 120 + 30;
+              const homeY = 50 + row * 80 + 30;
+              return {
+                ...v,
+                x: homeX,
+                y: homeY,
+                state: 'goingToMine',
+                targetX: this.mine.x,
+                targetY: this.mine.y,
+                workTimer: 0,
+                restTimer: 0,
+                homeX,
+                homeY,
+              };
+            });
 
             this.updateCanvasHeight();
             this.isLoading = false;

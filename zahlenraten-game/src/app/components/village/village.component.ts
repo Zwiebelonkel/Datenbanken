@@ -146,6 +146,8 @@ ngAfterViewInit() {
   this.market.y = 10;
 
   this.animate();
+  this.updateCanvasHeight();
+
 }
 
 

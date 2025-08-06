@@ -60,8 +60,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   animationId = 0;
   ctx!: CanvasRenderingContext2D;
 
-  mine = { x: 160, y: 20 };
-  market = { x: 260, y: 20 };
+  mine = { x: 160, y: 0 };
+  market = { x: 260, y: 0 };
 
   constructor(
     private villageService: VillageService,

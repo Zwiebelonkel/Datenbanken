@@ -144,9 +144,9 @@ ngAfterViewInit() {
   this.market.x = renderWidth / 2 + 20;
   this.mine.y = 10;
   this.market.y = 10;
-
-  this.animate();
+  
   this.updateCanvasHeight();
+  this.animate();
 
 }
 
@@ -316,7 +316,6 @@ collectEarnings() {
       this.ctx.lineWidth = 2;
       this.ctx.strokeStyle = '#000000'; // schwarze Umrandung
       this.ctx.stroke();
-      this.updateCanvasHeight();
     });
   };
 

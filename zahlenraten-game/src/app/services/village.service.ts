@@ -66,9 +66,10 @@ upgradeVillager(id: number): Observable<{ newLevel: number; newIncome: number; n
   );
 }
 
-  renameVillager(villagerId: number, newName: string) {
-  return this.http.patch<{ newName: string }>(`/api/villager/${villagerId}/rename`, { name: newName });
+renameVillager(id: number, name: string) {
+  return this.http.patch<{ newName: string }>(`/api/village/villager/${id}/rename`, { name });
 }
+
 
 
 

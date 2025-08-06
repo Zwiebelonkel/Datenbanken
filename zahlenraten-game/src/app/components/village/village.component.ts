@@ -124,11 +124,23 @@ updateCanvasHeight() {
   canvas.style.height = renderHeight + 'px';
 }
 
-  upgradeVillager(villager: Villager) {
-  villager.level += 1;
-  villager.income += 0.2;
-  // Hier evtl. Backend-Update einfügen!
-  }
+upgradeVillager(villager: Villager) {
+  this.isLoading = true;
+
+  this.villageService.upgradeVillager(villager.id).subscribe({
+    next: (res) => {
+      villager.level = res.newLevel;
+      villager.income = res.newIncome;
+      this.money -= 100 * res.newLevel; // optional
+      this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+      this.isLoading = false;
+    },
+    error: (err) => {
+      alert(err.error.message || "Fehler beim Upgrade");
+      this.isLoading = false;
+    },
+  });
+}
 
   animate = () => {
     this.animationId = requestAnimationFrame(this.animate);

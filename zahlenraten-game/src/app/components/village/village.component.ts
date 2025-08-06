@@ -124,6 +124,10 @@ updateCanvasHeight() {
   canvas.style.height = renderHeight + 'px';
 }
 
+getUpgradeCost(level: number): number {
+  return 100 * (level + 1);
+}
+
 upgradeVillager(villager: Villager) {
   this.isLoading = true;
 

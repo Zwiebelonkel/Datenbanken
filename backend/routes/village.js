@@ -26,11 +26,11 @@ router.get("/collect", verifyToken, async (req, res) => {
 
       // 4 Bewohner einfügen (ohne x/y)
       for (let i = 0; i < 4; i++) {
-        await db.execute({
-          sql: "INSERT INTO villagers (village_id, income) VALUES (?, 1)",
-          args: [villageId],
-        });
-      }
+  await db.execute({
+    sql: "INSERT INTO villagers (village_id, name, level, income) VALUES (?, ?, ?, ?)",
+    args: [villageId, `Bewohner ${i + 1}`, 1, 1],
+  });
+}
 
       // Neue Abfrage für Dorf
       villageResult = await db.execute({

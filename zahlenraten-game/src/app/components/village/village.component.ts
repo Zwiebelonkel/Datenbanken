@@ -164,7 +164,6 @@ collectEarnings() {
     .updateMoney({ username, amount: this.unsavedEarnings })
     .subscribe({
       next: () => {
-        this.deposited = true; // Falls du das nutzt
         this.unsavedEarnings = 0;
         this.loadMoney(); // ✅ Geld neu laden aus dem Server
         // this.soundService.playSound('win.aac', 0.5); // Falls du einen Sound willst

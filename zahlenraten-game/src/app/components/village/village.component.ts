@@ -305,8 +305,12 @@ collectEarnings() {
 
       this.ctx.beginPath();
       this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-      this.ctx.fillStyle = '##2ecc71';
+      this.ctx.fillStyle = '#2ecc71'; // Korrektur: nur ein #
       this.ctx.fill();
+
+      this.ctx.lineWidth = 2;
+      this.ctx.strokeStyle = '#000000'; // schwarze Umrandung
+      this.ctx.stroke();
     });
   };
 

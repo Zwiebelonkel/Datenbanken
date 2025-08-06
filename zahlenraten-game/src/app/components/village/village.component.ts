@@ -90,15 +90,14 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.incomePerMinute = res.villagers.reduce((sum, v) => sum + v.income, 0);
 
         this.villagers = res.villagers.map((v, i) => {
-          const houseIndex = Math.floor(i / 2);
-          const col = houseIndex % 3;
-          const row = Math.floor(houseIndex / 3);
-          const baseHomeX = 40 + col * 120 + 30;
-          const baseHomeY = 50 + row * 80; // z.B. mit Verschiebung nach unten
+const houseIndex = Math.floor(i / 2);
+const col = houseIndex % 3;
+const row = Math.floor(houseIndex / 3);
+const baseHomeX = 40 + col * 120 + 30;
+const baseHomeY = 75 + row * 80; // Wichtig: gleiche Y-Basis wie im animate für Häuser
+const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
+const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmitte
 
-          // Jetzt Bewohner horizontal versetzt positionieren, z.B. +/- 8px
-          const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
-          const homeY = baseHomeY;
 
           return {
             ...v,
@@ -332,10 +331,14 @@ collectEarnings() {
             this.incomePerMinute = res.villagers.reduce((sum, v) => sum + v.income, 0);
 
             this.villagers = res.villagers.map((v, i) => {
-              const col = i % 3;
-              const row = Math.floor(i / 3);
-              const homeX = 40 + col * 120 + 30;
-              const homeY = 50 + row * 80 + 30;
+const houseIndex = Math.floor(i / 2);
+const col = houseIndex % 3;
+const row = Math.floor(houseIndex / 3);
+const baseHomeX = 40 + col * 120 + 30;
+const baseHomeY = 75 + row * 80; // Wichtig: gleiche Y-Basis wie im animate für Häuser
+const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
+const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmitte
+
               return {
                 ...v,
                 x: homeX,

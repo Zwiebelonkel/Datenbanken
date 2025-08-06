@@ -130,6 +130,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     canvas.style.height = canvasHeight + 'px';
 
     this.ctx = canvas.getContext('2d')!;
+    this.updateCanvasHeight();
     this.animate();
   }
 

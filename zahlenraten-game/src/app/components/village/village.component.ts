@@ -223,7 +223,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
         switch (v.state) {
           case 'goingToMine':
             v.state = 'working';
-            v.workTimer = 60;
+            v.workTimer = 30 + Math.random() * 120; // (0.5s bis 2.5s)
             break;
           case 'working':
             v.workTimer--;
@@ -244,7 +244,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
             break;
           case 'goingHome':
             v.state = 'resting';
-            v.restTimer = 60;
+            v.restTimer = 30 + Math.random() * 120; // (0.5s bis 2.5s)
             break;
           case 'resting':
             v.restTimer--;

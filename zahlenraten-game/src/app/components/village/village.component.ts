@@ -312,7 +312,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   startEarningLoop() {
     setInterval(() => {
       const perSecond = this.incomePerMinute / 60;
-      this.money += perSecond;
+      this.unsavedEarnings += perSecond;
     }, 1000);
   }
 

@@ -24,8 +24,8 @@ router.get("/collect", verifyToken, async (req, res) => {
 
       const villageId = createVillage.lastInsertRowid;
 
-      // 4 Bewohner einfügen (ohne x/y)
-      for (let i = 0; i < 4; i++) {
+      // 2 Bewohner einfügen (ohne x/y)
+      for (let i = 0; i < 2; i++) {
   await db.execute({
     sql: "INSERT INTO villagers (village_id, name, level, income) VALUES (?, ?, ?, ?)",
     args: [villageId, `Bewohner ${i + 1}`, 1, 1],

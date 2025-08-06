@@ -9,6 +9,18 @@
     <span><strong>{{ money | number: '1.2-2' }} €</strong></span>
   </div>
 
+  <!-- 🆕 NEU: Noch nicht eingesammelt -->
+<div class="info-row" *ngIf="unsavedEarnings > 0">
+  <span>📦 Nicht eingesammelt:</span>
+  <span><strong>{{ unsavedEarnings | number: '1.2-2' }} €</strong></span>
+</div>
+
+<div class="info-row" *ngIf="unsavedEarnings > 0">
+  <button class="btn small" (click)="collectIncome()" [disabled]="isLoading">
+    💵 Geld abholen
+  </button>
+</div>
+
   <div class="info-row" *ngIf="earned > 0">
     <span>⏱️ Inaktivzeit:</span>
     <span>{{ minutesPassed }} Minuten</span>

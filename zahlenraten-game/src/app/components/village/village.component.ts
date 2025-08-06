@@ -101,8 +101,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
             x: homeX,
             y: homeY,
             state: 'goingToMine',
-            targetX: this.mine.x + (i % 2) * 10,
-            targetY: this.mine.y + Math.floor(i % 2) * 10,
+            targetX: this.mine.x + 20
+            targetY: this.mine.y + 20
             workTimer: 0,
             restTimer: 0,
             homeX,

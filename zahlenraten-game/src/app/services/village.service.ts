@@ -48,7 +48,7 @@ collectIncome(): Observable<{
   /**
    * Upgradet das Dorf
    */
-upgradeVillage(): Observable<{ success: boolean; newLevel: number, newMoney: number  }> {
+upgradeVillage(): Observable<{ success?: boolean; newLevel: number; newMoney: number }> {
   const headers = this.getAuthHeaders();
   return this.http.post<{ success: boolean; newLevel: number }>(
     `${this.baseUrl}/upgrade`,

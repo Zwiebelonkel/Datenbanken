@@ -239,9 +239,12 @@
     <path d="M0,5 C30,0 70,10 100,5 L100,10 L0,10 Z" fill="#ff8a00"></path>
   </svg>
 </div> -->
-<app-global-chat></app-global-chat>
     <div class="toast" *ngIf="achievementMessage">
       {{ achievementMessage }}
     </div>
   </div>
 </div>
+
+<app-global-chat
+  *ngIf="authService.isLoggedIn() && !isLoading"
+></app-global-chat>

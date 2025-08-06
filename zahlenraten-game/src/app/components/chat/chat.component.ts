@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ChatService } from '../../services/chat.service'; // ggf. Pfad anpassen
+import { ChatService } from '../../services/chat.service';
+import { AuthService } from '../../services/auth.service';
+import { ViewChild, ElementRef } from '@angular/core';
 
 interface ChatMessage {
   username: string;
@@ -14,25 +16,42 @@ interface ChatMessage {
   selector: 'app-global-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
+  standalone: true,
   imports: [CommonModule, FormsModule],
 })
 export class ChatComponent implements OnInit {
   messages: ChatMessage[] = [];
   newMessage = '';
-  username = 'Gpt'; // Optional: aus AuthService holen
+  username = '';
   loading = false;
+  showAll = false;
+  @ViewChild('messageContainer') messageContainer!: ElementRef;
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private auth: AuthService) {}
 
   ngOnInit() {
-    this.loadMessages();
+    this.username = this.auth.getUsername() || 'Unbekannt';
+    this.loadMessages(true);
     setInterval(() => this.loadMessages(), 5000);
   }
 
-  loadMessages() {
-    this.chatService.getLatestMessages().subscribe((data) => {
-      this.messages = data as ChatMessage[];
+  loadMessages(scrollToBottom: boolean = false) {
+    this.chatService.getLatestMessages(20).subscribe((data) => {
+      this.messages = data;
+      if (scrollToBottom) {
+        setTimeout(() => this.scrollToBottom(), 100);
+      }
     });
+  }
+
+  toggleShowAll() {
+    this.showAll = !this.showAll;
+    this.loadMessages();
+  }
+
+  scrollToBottom() {
+    const el = this.messageContainer.nativeElement;
+    el.scrollTop = el.scrollHeight;
   }
 
   sendMessage() {
@@ -45,5 +64,6 @@ export class ChatComponent implements OnInit {
       .subscribe(() => {
         this.loadMessages();
       });
+    this.scrollToBottom();
   }
 }

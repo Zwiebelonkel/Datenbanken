@@ -158,7 +158,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (res) => {
         villager.level = res.newLevel;
         villager.income = res.newIncome;
-        this.money -= upgradeCost;
+        this.money = res.newMoney;
         this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
         this.isLoading = false;
       },

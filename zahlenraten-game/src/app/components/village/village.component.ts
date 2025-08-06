@@ -262,7 +262,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.villageService.upgradeVillage().subscribe({
       next: (res) => {
         this.villageLevel = res.newLevel;
-        this.money -= 100 * (res.newLevel - 1);
+        this.money = res.newMoney;
 
         this.villageService.collectIncome().subscribe({
           next: (res) => {

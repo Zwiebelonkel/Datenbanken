@@ -124,3 +124,8 @@
     background: #e74c3c;
   }
 }
+
+.popup button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

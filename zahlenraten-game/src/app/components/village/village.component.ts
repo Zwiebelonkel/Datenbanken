@@ -156,22 +156,37 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
 collectEarnings() {
   const username = this.auth.getUsername();
-  const newAmount = this.money + this.unsavedEarnings;
-
-  if (!username) return;
+  if (!username || this.unsavedEarnings === 0) return;
 
   this.isLoading = true;
 
-  this.moneyService.updateMoney({ username, amount: newAmount }).subscribe({
-    next: () => {
-      this.money = newAmount;
-      this.unsavedEarnings = 0;
-      this.isLoading = false;
+  this.moneyService
+    .updateMoney({ username, amount: this.unsavedEarnings })
+    .subscribe({
+      next: () => {
+        this.deposited = true; // Falls du das nutzt
+        this.unsavedEarnings = 0;
+        this.loadMoney(); // ✅ Geld neu laden aus dem Server
+        // this.soundService.playSound('win.aac', 0.5); // Falls du einen Sound willst
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('❌ Fehler beim Geld abholen:', err);
+        this.isLoading = false;
+      },
+    });
+}
+
+  loadMoney() {
+  const username = this.auth.getUsername();
+  if (!username) return;
+
+  this.profileService.getUserStats(username).subscribe({
+    next: (stats) => {
+      this.money = stats.money;
     },
     error: (err) => {
-      console.error('❌ Fehler beim Speichern des Geldes:', err);
-      alert('Fehler beim Aktualisieren deines Geldes.');
-      this.isLoading = false;
+      console.error('❌ Fehler beim Laden des Geldes:', err);
     },
   });
 }

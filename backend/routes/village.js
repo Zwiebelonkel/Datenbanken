@@ -125,4 +125,50 @@ router.post("/upgrade", verifyToken, async (req, res) => {
   }
 });
 
+router.post("/upgrade-villager", verifyToken, async (req, res) => {
+  const userId = req.user.id;
+  const { villagerId } = req.body;
+
+  try {
+    // Bewohner und Dorf holen
+    const result = await db.execute({
+      sql: `
+        SELECT v.*, u.money 
+        FROM villagers v 
+        JOIN village vi ON v.village_id = vi.id 
+        JOIN users u ON vi.user_id = u.id 
+        WHERE v.id = ? AND vi.user_id = ?
+      `,
+      args: [villagerId, userId],
+    });
+
+    const villager = result.rows[0];
+    if (!villager) return res.status(404).json({ message: "Bewohner nicht gefunden" });
+
+    const upgradeCost = 100 * (villager.level + 1);
+    if (villager.money < upgradeCost) {
+      return res.status(400).json({ message: "Nicht genug Geld" });
+    }
+
+    const newLevel = villager.level + 1;
+    const newIncome = villager.income + 0.5;
+
+    // Upgrade durchführen
+    await db.execute({
+      sql: "UPDATE villagers SET level = ?, income = ? WHERE id = ?",
+      args: [newLevel, newIncome, villagerId],
+    });
+
+    await db.execute({
+      sql: "UPDATE users SET money = money - ? WHERE id = ?",
+      args: [upgradeCost, userId],
+    });
+
+    res.json({ message: "Upgrade erfolgreich", newLevel, newIncome });
+  } catch (err) {
+    console.error("❌ Fehler bei Bewohner-Upgrade:", err);
+    res.status(500).json({ error: "Upgrade fehlgeschlagen" });
+  }
+});
+
 export default router;

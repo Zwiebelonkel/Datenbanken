@@ -20,6 +20,7 @@ import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ChatComponent} from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     PackOpeningComponent,
     LoaderComponent,
     SidebarComponent,
-    VillageComponent
+    VillageComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

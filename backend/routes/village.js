@@ -151,7 +151,7 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
     }
 
     const newLevel = villager.level + 1;
-    const newIncome = villager.income + 0.5;
+    const newIncome = villager.income + 0.2;
 
     // Upgrade durchführen
     await db.execute({

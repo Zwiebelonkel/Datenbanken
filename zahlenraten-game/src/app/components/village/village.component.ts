@@ -236,8 +236,11 @@ collectEarnings() {
       const row = Math.floor(i / 3);
       const x = 40 + col * 120;
       const y = 75 + row * 80;
-      this.ctx.fillStyle = '#000000';
+      this.ctx.fillStyle = '#fff';
       this.ctx.fillRect(x, y, 60, 60);
+      this.ctx.strokeStyle = '#000000'; // Farbe der Umrandung, z.B. weiß
+      this.ctx.lineWidth = 2; // Dicke der Linie
+      this.ctx.strokeRect(x, y, 60, 60);
     }
 
     // ⛏ Mine

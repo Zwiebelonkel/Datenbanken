@@ -236,7 +236,7 @@ collectEarnings() {
       const col = i % 3;
       const row = Math.floor(i / 3);
       const x = 40 + col * 120;
-      const y = 50 + row * 80;
+      const y = 75 + row * 80;
       this.ctx.fillStyle = '#000000';
       this.ctx.fillRect(x, y, 60, 60);
     }

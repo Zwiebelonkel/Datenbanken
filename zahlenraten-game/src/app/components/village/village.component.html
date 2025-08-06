@@ -78,7 +78,20 @@
     <h3>👥 Bewohnerliste</h3>
     <ul>
       <li *ngFor="let v of villagers">
-        <strong>{{ v.name }}</strong>
+        <!-- Wenn im Bearbeitungsmodus -->
+<input
+  *ngIf="editingVillagerId === v.id"
+  [(ngModel)]="newName"
+  (blur)="renameVillager(v)"
+  (keydown.enter)="renameVillager(v)"
+  type="text"
+/>
+
+<!-- Wenn NICHT im Bearbeitungsmodus -->
+<strong *ngIf="editingVillagerId !== v.id" (click)="enableRename(v)" style="cursor: pointer;">
+  {{ v.name }}
+</strong>
+
         <span>⭐ {{ v.level }}</span>
 
         <!-- 💸 Upgrade-Kosten anzeigen -->

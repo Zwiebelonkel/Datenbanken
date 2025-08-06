@@ -212,4 +212,44 @@ res.json({
   }
 });
 
+// Bewohner umbenennen
+router.patch("/villager/:id/rename", verifyToken, async (req, res) => {
+  const userId = req.user.id;
+  const villagerId = req.params.id;
+  const { name } = req.body;
+
+  if (!name || name.trim().length === 0) {
+    return res.status(400).json({ message: "Name darf nicht leer sein." });
+  }
+
+  try {
+    // Prüfen, ob Bewohner zum User gehört
+    const checkResult = await db.execute({
+      sql: `
+        SELECT v.id 
+        FROM villagers v
+        JOIN village vi ON v.village_id = vi.id
+        WHERE v.id = ? AND vi.user_id = ?
+      `,
+      args: [villagerId, userId],
+    });
+
+    if (checkResult.rows.length === 0) {
+      return res.status(403).json({ message: "Zugriff verweigert." });
+    }
+
+    // Namen aktualisieren
+    await db.execute({
+      sql: `UPDATE villagers SET name = ? WHERE id = ?`,
+      args: [name.trim(), villagerId],
+    });
+
+    res.json({ newName: name.trim() });
+  } catch (err) {
+    console.error("❌ Fehler beim Umbenennen:", err);
+    res.status(500).json({ error: "Fehler beim Umbenennen" });
+  }
+});
+
+
 export default router;

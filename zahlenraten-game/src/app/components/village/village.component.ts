@@ -247,7 +247,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.ctx.beginPath();
       this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-      this.ctx.fillStyle = '#000';
+      this.ctx.fillStyle = '#fff';
       this.ctx.fill();
     });
   };

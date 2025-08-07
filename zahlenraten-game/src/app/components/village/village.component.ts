@@ -143,8 +143,8 @@ ngAfterViewInit() {
     this.updateCanvasHeight();
 
     // ➕ Zentriere Mine und Markt
-    this.mine.x = renderWidth / 2 - 60;
-    this.market.x = renderWidth / 2 + 20;
+    this.mine.x = renderWidth / 2 - 100;
+    this.market.x = renderWidth / 2 + 60;
     this.mine.y = 10;
     this.market.y = 10;
 

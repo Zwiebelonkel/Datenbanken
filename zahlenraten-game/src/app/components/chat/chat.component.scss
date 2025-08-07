@@ -32,6 +32,12 @@ h3 {
   font-size: 0.95rem;
 }
 
+/* Nachricht des Benutzers */
+.user-message {
+  background-color: #d4f1f4; /* Helle Farbe für Nachrichten des Benutzers */
+  color: #2c3e50;
+}
+
 .user {
   font-weight: bold;
   color: #2c3e50;
@@ -58,20 +64,20 @@ h3 {
   display: flex;
   gap: 0.5rem;
   margin-top: 1rem;
+}
 
-  input {
-    flex: 1;
-    padding: 0.5rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
+input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-  button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-  }
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
 }

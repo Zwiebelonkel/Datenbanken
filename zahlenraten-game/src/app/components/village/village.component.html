@@ -70,6 +70,33 @@
   <button class="btn" (click)="showVillagerPopup = true">
   👤 Bewohner anzeigen & verbessern
 </button>
+  <div class="legend">
+  <div class="legend-item" data-state="goingToMine">
+    <div class="color-box" style="background-color: #2ecc71;"></div>
+    <span>Going to Mine</span>
+  </div>
+  <div class="legend-item" data-state="resting">
+    <div class="color-box" style="background-color: #3498db;"></div>
+    <span>Resting</span>
+  </div>
+  <div class="legend-item" data-state="working">
+    <div class="color-box" style="background-color: #9b59b6;"></div>
+    <span>Working</span>
+  </div>
+  <div class="legend-item" data-state="goingToMarket">
+    <div class="color-box" style="background-color: #f39c12;"></div>
+    <span>Going to Market</span>
+  </div>
+  <div class="legend-item" data-state="selling">
+    <div class="color-box" style="background-color: #f39c12;"></div>
+    <span>Selling</span>
+  </div>
+  <div class="legend-item" data-state="goingHome">
+    <div class="color-box" style="background-color: #e74c3c;"></div>
+    <span>Going Home</span>
+  </div>
+</div>
+
 </div>
 
 <div class="popup-backdrop" *ngIf="showVillagerPopup">

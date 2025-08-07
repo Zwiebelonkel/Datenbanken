@@ -227,99 +227,123 @@ collectEarnings() {
     });
   }
 
-  animate = () => {
-    this.animationId = requestAnimationFrame(this.animate);
+ animate = () => {
+  this.animationId = requestAnimationFrame(this.animate);
 
-    const canvas = this.canvasRef.nativeElement;
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const canvas = this.canvasRef.nativeElement;
+  this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 🏠 Häuser
-    const numHouses = Math.ceil(this.villagers.length / 2);
+  // 🏠 Häuser
+  const numHouses = Math.ceil(this.villagers.length / 2);
 
-    for (let i = 0; i < numHouses; i++) {
-      const col = i % 3;
-      const row = Math.floor(i / 3);
-      const x = 40 + col * 120;
-      const y = 75 + row * 80;
-      this.ctx.fillStyle = '#fff';
-      this.ctx.fillRect(x, y, 60, 60);
-      this.ctx.strokeStyle = '#000000'; // Farbe der Umrandung, z.B. weiß
-      this.ctx.lineWidth = 2; // Dicke der Linie
-      this.ctx.strokeRect(x, y, 60, 60);
+  for (let i = 0; i < numHouses; i++) {
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const x = 40 + col * 120;
+    const y = 75 + row * 80;
+    this.ctx.fillStyle = '#fff';
+    this.ctx.fillRect(x, y, 60, 60);
+    this.ctx.strokeStyle = '#000000'; // Farbe der Umrandung, z.B. weiß
+    this.ctx.lineWidth = 2; // Dicke der Linie
+    this.ctx.strokeRect(x, y, 60, 60);
+  }
+
+  // ⛏ Mine
+  this.ctx.fillStyle = '#666';
+  this.ctx.fillRect(this.mine.x, this.mine.y, 40, 40);
+  this.ctx.fillStyle = '#fff';
+  this.ctx.fillText('⛏', this.mine.x + 10, this.mine.y + 25);
+
+  // 💰 Markt
+  this.ctx.fillStyle = '#999';
+  this.ctx.fillRect(this.market.x, this.market.y, 40, 40);
+  this.ctx.fillStyle = '#2ecc71';
+  this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
+
+  // 👥 Bewohner-Logik
+  this.villagers.forEach((v) => {
+    const speed = 1;
+
+    // Setze die Farbe basierend auf dem Status
+    switch (v.state) {
+      case 'goingToMine':
+        this.ctx.fillStyle = '#2ecc71'; // grün
+        break;
+      case 'resting':
+        this.ctx.fillStyle = '#312ecc'; // dunkelblau
+        break;
+      case 'working':
+        this.ctx.fillStyle = '#cc2eb4'; // pink
+        break;
+      case 'goingToMarket':
+        this.ctx.fillStyle = '#2ecc88'; // hellgrün
+        break;
+      case 'selling':
+        this.ctx.fillStyle = '#ccbf2e'; // gelb
+        break;
+      case 'goingHome':
+        this.ctx.fillStyle = '#cc2e2e'; // rot
+        break;
+      default:
+        this.ctx.fillStyle = '#2ecc71'; // Default für unbekannten Zustand
     }
 
-    // ⛏ Mine
-    this.ctx.fillStyle = '#666';
-    this.ctx.fillRect(this.mine.x, this.mine.y, 40, 40);
-    this.ctx.fillStyle = '#fff';
-    this.ctx.fillText('⛏', this.mine.x + 10, this.mine.y + 25);
+    // Bewegung
+    const dx = v.targetX - v.x;
+    const dy = v.targetY - v.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
 
-    // 💰 Markt
-    this.ctx.fillStyle = '#999';
-    this.ctx.fillRect(this.market.x, this.market.y, 40, 40);
-    this.ctx.fillStyle = '#2ecc71';
-    this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
-
-    // 👥 Bewohner-Logik
-    this.villagers.forEach((v) => {
-      const speed = 1;
-
-      // Bewegung
-      const dx = v.targetX - v.x;
-      const dy = v.targetY - v.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist > 1) {
-        v.x += (dx / dist) * speed;
-        v.y += (dy / dist) * speed;
-      } else {
-        switch (v.state) {
-          case 'goingToMine':
-            v.state = 'working';
-            v.workTimer = 30 + Math.random() * 120; // (0.5s bis 2.5s)
-            break;
-          case 'working':
-            v.workTimer--;
-            if (v.workTimer <= 0) {
-              v.state = 'goingToMarket';
-              v.targetX = this.market.x + 20;
-              v.targetY = this.market.y + 20;
-            }
-            break;
-          case 'goingToMarket':
-            v.state = 'selling';
-            break;
-          case 'selling':
-            this.unsavedEarnings += v.income; // ✅ NEU
-            v.state = 'goingHome';
-            v.targetX = v.homeX;
-            v.targetY = v.homeY;
-            break;
-          case 'goingHome':
-            v.state = 'resting';
-            v.restTimer = 30 + Math.random() * 120; // (0.5s bis 2.5s)
-            break;
-          case 'resting':
-            v.restTimer--;
-            if (v.restTimer <= 0) {
-              v.state = 'goingToMine';
-              v.targetX = this.mine.x + 20;
-              v.targetY = this.mine.y + 20;
-            }
-            break;
-        }
+    if (dist > 1) {
+      v.x += (dx / dist) * speed;
+      v.y += (dy / dist) * speed;
+    } else {
+      switch (v.state) {
+        case 'goingToMine':
+          v.state = 'working';
+          v.workTimer = 30 + Math.random() * 120; // (0.5s bis 2.5s)
+          break;
+        case 'working':
+          v.workTimer--;
+          if (v.workTimer <= 0) {
+            v.state = 'goingToMarket';
+            v.targetX = this.market.x + 20;
+            v.targetY = this.market.y + 20;
+          }
+          break;
+        case 'goingToMarket':
+          v.state = 'selling';
+          break;
+        case 'selling':
+          this.unsavedEarnings += v.income; // ✅ NEU
+          v.state = 'goingHome';
+          v.targetX = v.homeX;
+          v.targetY = v.homeY;
+          break;
+        case 'goingHome':
+          v.state = 'resting';
+          v.restTimer = 30 + Math.random() * 120; // (0.5s bis 2.5s)
+          break;
+        case 'resting':
+          v.restTimer--;
+          if (v.restTimer <= 0) {
+            v.state = 'goingToMine';
+            v.targetX = this.mine.x + 20;
+            v.targetY = this.mine.y + 20;
+          }
+          break;
       }
+    }
 
-      this.ctx.beginPath();
-      this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-      this.ctx.fillStyle = '#2ecc71'; // Korrektur: nur ein #
-      this.ctx.fill();
+    // Zeichne den Villager
+    this.ctx.beginPath();
+    this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
+    this.ctx.fill(); // Füllen mit der richtigen Farbe basierend auf dem Zustand
 
-      this.ctx.lineWidth = 2;
-      this.ctx.strokeStyle = '#000000'; // schwarze Umrandung
-      this.ctx.stroke();
-    });
-  };
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeStyle = '#000000'; // schwarze Umrandung
+    this.ctx.stroke();
+  });
+};
 
   upgrade() {
     this.isLoading = true;

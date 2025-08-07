@@ -88,6 +88,7 @@ console.log("📦 Village ID im Code:", village.id);
     console.error("❌ Fehler in /api/village/collect:", err);
     res.status(500).json({ error: "Serverfehler beim Sammeln" });
   }
+  console.log(villagers)
 });
 
 router.post("/upgrade", verifyToken, async (req, res) => {

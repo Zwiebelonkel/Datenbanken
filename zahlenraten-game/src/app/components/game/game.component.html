@@ -173,7 +173,13 @@
     </select>
 
     <!-- Einsetzen-Button -->
-    <button class="btn" (click)="useSelectedCards()">Einsetzen</button>
+    <button
+      class="btn"
+      [disabled]="selectedCard === null && selectedHeartCard === null"
+      (click)="useSelectedCards()"
+    >
+      Einsetzen
+    </button>
   </div>
 </div>
 

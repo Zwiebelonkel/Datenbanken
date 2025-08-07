@@ -82,3 +82,8 @@ button {
   color: white;
   cursor: pointer;
 }
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

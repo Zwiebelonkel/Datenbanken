@@ -204,7 +204,7 @@ input[type="text"]:focus {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  background-color: #f9f9f9;  // Leichtes Grau für besseren Kontrast
+  background-color: #f9f9f9; // Leichtes Grau für besseren Kontrast
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -233,9 +233,64 @@ input[type="text"]:focus {
     span {
       font-size: 14px;
       color: #333;
-      font-family: 'Arial', sans-serif;
+      font-family: "Arial", sans-serif;
     }
   }
 }
 
+.villager-card {
+  border-bottom: 1px dashed #ccc;
+  padding: 1rem 0;
+}
 
+.name-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.level {
+  color: #8e44ad;
+  font-weight: bold;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+}
+
+.upgrade-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.upgrade-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.upgrade-buttons button {
+  flex: 1;
+  min-width: 48%;
+  font-size: 0.85rem;
+}
+
+.popup input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.popup input[type="text"]:focus {
+  border-color: #3498db;
+  outline: none;
+}

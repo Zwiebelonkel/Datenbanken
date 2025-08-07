@@ -12,21 +12,7 @@ export class VillageService {
   /**
    * Holt passives Einkommen seit dem letzten Collect
    */
-collectIncome(): Observable<{
-  earned: number;
-  minutesPassed: number;
-  villageLevel: number;
-  villagers: {
-    id: number;
-    name: string;
-    level: number;
-    income: number;
-    speed: number;
-    stamina: number;
-  }[];
-}> {
-  const headers = this.getAuthHeaders();
-  return this.http.get<{
+  collectIncome(): Observable<{
     earned: number;
     minutesPassed: number;
     villageLevel: number;
@@ -38,8 +24,22 @@ collectIncome(): Observable<{
       speed: number;
       stamina: number;
     }[];
-  }>(`${this.baseUrl}/collect`, { headers });
-}
+  }> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<{
+      earned: number;
+      minutesPassed: number;
+      villageLevel: number;
+      villagers: {
+        id: number;
+        name: string;
+        level: number;
+        income: number;
+        speed: number;
+        stamina: number;
+      }[];
+    }>(`${this.baseUrl}/collect`, { headers });
+  }
 
   /**
    * Holt aktuelle Dorf-Daten
@@ -52,52 +52,71 @@ collectIncome(): Observable<{
   /**
    * Upgradet das Dorf
    */
-upgradeVillage(): Observable<{ success?: boolean; newLevel: number; newMoney: number; newSpeed: number; newStamina: number; }> {
-  const headers = this.getAuthHeaders();
-  return this.http.post<{ success?: boolean; newLevel: number; newMoney: number; newSpeed: number; newStamina: number; }>(
-    `${this.baseUrl}/upgrade`,
-    {},
-    { headers }
-  );
-}
+  upgradeVillage(): Observable<{
+    success?: boolean;
+    newLevel: number;
+    newMoney: number;
+    newSpeed: number;
+    newStamina: number;
+  }> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<{
+      success?: boolean;
+      newLevel: number;
+      newMoney: number;
+      newSpeed: number;
+      newStamina: number;
+    }>(`${this.baseUrl}/upgrade`, {}, { headers });
+  }
 
-upgradeVillager(id: number): Observable<{ newLevel: number; newIncome: number; newMoney: number }> {
-  const headers = this.getAuthHeaders();
-  return this.http.post<{ newLevel: number; newIncome: number; newMoney: number }>(
-    `${this.baseUrl}/upgrade-villager`,
-    { villagerId: id },
-    { headers }
-  );
-}
+  upgradeVillager(
+    id: number,
+    times: number = 1
+  ): Observable<{ newLevel: number; newIncome: number; newMoney: number }> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<{
+      newLevel: number;
+      newIncome: number;
+      newMoney: number;
+    }>(
+      `${this.baseUrl}/upgrade-villager`,
+      { villagerId: id, times },
+      { headers }
+    );
+  }
 
-  
-upgradeSpeed(id: number): Observable<{ newSpeed: number; newMoney: number }> {
-  const headers = this.getAuthHeaders();
-  return this.http.post<{ newSpeed: number; newMoney: number }>(
-    `${this.baseUrl}/upgrade-speed`,
-    { villagerId: id },
-    { headers }
-  );
-}
+  upgradeSpeed(
+    id: number,
+    times: number = 1
+  ): Observable<{ newSpeed: number; newMoney: number }> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<{ newSpeed: number; newMoney: number }>(
+      `${this.baseUrl}/upgrade-speed`,
+      { villagerId: id, times },
+      { headers }
+    );
+  }
 
-  upgradeStamina(id: number): Observable<{ newStamina: number; newMoney: number }> {
-  const headers = this.getAuthHeaders();
-  return this.http.post<{ newStamina: number; newMoney: number }>(
-    `${this.baseUrl}/upgrade-stamina`,
-    { villagerId: id },
-    { headers }
-  );
-}
+  upgradeStamina(
+    id: number,
+    times: number = 1
+  ): Observable<{ newStamina: number; newMoney: number }> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<{ newStamina: number; newMoney: number }>(
+      `${this.baseUrl}/upgrade-stamina`,
+      { villagerId: id, times },
+      { headers }
+    );
+  }
 
-renameVillager(id: number, name: string) {
-  const headers = this.getAuthHeaders(); // Falls Auth nötig ist
-  return this.http.patch<{ newName: string }>(
-    `${this.baseUrl}/villager/${id}/rename`,
-    { name },
-    { headers }
-  );
-}
-
+  renameVillager(id: number, name: string) {
+    const headers = this.getAuthHeaders(); // Falls Auth nötig ist
+    return this.http.patch<{ newName: string }>(
+      `${this.baseUrl}/villager/${id}/rename`,
+      { name },
+      { headers }
+    );
+  }
 
   /**
    * Baut Authorization-Header mit gespeichertem Token

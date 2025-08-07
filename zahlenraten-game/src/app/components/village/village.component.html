@@ -6,25 +6,28 @@
 
   <div class="info-row">
     <span>💰 Aktuelles Geld:</span>
-    <span><strong>{{ money | number: '1.2-2' }} €</strong></span>
+    <span
+      ><strong>{{ money | number : "1.2-2" }} €</strong></span
+    >
   </div>
 
   <!-- 🆕 NEU: Noch nicht eingesammelt -->
-<div class="info-row" *ngIf="unsavedEarnings > 0">
-  <span>📦 Nicht eingesammelt:</span>
-  <span><strong>{{ unsavedEarnings | number: '1.2-2' }} €</strong></span>
-</div>
+  <div class="info-row" *ngIf="unsavedEarnings > 0">
+    <span>📦 Nicht eingesammelt:</span>
+    <span
+      ><strong>{{ unsavedEarnings | number : "1.2-2" }} €</strong></span
+    >
+  </div>
 
-<div class="info-row">
-  <button
-    class="btn small"
-    (click)="collectEarnings()"
-    [disabled]="isLoading || unsavedEarnings <= 0"
-  >
-    💵 Geld abholen
-  </button>
-</div>
-
+  <div class="info-row">
+    <button
+      class="btn small"
+      (click)="collectEarnings()"
+      [disabled]="isLoading || unsavedEarnings <= 0"
+    >
+      💵 Geld abholen
+    </button>
+  </div>
 
   <div class="info-row" *ngIf="earned > 0">
     <span>⏱️ Inaktivzeit:</span>
@@ -33,12 +36,12 @@
 
   <div class="info-row" *ngIf="earned > 0">
     <span>📈 Einkommen in dieser Zeit:</span>
-    <span>+{{ earned | number: '1.2-2' }} €</span>
+    <span>+{{ earned | number : "1.2-2" }} €</span>
   </div>
 
   <div class="info-row">
     <span>📊 Geld pro Minute:</span>
-    <span>+{{ incomePerMinute | number: '1.2-2' }} €</span>
+    <span>+{{ incomePerMinute | number : "1.2-2" }} €</span>
   </div>
 
   <div class="info-row">
@@ -68,39 +71,38 @@
   </button>
 
   <button class="btn" (click)="showVillagerPopup = true">
-  👤 Bewohner anzeigen & verbessern
-</button>
+    👤 Bewohner anzeigen & verbessern
+  </button>
   <div class="legend">
-  <div class="legend-item" data-state="goingToMine">
-    <div class="color-box" style="background-color: #2ecc71;"></div>
-    <span>Going to Mine</span>
+    <div class="legend-item" data-state="goingToMine">
+      <div class="color-box" style="background-color: #2ecc71"></div>
+      <span>Going to Mine</span>
+    </div>
+    <div class="legend-item" data-state="resting">
+      <div class="color-box" style="background-color: #3498db"></div>
+      <span>Resting</span>
+    </div>
+    <div class="legend-item" data-state="working">
+      <div class="color-box" style="background-color: #9b59b6"></div>
+      <span>Working</span>
+    </div>
+    <div class="legend-item" data-state="selling">
+      <div class="color-box" style="background-color: #f39c12"></div>
+      <span>Selling</span>
+    </div>
+    <div class="legend-item" data-state="goingHome">
+      <div class="color-box" style="background-color: #e74c3c"></div>
+      <span>Going Home</span>
+    </div>
   </div>
-  <div class="legend-item" data-state="resting">
-    <div class="color-box" style="background-color: #3498db;"></div>
-    <span>Resting</span>
-  </div>
-  <div class="legend-item" data-state="working">
-    <div class="color-box" style="background-color: #9b59b6;"></div>
-    <span>Working</span>
-  </div>
-  <div class="legend-item" data-state="selling">
-    <div class="color-box" style="background-color: #f39c12;"></div>
-    <span>Selling</span>
-  </div>
-  <div class="legend-item" data-state="goingHome">
-    <div class="color-box" style="background-color: #e74c3c;"></div>
-    <span>Going Home</span>
-  </div>
-</div>
-
 </div>
 
 <div class="popup-backdrop" *ngIf="showVillagerPopup">
   <div class="popup">
     <h3>👥 Bewohnerliste</h3>
     <ul>
-      <li *ngFor="let v of villagers">
-        <!-- Wenn im Bearbeitungsmodus -->
+      <li *ngFor="let v of villagers" class="villager-card">
+        <!-- 📝 Name ändern -->
         <input
           *ngIf="editingVillagerId === v.id"
           [(ngModel)]="newName"
@@ -109,50 +111,80 @@
           type="text"
           placeholder="Neuer Name"
         />
+        <div *ngIf="editingVillagerId !== v.id" class="name-row">
+          <strong (click)="enableRename(v)">{{ v.name }}</strong>
+          <span class="level">⭐ {{ v.level }}</span>
+        </div>
 
-        <!-- Wenn NICHT im Bearbeitungsmodus -->
-        <strong *ngIf="editingVillagerId !== v.id" (click)="enableRename(v)" style="cursor: pointer;">
-          {{ v.name }}
-        </strong>
-
-        <span>⭐ {{ v.level }}</span>
-        <span>🚶‍♂️ Geschwindigkeit: {{ v.speed }}</span>
-        <span>💪 Ausdauer: {{ v.stamina }}</span>
-
-        <!-- 💸 Upgrade-Kosten anzeigen -->
-        <span class="cost">💰 {{ getUpgradeCost(v.level) }} €</span>
-
-        <!-- ⬆️ Button nur aktiv, wenn genug Geld -->
-        <button
-          (click)="upgradeVillager(v)"
-          [disabled]="money < getUpgradeCost(v.level)"
-        >
-          ⬆️
-        </button>
-
-        <!-- Buttons for upgrading Speed and Stamina -->
-        <div>
-          <button 
-            (click)="upgradeSpeed(v)"
-            [disabled]="money < getUpgradeCost(v.speed)"
+        <div class="stats-row">
+          <span
+            >🚶 Geschwindigkeit: <strong>{{ v.speed }}</strong></span
           >
-            🚀 Erhöhe Geschwindigkeit ({{ getUpgradeCost(v.speed) }} €)
-          </button>
-
-          <button 
-            (click)="upgradeStamina(v)"
-            [disabled]="money < getUpgradeCost(v.stamina)"
+          <span
+            >💪 Ausdauer: <strong>{{ v.stamina }}</strong></span
           >
-            💪 Erhöhe Ausdauer ({{ getUpgradeCost(v.stamina) }} €)
-          </button>
+          <span
+            >💰 Einkommen: <strong>{{ v.income }} €</strong></span
+          >
+        </div>
+
+        <div class="upgrade-section">
+          <div class="upgrade-buttons">
+            <button
+              (click)="upgradeVillager(v, 1)"
+              [disabled]="money < getUpgradeCost(v.level)"
+            >
+              ⬆️ +1 Stufe ({{ getUpgradeCost(v.level) }} €)
+            </button>
+
+            <button
+              (click)="upgradeVillager(v, 10)"
+              [disabled]="money < getTotalUpgradeCost(v.level, 10)"
+            >
+              ⬆️ +10 Stufen ({{ getTotalUpgradeCost(v.level, 10) }} €)
+            </button>
+          </div>
+
+          <div class="upgrade-buttons">
+            <button
+              (click)="upgradeSpeed(v, 1)"
+              [disabled]="money < getUpgradeCost(v.speed)"
+            >
+              🚀 +1 Speed ({{ getUpgradeCost(v.speed) }} €)
+            </button>
+
+            <button
+              (click)="upgradeSpeed(v, 10)"
+              [disabled]="money < getTotalUpgradeCost(v.speed, 10)"
+            >
+              🚀 +10 Speed ({{ getTotalUpgradeCost(v.speed, 10) }} €)
+            </button>
+          </div>
+
+          <div class="upgrade-buttons">
+            <button
+              (click)="upgradeStamina(v, 1)"
+              [disabled]="money < getUpgradeCost(v.stamina)"
+            >
+              💪 +1 Ausdauer ({{ getUpgradeCost(v.stamina) }} €)
+            </button>
+
+            <button
+              (click)="upgradeStamina(v, 10)"
+              [disabled]="money < getTotalUpgradeCost(v.stamina, 10)"
+            >
+              💪 +10 Ausdauer ({{ getTotalUpgradeCost(v.stamina, 10) }} €)
+            </button>
+          </div>
         </div>
       </li>
     </ul>
 
-    <button class="btn close-btn" (click)="showVillagerPopup = false">Schließen</button>
+    <button class="btn close-btn" (click)="showVillagerPopup = false">
+      Schließen
+    </button>
   </div>
 </div>
-
 
 <!-- 🔄 Loader -->
 <app-loader *ngIf="isLoading" />

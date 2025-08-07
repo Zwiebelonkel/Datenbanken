@@ -10,13 +10,13 @@
       <div class="message-content">
         <span class="user">{{ msg.username }}</span>
         <span class="text">{{ msg.message }}</span>
-        <span class="timestamp">{{ msg.created_at | date: 'HH:mm' }}</span>
+        <span class="timestamp">{{ msg.created_at | date : "HH:mm" }}</span>
       </div>
     </div>
   </div>
 
   <form (ngSubmit)="sendMessage()" class="chat-form">
     <input [(ngModel)]="newMessage" name="message" placeholder="" />
-    <button type="submit">📤 Senden</button>
+    <button [disabled]="newMessage === ''" type="submit">📤 Senden</button>
   </form>
 </div>

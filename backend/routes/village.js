@@ -26,11 +26,11 @@ router.get("/collect", verifyToken, async (req, res) => {
 
       // 2 Bewohner einfügen (ohne x/y)
       for (let i = 0; i < 2; i++) {
-  await db.execute({
-    sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
-    args: [villageId, `Bewohner`],
-  });
-}
+        await db.execute({
+          sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
+          args: [villageId, `Bewohner`],
+        });
+      }
 
       // Neue Abfrage für Dorf
       villageResult = await db.execute({
@@ -127,14 +127,13 @@ router.post("/upgrade", verifyToken, async (req, res) => {
       args: [newLevel, data.villageId],
     });
 
-// 3. Neue Bewohner hinzufügen
-for (let i = 0; i < 2; i++) {
-  await db.execute({
-    sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
-    args: [data.villageId, `Bewohner`],
-  });
-}
-
+    // 3. Neue Bewohner hinzufügen
+    for (let i = 0; i < 2; i++) {
+      await db.execute({
+        sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
+        args: [data.villageId, `Bewohner`],
+      });
+    }
 
     // 4. Neuen Geldstand abrufen und zurückgeben
     const moneyRes = await db.execute({
@@ -153,10 +152,9 @@ for (let i = 0; i < 2; i++) {
   }
 });
 
-
 router.post("/upgrade-villager", verifyToken, async (req, res) => {
   const userId = req.user.id;
-  const { villagerId } = req.body;
+  const { villagerId, times = 1 } = req.body;
 
   try {
     // Bewohner und Dorf holen
@@ -171,54 +169,57 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
       args: [villagerId, userId],
     });
 
-    const villager = result.rows[0];
-    if (!villager) return res.status(404).json({ message: "Bewohner nicht gefunden" });
+    let villager = result.rows[0];
+    if (!villager)
+      return res.status(404).json({ message: "Bewohner nicht gefunden" });
 
-    const upgradeCost = 10 * (villager.level + 1);
-    if (villager.money < upgradeCost) {
-      return res.status(400).json({ message: "Nicht genug Geld" });
+    let currentLevel = villager.level;
+    let currentIncome = villager.income;
+    let availableMoney = villager.money;
+    let totalCost = 0;
+
+    for (let i = 0; i < times; i++) {
+      const cost = 10 * (currentLevel + 1);
+      if (availableMoney < cost) break;
+
+      currentLevel++;
+      currentIncome += 0.2;
+      availableMoney -= cost;
+      totalCost += cost;
     }
 
-    const newLevel = villager.level + 1;
-    const newIncome = villager.income + 0.2;
-
-    // Upgrade durchführen
     await db.execute({
       sql: "UPDATE villagers SET level = ?, income = ? WHERE id = ?",
-      args: [newLevel, newIncome, villagerId],
+      args: [currentLevel, currentIncome, villagerId],
     });
 
     await db.execute({
       sql: "UPDATE users SET money = money - ? WHERE id = ?",
-      args: [upgradeCost, userId],
+      args: [totalCost, userId],
     });
 
-    // Aktuellen Geldstand abfragen
-const moneyRes = await db.execute({
-  sql: "SELECT money FROM users WHERE id = ?",
-  args: [userId],
-});
+    const moneyRes = await db.execute({
+      sql: "SELECT money FROM users WHERE id = ?",
+      args: [userId],
+    });
 
-res.json({
-  message: "Upgrade erfolgreich",
-  newLevel,
-  newIncome,
-  newMoney: moneyRes.rows[0].money,
-});
-
+    res.json({
+      message: "Upgrade erfolgreich",
+      newLevel: currentLevel,
+      newIncome: currentIncome,
+      newMoney: moneyRes.rows[0].money,
+    });
   } catch (err) {
     console.error("❌ Fehler bei Bewohner-Upgrade:", err);
     res.status(500).json({ error: "Upgrade fehlgeschlagen" });
   }
 });
 
-
 router.post("/upgrade-speed", verifyToken, async (req, res) => {
   const userId = req.user.id;
-  const { villagerId } = req.body;
+  const { villagerId, times = 1 } = req.body;
 
   try {
-    // Bewohner und Dorf holen
     const result = await db.execute({
       sql: `
         SELECT v.*, u.money 
@@ -230,51 +231,54 @@ router.post("/upgrade-speed", verifyToken, async (req, res) => {
       args: [villagerId, userId],
     });
 
-    const villager = result.rows[0];
-    if (!villager) return res.status(404).json({ message: "Bewohner nicht gefunden" });
+    let villager = result.rows[0];
+    if (!villager)
+      return res.status(404).json({ message: "Bewohner nicht gefunden" });
 
-    const upgradeCost = 10 * (villager.speed + 1);
-    if (villager.money < upgradeCost) {
-      return res.status(400).json({ message: "Nicht genug Geld" });
+    let currentSpeed = villager.speed;
+    let availableMoney = villager.money;
+    let totalCost = 0;
+
+    for (let i = 0; i < times; i++) {
+      const cost = 10 * (currentSpeed + 1);
+      if (availableMoney < cost) break;
+
+      currentSpeed += 0.5;
+      availableMoney -= cost;
+      totalCost += cost;
     }
 
-    const newSpeed = villager.speed + 0.5;
-
-    // Upgrade durchführen
     await db.execute({
       sql: "UPDATE villagers SET speed = ? WHERE id = ?",
-      args: [newSpeed, villagerId],
+      args: [currentSpeed, villagerId],
     });
 
     await db.execute({
       sql: "UPDATE users SET money = money - ? WHERE id = ?",
-      args: [upgradeCost, userId],
+      args: [totalCost, userId],
     });
 
-    // Aktuellen Geldstand abfragen
-const moneyRes = await db.execute({
-  sql: "SELECT money FROM users WHERE id = ?",
-  args: [userId],
-});
+    const moneyRes = await db.execute({
+      sql: "SELECT money FROM users WHERE id = ?",
+      args: [userId],
+    });
 
-res.json({
-  message: "Upgrade erfolgreich",
-  newSpeed,
-  newMoney: moneyRes.rows[0].money,
-});
-
+    res.json({
+      message: "Upgrade erfolgreich",
+      newSpeed: currentSpeed,
+      newMoney: moneyRes.rows[0].money,
+    });
   } catch (err) {
-    console.error("❌ Fehler bei Bewohner-Upgrade:", err);
+    console.error("❌ Fehler bei Speed-Upgrade:", err);
     res.status(500).json({ error: "Upgrade fehlgeschlagen" });
   }
 });
 
 router.post("/upgrade-stamina", verifyToken, async (req, res) => {
   const userId = req.user.id;
-  const { villagerId } = req.body;
+  const { villagerId, times = 1 } = req.body;
 
   try {
-    // Bewohner und Dorf holen
     const result = await db.execute({
       sql: `
         SELECT v.*, u.money 
@@ -286,41 +290,45 @@ router.post("/upgrade-stamina", verifyToken, async (req, res) => {
       args: [villagerId, userId],
     });
 
-    const villager = result.rows[0];
-    if (!villager) return res.status(404).json({ message: "Bewohner nicht gefunden" });
+    let villager = result.rows[0];
+    if (!villager)
+      return res.status(404).json({ message: "Bewohner nicht gefunden" });
 
-    const upgradeCost = 10 * (villager.stamina + 1);
-    if (villager.money < upgradeCost) {
-      return res.status(400).json({ message: "Nicht genug Geld" });
+    let currentStamina = villager.stamina;
+    let availableMoney = villager.money;
+    let totalCost = 0;
+
+    for (let i = 0; i < times; i++) {
+      const cost = 10 * (currentStamina + 1);
+      if (availableMoney < cost) break;
+
+      currentStamina += 0.5;
+      availableMoney -= cost;
+      totalCost += cost;
     }
 
-    const newStamina = villager.stamina + 0.5;
-
-    // Upgrade durchführen
     await db.execute({
       sql: "UPDATE villagers SET stamina = ? WHERE id = ?",
-      args: [newStamina, villagerId],
+      args: [currentStamina, villagerId],
     });
 
     await db.execute({
       sql: "UPDATE users SET money = money - ? WHERE id = ?",
-      args: [upgradeCost, userId],
+      args: [totalCost, userId],
     });
 
-    // Aktuellen Geldstand abfragen
-const moneyRes = await db.execute({
-  sql: "SELECT money FROM users WHERE id = ?",
-  args: [userId],
-});
+    const moneyRes = await db.execute({
+      sql: "SELECT money FROM users WHERE id = ?",
+      args: [userId],
+    });
 
-res.json({
-  message: "Upgrade erfolgreich",
-  newStamina,
-  newMoney: moneyRes.rows[0].money,
-});
-
+    res.json({
+      message: "Upgrade erfolgreich",
+      newStamina: currentStamina,
+      newMoney: moneyRes.rows[0].money,
+    });
   } catch (err) {
-    console.error("❌ Fehler bei Bewohner-Upgrade:", err);
+    console.error("❌ Fehler bei Stamina-Upgrade:", err);
     res.status(500).json({ error: "Upgrade fehlgeschlagen" });
   }
 });
@@ -363,6 +371,5 @@ router.patch("/villager/:id/rename", verifyToken, async (req, res) => {
     res.status(500).json({ error: "Fehler beim Umbenennen" });
   }
 });
-
 
 export default router;

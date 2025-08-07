@@ -219,6 +219,11 @@ body.dark-mode .topbar {
   transform: scale(1.05);
 }
 
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .hearts {
   font-size: 1.5rem;
   margin-bottom: 1rem;

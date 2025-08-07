@@ -27,7 +27,7 @@ router.get("/collect", verifyToken, async (req, res) => {
       // 2 Bewohner einfügen (ohne x/y)
       for (let i = 0; i < 2; i++) {
   await db.execute({
-    sql: "INSERT INTO villagers (village_id, name, level, income) VALUES (?, ?, ?, ?)",
+    sql: "INSERT INTO villagers (village_id, name, level, income, speed, stamina) VALUES (?, ?, ?, ?, ?, ?)",
     args: [villageId, `Bewohner ${i + 1}`, 1, 1],
   });
 }
@@ -43,7 +43,7 @@ router.get("/collect", verifyToken, async (req, res) => {
 console.log("📦 Village ID im Code:", village.id);
     // 2. Bewohner holen
     const villagersResult = await db.execute({
-      sql: "SELECT id, name, level, income FROM villagers WHERE village_id = ?",
+      sql: "SELECT id, name, level, income, speed, stamina FROM villagers WHERE village_id = ?",
       args: [village.id],
     });
     const villagers = villagersResult.rows;
@@ -131,7 +131,7 @@ router.post("/upgrade", verifyToken, async (req, res) => {
 // 3. Neue Bewohner hinzufügen
 for (let i = 0; i < 2; i++) {
   await db.execute({
-    sql: "INSERT INTO villagers (village_id, name, income) VALUES (?, ?, ?)",
+    sql: "INSERT INTO villagers (village_id, name, income, speed, stamina) VALUES (?, ?, ?, ?, ?)",
     args: [data.villageId, `Bewohner ${i + 1}`, 1],
   });
 }
@@ -260,8 +260,7 @@ const moneyRes = await db.execute({
 
 res.json({
   message: "Upgrade erfolgreich",
-  newLevel,
-  newIncome,
+  newSpeed,
   newMoney: moneyRes.rows[0].money,
 });
 
@@ -317,8 +316,7 @@ const moneyRes = await db.execute({
 
 res.json({
   message: "Upgrade erfolgreich",
-  newLevel,
-  newIncome,
+  newStamina,
   newMoney: moneyRes.rows[0].money,
 });
 

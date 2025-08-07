@@ -32,7 +32,7 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     this.username = this.auth.getUsername() || 'Unbekannt';
     this.loadMessages(true);
-    setInterval(() => this.loadMessages(), 5000);
+    setInterval(() => this.loadMessages(), 50000000000000000000000000000);
   }
 
   loadMessages(scrollToBottom: boolean = false) {

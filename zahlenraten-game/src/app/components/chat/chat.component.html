@@ -1,12 +1,14 @@
 <div class="chat-box">
   <h3>💬 Globaler Chat</h3>
 
-  <div class="messages" #messageContainer>
-    <div class="message" *ngFor="let msg of messages" [ngClass]="{'user-message': msg.username === username}">
-      <span class="user">{{ msg.username }}</span>
-      <span class="text">{{ msg.message }}</span>
-    </div>
+<div class="message" *ngFor="let msg of messages" [ngClass]="{'user-message': msg.username === username}">
+  <div class="message-header">
+    <span class="user">{{ msg.username }}</span>
+    <span class="timestamp">{{ msg.created_at | date:'short' }}</span>
   </div>
+  <span class="text">{{ msg.message }}</span>
+</div>
+
 
   <form (ngSubmit)="sendMessage()" class="chat-form">
     <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht..." />

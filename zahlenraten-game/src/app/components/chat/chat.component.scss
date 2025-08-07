@@ -22,75 +22,7 @@ h3 {
 }
 
 .message {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  background-color: white;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  font-size: 0.95rem;
-}
-
-/* Nachricht des Benutzers */
-.user-message {
-  background-color: #d4f1f4; /* Helle Farbe für Nachrichten des Benutzers */
-  color: #2c3e50;
-}
-
-.user {
-  font-weight: bold;
-  color: #2c3e50;
-  text-align: left;
-  flex: 1;
-}
-
-.text {
-  color: #333;
-  text-align: right;
-  flex: 1;
-  word-break: break-word;
-}
-
-.user {
-  flex-basis: 30%;
-}
-
-.text {
-  flex-basis: 70%;
-}
-
-.chat-form {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-input {
-  flex: 1;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-.timestamp{
-  font-size: 1rem;
-}
-
-.message {
   position: relative;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
   padding: 0.75rem 1rem;
   border-radius: 6px;
   background-color: white;
@@ -98,10 +30,14 @@ button {
   font-size: 0.95rem;
 }
 
+.user-message {
+  background-color: #d4f1f4;
+  color: #2c3e50;
+}
+
 .message-content {
   position: relative;
-  width: 100%;
-  padding-bottom: 1.2rem; /* Platz für Zeitstempel unten */
+  padding-bottom: 1.2rem; /* Platz für Zeitstempel */
 }
 
 .user {
@@ -125,3 +61,24 @@ button {
   color: #999;
 }
 
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}

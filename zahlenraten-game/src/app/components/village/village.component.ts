@@ -267,7 +267,7 @@ animate = () => {
     // Setze die Farbe basierend auf dem Status
     switch (v.state) {
       case 'goingToMine':
-        this.ctx.fillStyle = '#1abc9c'; // Türkisgrün
+        this.ctx.fillStyle = '#2ecc71'; // Türkisgrün
         break;
       case 'resting':
         this.ctx.fillStyle = '#3498db'; // Hellblau
@@ -285,7 +285,7 @@ animate = () => {
         this.ctx.fillStyle = '#e74c3c'; // Sattes Rot
         break;
       default:
-        this.ctx.fillStyle = '#1abc9c'; // Default (Türkisgrün)
+        this.ctx.fillStyle = '#2ecc71'; // Default (Türkisgrün)
     }
 
     // Bewegung

@@ -66,6 +66,25 @@ upgradeVillager(id: number): Observable<{ newLevel: number; newIncome: number; n
   );
 }
 
+  
+upgradeSpeed(id: number): Observable<{ newSpeed: number; newMoney: number }> {
+  const headers = this.getAuthHeaders();
+  return this.http.post<{ newSpeed: number; newMoney: number }>(
+    `${this.baseUrl}/upgrade-speed`,
+    { villagerId: id },
+    { headers }
+  );
+}
+
+  upgradeStamina(id: number): Observable<{ newStamina: number; newMoney: number }> {
+  const headers = this.getAuthHeaders();
+  return this.http.post<{ newStamina: number; newMoney: number }>(
+    `${this.baseUrl}/upgrade-stamina`,
+    { villagerId: id },
+    { headers }
+  );
+}
+
 renameVillager(id: number, name: string) {
   const headers = this.getAuthHeaders(); // Falls Auth nötig ist
   return this.http.patch<{ newName: string }>(

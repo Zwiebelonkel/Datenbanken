@@ -430,6 +430,48 @@ enableRename(v: VillagerAnim) {
     },
   });
 }
+  upgradeSpeed(villager: VillagerAnim) {
+  const upgradeCost = 10; // Define cost for speed upgrade
+
+  if (this.money >= upgradeCost) {
+    this.isLoading = true;
+
+    // Increase the villager's speed by a fixed amount (for example, 0.1)
+    villager.speed += 0.1;
+
+    // Deduct money for the upgrade
+    this.money -= upgradeCost;
+
+    // Update the villagers' stats
+    this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+    this.isLoading = false;
+  } else {
+    alert('Not enough money to upgrade speed!');
+    this.isLoading = false;
+  }
+}
+
+upgradeStamina(villager: VillagerAnim) {
+  const upgradeCost = 10; // Define cost for stamina upgrade
+
+  if (this.money >= upgradeCost) {
+    this.isLoading = true;
+
+    // Increase the villager's stamina by a fixed amount (for example, 0.1)
+    villager.stamina += 0.1;
+
+    // Deduct money for the upgrade
+    this.money -= upgradeCost;
+
+    // Update the villagers' stats
+    this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+    this.isLoading = false;
+  } else {
+    alert('Not enough money to upgrade stamina!');
+    this.isLoading = false;
+  }
+}
+
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);

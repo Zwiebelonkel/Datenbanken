@@ -20,6 +20,8 @@ interface Villager {
   name: string;
   level: number;
   income: number;
+  speed: number;
+  stamina: number;
 }
 
 type VillagerState = 'goingToMine' | 'working' | 'goingToMarket' | 'selling' | 'goingHome' | 'resting';

@@ -92,50 +92,77 @@
   max-width: 90%;
   width: 400px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-
-  h3 {
-    margin-top: 0;
-    text-align: center;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-
-    // 🔧 Neue Scrollbar-Funktionalität
-    max-height: 300px;
-    overflow-y: auto;
-
-    li {
-      display: flex;
-      justify-content: space-between;
-      margin: 0.5rem 0;
-      align-items: center;
-
-      button {
-        background: #3498db;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 0.3rem 0.6rem;
-        cursor: pointer;
-      }
-    }
-  }
-
-  .close-btn {
-    margin-top: 1rem;
-    background: #e74c3c;
-  }
+  max-height: 80vh; /* Limitiert die Höhe des Popups auf 80% der Bildschirmhöhe */
+  overflow-y: auto; /* Nur vertikal scrollen */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-// 🔒 Disabled Button im Popup
-.popup button:disabled {
-  opacity: 0.5;
+h3 {
+  margin-top: 0;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 60vh; /* Verhindert, dass die Liste zu lang wird */
+  overflow-y: auto; /* Nur vertikal scrollen */
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 1rem 0;
+  align-items: flex-start;
+}
+
+button {
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-// 🎨 Optional: Schönere Scrollbar für WebKit-Browser
+button:not(:disabled):hover {
+  background-color: #2980b9;
+}
+
+.close-btn {
+  margin-top: 1rem;
+  background: #e74c3c;
+  width: 100%;
+}
+
+strong {
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+}
+
+strong:hover {
+  text-decoration: underline;
+}
+
+.cost {
+  color: #e67e22;
+  font-weight: bold;
+}
+
 .popup ul::-webkit-scrollbar {
   width: 8px;
 }
@@ -144,6 +171,34 @@
   background-color: #ccc;
   border-radius: 4px;
 }
+
+/* Optional: Styling für das Input-Feld */
+input[type="text"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+input[type="text"]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 500px) {
+  .popup {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .popup-backdrop {
+    padding: 1rem;
+  }
+}
+
 .legend {
   display: flex;
   flex-direction: column;

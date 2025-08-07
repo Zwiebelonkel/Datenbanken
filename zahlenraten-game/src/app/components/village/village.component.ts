@@ -276,7 +276,7 @@ animate = () => {
         this.ctx.fillStyle = '#9b59b6'; // Violett
         break;
       case 'goingToMarket':
-        this.ctx.fillStyle = '#2ecc71'; // Frisches Grün
+        this.ctx.fillStyle = '#f39c12'; // Gelb, weil selling State nicht sichtbar ist
         break;
       case 'selling':
         this.ctx.fillStyle = '#f39c12'; // Sonniges Gelb

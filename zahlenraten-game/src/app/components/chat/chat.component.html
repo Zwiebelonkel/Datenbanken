@@ -2,15 +2,11 @@
   <h3>💬 Globaler Chat</h3>
 
   <div class="messages" #messageContainer>
-    <div class="message" *ngFor="let msg of messages">
+    <div class="message" *ngFor="let msg of messages" [ngClass]="{'user-message': msg.username === username}">
       <span class="user">{{ msg.username }}</span>
       <span class="text">{{ msg.message }}</span>
     </div>
   </div>
-
-  <!-- <button (click)="toggleShowAll()">
-    {{ showAll ? "🔼 Weniger anzeigen" : "🔽 Mehr anzeigen" }}
-  </button> -->
 
   <form (ngSubmit)="sendMessage()" class="chat-form">
     <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht..." />

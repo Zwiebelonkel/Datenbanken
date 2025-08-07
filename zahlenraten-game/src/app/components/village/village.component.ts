@@ -234,7 +234,7 @@ collectEarnings() {
 
     const upgradeCost = this.getUpgradeCost(villager.speed);
 
-    this.villageService.upgradeVillager(villager.id).subscribe({
+    this.villageService.upgradeSpeed(villager.id).subscribe({
       next: (res) => {
         villager.speed = res.newSpeed;
         this.money = res.newMoney;
@@ -253,7 +253,7 @@ collectEarnings() {
 
     const upgradeCost = this.getUpgradeCost(villager.stamina);
 
-    this.villageService.upgradeVillager(villager.id).subscribe({
+    this.villageService.upgradeStamina(villager.id).subscribe({
       next: (res) => {
         villager.stamina = res.newStamina;
         this.money = res.newMoney;

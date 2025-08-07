@@ -4,6 +4,7 @@
   <div class="messages" #messageContainer>
     <div class="message" *ngFor="let msg of messages" [ngClass]="{'user-message': msg.username === username}">
       <span class="user">{{ msg.username }}</span>
+      <span class="timestamp">{{ msg.created_at }}</span>
       <span class="text">{{ msg.message }}</span>
     </div>
   </div>

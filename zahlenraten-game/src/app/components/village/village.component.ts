@@ -227,7 +227,7 @@ collectEarnings() {
     });
   }
 
- animate = () => {
+animate = () => {
   this.animationId = requestAnimationFrame(this.animate);
 
   const canvas = this.canvasRef.nativeElement;
@@ -267,25 +267,25 @@ collectEarnings() {
     // Setze die Farbe basierend auf dem Status
     switch (v.state) {
       case 'goingToMine':
-        this.ctx.fillStyle = '#2ecc71'; // grün
+        this.ctx.fillStyle = '#1abc9c'; // Türkisgrün
         break;
       case 'resting':
-        this.ctx.fillStyle = '#312ecc'; // dunkelblau
+        this.ctx.fillStyle = '#3498db'; // Hellblau
         break;
       case 'working':
-        this.ctx.fillStyle = '#cc2eb4'; // pink
+        this.ctx.fillStyle = '#9b59b6'; // Violett
         break;
       case 'goingToMarket':
-        this.ctx.fillStyle = '#2ecc88'; // hellgrün
+        this.ctx.fillStyle = '#2ecc71'; // Frisches Grün
         break;
       case 'selling':
-        this.ctx.fillStyle = '#ccbf2e'; // gelb
+        this.ctx.fillStyle = '#f39c12'; // Sonniges Gelb
         break;
       case 'goingHome':
-        this.ctx.fillStyle = '#cc2e2e'; // rot
+        this.ctx.fillStyle = '#e74c3c'; // Sattes Rot
         break;
       default:
-        this.ctx.fillStyle = '#2ecc71'; // Default für unbekannten Zustand
+        this.ctx.fillStyle = '#1abc9c'; // Default (Türkisgrün)
     }
 
     // Bewegung

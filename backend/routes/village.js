@@ -40,7 +40,6 @@ router.get("/collect", verifyToken, async (req, res) => {
     }
 
     const village = villageResult.rows[0];
-console.log("📦 Village ID im Code:", village.id);
     // 2. Bewohner holen
     const villagersResult = await db.execute({
       sql: "SELECT id, name, level, income, speed, stamina FROM villagers WHERE village_id = ?",
@@ -88,7 +87,6 @@ console.log("📦 Village ID im Code:", village.id);
     console.error("❌ Fehler in /api/village/collect:", err);
     res.status(500).json({ error: "Serverfehler beim Sammeln" });
   }
-  console.log(villagers)
 });
 
 router.post("/upgrade", verifyToken, async (req, res) => {

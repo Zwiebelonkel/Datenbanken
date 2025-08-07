@@ -267,22 +267,23 @@ collectEarnings() {
     });
   }
 
-animate = () => {
+ animate = () => {
   this.animationId = requestAnimationFrame(this.animate);
 
   const canvas = this.canvasRef.nativeElement;
   this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 🏠 Häuser
+  // 🏠 Häuser zeichnen
   const numHouses = Math.ceil(this.villagers.length / 2);
   for (let i = 0; i < numHouses; i++) {
     const col = i % 3;
     const row = Math.floor(i / 3);
     const x = 40 + col * 120;
     const y = 75 + row * 80;
+
     this.ctx.fillStyle = '#fff';
     this.ctx.fillRect(x, y, 60, 60);
-    this.ctx.strokeStyle = '#000000'; // Farbe der Umrandung
+    this.ctx.strokeStyle = '#000';
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(x, y, 60, 60);
   }
@@ -299,89 +300,94 @@ animate = () => {
   this.ctx.fillStyle = '#2ecc71';
   this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
 
-  // 👥 Bewohner-Logik
+  // Bewohner bewegen und zeichnen
   this.villagers.forEach((v) => {
-    // Bewegung mit angepasstem Speed
+    // ➕ Sicherstellen, dass Mindestwerte verwendet werden
+    const speed = Math.max(v.speed, 2);
+    const stamina = Math.max(v.stamina, 2);
+
     const dx = v.targetX - v.x;
     const dy = v.targetY - v.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
 
-    const speedFactor = v.speed / 10; // Geschwindigkeit basierend auf Speed
+    const speedFactor = speed / 10;
     if (dist > 1) {
       v.x += (dx / dist) * speedFactor;
       v.y += (dy / dist) * speedFactor;
     }
 
-    // Setze die Farbe basierend auf dem Status
+    // Zustandswechsel nur, wenn angekommen
+    if (dist <= 1) {
+      switch (v.state) {
+        case 'goingToMine':
+          v.state = 'working';
+          v.workTimer = 30 + Math.random() * (120 - stamina);
+          break;
+
+        case 'working':
+          v.workTimer--;
+          if (v.workTimer <= 0) {
+            v.state = 'goingToMarket';
+            v.targetX = this.market.x + 20;
+            v.targetY = this.market.y + 20;
+          }
+          break;
+
+        case 'goingToMarket':
+          v.state = 'selling';
+          break;
+
+        case 'selling':
+          this.unsavedEarnings += v.income;
+          v.state = 'goingHome';
+          v.targetX = v.homeX;
+          v.targetY = v.homeY;
+          break;
+
+        case 'goingHome':
+          v.state = 'resting';
+          v.restTimer = 30 + Math.random() * (120 - stamina);
+          break;
+
+        case 'resting':
+          v.restTimer--;
+          if (v.restTimer <= 0) {
+            v.state = 'goingToMine';
+            v.targetX = this.mine.x + 20;
+            v.targetY = this.mine.y + 20;
+          }
+          break;
+      }
+    }
+
+    // 🎨 Farbe nach Status
     switch (v.state) {
       case 'goingToMine':
-        this.ctx.fillStyle = '#2ecc71'; // Türkisgrün
-        break;
-      case 'resting':
-        this.ctx.fillStyle = '#3498db'; // Hellblau
-        break;
+        this.ctx.fillStyle = '#2ecc71'; break;
       case 'working':
-        this.ctx.fillStyle = '#9b59b6'; // Violett
-        break;
+        this.ctx.fillStyle = '#9b59b6'; break;
       case 'goingToMarket':
-        this.ctx.fillStyle = '#f39c12'; // Gelb
-        break;
+        this.ctx.fillStyle = '#f39c12'; break;
       case 'selling':
-        this.ctx.fillStyle = '#f39c12'; // Sonniges Gelb
-        break;
+        this.ctx.fillStyle = '#f1c40f'; break;
       case 'goingHome':
-        this.ctx.fillStyle = '#e74c3c'; // Sattes Rot
-        break;
+        this.ctx.fillStyle = '#e74c3c'; break;
+      case 'resting':
+        this.ctx.fillStyle = '#3498db'; break;
       default:
-        this.ctx.fillStyle = '#2ecc71'; // Default
+        this.ctx.fillStyle = '#95a5a6';
     }
 
-    // Zustand-Übergang und Timer basierend auf Stamina
-    switch (v.state) {
-      case 'goingToMine':
-        v.state = 'working';
-        v.workTimer = 30 + Math.random() * (120 - v.stamina); // Weniger Arbeit bei höherer Stamina
-        break;
-      case 'working':
-        v.workTimer--;
-        if (v.workTimer <= 0) {
-          v.state = 'goingToMarket';
-          v.targetX = this.market.x + 20;
-          v.targetY = this.market.y + 20;
-        }
-        break;
-      case 'goingToMarket':
-        v.state = 'selling';
-        break;
-      case 'selling':
-        this.unsavedEarnings += v.income;
-        v.state = 'goingHome';
-        v.targetX = v.homeX;
-        v.targetY = v.homeY;
-        break;
-      case 'goingHome':
-        v.state = 'resting';
-        v.restTimer = 30 + Math.random() * (120 - v.stamina); // Kürzere Pausen bei höherer Stamina
-        break;
-      case 'resting':
-        v.restTimer--;
-        if (v.restTimer <= 0) {
-          v.state = 'goingToMine';
-          v.targetX = this.mine.x + 20;
-          v.targetY = this.mine.y + 20;
-        }
-        break;
-    }
-
-    // Zeichne den Villager
+    // Bewohner zeichnen
     this.ctx.beginPath();
     this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-    this.ctx.fill(); // Füllen mit der richtigen Farbe basierend auf dem Zustand
+    this.ctx.fill();
     this.ctx.lineWidth = 2;
-    this.ctx.strokeStyle = '#000000'; // schwarze Umrandung
+    this.ctx.strokeStyle = '#000';
     this.ctx.stroke();
   });
 };
+
 
   upgrade() {
     this.isLoading = true;

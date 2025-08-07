@@ -28,7 +28,7 @@ router.get("/collect", verifyToken, async (req, res) => {
       for (let i = 0; i < 2; i++) {
   await db.execute({
     sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
-    args: [villageId, `Bewohner ${i + 1}`],
+    args: [villageId, `Bewohner`],
   });
 }
 
@@ -131,7 +131,7 @@ router.post("/upgrade", verifyToken, async (req, res) => {
 for (let i = 0; i < 2; i++) {
   await db.execute({
     sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
-    args: [data.villageId, `Bewohner ${i + 1}`],
+    args: [data.villageId, `Bewohner`],
   });
 }
 

@@ -12,7 +12,9 @@
       }"
     >
       <div class="message-content">
-        <span class="user">{{ msg.username }}</span>
+        <span class="user"
+          ><b>{{ msg.username }}</b></span
+        >
         <span class="text">{{ msg.message }}</span>
         <span class="timestamp">{{ msg.created_at | date : "HH:mm" }}</span>
       </div>

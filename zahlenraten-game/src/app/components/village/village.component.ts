@@ -94,13 +94,13 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.incomePerMinute = res.villagers.reduce((sum, v) => sum + v.income, 0);
 
         this.villagers = res.villagers.map((v, i) => {
-const houseIndex = Math.floor(i / 2);
-const col = houseIndex % 3;
-const row = Math.floor(houseIndex / 3);
-const baseHomeX = 40 + col * 120 + 30;
-const baseHomeY = 75 + row * 80; // Wichtig: gleiche Y-Basis wie im animate für Häuser
-const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
-const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmitte
+        const houseIndex = Math.floor(i / 2);
+        const col = houseIndex % 3;
+        const row = Math.floor(houseIndex / 3);
+        const baseHomeX = 40 + col * 120 + 30;
+        const baseHomeY = 75 + row * 80; // Wichtig: gleiche Y-Basis wie im animate für Häuser
+        const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
+        const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmitte
 
 
           return {
@@ -222,6 +222,44 @@ collectEarnings() {
       },
       error: (err) => {
         alert(err.error.message || 'Fehler beim Upgrade');
+        this.isLoading = false;
+      },
+    });
+  }
+  
+  upgradeSpeed(villager: VillagerAnim) {
+    this.isLoading = true;
+
+    const upgradeCost = this.getUpgradeCost(villager.speed);
+
+    this.villageService.upgradeVillager(villager.id).subscribe({
+      next: (res) => {
+        villager.speed = res.newSpeed;
+        this.money = res.newMoney;
+        this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        alert(err.error.message || 'Fehler beim Speed-Upgrade');
+        this.isLoading = false;
+      },
+    });
+  }
+
+  upgradeStamina(villager: VillagerAnim) {
+    this.isLoading = true;
+
+    const upgradeCost = this.getUpgradeCost(villager.stamina);
+
+    this.villageService.upgradeVillager(villager.id).subscribe({
+      next: (res) => {
+        villager.stamina = res.newStamina;
+        this.money = res.newMoney;
+        this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        alert(err.error.message || 'Fehler beim Speed-Upgrade');
         this.isLoading = false;
       },
     });
@@ -363,13 +401,13 @@ animate = () => {
             this.incomePerMinute = res.villagers.reduce((sum, v) => sum + v.income, 0);
 
             this.villagers = res.villagers.map((v, i) => {
-const houseIndex = Math.floor(i / 2);
-const col = houseIndex % 3;
-const row = Math.floor(houseIndex / 3);
-const baseHomeX = 40 + col * 120 + 30;
-const baseHomeY = 75 + row * 80; // Wichtig: gleiche Y-Basis wie im animate für Häuser
-const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
-const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmitte
+            const houseIndex = Math.floor(i / 2);
+            const col = houseIndex % 3;
+            const row = Math.floor(houseIndex / 3);
+            const baseHomeX = 40 + col * 120 + 30;
+            const baseHomeY = 75 + row * 80; // Wichtig: gleiche Y-Basis wie im animate für Häuser
+            const homeX = baseHomeX + (i % 2 === 0 ? -8 : 8);
+            const homeY = baseHomeY + 30;  // Bewohner 30px unter Haus-Y, also in der Hausmitte
 
               return {
                 ...v,
@@ -430,49 +468,7 @@ enableRename(v: VillagerAnim) {
     },
   });
 }
-  upgradeSpeed(villager: VillagerAnim) {
-  const upgradeCost = 10; // Define cost for speed upgrade
-
-  if (this.money >= upgradeCost) {
-    this.isLoading = true;
-
-    // Increase the villager's speed by a fixed amount (for example, 0.1)
-    villager.speed += 0.1;
-
-    // Deduct money for the upgrade
-    this.money -= upgradeCost;
-
-    // Update the villagers' stats
-    this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
-    this.isLoading = false;
-  } else {
-    alert('Not enough money to upgrade speed!');
-    this.isLoading = false;
-  }
-}
-
-upgradeStamina(villager: VillagerAnim) {
-  const upgradeCost = 10; // Define cost for stamina upgrade
-
-  if (this.money >= upgradeCost) {
-    this.isLoading = true;
-
-    // Increase the villager's stamina by a fixed amount (for example, 0.1)
-    villager.stamina += 0.1;
-
-    // Deduct money for the upgrade
-    this.money -= upgradeCost;
-
-    // Update the villagers' stats
-    this.incomePerMinute = this.villagers.reduce((sum, v) => sum + v.income, 0);
-    this.isLoading = false;
-  } else {
-    alert('Not enough money to upgrade stamina!');
-    this.isLoading = false;
-  }
-}
-
-
+  
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
   }

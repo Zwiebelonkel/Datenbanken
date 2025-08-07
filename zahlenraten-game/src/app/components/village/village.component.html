@@ -141,7 +141,8 @@
 
           <button 
             (click)="upgradeStamina(v)"
-            [disabled]="money < getUpgradeCost(v.stamina)"          >
+            [disabled]="money < getUpgradeCost(v.stamina)"
+          >
             💪 Erhöhe Ausdauer (10 €)
           </button>
         </div>
@@ -151,6 +152,7 @@
     <button class="btn close-btn" (click)="showVillagerPopup = false">Schließen</button>
   </div>
 </div>
+
 
 <!-- 🔄 Loader -->
 <app-loader *ngIf="isLoading" />

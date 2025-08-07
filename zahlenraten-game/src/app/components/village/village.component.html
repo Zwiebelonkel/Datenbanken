@@ -136,14 +136,14 @@
             (click)="upgradeSpeed(v)"
             [disabled]="money < getUpgradeCost(v.speed)"
           >
-            🚀 Erhöhe Geschwindigkeit (10 €)
+            🚀 Erhöhe Geschwindigkeit ({{ getUpgradeCost(v.speed) }} €)
           </button>
 
           <button 
             (click)="upgradeStamina(v)"
             [disabled]="money < getUpgradeCost(v.stamina)"
           >
-            💪 Erhöhe Ausdauer (10 €)
+            💪 Erhöhe Ausdauer ({{ getUpgradeCost(v.stamina) }} €)
           </button>
         </div>
       </li>

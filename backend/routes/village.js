@@ -128,13 +128,14 @@ router.post("/upgrade", verifyToken, async (req, res) => {
       args: [newLevel, data.villageId],
     });
 
-    // 3. Neue Bewohner hinzufügen
-    for (let i = 0; i < 2; i++) {
-      await db.execute({
-        sql: "INSERT INTO villagers (village_id, name, income) VALUES (?, ?, ?)",
-        args: [data.villageId, `Bewohner ${Date.now()}`, 1],
-      });
-    }
+// 3. Neue Bewohner hinzufügen
+for (let i = 0; i < 2; i++) {
+  await db.execute({
+    sql: "INSERT INTO villagers (village_id, name, income) VALUES (?, ?, ?)",
+    args: [data.villageId, `Bewohner ${i + 1}`, 1],
+  });
+}
+
 
     // 4. Neuen Geldstand abrufen und zurückgeben
     const moneyRes = await db.execute({

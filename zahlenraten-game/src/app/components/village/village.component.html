@@ -101,20 +101,23 @@
     <ul>
       <li *ngFor="let v of villagers">
         <!-- Wenn im Bearbeitungsmodus -->
-<input
-  *ngIf="editingVillagerId === v.id"
-  [(ngModel)]="newName"
-  (blur)="renameVillager(v)"
-  (keydown.enter)="renameVillager(v)"
-  type="text"
-/>
+        <input
+          *ngIf="editingVillagerId === v.id"
+          [(ngModel)]="newName"
+          (blur)="renameVillager(v)"
+          (keydown.enter)="renameVillager(v)"
+          type="text"
+          placeholder="Neuer Name"
+        />
 
-<!-- Wenn NICHT im Bearbeitungsmodus -->
-<strong *ngIf="editingVillagerId !== v.id" (click)="enableRename(v)" style="cursor: pointer;">
-  {{ v.name }}
-</strong>
+        <!-- Wenn NICHT im Bearbeitungsmodus -->
+        <strong *ngIf="editingVillagerId !== v.id" (click)="enableRename(v)" style="cursor: pointer;">
+          {{ v.name }}
+        </strong>
 
         <span>⭐ {{ v.level }}</span>
+        <span>🚶‍♂️ Geschwindigkeit: {{ v.speed }}</span>
+        <span>💪 Ausdauer: {{ v.stamina }}</span>
 
         <!-- 💸 Upgrade-Kosten anzeigen -->
         <span class="cost">💰 {{ getUpgradeCost(v.level) }} €</span>
@@ -126,11 +129,29 @@
         >
           ⬆️
         </button>
+
+        <!-- Buttons for upgrading Speed and Stamina -->
+        <div>
+          <button 
+            (click)="upgradeSpeed(v)"
+            [disabled]="money < 10 || isLoading"  <!-- Example cost -->
+          >
+            🚀 Erhöhe Geschwindigkeit (10 €)
+          </button>
+
+          <button 
+            (click)="upgradeStamina(v)"
+            [disabled]="money < 10 || isLoading"  <!-- Example cost -->
+          >
+            💪 Erhöhe Ausdauer (10 €)
+          </button>
+        </div>
       </li>
     </ul>
 
     <button class="btn close-btn" (click)="showVillagerPopup = false">Schließen</button>
   </div>
 </div>
+
 <!-- 🔄 Loader -->
 <app-loader *ngIf="isLoading" />

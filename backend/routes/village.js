@@ -27,8 +27,8 @@ router.get("/collect", verifyToken, async (req, res) => {
       // 2 Bewohner einfügen (ohne x/y)
       for (let i = 0; i < 2; i++) {
   await db.execute({
-    sql: "INSERT INTO villagers (village_id, name, level, income, speed, stamina) VALUES (?, ?, ?, ?, ?, ?)",
-    args: [villageId, `Bewohner ${i + 1}`, 1, 1],
+    sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
+    args: [villageId, `Bewohner ${i + 1}`],
   });
 }
 
@@ -131,8 +131,8 @@ router.post("/upgrade", verifyToken, async (req, res) => {
 // 3. Neue Bewohner hinzufügen
 for (let i = 0; i < 2; i++) {
   await db.execute({
-    sql: "INSERT INTO villagers (village_id, name, income, speed, stamina) VALUES (?, ?, ?, ?, ?)",
-    args: [data.villageId, `Bewohner ${i + 1}`, 1],
+    sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
+    args: [data.villageId, `Bewohner ${i + 1}`],
   });
 }
 

@@ -346,7 +346,7 @@ collectEarnings() {
 
         case 'goingHome':
           v.state = 'resting';
-          v.restTimer = 200 + Math.random() * (120 - stamina);
+          v.restTimer = (180 + Math.random() * 40)/v.stamina;
           break;
 
         case 'resting':

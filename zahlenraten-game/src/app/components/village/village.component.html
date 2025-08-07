@@ -134,15 +134,14 @@
         <div>
           <button 
             (click)="upgradeSpeed(v)"
-            [disabled]="money < 10 || isLoading"  <!-- Example cost -->
+            [disabled]="money < getUpgradeCost(v.speed)"
           >
             🚀 Erhöhe Geschwindigkeit (10 €)
           </button>
 
           <button 
             (click)="upgradeStamina(v)"
-            [disabled]="money < 10 || isLoading"  <!-- Example cost -->
-          >
+            [disabled]="money < getUpgradeCost(v.stamina)"          >
             💪 Erhöhe Ausdauer (10 €)
           </button>
         </div>

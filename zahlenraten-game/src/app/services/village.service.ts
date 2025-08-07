@@ -21,6 +21,8 @@ collectIncome(): Observable<{
     name: string;
     level: number;
     income: number;
+    speed: number;
+    stamina: number;
   }[];
 }> {
   const headers = this.getAuthHeaders();
@@ -33,6 +35,8 @@ collectIncome(): Observable<{
       name: string;
       level: number;
       income: number;
+      speed: number;
+      stamina: number;
     }[];
   }>(`${this.baseUrl}/collect`, { headers });
 }

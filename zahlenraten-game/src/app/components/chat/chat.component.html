@@ -5,7 +5,11 @@
     <div
       class="message"
       *ngFor="let msg of messages"
-      [ngClass]="{ 'user-message': msg.username === username }"
+      [ngClass]="{
+        'user-message': msg.username === username,
+        'admin-message': msg.username === 'admin',
+        'other-message': msg.username !== username && msg.username !== 'admin'
+      }"
     >
       <div class="message-content">
         <span class="user">{{ msg.username }}</span>

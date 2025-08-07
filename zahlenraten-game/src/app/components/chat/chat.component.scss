@@ -28,6 +28,7 @@ h3 {
   background-color: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   font-size: 0.95rem;
+  /* Kein border-left oder border-right hier! */
 }
 
 .user-message {
@@ -35,16 +36,24 @@ h3 {
   color: #2c3e50;
 }
 
-.message-content {
-  position: relative;
-  padding-bottom: 1.2rem; /* Platz für Zeitstempel */
+.user-message {
+  background-color: #d4f1f4;
+  color: #2c3e50;
+  border-left: 4px solid #3498db;
 }
 
-.user {
+.admin-message {
+  background-color: #ffe5e5;
+  border-left: 4px solid #e74c3c;
+}
+
+.other-message {
+  border-right: 4px solid #555; /* dunkelgrauer Rand */
+}
+
+.admin-message .user {
+  color: #c0392b;
   font-weight: bold;
-  color: #2c3e50;
-  display: block;
-  margin-bottom: 0.25rem;
 }
 
 .text {

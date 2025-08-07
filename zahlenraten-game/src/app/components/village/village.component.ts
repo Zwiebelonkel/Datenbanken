@@ -321,7 +321,7 @@ collectEarnings() {
       switch (v.state) {
         case 'goingToMine':
           v.state = 'working';
-          v.workTimer = 30 + Math.random() * (120 - stamina);
+          v.workTimer = 100 + Math.random() * (120 - stamina);
           break;
 
         case 'working':
@@ -346,7 +346,7 @@ collectEarnings() {
 
         case 'goingHome':
           v.state = 'resting';
-          v.restTimer = 30 + Math.random() * (120 - stamina);
+          v.restTimer = 200 + Math.random() * (120 - stamina);
           break;
 
         case 'resting':

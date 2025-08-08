@@ -1,109 +1,134 @@
 .slot-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  font-family: "Nunito", sans-serif;
-  color: var(--text-color);
-  background-color: var(--card-bg);
-  padding: 1.8rem;
-  border-radius: 12px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+  max-width: 480px;
+  margin: 2.5rem auto;
+  font-family: 'Nunito', sans-serif;
+  color: #333;
+  background: linear-gradient(145deg, #f0f4ff, #d6e0ff);
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
   text-align: center;
+  user-select: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.slot-container:hover {
+  box-shadow: 0 15px 25px rgba(0,0,0,0.18);
 }
 
 .slot-header {
-  margin-bottom: 2rem;
-
-  h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
+  margin-bottom: 2.5rem;
 }
 
-.slot-reels {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 1.5rem;
-}
-
-button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: background 0.2s, transform 0.2s;
-
-  &:hover {
-    background-color: #45a049;
-    transform: scale(1.1);
-  }
-}
-
-.slot-result {
-  margin-top: 1rem;
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: green;
+.slot-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a237e;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
 }
 
 .slot-status {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  font-size: 1.2rem;
+  margin-bottom: 1.8rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #3949ab;
 }
 
-.slot-message.win {
-  color: green;
-  margin-top: 1rem;
-  font-weight: bold;
-}
-
-.slot-message.lose {
-  color: red;
-  margin-top: 1rem;
-  font-weight: bold;
+.slot-status span {
+  background: #e8eaf6;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: inset 2px 2px 5px rgba(255,255,255,0.8),
+              inset -2px -2px 5px rgba(0,0,0,0.05);
 }
 
 .slot-bet {
-  margin: 1rem 0;
-
-  label {
-    font-weight: bold;
-    margin-right: 0.5rem;
-  }
-
-  input {
-    padding: 0.4rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    width: 100px;
-    text-align: center;
-  }
-
-  .bet-buttons {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-top: 0.5rem;
-
-    button {
-      background-color: #1976d2;
-      color: white;
-      border: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover {
-        background-color: #1565c0;
-      }
-    }
-  }
+  margin-bottom: 2rem;
 }
 
+.slot-bet label {
+  font-weight: 700;
+  margin-right: 0.8rem;
+  font-size: 1.1rem;
+  color: #3f51b5;
+}
+
+.slot-bet input {
+  width: 120px;
+  padding: 0.5rem 0.8rem;
+  border-radius: 12px;
+  border: 2px solid #7986cb;
+  font-size: 1.1rem;
+  text-align: center;
+  transition: border-color 0.3s ease;
+  outline-offset: 2px;
+}
+
+.slot-bet input:focus {
+  border-color: #303f9f;
+  box-shadow: 0 0 8px rgba(63, 81, 181, 0.5);
+}
+
+.slot-reels {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+button {
+  background: linear-gradient(45deg, #4caf50, #388e3c);
+  color: white;
+  border: none;
+  padding: 0.75rem 2.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.15rem;
+  font-weight: 700;
+  box-shadow: 0 5px 12px rgba(56, 142, 60, 0.6);
+  transition: background 0.3s ease, transform 0.15s ease;
+  user-select: none;
+}
+
+button:disabled {
+  background: #a5d6a7;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+button:not(:disabled):hover {
+  background: linear-gradient(45deg, #43a047, #2e7d32);
+  transform: scale(1.1);
+}
+
+.slot-result {
+  margin-top: 1.5rem;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: #2e7d32;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.slot-message {
+  margin-top: 1.5rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 14px;
+  user-select: none;
+}
+
+.slot-message.win {
+  color: #2e7d32;
+  background: #c8e6c9;
+  box-shadow: 0 2px 8px rgba(46,125,50,0.4);
+}
+
+.slot-message.lose {
+  color: #c62828;
+  background: #ffcdd2;
+  box-shadow: 0 2px 8px rgba(198,40,40,0.4);
+}

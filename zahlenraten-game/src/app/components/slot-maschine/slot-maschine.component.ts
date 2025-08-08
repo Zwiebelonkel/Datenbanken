@@ -23,7 +23,7 @@ import { FormsModule } from '@angular/forms'
 })
 export class SlotMaschineComponent implements OnInit {
   reels = [0, 1, 2];
-  symbols = ['🍒', '🍋', '🔔', '💎', { name: 'logo', src: 'assets/logo.png' }];
+  symbols = ['🍒', '🍋', '🔔', '💎', '{ name: 'logo', src: 'assets/logo.png' }'];
   results: string[] = [];
 
   message: string = '';

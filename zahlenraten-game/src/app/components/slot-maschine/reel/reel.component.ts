@@ -16,12 +16,12 @@ export class ReelComponent {
   { type: 'emoji', value: '💎' },
   { type: 'image', value: 'assets/logo.png' }
 ];
-  @Input() finalSymbol: string = '❔';
+@Input() finalSymbol: SymbolData | null = null;
 
 currentSymbol: { type: 'emoji' | 'image'; value: string } | null = null;  spinning = false;
   private intervalId: any;
 
-spin(finalSymbol: string) {
+spin(finalSymbol: SymbolData) {
   this.spinning = true;
 
   this.intervalId = setInterval(() => {
@@ -35,5 +35,6 @@ spin(finalSymbol: string) {
     this.spinning = false;
   }, 900);
 }
+
 
 }

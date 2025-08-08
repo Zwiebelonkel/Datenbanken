@@ -8,11 +8,7 @@ import { ProfileService } from '../../services/profile.service';
 import { ReelComponent } from './reel/reel.component';
 import { FormsModule } from '@angular/forms'
 
-interface SymbolData {
-  type: 'emoji' | 'image';
-  value: string;
-}
-
+type SymbolData = { type: 'emoji' | 'image'; value: string };
 
 @Component({
   selector: 'app-slot-maschine',

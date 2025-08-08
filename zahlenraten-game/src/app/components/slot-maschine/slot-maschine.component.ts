@@ -66,7 +66,7 @@ spin() {
     next: () => {
       this.results = ['⏳', '⏳', '⏳']; // Startanzeige
 
-      const spinDelay = 300; // ms zwischen Rollen starten
+      const spinDelay = 500; // ms zwischen Rollen starten
       const newResults: string[] = [];
 
       this.reelComponents.forEach((reel, i) => {

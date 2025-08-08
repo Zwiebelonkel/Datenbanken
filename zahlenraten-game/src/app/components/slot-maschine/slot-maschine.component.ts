@@ -122,7 +122,7 @@ spin() {
                       // Nachricht an den Chat senden
                       this.chatService.sendMessage({
                         username: 'Info',
-                        message: `${this.username} hat gerade einen Jackpot geknackt`
+                        message: `${this.username} hat gerade einen Jackpot geknackt und ${this.winReward} gewonnen! 💸`
                       }).subscribe({
                         next: () => {
                           console.log('Nachricht erfolgreich gesendet!');

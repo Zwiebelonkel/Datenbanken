@@ -16,7 +16,7 @@ export class ReelComponent {
 ];
   @Input() finalSymbol: string = '❔';
 
-  currentSymbol: string = '{ name: 'logo', src: 'assets/logo.png' }';
+currentSymbol = { type: 'image', value: 'assets/logo.png' };
   spinning = false;
   private intervalId: any;
 

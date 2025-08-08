@@ -51,6 +51,7 @@ const ALL_ACHIEVEMENTS = [
     description: "Du hast 20 mal richtig geraten ohne ein Leben zu verlieren",
   },
   { name: "Champion 🏆", description: "Sei auf dem Leaderboard" },
+  { name: "Bürgermeister", description: "Verbessere dein Dorf" },
 ];
 
 // Registrierung mit Dorf und Bewohnern

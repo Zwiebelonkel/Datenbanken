@@ -1,5 +1,4 @@
-/* reel.component.scss */
-:host {
+.reel {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,4 +11,17 @@
   margin: 0 5px;
   user-select: none;
   transition: transform 0.3s ease;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning {
+  animation: spin 1s linear;
 }

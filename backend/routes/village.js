@@ -63,7 +63,9 @@ router.get("/collect", verifyToken, async (req, res) => {
       });
     }
 
-    const totalIncome = minutesPassed * (village.base_income + villagersIncome);
+    // Hier den Offline-Multiplikator anwenden (z.B. 50% des Einkommens)
+    const offlineMultiplier = 0.5; // 50% des normalen Einkommens
+    const totalIncome = minutesPassed * (village.base_income + villagersIncome) * offlineMultiplier;
 
     // 4. Einkommen verbuchen
     await db.execute({
@@ -88,6 +90,7 @@ router.get("/collect", verifyToken, async (req, res) => {
     res.status(500).json({ error: "Serverfehler beim Sammeln" });
   }
 });
+
 
 router.post("/upgrade", verifyToken, async (req, res) => {
   const userId = req.user.id;

@@ -25,9 +25,10 @@
 
   <button (click)="spin()" [disabled]="currentMoney < spinCost">Spin</button>
 
-  <div *ngIf="results.length" class="slot-result">
-    Ergebnis: {{ results.join(' | ') }}
-  </div>
+<div *ngIf="results.length" class="slot-result">
+  Ergebnis: {{ resultString }}
+</div>
+
 
   <div *ngIf="message" [class.win]="isWinner" [class.lose]="!isWinner" class="slot-message">
     {{ message }}

@@ -64,24 +64,24 @@ spin() {
   this.currentMoney -= this.spinCost;
   this.moneyService.updateMoney({ username: this.username, amount: -this.spinCost }).subscribe({
     next: () => {
-      this.results = ['⏳', '⏳', '⏳']; // Start mit Drehsymbolen
+      this.results = ['⏳', '⏳', '⏳']; // Startanzeige
 
-      const spinDelay = 300; // ms Verzögerung zwischen Rollen
+      const spinDelay = 300; // ms zwischen Rollen starten
       const newResults: string[] = [];
 
       this.reelComponents.forEach((reel, i) => {
         setTimeout(() => {
-          // Neues Symbol vor Drehung festlegen
+          // Finales Symbol bestimmen
           const index = Math.floor(Math.random() * this.symbols.length);
           newResults[i] = this.symbols[index];
-          this.results = [...newResults]; // UI sofort updaten!
 
-          // Reel animieren
-          reel.spin();
+          // Reel drehen mit finalem Symbol
+          reel.spin(newResults[i]);
 
-          // Wenn letzte Rolle: nach Animation prüfen
+          // Wenn letzte Rolle: nach ca 1 Sekunde Ergebnis prüfen
           if (i === this.reels.length - 1) {
             setTimeout(() => {
+              this.results = [...newResults];
               if (this.isJackpot()) {
                 this.moneyService.updateMoney({ username: this.username, amount: this.winReward }).subscribe({
                   next: () => {
@@ -96,7 +96,7 @@ spin() {
                 this.isWinner = false;
                 this.loadMoney();
               }
-            }, 1000); // Warte bis Animation vorbei ist (1 Sekunde)
+            }, 1100); // leicht länger als Reel spin Dauer
           }
         }, i * spinDelay);
       });
@@ -107,6 +107,7 @@ spin() {
     }
   });
 }
+
 
 
 

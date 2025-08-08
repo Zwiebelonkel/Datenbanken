@@ -24,7 +24,7 @@
 
   </div>
 
-  <button (click)="spin()" [disabled]="currentMoney < spinCost">Spin</button>
+<button (click)="spin()" [disabled]="currentMoney < spinCost || isSpinning">Spin</button>
 
 <div *ngIf="results.length" class="slot-result">
   Ergebnis: 

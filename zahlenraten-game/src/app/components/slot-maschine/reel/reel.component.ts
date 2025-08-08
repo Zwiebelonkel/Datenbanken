@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-reel',
+  imports: [CommonModule],
   templateUrl: './reel.component.html',
   styleUrls: ['./reel.component.scss'],
   standalone: true

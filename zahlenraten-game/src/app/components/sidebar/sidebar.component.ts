@@ -89,6 +89,11 @@ export class SidebarComponent implements OnInit {
     this.sidebarOpen = false;
   }
 
+    goToSlots() {
+    this.router.navigate(['/slot-maschine']);
+    this.sidebarOpen = false;
+  }
+
   goToLogin() {
     this.router.navigate(['/login']);
   }

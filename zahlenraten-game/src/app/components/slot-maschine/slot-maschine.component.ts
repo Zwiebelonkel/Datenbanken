@@ -7,6 +7,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ProfileService } from '../../services/profile.service';
 import { ReelComponent } from './reel/reel.component';
 import { FormsModule } from '@angular/forms'
+import { Renderer2 } from '@angular/core';
 
 type SymbolData = { type: 'emoji' | 'image'; value: string };
 

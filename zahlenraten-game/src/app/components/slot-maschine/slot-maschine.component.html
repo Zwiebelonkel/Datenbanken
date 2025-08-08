@@ -9,11 +9,11 @@
   </div>
 
   <div class="slot-reels">
-    <app-reel
-      *ngFor="let reel of reels; let i = index"
-      [symbol]="results[i] || '❔'"
-      #reelComp
-    ></app-reel>
+<app-reel
+  *ngFor="let reel of reels; let i = index"
+  #reelComp
+></app-reel>
+
   </div>
 
   <button (click)="spin()" [disabled]="currentMoney < spinCost">Spin</button>

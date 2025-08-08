@@ -4,7 +4,11 @@
   </div>
 
   <div class="slot-reels">
-    <app-reel *ngFor="let reel of reels; let i = index" [symbol]="results[i]"></app-reel>
+    <app-reel
+      *ngFor="let reel of reels; let i = index"
+      [symbol]="results[i] || '❔'"
+      #reelComp
+    ></app-reel>
   </div>
 
   <button (click)="spin()">Spin</button>

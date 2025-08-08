@@ -15,11 +15,22 @@ export class AchievementService {
     );
   }
 
-  getDescription(name: string): string {
+  getAchievementDescription(name: string): string {
     const descriptions: Record<string, string> = {
       'First Game 1️⃣': 'Dein erstes Spiel!',
       'Pechvogel 🐓': '0 Punkte erzielt',
-      // ...
+      'Newbie 🐣': 'Du hast 10 Punkte erreicht!',
+      'Glückspilz 🍄': 'Du hast 50 Punkte erreicht!',
+      'Zahlenmeister 💯': 'Du hast 75 Punkte erreicht!',
+      'Rund 🥸': 'Du hast 100 Punkte erreicht!',
+      'Göttlicher Segen 👼🏻': 'Du hast 500 Punkte erreicht!',
+      'Gambler 🎲': 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren',
+      'Arbeitswoche 🛠️':
+        'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
+      'Strategieprofi 🧭':
+        'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
+      'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren',
+      'Champion 🏆': 'Sei auf dem Leaderboard',
     };
     return descriptions[name] || 'Erfolg freigeschaltet';
   }

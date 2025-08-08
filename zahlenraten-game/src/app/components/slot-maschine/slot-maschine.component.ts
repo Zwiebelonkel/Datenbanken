@@ -6,7 +6,7 @@ import { MoneyService } from '../../services/money.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ProfileService } from '../../services/profile.service';
-import { ReelComponent } from '../reel/reel.component';
+import { ReelComponent } from './reel/reel.component';
 
 
 @Component({

@@ -127,6 +127,7 @@ reel.spin(newResults[i]); // Muss Objekt übergeben
                 this.isWinner = false;
                 this.loadMoney();
               }
+              this.isSpinning = false;
             }, 1100); // leicht länger als Reel spin Dauer
           }
         }, i * spinDelay);
@@ -134,11 +135,10 @@ reel.spin(newResults[i]); // Muss Objekt übergeben
     },
     error: () => {
       this.message = '❌ Fehler beim Abziehen der Coins';
+      this.isSpinning = false;
       this.loadMoney();
     }
   });
-    this.isSpinning = false;
-
 }
 
 

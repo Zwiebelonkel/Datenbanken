@@ -1,3 +1,7 @@
 <div class="reel" [class.spinning]="spinning">
-  {{ currentSymbol || '❔' }}
+  <ng-container [ngSwitch]="currentSymbol?.type">
+    <span *ngSwitchCase="'emoji'">{{ currentSymbol?.value }}</span>
+    <img *ngSwitchCase="'image'" [src]="currentSymbol?.value" alt="symbol" />
+    <span *ngSwitchDefault>❔</span>
+  </ng-container>
 </div>

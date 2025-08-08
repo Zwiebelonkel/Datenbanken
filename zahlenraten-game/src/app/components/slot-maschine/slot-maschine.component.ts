@@ -61,6 +61,7 @@ results: SymbolData[] = [];
     private profileService: ProfileService,
     private authService: AuthService,
     private moneyService: MoneyService,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {

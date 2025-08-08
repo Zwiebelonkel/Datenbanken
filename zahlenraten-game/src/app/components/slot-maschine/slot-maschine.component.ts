@@ -2,13 +2,13 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-slot-machine',
-  templateUrl: './slot-machine.component.html',
-  styleUrls: ['./slot-machine.component.scss']
+  selector: 'app-slot-maschine',
+  templateUrl: './slot-maschine.component.html',
+  styleUrls: ['./slot-maschine.component.scss']
   standalone: true,
   imports: [CommonModule, LoaderComponent, SidebarComponent],
 })
-export class SlotMachineComponent {
+export class SlotMaschineComponent {
   reels = [0, 1, 2]; // Drei Rollen
   symbols = ['🍒', '🍋', '🔔', '💎', '🍀'];
   results: string[] = [];

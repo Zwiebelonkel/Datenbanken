@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Renderer2 } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class AchievementService {
       {
         userId,
         name,
-        description: this.getDescription(name),
+        description: this.getAchievementDescription(name),
       }
     );
   }

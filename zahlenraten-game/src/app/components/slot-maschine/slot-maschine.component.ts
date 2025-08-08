@@ -1,5 +1,7 @@
 // slot-machine.component.ts
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { MoneyService } from '../../services/money.service';
 
 @Component({
   selector: 'app-slot-maschine',

@@ -110,6 +110,7 @@ reel.spin(newResults[i]); // Muss Objekt übergeben
             setTimeout(() => {
               this.results = [...newResults];
               if (this.isJackpot()) {
+                this.emojiRain('💸')
                 this.moneyService.updateMoney({ username: this.username, amount: this.winReward }).subscribe({
                   next: () => {
                     this.message = `🎉 Jackpot! Du hast ${this.winReward} Coins gewonnen!`;

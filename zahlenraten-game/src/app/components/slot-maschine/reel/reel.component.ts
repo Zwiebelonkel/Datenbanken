@@ -7,7 +7,13 @@ import { Component, Input } from '@angular/core';
   standalone: true
 })
 export class ReelComponent {
-  @Input() symbols: string[] = ['🍒', '🍋', '🔔', '💎', '{ name: 'logo', src: 'assets/logo.png' }'];
+  @Input() symbols = [
+  { type: 'emoji', value: '🍒' },
+  { type: 'emoji', value: '🍋' },
+  { type: 'emoji', value: '🔔' },
+  { type: 'emoji', value: '💎' },
+  { type: 'image', value: 'assets/logo.png' }
+];
   @Input() finalSymbol: string = '❔';
 
   currentSymbol: string = '{ name: 'logo', src: 'assets/logo.png' }';

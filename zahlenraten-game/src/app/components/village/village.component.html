@@ -187,5 +187,9 @@
   </div>
 </div>
 
+    <div class="toast" *ngIf="achievementMessage">
+      {{ achievementMessage }}
+    </div>
+
 <!-- 🔄 Loader -->
 <app-loader *ngIf="isLoading" />

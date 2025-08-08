@@ -219,11 +219,6 @@ body.dark-mode .topbar {
   transform: scale(1.05);
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
 .hearts {
   font-size: 1.5rem;
   margin-bottom: 1rem;
@@ -640,4 +635,10 @@ body.dark-mode {
 /* Marker-Position korrigieren: Zeigt der Marker nach oben, wenn die zugehörige Zahl unterhalb der Leiste liegt */
 .number-scale .number-marker.below .marker {
   top: -1.1rem;
+}
+
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

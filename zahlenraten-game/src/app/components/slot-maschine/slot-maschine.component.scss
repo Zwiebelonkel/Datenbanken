@@ -1,12 +1,50 @@
-/* slot-machine.component.css */
-.machine {
+.slot-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  font-family: "Nunito", sans-serif;
+  color: var(--text-color);
+  background-color: var(--card-bg);
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.slot-header {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.slot-reels {
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
 }
 
 button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 18px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+
+  &:hover {
+    background-color: #45a049;
+    transform: scale(1.1);
+  }
+}
+
+.slot-result {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: green;
 }

@@ -37,7 +37,7 @@ spin(finalSymbol: SymbolData) {
     clearInterval(this.intervalId);
     this.currentSymbol = finalSymbol;
     this.spinning = false;
-  }, 900);
+  }, 500);
 }
 
 

@@ -25,3 +25,8 @@
   0%   { transform: rotateX(0deg); }
   100% { transform: rotateX(1440deg); } // 4 volle Drehungen (360 * 4)
 }
+
+img {
+  max-width: 100px;
+  max-height: 100px;
+}

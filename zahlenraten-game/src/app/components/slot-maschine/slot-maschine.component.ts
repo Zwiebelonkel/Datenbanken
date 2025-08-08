@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { ProfileService } from '../../services/profile.service';
+
 
 @Component({
   selector: 'app-slot-maschine',
@@ -16,6 +18,12 @@ export class SlotMaschineComponent {
   reels = [0, 1, 2]; // Drei Rollen
   symbols = ['🍒', '🍋', '🔔', '💎', '🍀'];
   results: string[] = [];
+
+    constructor(
+    private profileService: ProfileService,
+    private auth: AuthService,
+    private moneyService: MoneyService,
+  ) {}
 
   spin() {
     this.results = this.reels.map(() => {

@@ -1,8 +1,11 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AchievementService {
-  constructor(private http: HttpClient, private soundService: SoundsService, private renderer: Renderer2) {}
+  constructor(private http: HttpClient, private renderer: Renderer2) {}
 
   unlockAchievement(userId: string, name: string) {
     return this.http.post<{ unlocked: boolean; name: string }>(

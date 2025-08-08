@@ -14,7 +14,7 @@ export class ReelComponent {
   spinning = false;
   private intervalId: any;
 
-  spin() {
+  spin(finalSymbol: string) {
     this.spinning = true;
     
     // Schnelles Symbolwechsel-Intervall starten (z.B. alle 50ms)

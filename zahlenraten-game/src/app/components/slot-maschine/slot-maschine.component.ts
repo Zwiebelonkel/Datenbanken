@@ -85,7 +85,12 @@ spin() {
   this.currentMoney -= this.spinCost;
   this.moneyService.updateMoney({ username: this.username, amount: -this.spinCost }).subscribe({
     next: () => {
-      this.results = ['⏳', '⏳', '⏳']; // Startanzeige
+      this.results = [
+  { type: 'emoji', value: '⏳' },
+  { type: 'emoji', value: '⏳' },
+  { type: 'emoji', value: '⏳' }
+];
+
 
       const spinDelay = 500; // ms zwischen Rollen starten
       const newResults: SymbolData[] = [];

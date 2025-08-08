@@ -23,8 +23,13 @@ import { FormsModule } from '@angular/forms'
 })
 export class SlotMaschineComponent implements OnInit {
   reels = [0, 1, 2];
-  symbols = ['🍒', '🍋', '🔔', '💎', '{ name: 'logo', src: 'assets/logo.png' }'];
-  results: string[] = [];
+symbols = [
+  { type: 'emoji', value: '🍒' },
+  { type: 'emoji', value: '🍋' },
+  { type: 'emoji', value: '🔔' },
+  { type: 'emoji', value: '💎' },
+  { type: 'image', value: 'assets/logo.png' }
+];  results: string[] = [];
 
   message: string = '';
   isWinner: boolean = false;

@@ -135,7 +135,30 @@ reel.spin(newResults[i]); // Muss Objekt übergeben
 }
 
 
+  emojiRain(emoji: string, count: number = 50) {
+    const container = document.querySelector('.emoji-rain-container');
+    if (!container) return;
 
+    for (let i = 0; i < count; i++) {
+      const span = this.renderer.createElement('span');
+      const text = this.renderer.createText(emoji);
+      this.renderer.appendChild(span, text);
+      this.renderer.addClass(span, 'emoji-drop');
+
+      const startX = Math.random() * window.innerWidth;
+      const delay = Math.random() * 2;
+
+      this.renderer.setStyle(span, 'left', `${startX}px`);
+      this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
+
+      this.renderer.appendChild(container, span);
+
+      // ❗ Timeout mit passendem Delay (nicht neu deklarieren)
+      setTimeout(() => {
+        this.renderer.removeChild(container, span);
+      }, (3 + delay) * 1000);
+    }
+  }
 
   isJackpot(): boolean {
     return this.results.length === 3 &&

@@ -10,7 +10,7 @@ import { ClickerComponent } from './components/clicker/clicker.component';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
 import { VillageComponent } from './components/village/village.component';
-import { SlotMachineComponent } from './components/slot-machine/slot-machine.component';
+import { SlotMachineComponent } from './components/slot-machine/slot-maschine.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },

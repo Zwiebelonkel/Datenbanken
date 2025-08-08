@@ -14,20 +14,19 @@ export class ReelComponent {
   spinning = false;
   private intervalId: any;
 
-  spin(finalSymbol: string) {
-    this.spinning = true;
-    
-    // Schnelles Symbolwechsel-Intervall starten (z.B. alle 50ms)
-    this.intervalId = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * this.symbols.length);
-      this.currentSymbol = this.symbols[randomIndex];
-    }, 50);
+spin(finalSymbol: string) {
+  this.spinning = true;
 
-    // Nach 1 Sekunde Spin beenden, finale Symbol setzen
-    setTimeout(() => {
-      clearInterval(this.intervalId);
-      this.currentSymbol = this.finalSymbol;
-      this.spinning = false;
-    }, 1000);
-  }
+  this.intervalId = setInterval(() => {
+    const randomIndex = Math.floor(Math.random() * this.symbols.length);
+    this.currentSymbol = this.symbols[randomIndex];
+  }, 50);
+
+  setTimeout(() => {
+    clearInterval(this.intervalId);
+    this.currentSymbol = finalSymbol;
+    this.spinning = false;
+  }, 1000);
+}
+
 }

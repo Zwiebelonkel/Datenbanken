@@ -26,11 +26,12 @@ export class AchievementService {
       'Göttlicher Segen 👼🏻': 'Du hast 500 Punkte erreicht!',
       'Gambler 🎲': 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren',
       'Arbeitswoche 🛠️':
-        'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
+      'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
       'Strategieprofi 🧭':
-        'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
+      'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
       'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren',
       'Champion 🏆': 'Sei auf dem Leaderboard',
+      'Bürgermeister': 'Verbessere dein Dorf',
     };
     return descriptions[name] || 'Erfolg freigeschaltet';
   }

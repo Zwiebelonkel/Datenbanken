@@ -5,6 +5,8 @@ import { Component } from '@angular/core';
   selector: 'app-slot-machine',
   templateUrl: './slot-machine.component.html',
   styleUrls: ['./slot-machine.component.scss']
+  standalone: true,
+  imports: [CommonModule, LoaderComponent, SidebarComponent],
 })
 export class SlotMachineComponent {
   reels = [0, 1, 2]; // Drei Rollen

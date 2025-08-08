@@ -53,50 +53,61 @@ export class SlotMaschineComponent implements OnInit {
   }
 
   spin() {
-    this.message = '';
-    this.isWinner = false;
+  this.message = '';
+  this.isWinner = false;
 
-    if (this.currentMoney < this.spinCost) {
-      this.message = '❌ Nicht genug Coins!';
-      return;
-    }
-
-    // Lokalen Kontostand vorübergehend abziehen
-    this.currentMoney -= this.spinCost;
-
-    // Backend updaten
-    this.moneyService.updateMoney({ username: this.username, amount: -this.spinCost }).subscribe({
-      next: () => {
-        this.reelComponents.forEach(reel => reel.spin());
-
-        setTimeout(() => {
-          this.results = this.reels.map(() => {
-            const index = Math.floor(Math.random() * this.symbols.length);
-            return this.symbols[index];
-          });
-
-          // Gewinn prüfen
-          if (this.isJackpot()) {
-            this.moneyService.updateMoney({ username: this.username, amount: this.winReward }).subscribe({
-              next: () => {
-                this.message = `🎉 Jackpot! Du hast ${this.winReward} Coins gewonnen!`;
-                this.isWinner = true;
-                this.loadMoney(); // Kontostand neu laden
-              },
-              error: () => this.message = 'Fehler beim Gutschreiben des Gewinns',
-            });
-          } else {
-            this.message = '🌀 Leider kein Gewinn. Versuche es nochmal!';
-            this.loadMoney(); // auch hier Kontostand refreshen
-          }
-        }, 1000);
-      },
-      error: () => {
-        this.message = '❌ Fehler beim Abziehen der Coins';
-        this.loadMoney();
-      }
-    });
+  if (this.currentMoney < this.spinCost) {
+    this.message = '❌ Nicht genug Coins!';
+    return;
   }
+
+  this.currentMoney -= this.spinCost;
+  this.moneyService.updateMoney({ username: this.username, amount: -this.spinCost }).subscribe({
+    next: () => {
+      this.results = ['⏳', '⏳', '⏳']; // Drehsymbol anzeigen
+      const spinDelay = 300; // ms zwischen den Rollen
+      const newResults: string[] = [];
+
+      this.reelComponents.forEach((reel, i) => {
+        setTimeout(() => {
+          reel.spin();
+
+          // Nach Animation Symbol setzen
+          const index = Math.floor(Math.random() * this.symbols.length);
+          newResults[i] = this.symbols[index];
+
+          // Sobald alle Rollen fertig sind (letzte Rolle)
+          if (i === this.reels.length - 1) {
+            // Kleiner Timeout, um das letzte Symbol sichtbar zu machen
+            setTimeout(() => {
+              this.results = [...newResults]; // Ergebnisse setzen
+              
+              if (this.isJackpot()) {
+                this.moneyService.updateMoney({ username: this.username, amount: this.winReward }).subscribe({
+                  next: () => {
+                    this.message = `🎉 Jackpot! Du hast ${this.winReward} Coins gewonnen!`;
+                    this.isWinner = true;
+                    this.loadMoney();
+                  },
+                  error: () => this.message = 'Fehler beim Gutschreiben des Gewinns',
+                });
+              } else {
+                this.message = '🌀 Leider kein Gewinn. Versuche es nochmal!';
+                this.isWinner = false;
+                this.loadMoney();
+              }
+            }, 200); // kleines Delay für bessere UX
+          }
+        }, i * spinDelay);
+      });
+    },
+    error: () => {
+      this.message = '❌ Fehler beim Abziehen der Coins';
+      this.loadMoney();
+    }
+  });
+}
+
 
   isJackpot(): boolean {
     return this.results.length === 3 &&

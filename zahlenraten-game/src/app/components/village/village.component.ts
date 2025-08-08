@@ -61,8 +61,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   unsavedEarnings = 0;
   editingVillagerId: number | null = null;
   newName = '';
-  achievementMessage = ''
-
+  achievementMessage: string | null = null;
   villageLevel = 1;
   villagers: VillagerAnim[] = [];
   incomePerMinute = 0;

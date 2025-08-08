@@ -2,6 +2,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
+import { LoaderComponent } from '../loader/loader.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-slot-maschine',

@@ -41,6 +41,7 @@ results: SymbolData[] = [];
   currentMoney: number = 0;
   username: string = '';
   betAmount: number = 100;
+  isSpinning: boolean = false;
 
   get spinCost() {
     return this.betAmount;
@@ -77,6 +78,7 @@ results: SymbolData[] = [];
   }
 
 spin() {
+  this.isSpinning = true;
   this.message = '';
   this.isWinner = false;
 
@@ -135,6 +137,8 @@ reel.spin(newResults[i]); // Muss Objekt übergeben
       this.loadMoney();
     }
   });
+    this.isSpinning = false;
+
 }
 
 

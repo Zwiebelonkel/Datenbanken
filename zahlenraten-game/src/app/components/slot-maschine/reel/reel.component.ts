@@ -1,6 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+interface SymbolData {
+  type: 'emoji' | 'image';
+  value: string;
+}
+
+
 @Component({
   selector: 'app-reel',
   imports: [CommonModule],

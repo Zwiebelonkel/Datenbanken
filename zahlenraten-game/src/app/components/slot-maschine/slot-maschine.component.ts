@@ -6,6 +6,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ProfileService } from '../../services/profile.service';
 import { ReelComponent } from './reel/reel.component';
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'app-slot-maschine',
@@ -14,6 +15,7 @@ import { ReelComponent } from './reel/reel.component';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     LoaderComponent,
     SidebarComponent,
     ReelComponent
@@ -28,9 +30,15 @@ export class SlotMaschineComponent implements OnInit {
   isWinner: boolean = false;
   currentMoney: number = 0;
   username: string = '';
+  betAmount: number = 100;
 
-  readonly spinCost = 0;
-  readonly winReward = 500;
+  get spinCost() {
+    return this.betAmount;
+  }
+
+  get winReward(){
+    return this.betAmount*10
+  }
 
   @ViewChildren(ReelComponent) reelComponents!: QueryList<ReelComponent>;
 

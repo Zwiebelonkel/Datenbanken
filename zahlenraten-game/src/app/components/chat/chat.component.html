@@ -8,7 +8,8 @@
       [ngClass]="{
         'user-message': msg.username === username,
         'admin-message': msg.username === 'admin',
-        'other-message': msg.username !== username && msg.username !== 'admin'
+        'info-message': msg.username === 'info',
+        'other-message': msg.username !== username && msg.username !== 'admin' && msg.username !== 'info'
       }"
     >
       <div class="message-content">

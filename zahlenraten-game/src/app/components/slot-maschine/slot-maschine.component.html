@@ -1,4 +1,15 @@
-<div class="machine">
-  <app-reel *ngFor="let reel of reels; let i = index" [symbol]="results[i]"></app-reel>
+<div class="slot-container">
+  <div class="slot-header">
+    <h2>🎰 Slot Machine</h2>
+  </div>
+
+  <div class="slot-reels">
+    <app-reel *ngFor="let reel of reels; let i = index" [symbol]="results[i]"></app-reel>
+  </div>
+
+  <button (click)="spin()">Spin</button>
+
+  <div *ngIf="results.length" class="slot-result">
+    Ergebnis: {{ results.join(' | ') }}
+  </div>
 </div>
-<button (click)="spin()">🎲 Spin!</button>

@@ -8,6 +8,12 @@ import { ProfileService } from '../../services/profile.service';
 import { ReelComponent } from './reel/reel.component';
 import { FormsModule } from '@angular/forms'
 
+interface SymbolData {
+  type: 'emoji' | 'image';
+  value: string;
+}
+
+
 @Component({
   selector: 'app-slot-maschine',
   templateUrl: './slot-maschine.component.html',
@@ -23,13 +29,15 @@ import { FormsModule } from '@angular/forms'
 })
 export class SlotMaschineComponent implements OnInit {
   reels = [0, 1, 2];
-symbols = [
+symbols: SymbolData[] = [
   { type: 'emoji', value: '🍒' },
   { type: 'emoji', value: '🍋' },
   { type: 'emoji', value: '🔔' },
   { type: 'emoji', value: '💎' },
   { type: 'image', value: 'assets/logo.png' }
-];  results: string[] = [];
+];
+
+results: SymbolData[] = [];
 
   message: string = '';
   isWinner: boolean = false;
@@ -80,16 +88,15 @@ spin() {
       this.results = ['⏳', '⏳', '⏳']; // Startanzeige
 
       const spinDelay = 500; // ms zwischen Rollen starten
-      const newResults: string[] = [];
+      const newResults: SymbolData[] = [];
 
       this.reelComponents.forEach((reel, i) => {
         setTimeout(() => {
           // Finales Symbol bestimmen
-          const index = Math.floor(Math.random() * this.symbols.length);
-          newResults[i] = this.symbols[index];
+const index = Math.floor(Math.random() * this.symbols.length);
+newResults[i] = this.symbols[index];
+reel.spin(newResults[i]); // Muss Objekt übergeben
 
-          // Reel drehen mit finalem Symbol
-          reel.spin(newResults[i]);
 
           // Wenn letzte Rolle: nach ca 1 Sekunde Ergebnis prüfen
           if (i === this.reels.length - 1) {

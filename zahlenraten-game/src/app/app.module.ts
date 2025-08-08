@@ -21,6 +21,8 @@ import { PackOpeningComponent } from './components/pack-opening/pack-opening.com
 import { LoaderComponent } from './components/loader/loader.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ChatComponent} from './components/chat/chat.component';
+import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
+import { ReelComponent } from './components/slot-machine/reel/reel.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { ChatComponent} from './components/chat/chat.component';
     LoaderComponent,
     SidebarComponent,
     VillageComponent,
-    ChatComponent
+    ChatComponent,
+    SlotMaschineComponent,
+    ReelComponent
   ],
   imports: [
     BrowserModule,

@@ -136,6 +136,8 @@ button {
   }
 }
 
-button.disabled{
+button:disabled {
   background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;  /* Optionale Anpassung, um den Hover-Effekt zu deaktivieren */
 }

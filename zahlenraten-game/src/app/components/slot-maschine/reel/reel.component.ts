@@ -7,10 +7,10 @@ import { Component, Input } from '@angular/core';
   standalone: true
 })
 export class ReelComponent {
-  @Input() symbols: string[] = ['🍒', '🍋', '🔔', '💎', '🍀'];
+  @Input() symbols: string[] = ['🍒', '🍋', '🔔', '💎', '{ name: 'logo', src: 'assets/logo.png' }'];
   @Input() finalSymbol: string = '❔';
 
-  currentSymbol: string = '❔';
+  currentSymbol: string = '{ name: 'logo', src: 'assets/logo.png' }';
   spinning = false;
   private intervalId: any;
 

@@ -12,13 +12,14 @@ type SymbolData = { type: 'emoji' | 'image'; value: string };
   standalone: true
 })
 export class ReelComponent {
-  @Input() symbols = [
+@Input() symbols: SymbolData[] = [
   { type: 'emoji', value: '🍒' },
   { type: 'emoji', value: '🍋' },
   { type: 'emoji', value: '🔔' },
   { type: 'emoji', value: '💎' },
   { type: 'image', value: 'assets/logo.png' }
 ];
+
 @Input() finalSymbol: SymbolData | null = null;
 
 currentSymbol: { type: 'emoji' | 'image'; value: string } | null = null;  spinning = false;

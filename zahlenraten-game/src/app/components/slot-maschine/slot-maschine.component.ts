@@ -52,7 +52,7 @@ export class SlotMaschineComponent implements OnInit {
     });
   }
 
-  spin() {
+spin() {
   this.message = '';
   this.isWinner = false;
 
@@ -64,24 +64,24 @@ export class SlotMaschineComponent implements OnInit {
   this.currentMoney -= this.spinCost;
   this.moneyService.updateMoney({ username: this.username, amount: -this.spinCost }).subscribe({
     next: () => {
-      this.results = ['⏳', '⏳', '⏳']; // Drehsymbol anzeigen
-      const spinDelay = 300; // ms zwischen den Rollen
+      this.results = ['⏳', '⏳', '⏳']; // Start mit Drehsymbolen
+
+      const spinDelay = 300; // ms Verzögerung zwischen Rollen
       const newResults: string[] = [];
 
       this.reelComponents.forEach((reel, i) => {
         setTimeout(() => {
-          reel.spin();
-
-          // Nach Animation Symbol setzen
+          // Neues Symbol vor Drehung festlegen
           const index = Math.floor(Math.random() * this.symbols.length);
           newResults[i] = this.symbols[index];
+          this.results = [...newResults]; // UI sofort updaten!
 
-          // Sobald alle Rollen fertig sind (letzte Rolle)
+          // Reel animieren
+          reel.spin();
+
+          // Wenn letzte Rolle: nach Animation prüfen
           if (i === this.reels.length - 1) {
-            // Kleiner Timeout, um das letzte Symbol sichtbar zu machen
             setTimeout(() => {
-              this.results = [...newResults]; // Ergebnisse setzen
-              
               if (this.isJackpot()) {
                 this.moneyService.updateMoney({ username: this.username, amount: this.winReward }).subscribe({
                   next: () => {
@@ -96,7 +96,7 @@ export class SlotMaschineComponent implements OnInit {
                 this.isWinner = false;
                 this.loadMoney();
               }
-            }, 200); // kleines Delay für bessere UX
+            }, 1000); // Warte bis Animation vorbei ist (1 Sekunde)
           }
         }, i * spinDelay);
       });
@@ -107,6 +107,7 @@ export class SlotMaschineComponent implements OnInit {
     }
   });
 }
+
 
 
   isJackpot(): boolean {

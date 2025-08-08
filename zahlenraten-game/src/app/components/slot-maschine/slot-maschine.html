@@ -1,0 +1,4 @@
+<div class="machine">
+  <app-reel *ngFor="let reel of reels; let i = index" [symbol]="results[i]"></app-reel>
+</div>
+<button (click)="spin()">🎲 Spin!</button>

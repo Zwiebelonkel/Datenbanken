@@ -26,8 +26,18 @@
   <button (click)="spin()" [disabled]="currentMoney < spinCost">Spin</button>
 
 <div *ngIf="results.length" class="slot-result">
-  Ergebnis: {{ resultString }}
+  Ergebnis: 
+  <ng-container *ngFor="let symbol of results; let last = last">
+    <ng-container *ngIf="symbol.type === 'emoji'; else imageTemplate">
+      {{ symbol.value }}
+    </ng-container>
+    <ng-template #imageTemplate>
+      <img [src]="symbol.value" alt="Symbol" style="width: 30px; height: 30px;" />
+    </ng-template>
+    <span *ngIf="!last"> | </span>
+  </ng-container>
 </div>
+
 
 
   <div *ngIf="message" [class.win]="isWinner" [class.lose]="!isWinner" class="slot-message">

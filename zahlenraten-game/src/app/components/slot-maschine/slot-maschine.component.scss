@@ -135,3 +135,7 @@ button {
     opacity: 0;
   }
 }
+
+button.disabled{
+  background-color: #ccc;
+}

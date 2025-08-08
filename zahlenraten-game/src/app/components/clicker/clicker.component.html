@@ -6,7 +6,7 @@
   <app-loader *ngIf="isLoading"></app-loader>
 
   <div *ngIf="!isLoading" class="money-display">
-    💼 Gesamtguthaben: <strong>{{ money }} €</strong>
+    💼 Gesamtguthaben: <strong>{{ money | number : "1.2-2" }} €</strong>
   </div>
   <div class="click-amount">
     💸 Erspieltes Geld: <strong>{{ clickAmount }} €</strong>

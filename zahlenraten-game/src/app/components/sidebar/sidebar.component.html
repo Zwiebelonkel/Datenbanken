@@ -16,10 +16,7 @@
   >
     🛠️ Admin
   </button>
-    <button
-    *ngIf="authService.getRole()?.toLowerCase() === 'admin'"
-    (click)="goToSlots()"
-  >
+    <button (click)="goToSlots()">
     🎰 Slots
   </button>
 <button (click)="goToVillage()">

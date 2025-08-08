@@ -41,7 +41,7 @@ export class SlotMaschineComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.username = this.authService.getUsername(); // oder wie auch immer du den User bekommst
+    this.username = this.authService.getUsername() ?? '';
     this.loadMoney();
   }
 

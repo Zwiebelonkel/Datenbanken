@@ -69,3 +69,41 @@ button {
   font-weight: bold;
 }
 
+.slot-bet {
+  margin: 1rem 0;
+
+  label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+
+  input {
+    padding: 0.4rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100px;
+    text-align: center;
+  }
+
+  .bet-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+
+    button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #1565c0;
+      }
+    }
+  }
+}
+

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-slot-maschine',
   templateUrl: './slot-maschine.component.html',
-  styleUrls: ['./slot-maschine.component.scss']
+  styleUrls: ['./slot-maschine.component.scss'],
   standalone: true,
   imports: [CommonModule, LoaderComponent, SidebarComponent],
 })

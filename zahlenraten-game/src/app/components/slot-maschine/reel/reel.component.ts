@@ -18,8 +18,7 @@ export class ReelComponent {
 ];
   @Input() finalSymbol: string = '❔';
 
-currentSymbol = { type: 'image', value: 'assets/logo.png' };
-  spinning = false;
+currentSymbol: { type: 'emoji' | 'image'; value: string } | null = null;  spinning = false;
   private intervalId: any;
 
 spin(finalSymbol: string) {

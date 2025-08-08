@@ -29,8 +29,8 @@ export class SlotMaschineComponent implements OnInit {
   currentMoney: number = 0;
   username: string = '';
 
-  readonly spinCost = 10;
-  readonly winReward = 50;
+  readonly spinCost = 0;
+  readonly winReward = 500;
 
   @ViewChildren(ReelComponent) reelComponents!: QueryList<ReelComponent>;
 

@@ -177,6 +177,8 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
     let currentIncome = villager.income;
     let availableMoney = villager.money;
     let totalCost = 0;
+    currentIncome = parseFloat(currentIncome.toFixed(2));
+
 
     for (let i = 0; i < times; i++) {
       const cost = 10 * (currentLevel + 1);
@@ -184,14 +186,19 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
 
       currentLevel++;
       currentIncome += 0.2;
+
+      currentIncome = parseFloat(currentIncome.toFixed(2));
+
       availableMoney -= cost;
       totalCost += cost;
     }
 
+
     await db.execute({
       sql: "UPDATE villagers SET level = ?, income = ? WHERE id = ?",
-      args: [currentLevel, currentIncome, villagerId],
+      args: [currentLevel, parseFloat(currentIncome.toFixed(2)), villagerId],
     });
+
 
     await db.execute({
       sql: "UPDATE users SET money = money - ? WHERE id = ?",

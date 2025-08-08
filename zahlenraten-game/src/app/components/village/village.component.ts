@@ -513,27 +513,27 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   
-unlockAch(name: string) {
-  this.achievementService
-    .unlockAchievement(this.authService.getUserId(), name)
-    .subscribe({
-      next: (res) => {
-        if (res.unlocked) {
-          this.achievementService.showAchievementMessage(
-            `🎉 Erfolg freigeschaltet: ${res.name}`
-          );
-          this.achievementService.emojiRain(
-            '🎖️',
-            document.querySelector('.emoji-rain-container')
-          );
-          this.soundService.playSound('message.aac');
-        }
-      },
-      error: (err) => {
-        console.error('❌ Fehler beim Freischalten des Erfolgs:', err);
-      },
-    });
-}
+//unlockAch(name: string) {
+//  this.achievementService
+//    .unlockAchievement(this.authService.getUserId(), name)
+//    .subscribe({
+//      next: (res) => {
+//        if (res.unlocked) {
+//          this.achievementService.showAchievementMessage(
+ //           `🎉 Erfolg freigeschaltet: ${res.name}`
+ //         );
+//          this.achievementService.emojiRain(
+//            '🎖️',
+//            document.querySelector('.emoji-rain-container')
+//          );
+//          this.soundService.playSound('message.aac');
+//        }
+//      },
+//      error: (err) => {
+//        console.error('❌ Fehler beim Freischalten des Erfolgs:', err);
+//      },
+//    });
+//}
 
 
   ngOnDestroy() {

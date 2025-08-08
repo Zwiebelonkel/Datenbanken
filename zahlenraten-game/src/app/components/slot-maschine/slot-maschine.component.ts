@@ -49,6 +49,11 @@ results: SymbolData[] = [];
     return this.betAmount*10
   }
 
+  get resultString(): string {
+  return this.results.map(r => r.value).join(' | ');
+}
+
+
   @ViewChildren(ReelComponent) reelComponents!: QueryList<ReelComponent>;
 
   constructor(

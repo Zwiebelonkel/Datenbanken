@@ -3,6 +3,11 @@
     <h2>🎰 Slot Machine</h2>
   </div>
 
+  <div class="slot-status">
+    <span>💰 Geld: {{ currentMoney }} Coins</span>
+    <span>🎲 Einsatz: {{ spinCost }} Coins</span>
+  </div>
+
   <div class="slot-reels">
     <app-reel
       *ngFor="let reel of reels; let i = index"
@@ -11,9 +16,13 @@
     ></app-reel>
   </div>
 
-  <button (click)="spin()">Spin</button>
+  <button (click)="spin()" [disabled]="currentMoney < spinCost">Spin</button>
 
   <div *ngIf="results.length" class="slot-result">
     Ergebnis: {{ results.join(' | ') }}
+  </div>
+
+  <div *ngIf="message" [class.win]="isWinner" [class.lose]="!isWinner" class="slot-message">
+    {{ message }}
   </div>
 </div>

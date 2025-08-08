@@ -6,7 +6,12 @@
 
   <div class="slot-status">
     <span>💰 Geld: {{ currentMoney | number:'1.0-0' }}</span>
-    <span>🎲 Einsatz: {{ spinCost }} Coins</span>
+    <span>🎲 Einsatz: {{ spinCost }} Coins (Gewinn: {{winReward}} Coins</span>
+  </div>
+
+  <div class="slot-bet">
+    <label for="bet">Einsatz wählen:</label>
+    <input type="number" id="bet" [(ngModel)]="betAmount" min="1" step="1"></input>
   </div>
 
   <div class="slot-reels">

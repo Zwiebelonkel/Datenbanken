@@ -11,7 +11,6 @@
     >
   </div>
 
-  <!-- 🆕 NEU: Noch nicht eingesammelt -->
   <div class="info-row" *ngIf="unsavedEarnings > 0">
     <span>📦 Nicht eingesammelt:</span>
     <span
@@ -38,12 +37,6 @@
     <span>📈 Einkommen in dieser Zeit:</span>
     <span>+{{ earned | number : "1.2-2" }} 💵</span>
   </div>
-<!--
-<div class="info-row">
-    <span>📊 Geld pro Minute:</span>
-    <span>+{{ incomePerMinute | number : "1.2-2" }} 💵</span>
-  </div>
-  -->
 
   <div class="info-row">
     <span>🏘️ Dorf-Level:</span>
@@ -56,9 +49,35 @@
   </div>
 </div>
 
+<!-- 🆕 Mini-Statistik als eigene Card (gleiche Breite wie andere Cards) -->
+<div class="village-box" *ngIf="!isLoading && villagers.length">
+  <div class="mini-stats">
+    <span>⛏️ To Work: {{ villagerCounts.goingToMine }}</span>
+    <span>💤 Resting: {{ villagerCounts.resting }}</span>
+    <span>⚒️ Working: {{ villagerCounts.working }}</span>
+    <span>🔥 Selling: {{ villagerCounts.goingToMarket }}</span>
+    <span>🏠 To Home: {{ villagerCounts.goingHome }}</span>
+  </div>
+</div>
+
 <!-- 🖼️ Box: Canvas -->
-<div class="village-box canvas-box">
-  <canvas #villageCanvas width="400"></canvas>
+<div class="village-box canvas-box" style="position: relative">
+  <canvas
+    #villageCanvas
+    width="400"
+    (mousemove)="onCanvasHover($event)"
+    (mouseleave)="tooltip.visible = false"
+  ></canvas>
+
+  <!-- Tooltip -->
+  <div
+    class="tooltip"
+    *ngIf="tooltip.visible"
+    [style.left.px]="tooltip.x"
+    [style.top.px]="tooltip.y"
+  >
+    {{ tooltip.text }}
+  </div>
 </div>
 
 <!-- 🛠️ Box: Buttons -->
@@ -74,6 +93,7 @@
   <button class="btn" (click)="showVillagerPopup = true">
     👤 Bewohner anzeigen & verbessern
   </button>
+
   <div class="legend">
     <div class="legend-item" data-state="goingToMine">
       <div class="color-box" style="background-color: #2ecc71"></div>
@@ -98,12 +118,12 @@
   </div>
 </div>
 
+<!-- Bewohner Popup -->
 <div class="popup-backdrop" *ngIf="showVillagerPopup">
   <div class="popup">
     <h3>👥 Bewohnerliste</h3>
     <ul>
       <li *ngFor="let v of villagers" class="villager-card">
-        <!-- 📝 Name ändern -->
         <input
           *ngIf="editingVillagerId === v.id"
           [(ngModel)]="newName"
@@ -138,7 +158,6 @@
             >
               ⬆️ +1 Stufe ({{ getUpgradeCost(v.level) }} 💵)
             </button>
-
             <button
               (click)="upgradeVillager(v, 10)"
               [disabled]="money < getTotalUpgradeCost(v.level, 10)"
@@ -154,7 +173,6 @@
             >
               🚀 +1 Speed ({{ getUpgradeCost(v.speed) }} 💵)
             </button>
-
             <button
               (click)="upgradeSpeed(v, 10)"
               [disabled]="money < getTotalUpgradeCost(v.speed, 10)"
@@ -170,7 +188,6 @@
             >
               💪 +1 Ausdauer ({{ getUpgradeCost(v.stamina) }} 💵)
             </button>
-
             <button
               (click)="upgradeStamina(v, 10)"
               [disabled]="money < getTotalUpgradeCost(v.stamina, 10)"
@@ -188,9 +205,8 @@
   </div>
 </div>
 
-    <div class="toast" *ngIf="achievementMessage">
-      {{ achievementMessage }}
-    </div>
+<div class="toast" *ngIf="achievementMessage">
+  {{ achievementMessage }}
+</div>
 
-<!-- 🔄 Loader -->
 <app-loader *ngIf="isLoading" />

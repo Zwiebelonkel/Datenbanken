@@ -297,3 +297,25 @@ input[type="text"]:focus {
   border-color: #3498db;
   outline: none;
 }
+
+.tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.mini-stats {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  background: #f8f8f8;
+  border-radius: 6px;
+  margin: 5px 0;
+}

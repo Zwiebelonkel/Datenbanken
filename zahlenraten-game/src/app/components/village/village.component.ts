@@ -67,6 +67,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   villagers: VillagerAnim[] = [];
   incomePerMinute = 0;
   showVillagerPopup = false;
+  tooltip = { visible: false, x: 0, y: 0, text: '' };
 
   animationId = 0;
   ctx!: CanvasRenderingContext2D;
@@ -78,8 +79,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     private villageService: VillageService,
     private profileService: ProfileService,
     private auth: AuthService,
-    private moneyService: MoneyService,
-//    private achievementService: AchievementService
+    private moneyService: MoneyService //    private achievementService: AchievementService
   ) {}
 
   ngOnInit() {
@@ -173,6 +173,46 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     canvas.style.width = renderWidth + 'px';
     canvas.style.height = canvasHeight + 'px';
     console.log('resizing');
+  }
+
+  onCanvasHover(event: MouseEvent) {
+    const canvas = this.canvasRef.nativeElement;
+
+    // Mausposition RELATIV zum Canvas (keine Rect-Berechnung nötig)
+    const mouseX = event.offsetX ?? 0;
+    const mouseY = event.offsetY ?? 0;
+
+    // Tooltip-Position: Canvas-Offset innerhalb der Card + Mausposition
+    const offLeft = canvas.offsetLeft;
+    const offTop = canvas.offsetTop;
+
+    let found = false;
+    for (const v of this.villagers) {
+      // Hit-Test im Canvas-Koordinatensystem
+      if (Math.hypot(mouseX - v.x, mouseY - v.y) <= 12) {
+        this.tooltip = {
+          visible: true,
+          x: offLeft + mouseX + 12,
+          y: offTop + mouseY + 12,
+          text: `${v.name}  ⭐${v.level}`,
+        };
+        found = true;
+        break;
+      }
+    }
+    if (!found) this.tooltip.visible = false;
+  }
+
+  get villagerCounts() {
+    return {
+      goingToMine: this.villagers.filter((v) => v.state === 'goingToMine')
+        .length,
+      resting: this.villagers.filter((v) => v.state === 'resting').length,
+      working: this.villagers.filter((v) => v.state === 'working').length,
+      goingToMarket: this.villagers.filter((v) => v.state === 'goingToMarket')
+        .length,
+      goingHome: this.villagers.filter((v) => v.state === 'goingHome').length,
+    };
   }
 
   getUpgradeCost(level: number): number {
@@ -512,29 +552,28 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
   }
-  
-//unlockAch(name: string) {
-//  this.achievementService
-//    .unlockAchievement(this.authService.getUserId(), name)
-//    .subscribe({
-//      next: (res) => {
-//        if (res.unlocked) {
-//          this.achievementService.showAchievementMessage(
- //           `🎉 Erfolg freigeschaltet: ${res.name}`
- //         );
-//          this.achievementService.emojiRain(
-//            '🎖️',
-//            document.querySelector('.emoji-rain-container')
-//          );
-//          this.soundService.playSound('message.aac');
-//        }
-//      },
-//      error: (err) => {
-//        console.error('❌ Fehler beim Freischalten des Erfolgs:', err);
-//      },
-//    });
-//}
 
+  //unlockAch(name: string) {
+  //  this.achievementService
+  //    .unlockAchievement(this.authService.getUserId(), name)
+  //    .subscribe({
+  //      next: (res) => {
+  //        if (res.unlocked) {
+  //          this.achievementService.showAchievementMessage(
+  //           `🎉 Erfolg freigeschaltet: ${res.name}`
+  //         );
+  //          this.achievementService.emojiRain(
+  //            '🎖️',
+  //            document.querySelector('.emoji-rain-container')
+  //          );
+  //          this.soundService.playSound('message.aac');
+  //        }
+  //      },
+  //      error: (err) => {
+  //        console.error('❌ Fehler beim Freischalten des Erfolgs:', err);
+  //      },
+  //    });
+  //}
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);

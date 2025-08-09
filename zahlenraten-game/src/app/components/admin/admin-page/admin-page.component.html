@@ -11,8 +11,12 @@
           <li *ngFor="let user of users">
             <span class="username">{{ user.username }}</span>
             <div class="button-group">
-              <button class="delete-btn" (click)="deleteUser(user.id)">❌</button>
-              <button class="inspect-btn" (click)="showProfile(user.username)">🔎</button>
+              <button class="delete-btn" (click)="deleteUser(user.id)">
+                ❌
+              </button>
+              <button class="inspect-btn" (click)="showProfile(user.username)">
+                🔎
+              </button>
             </div>
           </li>
         </ul>
@@ -22,8 +26,12 @@
         <h2>🏆 Highscores verwalten</h2>
         <ul class="admin-list">
           <li *ngFor="let score of scores">
-            <span class="score-entry">{{ score.username }} – {{ score.score }} Punkte</span>
-            <button class="delete-btn" (click)="deleteScore(score.id)">❌</button>
+            <span class="score-entry"
+              >{{ score.username }} – {{ score.score }} Punkte</span
+            >
+            <button class="delete-btn" (click)="deleteScore(score.id)">
+              ❌
+            </button>
           </li>
         </ul>
       </section>
@@ -36,7 +44,9 @@
     <div class="stat-box">💠 Highscore: {{ selectedStats.highscore }}</div>
     <div class="stat-box">🏆 Punkte: {{ selectedStats.totalScore }}</div>
     <div class="stat-box">🎮 Partien: {{ selectedStats.totalGames }}</div>
-    <div class="stat-box">😊 Erfolge: {{ selectedStats.unlockedAchievements }}</div>
+    <div class="stat-box">
+      😊 Erfolge: {{ selectedStats.unlockedAchievements }}
+    </div>
     <div class="stat-box">💰 Geld: {{ selectedStats.money }} €</div>
   </div>
 </div>

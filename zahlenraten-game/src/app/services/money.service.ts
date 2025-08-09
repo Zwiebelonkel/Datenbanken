@@ -7,7 +7,7 @@ export class MoneyService {
 
   constructor(private http: HttpClient) {}
 
-    updateMoney(data: { username: string, amount: number }) {
-      return this.http.post(`${this.apiUrl}/update`, data);
-    }
+  updateMoney(data: { username: string; amount: number }) {
+    return this.http.post(`${this.apiUrl}/update`, data);
+  }
 }

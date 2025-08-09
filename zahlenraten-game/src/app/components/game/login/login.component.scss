@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 90vh;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 .form-container {
@@ -37,7 +37,7 @@ button {
   margin-top: 15px;
   width: 100%;
   padding: 10px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   border: none;
   color: white;
   font-size: 1em;
@@ -45,19 +45,16 @@ button {
   cursor: pointer;
   transition: background 0.3s ease;
   transition: 0.2s;
-
 }
 
 button:hover {
   background-color: #45a049;
   transform: scale(1.1);
   transition: 0.2s;
-
-
 }
 
 a {
-  color: #4CAF50;
+  color: #4caf50;
   text-decoration: none;
   font-weight: bold;
 }

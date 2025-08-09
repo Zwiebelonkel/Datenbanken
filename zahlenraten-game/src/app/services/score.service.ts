@@ -10,7 +10,6 @@ interface ScoreEntry {
   money_per_round?: number;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -28,7 +27,6 @@ export class ScoreService {
     return this.http.post(`${this.apiUrl}/submit`, scoreData);
   }
 
-
   getTopScores(): Observable<ScoreEntry[]> {
     return this.http.get<ScoreEntry[]>(`${this.apiUrl}/top`);
   }
@@ -39,11 +37,13 @@ export class ScoreService {
 
   getTopMoneyPerRound(): Observable<ScoreEntry[]> {
     return this.http.get<ScoreEntry[]>(`${this.apiUrl}/topMoneyPerRound`);
-}
-
+  }
 
   isHighscore(score: number): Observable<{ isHighscore: boolean }> {
-    return this.http.post<{ isHighscore: boolean }>(`${this.apiUrl}/isHighscore`, { score });
+    return this.http.post<{ isHighscore: boolean }>(
+      `${this.apiUrl}/isHighscore`,
+      { score }
+    );
   }
 
   updateTotalScore(scoreData: { username: string; score: number }) {
@@ -51,7 +51,8 @@ export class ScoreService {
   }
 
   getTotalScore(username: string): Observable<{ total_score: number }> {
-  return this.http.get<{ total_score: number }>(`https://outside-between.onrender.com/api/scores/userTotalScore/${username}`);
-}
-
+    return this.http.get<{ total_score: number }>(
+      `https://outside-between.onrender.com/api/scores/userTotalScore/${username}`
+    );
+  }
 }

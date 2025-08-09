@@ -1,13 +1,18 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
 <app-sidebar></app-sidebar>
 <div class="topbar" *ngIf="authService.isLoggedIn()">
   <!-- <div class="user-info">
     <span>👤 Eingeloggt als: <strong>{{ authService.getUsername() }}</strong></span>
     <span>🛡️ Rolle: <strong>{{ authService.getRole()?.toLowerCase() }}</strong></span>
   </div> -->
-  <span>👤 Welcome <strong>{{ authService.getUsername() }}</strong></span>
+  <span
+    >👤 Welcome <strong>{{ authService.getUsername() }}</strong></span
+  >
 </div>
 
 <div class="emoji-rain-container"></div>
@@ -19,22 +24,25 @@
   </div>
 </div>
 
-<div *ngIf="cardMultiplierUsed && cardMultiplier > 1.0" class="card-multiplier-banner">
+<div
+  *ngIf="cardMultiplierUsed && cardMultiplier > 1.0"
+  class="card-multiplier-banner"
+>
   🃏 Aktiver Karten-Multiplikator: <strong>x{{ cardMultiplier }}</strong>
 </div>
 
 <!-- Spiel läuft -->
 <div class="game-container" *ngIf="!gameOver">
-
-<div class="hearts">
-  <span 
-    *ngFor="let life of getLivesArray(); index as i" 
-    class="heart"
-    [ngStyle]="{ animationDuration: getHeartSpeed() }"
-    [style.animationDelay]="i * 0.1 + 's'"
-  >❤</span>
-</div>
-      <!--
+  <div class="hearts">
+    <span
+      *ngFor="let life of getLivesArray(); index as i"
+      class="heart"
+      [ngStyle]="{ animationDuration: getHeartSpeed() }"
+      [style.animationDelay]="i * 0.1 + 's'"
+      >❤</span
+    >
+  </div>
+  <!--
         Die beiden Zufallszahlen (num1 und num2) werden jetzt nicht mehr
         untereinander angezeigt. Stattdessen platzieren wir sie auf einer
         gemeinsamen Achse. Zwischen den Zahlen befindet sich eine waagrechte
@@ -43,8 +51,8 @@
         innerhalb des Elements mit der ID "finalNumber" und wird erst nach
         einer Schätzung sichtbar, wie zuvor.
       -->
-      <div class="numbers">
-        <!--
+  <div class="numbers">
+    <!--
           Visualisierung der beiden Zufallszahlen auf einem Zahlenstrahl (0–100).
           Jede Zahl wird anhand ihres Wertes relativ zur Breite der Leiste
           positioniert. Kleinere Werte erscheinen weiter links, größere weiter
@@ -53,81 +61,101 @@
           werden die Marker zentriert, sodass der Mittelpunkt exakt auf der
           berechneten Position liegt.
         -->
-        <div class="number-scale">
-          <!-- Endpunkte des Zahlenstrahls: die beiden Zufallszahlen -->
-          <span 
-            class="number-marker" 
-            [ngStyle]="{'left.%': getOffset(num1)}"
-            [ngClass]="{'below': shouldPlaceBelow(num1)}"
-          >{{ num1 }}
-        <div class="marker"></div></span>
-          <span 
-            class="number-marker" 
-            [ngStyle]="{'left.%': getOffset(num2)}"
-            [ngClass]="{'below': shouldPlaceBelow(num2)}"
-          >{{ num2 }}<div class="marker"></div>
-        </span>
-          <!-- Testzahl wird auf der gleichen Leiste angezeigt, sobald geschätzt wurde -->
-          <span 
-            *ngIf="showTest" 
-            class="number-marker" 
-            [ngStyle]="{'left.%': getOffset(testNum)}"
-            [ngClass]="{'test-num': true, 'below': shouldPlaceBelow(testNum)}"
-          >{{ testNum }}
-        <div class="marker"></div></span>
-        </div>
-      </div>
-
-<div class="buttons">
-  <button class="btn" [disabled]="buttonsDisabled" (click)="guess('inside')">Zwischen</button>
-  <button class="btn" [disabled]="buttonsDisabled" (click)="guess('outside')">Außerhalb</button>
-</div>
-
-  <p class="score">Punkte: <span>{{ score }}</span></p>
-
-    <div class="multiplier-display" *ngIf="currentMultiplier > 1">
-      🔥 Multiplikator: <strong>{{ currentMultiplier | number:'1.1-1' }}x</strong>
+    <div class="number-scale">
+      <!-- Endpunkte des Zahlenstrahls: die beiden Zufallszahlen -->
+      <span
+        class="number-marker"
+        [ngStyle]="{ 'left.%': getOffset(num1) }"
+        [ngClass]="{ below: shouldPlaceBelow(num1) }"
+        >{{ num1 }}
+        <div class="marker"></div
+      ></span>
+      <span
+        class="number-marker"
+        [ngStyle]="{ 'left.%': getOffset(num2) }"
+        [ngClass]="{ below: shouldPlaceBelow(num2) }"
+        >{{ num2 }}
+        <div class="marker"></div>
+      </span>
+      <!-- Testzahl wird auf der gleichen Leiste angezeigt, sobald geschätzt wurde -->
+      <span
+        *ngIf="showTest"
+        class="number-marker"
+        [ngStyle]="{ 'left.%': getOffset(testNum) }"
+        [ngClass]="{ 'test-num': true, below: shouldPlaceBelow(testNum) }"
+        >{{ testNum }}
+        <div class="marker"></div
+      ></span>
     </div>
-  <p class="money">💰 Geld: <span>{{ money }}€</span></p>
+  </div>
 
-<!-- Nur anzeigen, wenn multiplier aktiv -->
+  <div class="buttons">
+    <button class="btn" [disabled]="buttonsDisabled" (click)="guess('inside')">
+      Zwischen
+    </button>
+    <button class="btn" [disabled]="buttonsDisabled" (click)="guess('outside')">
+      Außerhalb
+    </button>
+  </div>
 
+  <p class="score">
+    Punkte: <span>{{ score }}</span>
+  </p>
+
+  <div class="multiplier-display" *ngIf="currentMultiplier > 1">
+    🔥 Multiplikator:
+    <strong>{{ currentMultiplier | number : "1.1-1" }}x</strong>
+  </div>
+  <p class="money">
+    💰 Geld: <span>{{ money }}€</span>
+  </p>
+
+  <!-- Nur anzeigen, wenn multiplier aktiv -->
 </div>
-
-
 
 <!-- Spiel vorbei -->
 <div class="game-over" *ngIf="gameOver">
   <h2>🎯 Game Over!</h2>
-  <p class="final-score">Dein Score: <strong>{{ score }}</strong></p>
+  <p class="final-score">
+    Dein Score: <strong>{{ score }}</strong>
+  </p>
 
-  <div *ngIf="authService.isLoggedIn() && this.score !== 0" class="highscore-form">
+  <div
+    *ngIf="authService.isLoggedIn() && this.score !== 0"
+    class="highscore-form"
+  >
     <button class="btn" (click)="submitScore()">🏅 Highscore speichern</button>
   </div>
 
-  <div *ngIf="!authService.isLoggedIn()" style="color: gray; font-size: 0.9em;">
+  <div *ngIf="!authService.isLoggedIn()" style="color: gray; font-size: 0.9em">
     <em>👉 <a routerLink="/login">Einloggen</a>, um Highscores zu speichern</em>
   </div>
 
   <button class="btn restart" (click)="restart()">🔄 Nochmal spielen</button>
 </div>
 
-<div 
-  *ngIf="authService.isLoggedIn() && !gameOver && !gameStarted && !cardUsed && !isLoading" 
+<div
+  *ngIf="
+    authService.isLoggedIn() &&
+    !gameOver &&
+    !gameStarted &&
+    !cardUsed &&
+    !isLoading
+  "
   class="card-combined-box"
 >
   <label class="combined-label">🎴 Karten wählen:</label>
   <div class="card-combined-inline">
-    
     <!-- Multiplikator-Karten -->
     <div class="symbol-label">🃏</div>
     <select [(ngModel)]="selectedCard" class="dropdown">
       <option [ngValue]="null">– keine –</option>
-      <option 
+      <option
         *ngFor="let card of multiplierCards"
         [ngValue]="card"
-        [disabled]="card.amount <= 0">
-        {{ card.multiplier + 'x' }} (x{{ card.amount }})
+        [disabled]="card.amount <= 0"
+      >
+        {{ card.multiplier + "x" }} (x{{ card.amount }})
       </option>
     </select>
 
@@ -135,22 +163,25 @@
     <div class="symbol-label heart">❤️</div>
     <select [(ngModel)]="selectedHeartCard" class="dropdown">
       <option [ngValue]="null">– keine –</option>
-      <option 
+      <option
         *ngFor="let card of heartCards"
         [ngValue]="card"
-        [disabled]="card.amount <= 0">
+        [disabled]="card.amount <= 0"
+      >
         +{{ -card.multiplier }}❤️ (x{{ card.amount }})
       </option>
     </select>
 
     <!-- Einsetzen-Button -->
-    <button class="btn" (click)="useSelectedCards()">Einsetzen</button>
+    <button
+      class="btn"
+      [disabled]="selectedCard === null && selectedHeartCard === null"
+      (click)="useSelectedCards()"
+    >
+      Einsetzen
+    </button>
   </div>
 </div>
-
-
-
-
 
 <app-loader *ngIf="isLoading"></app-loader>
 
@@ -159,49 +190,49 @@
   (touchstart)="onTouchStart($event)"
   (touchend)="onTouchEnd($event)"
 >
-<div *ngIf="!isLoading" class="highscores-carousel">
-  <h3>{{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
+  <div *ngIf="!isLoading" class="highscores-carousel">
+    <h3>{{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
 
-  <!-- SLIDER -->
-  <input
-    type="range"
-    min="0"
-    [max]="allLeaderboards.length - 1"
-    [(ngModel)]="currentLeaderboardIndex"
-    (input)="setLeaderboard(currentLeaderboardIndex)"
-    class="leaderboard-slider"
-  />
+    <!-- SLIDER -->
+    <input
+      type="range"
+      min="0"
+      [max]="allLeaderboards.length - 1"
+      [(ngModel)]="currentLeaderboardIndex"
+      (input)="setLeaderboard(currentLeaderboardIndex)"
+      class="leaderboard-slider"
+    />
 
- <div class="slider-wrapper">
-  <div
-    class="slider"
-    [style.transform]="'translateX(-' + currentLeaderboardIndex * 100 + '%)'"
-  >
-    <div
-      class="leaderboard"
-      *ngFor="let board of allLeaderboards; index as i"
-    >
-      <ul>
-        <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
-        <li 
-          *ngFor="let entry of board; index as j"
-          [ngClass]="{
-            'gold-bg shimmer-effect': j === 0,
-            'silver-bg shimmer-effect': j === 1,
-            'bronze-bg shimmer-effect': j === 2
-          }"
+    <div class="slider-wrapper">
+      <div
+        class="slider"
+        [style.transform]="
+          'translateX(-' + currentLeaderboardIndex * 100 + '%)'
+        "
+      >
+        <div
+          class="leaderboard"
+          *ngFor="let board of allLeaderboards; index as i"
         >
-
-          <span>{{ getMedal(j) }} {{ entry.username }}</span>
-          <strong>{{ entry.value }}</strong>
-        </li>
-      </ul>
+          <ul>
+            <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
+            <li
+              *ngFor="let entry of board; index as j"
+              [ngClass]="{
+                'gold-bg shimmer-effect': j === 0,
+                'silver-bg shimmer-effect': j === 1,
+                'bronze-bg shimmer-effect': j === 2
+              }"
+            >
+              <span>{{ getMedal(j) }} {{ entry.username }}</span>
+              <strong>{{ entry.value }}</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-
-<!-- <div 
+    <!-- <div 
   class="lava-fill" 
   [class.lava-enter]="justAppeared"
   *ngIf="currentMultiplier > 1"
@@ -214,11 +245,12 @@
     <path d="M0,5 C30,0 70,10 100,5 L100,10 L0,10 Z" fill="#ff8a00"></path>
   </svg>
 </div> -->
-
-
-
-
-<div class="toast" *ngIf="achievementMessage">
-  {{ achievementMessage }}
+    <div class="toast" *ngIf="achievementMessage">
+      {{ achievementMessage }}
+    </div>
+  </div>
 </div>
 
+<app-global-chat
+  *ngIf="authService.isLoggedIn() && !isLoading"
+></app-global-chat>

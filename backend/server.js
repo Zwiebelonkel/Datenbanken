@@ -1,137 +1,188 @@
-import express from 'express';
-import cors from 'cors';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import scoresRoutes from './routes/scores.js';
-import profileRoutes from './routes/profile.js';
-import moneyRoutes from './routes/money.js';
-import cardsRoutes from './routes/cards.js';
-import db from './db.js';
+import express from "express";
+import cors from "cors";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import scoresRoutes from "./routes/scores.js";
+import profileRoutes from "./routes/profile.js";
+import moneyRoutes from "./routes/money.js";
+import cardsRoutes from "./routes/cards.js";
+import db from "./db.js";
+import { verifyToken } from './auth.js';
+import villageRoutes from './routes/village.js';
+import chatRoutes from './routes/chat.js';
+
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
+const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret";
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/scores', scoresRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/money', moneyRoutes);
-app.use('/api/cards', cardsRoutes);
-
+app.use("/api/scores", scoresRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/money", moneyRoutes);
+app.use("/api/cards", cardsRoutes);
+app.use('/api/village', villageRoutes);
+app.use('/api/chat', chatRoutes);
 
 const ALL_ACHIEVEMENTS = [
-  { name: 'First Game 1️⃣', description: 'Dein erstes Spiel!' },
-  { name: 'Pechvogel 🐓', description: '0 Punkte erzielt' },
-  { name: 'Newbie 🐣', description: 'Du hast 10 Punkte erreicht!' },
-  { name: 'Glückspilz 🍄', description: 'Du hast 50 Punkte erreicht!' },
-  { name: 'Zahlenmeister 💯', description: 'Du hast 75 Punkte erreicht!' },
-  { name: 'Rund 🥸', description: 'Du hast 100 Punkte erreicht!' },
-  { name: 'Göttlicher Segen 👼🏻', description: 'Du hast 500 Punkte erreicht!' },
-  { name: 'Gambler 🎲', description: 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren' },
-  { name: 'Arbeitswoche 🛠️', description: 'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren' },
-  { name: 'Strategieprofi 🧭', description: 'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren' },
-  { name: 'Magier 🪄', description: 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren' },
-  { name: 'Champion 🏆', description: 'Sei auf dem Leaderboard' },
+  { name: "First Game 1️⃣", description: "Dein erstes Spiel!" },
+  { name: "Pechvogel 🐓", description: "0 Punkte erzielt" },
+  { name: "Newbie 🐣", description: "Du hast 10 Punkte erreicht!" },
+  { name: "Glückspilz 🍄", description: "Du hast 50 Punkte erreicht!" },
+  { name: "Zahlenmeister 💯", description: "Du hast 75 Punkte erreicht!" },
+  { name: "Rund 🥸", description: "Du hast 100 Punkte erreicht!" },
+  { name: "Göttlicher Segen 👼🏻", description: "Du hast 500 Punkte erreicht!" },
+  {
+    name: "Gambler 🎲",
+    description: "Du hast 3 mal richtig geraten ohne ein Leben zu verlieren",
+  },
+  {
+    name: "Arbeitswoche 🛠️",
+    description: "Du hast 5 mal richtig geraten ohne ein Leben zu verlieren",
+  },
+  {
+    name: "Strategieprofi 🧭",
+    description: "Du hast 10 mal richtig geraten ohne ein Leben zu verlieren",
+  },
+  {
+    name: "Magier 🪄",
+    description: "Du hast 20 mal richtig geraten ohne ein Leben zu verlieren",
+  },
+  { name: "Champion 🏆", description: "Sei auf dem Leaderboard" },
+  { name: "Bürgermeister", description: "Verbessere dein Dorf" },
 ];
 
-// Registrierung
-app.post('/api/register', async (req, res) => {
+// Registrierung mit Dorf und Bewohnern
+app.post("/api/register", async (req, res) => {
   const { username, password } = req.body;
+
   try {
     const hash = await bcrypt.hash(password, 10);
-    await db.execute({
-      sql: 'INSERT INTO users (username, password) VALUES (?, ?)',
+
+    // 1. Nutzer anlegen
+    const result = await db.execute({
+      sql: "INSERT INTO users (username, password) VALUES (?, ?)",
       args: [username, hash],
     });
-    res.status(201).json({ message: 'Registrierung erfolgreich' });
-  } catch (err) {
-    if (err.message.includes('UNIQUE')) {
-      return res.status(409).json({ message: 'Benutzername bereits vergeben' });
+
+    const userId = result.lastInsertRowid;
+
+    // 2. Dorf anlegen
+    const villageResult = await db.execute({
+      sql: "INSERT INTO village (user_id) VALUES (?)",
+      args: [userId],
+    });
+
+    const villageId = villageResult.lastInsertRowid;
+
+    // 3. 4 Bewohner anlegen
+    for (let i = 1; i <= 2; i++) {
+      await db.execute({
+        sql: "INSERT INTO villagers (village_id, name, level, income) VALUES (?, ?, ?, ?)",
+        args: [villageId, `Bewohner ${i}`, 1, 0.5],
+      });
     }
-    res.status(500).json({ message: 'Fehler beim Registrieren' });
+
+    res.status(201).json({ message: "Registrierung & Dorf erfolgreich" });
+
+  } catch (err) {
+    if (err.message.includes("UNIQUE")) {
+      return res.status(409).json({ message: "Benutzername bereits vergeben" });
+    }
+    console.error("❌ Fehler bei Registrierung:", err);
+    res.status(500).json({ message: "Fehler beim Registrieren" });
   }
 });
 
 // Login
-app.post('/api/login', async (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   try {
     const result = await db.execute({
-      sql: 'SELECT * FROM users WHERE username = ?',
+      sql: "SELECT * FROM users WHERE username = ?",
       args: [username],
     });
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ message: 'Benutzer nicht gefunden' });
+      return res.status(401).json({ message: "Benutzer nicht gefunden" });
     }
 
     const user = result.rows[0];
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(401).json({ message: 'Falsches Passwort' });
+    if (!valid) return res.status(401).json({ message: "Falsches Passwort" });
 
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
       JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: "8h" }
     );
 
     res.json({ success: true, token });
   } catch (err) {
-    res.status(500).json({ message: 'Login-Fehler' });
+    res.status(500).json({ message: "Login-Fehler" });
   }
 });
 
 // Benutzerliste
-app.get('/api/users', async (req, res) => {
+app.get("/api/users", async (req, res) => {
   try {
-    const result = await db.execute('SELECT id, username FROM users');
+    const result = await db.execute("SELECT id, username FROM users");
     res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: 'Fehler beim Laden der Benutzer' });
+    res.status(500).json({ error: "Fehler beim Laden der Benutzer" });
   }
 });
 
-// Benutzer löschen
-app.delete('/api/users/:id', async (req, res) => {
+// Benutzer + alle abhängigen Daten löschen (mit ON DELETE CASCADE)
+app.delete("/api/users/:id", async (req, res) => {
+  const userId = req.params.id;
+
   try {
+    // Einfach nur den Benutzer löschen,
+    // alle abhängigen Einträge werden automatisch gelöscht
     await db.execute({
-      sql: 'DELETE FROM users WHERE id = ?',
-      args: [req.params.id],
+      sql: "DELETE FROM users WHERE id = ?",
+      args: [userId],
     });
+
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: 'Fehler beim Löschen des Benutzers' });
+    console.error("❌ Fehler beim Benutzerlöschen:", err);
+    res.status(500).json({ error: "Fehler beim Löschen des Benutzers" });
   }
 });
 
+
 // Scores abrufen (kann vielleicht weg wegen scores.js)
-app.get('/api/scores/all', async (req, res) => {
+app.get("/api/scores/all", async (req, res) => {
   try {
-    const result = await db.execute('SELECT * FROM scores ORDER BY score DESC');
+    const result = await db.execute("SELECT * FROM scores ORDER BY score DESC");
     res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: 'Fehler beim Laden der Scores' });
+    res.status(500).json({ error: "Fehler beim Laden der Scores" });
   }
 });
 
 // Score löschen
-app.delete('/api/scores/:id', async (req, res) => {
+app.delete("/api/scores/:id", async (req, res) => {
   try {
     await db.execute({
-      sql: 'DELETE FROM scores WHERE id = ?',
+      sql: "DELETE FROM scores WHERE id = ?",
       args: [req.params.id],
     });
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: 'Fehler beim Löschen des Scores' });
+    res.status(500).json({ error: "Fehler beim Löschen des Scores" });
   }
 });
 
 // Achievements abrufen
-app.get('/api/achievements', async (req, res) => {
+app.get("/api/achievements", async (req, res) => {
   const username = req.query.username;
-  if (!username) return res.status(400).json({ error: 'Kein Benutzername angegeben' });
+  if (!username)
+    return res.status(400).json({ error: "Kein Benutzername angegeben" });
 
   try {
     const result = await db.execute({
@@ -143,34 +194,34 @@ app.get('/api/achievements', async (req, res) => {
       args: [username],
     });
 
-    const unlockedNames = result.rows.map(r => r.name);
-    const merged = ALL_ACHIEVEMENTS.map(ach => ({
+    const unlockedNames = result.rows.map((r) => r.name);
+    const merged = ALL_ACHIEVEMENTS.map((ach) => ({
       ...ach,
-      unlocked: unlockedNames.includes(ach.name)
+      unlocked: unlockedNames.includes(ach.name),
     }));
 
     res.json(merged);
   } catch (err) {
-    res.status(500).json({ error: 'Fehler beim Laden der Achievements' });
+    res.status(500).json({ error: "Fehler beim Laden der Achievements" });
   }
 });
 
 // Achievement freischalten
-app.post('/api/unlock', async (req, res) => {
+app.post("/api/unlock", async (req, res) => {
   const { userId, name, description } = req.body;
   if (!userId || !name || !description) {
-    return res.status(400).json({ message: 'Fehlende Daten' });
+    return res.status(400).json({ message: "Fehlende Daten" });
   }
 
   try {
     const result = await db.execute({
-      sql: 'SELECT * FROM achievements WHERE user_id = ? AND name = ?',
+      sql: "SELECT * FROM achievements WHERE user_id = ? AND name = ?",
       args: [userId, name],
     });
 
     if (result.rows.length === 0) {
       await db.execute({
-        sql: 'INSERT INTO achievements (user_id, name, description, unlocked) VALUES (?, ?, ?, 1)',
+        sql: "INSERT INTO achievements (user_id, name, description, unlocked) VALUES (?, ?, ?, 1)",
         args: [userId, name, description],
       });
 
@@ -180,43 +231,90 @@ app.post('/api/unlock', async (req, res) => {
     // Bereits vorhanden
     return res.status(200).json({ unlocked: false, name });
   } catch (err) {
-    console.error('Fehler beim Achievement-Unlock:', err);
-    return res.status(500).json({ message: 'Serverfehler' });
+    console.error("Fehler beim Achievement-Unlock:", err);
+    return res.status(500).json({ message: "Serverfehler" });
   }
 });
 
 // Passwort ändern
-app.patch('/api/users/password', async (req, res) => {
+app.patch("/api/users/password", async (req, res) => {
   const { username, currentPassword, newPassword } = req.body;
 
   try {
     const result = await db.execute({
-      sql: 'SELECT * FROM users WHERE username = ?',
+      sql: "SELECT * FROM users WHERE username = ?",
       args: [username],
     });
 
     if (result.rows.length === 0) {
-      return res.status(400).json({ message: 'Benutzer nicht gefunden' });
+      return res.status(400).json({ message: "Benutzer nicht gefunden" });
     }
 
     const user = result.rows[0];
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      return res.status(403).json({ message: 'Falsches Passwort' });
+      return res.status(403).json({ message: "Falsches Passwort" });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await db.execute({
-      sql: 'UPDATE users SET password = ? WHERE username = ?',
+      sql: "UPDATE users SET password = ? WHERE username = ?",
       args: [hashedPassword, username],
     });
 
-    res.json({ message: 'Passwort erfolgreich geändert' });
+    res.json({ message: "Passwort erfolgreich geändert" });
   } catch (err) {
-    res.status(500).json({ message: 'Fehler beim Ändern des Passworts' });
+    res.status(500).json({ message: "Fehler beim Ändern des Passworts" });
   }
 });
 
+// Automatisches Einkommen (passiv)
+app.get("/api/collect", verifyToken, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const villageResult = await db.execute({
+      sql: "SELECT * FROM village WHERE user_id = ?",
+      args: [userId],
+    });
+    const village = villageResult.rows[0];
+    if (!village)
+      return res.status(404).json({ message: "Kein Dorf gefunden" });
+
+    const villagersResult = await db.execute({
+      sql: "SELECT income FROM villagers WHERE village_id = ?",
+      args: [village.id],
+    });
+    const villagersIncome = villagersResult.rows.reduce(
+      (sum, row) => sum + row.income,
+      0
+    );
+
+    const now = new Date();
+    const lastCollected = new Date(village.last_collected || now);
+    const minutesPassed = Math.floor((now - lastCollected) / 60000);
+    if (minutesPassed <= 0) {
+      return res.json({ earned: 0, minutesPassed: 0 });
+    }
+
+    const income = (village.base_income + villagersIncome) * minutesPassed;
+
+    await db.execute({
+      sql: "UPDATE users SET money = money + ? WHERE id = ?",
+      args: [income, userId],
+    });
+
+    await db.execute({
+      sql: "UPDATE village SET last_collected = ? WHERE id = ?",
+      args: [now.toISOString(), village.id],
+    });
+
+res.json({ earned: income, minutesPassed, villageLevel: village.level, villagers: villagersResult.rows });
+  } catch (err) {
+    console.error("💥 Fehler bei /api/collect:", err);
+    res.status(500).json({ message: "Serverfehler" });
+  }
+});
 
 // Server starten
 app.listen(PORT, () => {

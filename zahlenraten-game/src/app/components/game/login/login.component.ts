@@ -11,9 +11,8 @@ import { LoaderComponent } from '../../loader/loader.component';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent]
+  imports: [FormsModule, CommonModule, RouterModule, LoaderComponent],
 })
-
 export class LoginComponent {
   username = '';
   password = '';
@@ -22,37 +21,42 @@ export class LoginComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-login() {
-  this.isLoading = true;
+  login() {
+    this.isLoading = true;
 
-  this.http.post<{ success: boolean, token?: string, message?: string }>(
-    'https://outside-between.onrender.com/api/login',
-    {
-      username: this.username,
-      password: this.password
-    },
-    {
-      headers: { 'Content-Type': 'application/json' }
-    }
-  ).subscribe({
-    next: (res) => {
-      this.isLoading = false;
-
-      if (res.success) {
-        if (res.token) {
-          localStorage.setItem('token', res.token);
+    this.http
+      .post<{ success: boolean; token?: string; message?: string }>(
+        'https://outside-between.onrender.com/api/login',
+        {
+          username: this.username,
+          password: this.password,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
         }
-        this.router.navigate(['/']); // z. B. Spielseite oder Dashboard
-      } else {
-        this.error = true;
-      }
-    },
-    error: (err) => {
-      this.isLoading = false;
-      this.error = true;
-      console.error('Login-Fehler:', err);
-    }
-  });
-}
+      )
+      .subscribe({
+        next: (res) => {
+          this.isLoading = false;
 
+          if (res.success && res.token) {
+            localStorage.setItem('token', res.token);
+
+            // Ablaufzeit aus dem JWT speichern
+            const payload = JSON.parse(atob(res.token.split('.')[1]));
+            const expiry = payload.exp * 1000;
+            localStorage.setItem('tokenExpiry', expiry.toString());
+
+            this.router.navigate(['/']); // z. B. Dashboard oder Game
+          } else {
+            this.error = true;
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.error = true;
+          console.error('Login-Fehler:', err);
+        },
+      });
+  }
 }

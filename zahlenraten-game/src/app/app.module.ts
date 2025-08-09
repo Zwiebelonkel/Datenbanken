@@ -9,6 +9,7 @@ import { GameComponent } from './components/game/game.component';
 import { routes } from './app.routes';
 import { RegisterComponent } from './components/game/register/register.component';
 import { LoginComponent } from './components/game/login/login.component';
+import { VillageComponent } from './components/village/village.component';
 import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -19,7 +20,9 @@ import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-
+import { ChatComponent} from './components/chat/chat.component';
+import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
+import { ReelComponent } from './components/slot-machine/reel/reel.component';
 
 @NgModule({
   declarations: [
@@ -36,16 +39,20 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     CardShopComponent,
     PackOpeningComponent,
     LoaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    VillageComponent,
+    ChatComponent,
+    SlotMaschineComponent,
+    ReelComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     CommonModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

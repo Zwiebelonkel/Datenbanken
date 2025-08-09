@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CardsService {
   private baseUrl = 'https://outside-between.onrender.com/api/cards';
@@ -23,7 +23,7 @@ export class CardsService {
     return this.http.post<any>(this.baseUrl, {
       username,
       multiplier,
-      amount
+      amount,
     });
   }
 
@@ -32,7 +32,7 @@ export class CardsService {
     const username = this.authService.getUsername();
     return this.http.put<any>(`${this.baseUrl}/use`, {
       username,
-      multiplier
+      multiplier,
     });
   }
 }

@@ -1,0 +1,114 @@
+.chat-box {
+  padding: 1rem;
+  border-radius: 10px;
+  background: #f5f5f5;
+  max-width: 500px;
+  margin: 1rem auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.messages {
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.message {
+  transition:0.25s;
+  position: relative;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  /* Kein border-left oder border-right hier! */
+}
+
+.message:hover{
+  transition:0.25s;
+  scale:0.95;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+
+}
+
+.user-message {
+  background-color: #d4f1f4;
+  color: #2c3e50;
+}
+
+.user-message {
+  background-color: #d4f1f4;
+  color: #2c3e50;
+  border-left: 4px solid #3498db;
+}
+
+.admin-message {
+  background-color: #ffe5e5;
+  border-left: 4px solid #e74c3c;
+  border-right: 4px solid #e74c3c;
+}
+
+.other-message {
+  border-right: 4px solid #555; /* dunkelgrauer Rand */
+}
+
+.admin-message .user {
+  color: #c0392b;
+  font-weight: bold;
+}
+
+.info-message {
+  color: #2c852f;
+  background-color: #bbeabd;
+  border-left: 4px solid #4caf50;
+  border-right: 4px solid #4caf50;
+}
+
+.text {
+  color: #333;
+  word-break: break-word;
+  display: block;
+}
+
+.timestamp {
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.5rem;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

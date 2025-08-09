@@ -1,12 +1,12 @@
 <app-sidebar></app-sidebar>
 <div class="opening-container">
-    <p *ngIf="message" class="error">{{ message }}</p>
+  <p *ngIf="message" class="error">{{ message }}</p>
   <!-- 🟦 NEU: Pack-Overlay unabhängig -->
-<div
-  (click)="dropCardPack()"
-  class="pack-cover-container"
-  [class.disabled]="packDropped"
->
+  <div
+    (click)="dropCardPack()"
+    class="pack-cover-container"
+    [class.disabled]="packDropped"
+  >
     <img
       *ngIf="showPack"
       [src]="packImagePath"
@@ -16,19 +16,30 @@
     />
   </div>
 
-  <!-- 🔄 Flip-Card bleibt wie gehabt -->
-  <div class="flip-card" [class.flipped]="reveal" (click)="revealCard()">
-    <div class="flip-inner">
-      <div class="flip-front" [ngClass]="packName.toLowerCase()">
-        <img src="assets/logo.png" class="logo center" />
-        <p class="pack-label"></p>
-      </div>
+  <!-- 🎴 Gestapelte Karten -->
+  <div class="card-stack">
+    <div
+      class="flip-card"
+      *ngFor="let card of cardStack; let i = index; let last = last"
+      [style.zIndex]="i + 1"
+      [style.top.px]="i * 4"
+      [style.left.px]="i * 1"
+      [class.top-card]="last"
+      [class.flipped]="last && reveal"
+      [class.fly-away]="last && lastCardOut"
+      (click)="last ? revealCard() : null"
+    >
+      <div class="flip-inner">
+        <div class="flip-front" [ngClass]="packName.toLowerCase()">
+          <img src="assets/logo.png" class="logo center" />
+        </div>
         <div class="flip-back" [ngClass]="packName.toLowerCase()">
           <img src="assets/logo.png" class="emoji top-left" />
           <img src="assets/logo.png" class="emoji bottom-right" />
           <p class="multiplier-text">{{ displayResult }}</p>
-        <div class="sparkles"></div>
-</div>
+          <div class="sparkles"></div>
+        </div>
+      </div>
     </div>
   </div>
 

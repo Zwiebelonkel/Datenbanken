@@ -8,11 +8,10 @@ export interface UserStats {
   unlockedAchievements: number;
   money: number;
   highscore: number;
-
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileService {
   private apiUrl = 'https://outside-between.onrender.com/api/profile';

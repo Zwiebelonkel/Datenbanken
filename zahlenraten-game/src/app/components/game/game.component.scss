@@ -5,13 +5,15 @@ body.dark-mode {
   margin: 0;
 }
 
-.game-container, .game-over, .highscores-carousel {
+.game-container,
+.game-over,
+.highscores-carousel {
   max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
   background: #f9f9f9;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: background 0.3s ease, color 0.3s ease;
 }
@@ -28,93 +30,50 @@ body.dark-mode .highscores-carousel {
   margin: 0.5rem 0;
 }
 
-    /*
-      Darstellung für die horizontale Achse, auf der die beiden Zufallszahlen
-      nebeneinander angezeigt werden. Die Zahlen werden jeweils an den
-      Enden der Achse positioniert und der Balken in der Mitte füllt den
-      übrigen Platz aus. Durch flexbox wird erreicht, dass die Achse sich
-      automatisch an die verfügbare Breite anpasst.  Eine kleine
-      Randabstände sorgen für visuelle Trennung von den anderen Elementen.
-    */
-    /*
-      Die alte Darstellung mit .number-axis wird zurzeit nicht mehr verwendet,
-      da wir die Zahlen auf einem flexiblen Zahlenstrahl (.number-scale) platzieren.
-      Diese Styles bleiben auskommentiert, falls sie später erneut benötigt werden.
-    */
-    /*
-    .number-axis {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 1rem 0;
-    }
-    .number-axis .axis-number {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .number-axis .axis-line {
-      flex-grow: 1;
-      height: 4px;
-      background-color: #ccc;
-      margin: 0 0.5rem;
-      border-radius: 2px;
-    }
-    */
+.number-scale {
+  position: relative;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+}
+.number-scale .number-marker,
+.marker {
+  position: absolute;
+  top: -1.2rem;
+  transform: translateX(-50%);
+  font-size: 0.9rem;
+  font-weight: bold;
+  white-space: nowrap;
+  transition: left 0.4s ease;
+}
 
-    /*
-      Zahlenstrahl von 0 bis 100. Dieser Balken dient als visuelle Achse,
-      auf der die Zufallszahlen relativ zu ihrem Wert positioniert werden.
-      Die Marker werden absolut positioniert, zentriert und oberhalb der Leiste
-      angezeigt. Bei nah beieinander liegenden Werten liegen die Marker
-      entsprechend nah beieinander; bei weit auseinander liegenden Werten
-      entsprechend weit entfernt.
-    */
-    .number-scale {
-      position: relative;
-      height: 8px;
-      background-color: #e0e0e0;
-      border-radius: 4px;
-      margin: 1.5rem 0;
-    }
-    .number-scale .number-marker, .marker {
-      position: absolute;
-      top: -1.2rem;
-      transform: translateX(-50%);
-      font-size: 0.9rem;
-      font-weight: bold;
-      white-space: nowrap;
-      /* optional kleine farbige Kreise hinter den Zahlen */
-      /* sanfte Animation, wenn sich der left-Wert ändert */
-      transition: left 0.4s ease;
-    }
-    /* spezielle Darstellung für die Testzahl */
-    .number-scale .number-marker.test-num {
-      color: #e91e63; /* abgesetzte Farbe für die Testzahl */
-    }
+.number-scale .number-marker.test-num {
+  color: #e91e63;
+}
 
-      .number-scale .marker {
-      background-color: black;
-      width: 2px;
-      height: 10px;
-      top: 1.1rem;
-left: 50%;
-      border-radius: 10px;
-      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.62);
-    }
+.number-scale .marker {
+  background-color: black;
+  width: 2px;
+  height: 10px;
+  top: 1.1rem;
+  left: 50%;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.62);
+}
 
-
-    /* wenn Marker nach unten verschoben werden soll, z.B. bei Überlappung */
-    .number-scale .number-marker.below {
-      top: 1rem; /* unterhalb der Leiste platzieren */
-    }
+.number-scale .number-marker.below {
+  top: 1rem;
+}
 
 .buttons {
   margin: 1.5rem 0;
   transition: 0.2s;
 }
 
-.btn, .arrow-buttons {
-  background: #4CAF50;
+.btn,
+.arrow-buttons {
+  background: #4caf50;
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -136,29 +95,15 @@ left: 50%;
   cursor: not-allowed;
 }
 
-button.btn:disabled {
-  /*
-    Dieses Styling war ursprünglich eine Duplikation zu .btn:disabled. Die
-    notwendigen Eigenschaften (Hintergrundfarbe und Cursor) sind dort
-    bereits definiert. Wir kommentieren diese Block aus, um Redundanz zu
-    vermeiden. Falls zusätzliche Anpassungen (z. B. Farbänderungen) nötig
-    werden, kann dieser Block wieder aktiviert werden.
-  */
-  /*background: #ccc;
-  color: #888;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;*/
-}
-
 .restart {
-  background: #2196F3;
+  background: #2196f3;
 }
 .restart:hover {
   background: #1e88e5;
 }
 
-.score, .final-score {
+.score,
+.final-score {
   font-size: 1.3rem;
   margin-top: 1rem;
 }
@@ -235,8 +180,6 @@ body.dark-mode .highscores-carousel li:hover {
   box-sizing: border-box;
 }
 
-
-
 body.dark-mode .topbar {
   background: #1a1a1acc;
   color: #f1f1f1;
@@ -290,7 +233,8 @@ body.dark-mode .topbar {
   animation: pulse 0.8s infinite;
 }
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -325,17 +269,28 @@ body.dark-mode {
   color: white;
   padding: 1rem 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   font-size: 1rem;
   z-index: 9999;
   animation: fadeInOut 3s ease-in-out;
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  90% { opacity: 1; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
 }
 
 .combo {
@@ -349,11 +304,26 @@ body.dark-mode {
 }
 
 @keyframes fireWobble {
-  0%   { transform: scale(1) rotate(0deg);    opacity: 1; }
-  25%  { transform: scale(1.05) rotate(-1deg); opacity: 0.95; }
-  50%  { transform: scale(0.98) rotate(1deg);  opacity: 1; }
-  75%  { transform: scale(1.03) rotate(-0.5deg); opacity: 0.97; }
-  100% { transform: scale(1) rotate(0deg);    opacity: 1; }
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(1.05) rotate(-1deg);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(0.98) rotate(1deg);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(1.03) rotate(-0.5deg);
+    opacity: 0.97;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
 }
 
 .emoji-rain-container {
@@ -456,7 +426,7 @@ body.dark-mode {
   }
 
   .btn {
-    background: #4CAF50;
+    background: #4caf50;
     color: white;
     border: none;
     padding: 0.6rem 1.2rem;
@@ -564,7 +534,6 @@ body.dark-mode {
   color: black !important;
 }
 
-
 .leaderboard-wrapper {
   touch-action: pan-y; // erlaubt horizontales Swipen ohne Scrollblock
   overflow: hidden;
@@ -576,7 +545,7 @@ body.dark-mode {
   z-index: 0;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -75%;
@@ -603,7 +572,9 @@ body.dark-mode {
   }
 }
 
-.gold-bg, .silver-bg, .bronze-bg {
+.gold-bg,
+.silver-bg,
+.bronze-bg {
   position: relative;
   z-index: 0;
 }
@@ -641,7 +612,7 @@ body.dark-mode {
     }
 
     .btn {
-      background: #4CAF50;
+      background: #4caf50;
       color: white;
       border: none;
       padding: 0.6rem 1.2rem;
@@ -651,18 +622,22 @@ body.dark-mode {
       transition: background 0.3s ease;
 
       &:hover {
-        background: #388E3C;
+        background: #388e3c;
       }
     }
   }
 }
 
-.symbol-label{
+.symbol-label {
   font-size: 1.8rem;
 }
-
 
 /* Marker-Position korrigieren: Zeigt der Marker nach oben, wenn die zugehörige Zahl unterhalb der Leiste liegt */
 .number-scale .number-marker.below .marker {
   top: -1.1rem;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

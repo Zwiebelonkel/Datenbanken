@@ -7,11 +7,10 @@ import { Router } from '@angular/router';
 import { UserStats } from '../../../services/profile.service'; // Importiere UserStats
 import { SidebarComponent } from '../../sidebar/sidebar.component';
 
-
 @Component({
   selector: 'app-admin-page',
   templateUrl: './admin-page.component.html',
-  styleUrls: ['./admin-page.component.scss'], 
+  styleUrls: ['./admin-page.component.scss'],
   standalone: true,
   imports: [CommonModule, SidebarComponent],
 })
@@ -21,56 +20,66 @@ export class AdminPageComponent implements OnInit {
   selectedStats: UserStats | null = null;
   selectedUser: string | null = null;
 
+  constructor(
+    private http: HttpClient,
+    public authService: AuthService,
+    private router: Router,
+    private profileService: ProfileService
+  ) {}
 
-  constructor(private http: HttpClient, public authService: AuthService, private router: Router, private profileService: ProfileService) {}
+  ngOnInit(): void {
+    const role = this.authService.getRole()?.toLowerCase();
+    if (role !== 'admin') {
+      this.router.navigate(['/']);
+      return;
+    }
 
-ngOnInit(): void {
-  const role = this.authService.getRole()?.toLowerCase();
-  if (role !== 'admin') {
-    this.router.navigate(['/']);
-    return;
+    this.loadUsers();
+    this.loadScores();
   }
 
-  this.loadUsers();
-  this.loadScores();
-}
-
   loadUsers() {
-    this.http.get<any[]>('https://outside-between.onrender.com/api/users').subscribe(data => {
-      const current = this.authService.getUsername();
-      this.users = data.filter(u => u.username !== current); // Admin ausblenden
-    });
+    this.http
+      .get<any[]>('https://outside-between.onrender.com/api/users')
+      .subscribe((data) => {
+        const current = this.authService.getUsername();
+        this.users = data.filter((u) => u.username !== current); // Admin ausblenden
+      });
   }
 
   loadScores() {
-    this.http.get<any[]>('https://outside-between.onrender.com/api/scores/all').subscribe(data => {
-      this.scores = data;
-    });
+    this.http
+      .get<any[]>('https://outside-between.onrender.com/api/scores/all')
+      .subscribe((data) => {
+        this.scores = data;
+      });
   }
 
-deleteUser(id: number) {
-  this.http.delete(`https://outside-between.onrender.com/api/users/${id}`).subscribe(() => {
-    this.users = this.users.filter(user => user.id !== id);
-  });
-}
+  deleteUser(id: number) {
+    this.http
+      .delete(`https://outside-between.onrender.com/api/users/${id}`)
+      .subscribe(() => {
+        this.users = this.users.filter((user) => user.id !== id);
+      });
+  }
 
-showProfile(username: string) {
-  this.profileService.getUserStats(username).subscribe(
-    (stats) => {
-      this.selectedStats = stats;
-      this.selectedUser = username;
-    },
-    (error) => {
-      console.error('Fehler beim Laden der Stats:', error);
-    }
-  );
-}
-
-
+  showProfile(username: string) {
+    this.profileService.getUserStats(username).subscribe(
+      (stats) => {
+        this.selectedStats = stats;
+        this.selectedUser = username;
+      },
+      (error) => {
+        console.error('Fehler beim Laden der Stats:', error);
+      }
+    );
+  }
 
   deleteScore(id: number) {
-    this.http.delete(`https://outside-between.onrender.com/api/scores/${id}`).subscribe(() => {
-      this.loadScores();
-    });
+    this.http
+      .delete(`https://outside-between.onrender.com/api/scores/${id}`)
+      .subscribe(() => {
+        this.loadScores();
+      });
   }
 }

@@ -2,9 +2,9 @@
 <div class="profile-container">
   <div class="profile-avatar">
     <img src="assets/profile.png" alt="Profilbild" />
-    <h2>{{username}}</h2>
+    <h2>{{ username }}</h2>
   </div>
-<app-loader *ngIf="isLoading"></app-loader>
+  <app-loader *ngIf="isLoading"></app-loader>
   <div *ngIf="!isLoading" class="profile-card">
     <h3>📊 Statistiken</h3>
     <div class="stat-row">
@@ -25,21 +25,34 @@
     </div>
     <div class="stat-row">
       <span>💰 Geld</span>
-      <span>{{ money }}</span>
+      <span>{{ money | number : "1.2-2" }}</span>
     </div>
-
   </div>
 
   <div class="password-change-box">
     <h3>🔐 Passwort ändern</h3>
 
-    <input [(ngModel)]="currentPassword" type="password" placeholder="Aktuelles Passwort" />
-    <input [(ngModel)]="newPassword" type="password" placeholder="Neues Passwort" />
-    <input [(ngModel)]="repeatPassword" type="password" placeholder="Neues Passwort wiederholen" />
+    <input
+      [(ngModel)]="currentPassword"
+      type="password"
+      placeholder="Aktuelles Passwort"
+    />
+    <input
+      [(ngModel)]="newPassword"
+      type="password"
+      placeholder="Neues Passwort"
+    />
+    <input
+      [(ngModel)]="repeatPassword"
+      type="password"
+      placeholder="Neues Passwort wiederholen"
+    />
 
     <button (click)="changePassword()">Ändern</button>
 
-    <div *ngIf="pwChangeSuccess" class="success-msg">✅ Passwort erfolgreich geändert</div>
+    <div *ngIf="pwChangeSuccess" class="success-msg">
+      ✅ Passwort erfolgreich geändert
+    </div>
     <div *ngIf="!pwChangeSuccess" class="error-msg">{{ pwChangeMsg }}</div>
   </div>
 </div>

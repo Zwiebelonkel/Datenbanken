@@ -332,6 +332,21 @@ app.get("/api/pages", async (req, res) => {
   }
 });
 
+// Admin: Seiten-Flags lesen (mit Auth)
+app.get("/api/admin/pages", requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const result = await db.execute("SELECT key, enabled FROM page_settings");
+    const pages = {};
+    result.rows.forEach((r) => {
+      pages[r.key] = !!r.enabled;
+    });
+    res.json({ pages });
+  } catch (err) {
+    console.error("Fehler beim Laden der Admin-Seitenflags:", err);
+    res.status(500).json({ error: "Fehler beim Laden der Seiten" });
+  }
+});
+
 // Admin-Only: alle Seiten inkl. ändern
 app.put(
   "/api/admin/pages/:key",

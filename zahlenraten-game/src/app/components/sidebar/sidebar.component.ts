@@ -12,9 +12,11 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  private baseUrl = 'https://outside-between.onrender.com/api';
+
   sidebarOpen = false;
   achAmount = 0;
-  pageSettings: any = {};
+  pageSettings: Record<string, boolean> = {}; // Flags vom Server
 
   constructor(
     public authService: AuthService,
@@ -24,26 +26,28 @@ export class SidebarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.http.get<any>('API_URL/pages').subscribe((data) => {
-      this.pageSettings = data.pages;
-    });
+    this.http
+      .get<{ pages: Record<string, boolean> }>(`${this.baseUrl}/pages`)
+      .subscribe({
+        next: (data) => (this.pageSettings = data.pages || {}),
+        error: (err) => {
+          console.error('Seiten-Flags konnten nicht geladen werden:', err);
+          // Fallback: pageSettings bleibt leer => Buttons standardmäßig sichtbar
+        },
+      });
   }
 
   isPageEnabled(pageKey: string): boolean {
+    // Standard: wenn kein Flag vorhanden, ist die Seite sichtbar
     return this.pageSettings[pageKey] !== false;
   }
 
-  loadAch() {
+  private loadAch() {
     const username = this.authService.getUsername();
-    if (!username) return; // Sicherheit: nicht einloggen -> abbrechen
-
+    if (!username) return;
     this.profileService.getUserStats(username).subscribe({
-      next: (stats) => {
-        this.achAmount = stats.unlockedAchievements;
-      },
-      error: (err) => {
-        console.error('Fehler beim Laden der Statistiken', err);
-      },
+      next: (stats) => (this.achAmount = stats.unlockedAchievements),
+      error: (err) => console.error('Fehler beim Laden der Statistiken', err),
     });
   }
 
@@ -56,55 +60,44 @@ export class SidebarComponent implements OnInit {
     this.router.navigate(['/achievements']);
     this.sidebarOpen = false;
   }
-
   goToProfile() {
     this.router.navigate(['/profile']);
     this.sidebarOpen = false;
   }
-
   howToPlay() {
     this.router.navigate(['/how-to-play']);
     this.sidebarOpen = false;
   }
-
   goToClicker() {
     this.router.navigate(['/clicker']);
     this.sidebarOpen = false;
   }
-
   goToVillage() {
     this.router.navigate(['/village']);
     this.sidebarOpen = false;
   }
-
   shop() {
     this.router.navigate(['/card-shop']);
     this.sidebarOpen = false;
   }
-
   toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
   }
-
   logout() {
     this.router.navigate(['/login']);
     this.sidebarOpen = false;
   }
-
   goToAdmin() {
     this.router.navigate(['/admin']);
     this.sidebarOpen = false;
   }
-
   goToSlots() {
     this.router.navigate(['/slot-maschine']);
     this.sidebarOpen = false;
   }
-
   goToLogin() {
     this.router.navigate(['/login']);
   }
-
   goHome() {
     this.router.navigate(['/']);
   }

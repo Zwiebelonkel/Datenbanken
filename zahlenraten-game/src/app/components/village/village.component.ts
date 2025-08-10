@@ -71,6 +71,17 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   animationId = 0;
   ctx!: CanvasRenderingContext2D;
+  // === Time & Balancing (added) ===
+  private lastTime = performance.now();
+  private readonly BASE_WORK_TIME = 10; // seconds
+  private readonly BASE_REST_TIME = 5; // seconds
+  private readonly MIN_PHASE_TIME = 0.5; // seconds
+
+  private efficiencyFromStamina(staminaRaw: number): number {
+    const s = Math.max(0.5, staminaRaw || 0.5);
+    // ~2x after ~20 upgrades (0.5 -> 10.5)
+    return 1 + 0.1 * (s - 0.5);
+  }
 
   mine = { x: 0, y: 0 };
   market = { x: 0, y: 0 };
@@ -94,6 +105,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.villageService.collectIncome().subscribe({
       next: (res) => {
+        const OFFLINE_EARNINGS_FACTOR = 0.05;
+        res.earned = Math.floor((res.earned || 0) * OFFLINE_EARNINGS_FACTOR);
         this.earned = res.earned;
         this.minutesPassed = res.minutesPassed;
         this.money += res.earned;
@@ -337,8 +350,13 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     return total;
   }
 
-  animate = () => {
+  animate = (now: number = performance.now()) => {
     this.animationId = requestAnimationFrame(this.animate);
+
+    // Δt in seconds (frame independent)
+    let dt = (now - this.lastTime) / 1000;
+    this.lastTime = now;
+    if (dt > 0.1) dt = 0.1;
 
     const canvas = this.canvasRef.nativeElement;
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -370,64 +388,83 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ctx.fillStyle = '#2ecc71';
     this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
 
-    // Bewohner bewegen und zeichnen
+    // Bewohner bewegen/aktualisieren
     this.villagers.forEach((v) => {
       const dx = v.targetX - v.x;
       const dy = v.targetY - v.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      const dist = Math.hypot(dx, dy);
 
-      const speedFactor = Math.max(v.speed, 2) / 10;
-
-      if (dist > speedFactor) {
-        v.x += (dx / dist) * speedFactor;
-        v.y += (dy / dist) * speedFactor;
+      // Bewegung: px/s * s
+      const step = Math.max(1, v.speed) * dt;
+      if (dist > step) {
+        const nx = dx / dist,
+          ny = dy / dist;
+        v.x += nx * step;
+        v.y += ny * step;
       } else {
         v.x = v.targetX;
         v.y = v.targetY;
       }
 
-      // Zustandswechsel nur, wenn angekommen
+      // Zustandswechsel/Timer
       if (dist <= 1) {
         switch (v.state) {
           case 'goingToMine':
             v.state = 'working';
-            v.workTimer = 600; // 10 Sekunden
-            break;
-
-          case 'working':
-            v.workTimer -= Math.max(v.speed, 1) / 10; // Schneller je höher speed
-            if (v.workTimer <= 0) {
-              v.state = 'goingToMarket';
-              v.targetX = this.market.x + 20;
-              v.targetY = this.market.y + 20;
+            {
+              const eff = this.efficiencyFromStamina(v.stamina);
+              v.workTimer = Math.max(
+                this.MIN_PHASE_TIME,
+                this.BASE_WORK_TIME / eff
+              );
             }
             break;
 
           case 'goingToMarket':
             v.state = 'selling';
-            break;
-
-          case 'selling':
-            this.unsavedEarnings += v.income;
-            v.state = 'goingHome';
-            v.targetX = v.homeX;
-            v.targetY = v.homeY;
+            v.workTimer = 1; // fixed 1s
             break;
 
           case 'goingHome':
             v.state = 'resting';
-            v.restTimer = 600; // 10 Sekunden
-            break;
-
-          case 'resting':
-            v.restTimer -= Math.max(v.stamina, 1) / 10; // Schneller je höher stamina
-            if (v.restTimer <= 0) {
-              v.state = 'goingToMine';
-              v.targetX = this.mine.x + 20;
-              v.targetY = this.mine.y + 20;
+            {
+              const eff = this.efficiencyFromStamina(v.stamina);
+              v.restTimer = Math.max(
+                this.MIN_PHASE_TIME,
+                this.BASE_REST_TIME / eff
+              );
             }
             break;
         }
+      }
+
+      switch (v.state) {
+        case 'working':
+          v.workTimer -= dt;
+          if (v.workTimer <= 0) {
+            v.state = 'goingToMarket';
+            v.targetX = this.market.x + 20;
+            v.targetY = this.market.y + 20;
+          }
+          break;
+
+        case 'selling':
+          v.workTimer -= dt;
+          if (v.workTimer <= 0) {
+            v.state = 'goingHome';
+            v.targetX = v.homeX;
+            v.targetY = v.homeY;
+          }
+          break;
+
+        case 'resting':
+          v.restTimer -= dt;
+          if (v.restTimer <= 0) {
+            v.state = 'goingToMine';
+            v.targetX = this.mine.x + 20;
+            v.targetY = this.mine.y + 20;
+          }
+          break;
       }
 
       // 🎨 Farbe nach Status
@@ -436,10 +473,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           this.ctx.fillStyle = '#2ecc71';
           break;
         case 'working':
-          this.ctx.fillStyle = '#9b59b6';
+          this.ctx.fillStyle = '#e67e22';
           break;
         case 'goingToMarket':
-          this.ctx.fillStyle = '#f39c12';
+          this.ctx.fillStyle = '#9b59b6';
           break;
         case 'selling':
           this.ctx.fillStyle = '#f1c40f';
@@ -474,6 +511,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.villageService.collectIncome().subscribe({
           next: (res) => {
+            const OFFLINE_EARNINGS_FACTOR = 0.05;
+            res.earned = Math.floor(
+              (res.earned || 0) * OFFLINE_EARNINGS_FACTOR
+            );
             this.earned = res.earned;
             this.minutesPassed = res.minutesPassed;
             this.money += res.earned;

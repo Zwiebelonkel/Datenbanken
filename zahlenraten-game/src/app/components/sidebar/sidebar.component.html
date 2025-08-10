@@ -7,24 +7,33 @@
 </div>
 
 <div class="sidebar" [class.open]="sidebarOpen">
-  <button (click)="goHome()">🏠 Home</button>
-  <button (click)="goToAchievements()">🎖️ Erfolge</button>
-  <button (click)="goToProfile()">👤 Profil</button>
+  <button *ngIf="isPageEnabled('home')" (click)="goHome()">🏠 Home</button>
+  <button *ngIf="isPageEnabled('achievements')" (click)="goToAchievements()">
+    🎖️ Erfolge
+  </button>
+  <button *ngIf="isPageEnabled('profile')" (click)="goToProfile()">
+    👤 Profil
+  </button>
   <button
     *ngIf="authService.getRole()?.toLowerCase() === 'admin'"
     (click)="goToAdmin()"
   >
     🛠️ Admin
   </button>
-    <button (click)="goToSlots()">
-    🎰 Slots
-  </button>
-<button (click)="goToVillage()">
+  <button *ngIf="isPageEnabled('slots')" (click)="goToSlots()">🎰 Slots</button>
+  <button *ngIf="isPageEnabled('village')" (click)="goToVillage()">
     🛖 Dorf
   </button>
-  <button (click)="howToPlay()">❓ Tutorial</button>
-  <button [disabled]="achAmount < 3" (click)="goToClicker()">💰 Clicker</button>
-  <button (click)="shop()">🃏 Karten</button>
-  <!-- <button (click)="toggleDarkMode()">🌓 Dark Mode</button> -->
+  <button *ngIf="isPageEnabled('tutorial')" (click)="howToPlay()">
+    ❓ Tutorial
+  </button>
+  <button
+    *ngIf="isPageEnabled('clicker')"
+    [disabled]="achAmount < 3"
+    (click)="goToClicker()"
+  >
+    💰 Clicker
+  </button>
+  <button *ngIf="isPageEnabled('shop')" (click)="shop()">🃏 Karten</button>
   <button (click)="logout()">🚪 Logout</button>
 </div>

@@ -19,6 +19,15 @@ export class AdminPageComponent implements OnInit {
   scores: any[] = [];
   selectedStats: UserStats | null = null;
   selectedUser: string | null = null;
+  availablePages = [
+    { key: 'achievements', label: '🎖️ Erfolge', enabled: true },
+    { key: 'profile', label: '👤 Profil', enabled: true },
+    { key: 'slots', label: '🎰 Slots', enabled: true },
+    { key: 'village', label: '🛖 Dorf', enabled: true },
+    { key: 'clicker', label: '💰 Clicker', enabled: true },
+    { key: 'shop', label: '🃏 Karten', enabled: true },
+    { key: 'tutorial', label: '❓ Tutorial', enabled: true },
+  ];
 
   constructor(
     private http: HttpClient,
@@ -28,6 +37,14 @@ export class AdminPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Hier vom Server die aktuellen Einstellungen laden
+    this.http.get<any>('API_URL/admin/pages').subscribe((data) => {
+      this.availablePages.forEach((page) => {
+        if (data.pages && data.pages[page.key] !== undefined) {
+          page.enabled = data.pages[page.key];
+        }
+      });
+    });
     const role = this.authService.getRole()?.toLowerCase();
     if (role !== 'admin') {
       this.router.navigate(['/']);
@@ -36,6 +53,10 @@ export class AdminPageComponent implements OnInit {
 
     this.loadUsers();
     this.loadScores();
+  }
+
+  togglePage(key: string, enabled: boolean) {
+    this.http.post('API_URL/admin/pages', { key, enabled }).subscribe();
   }
 
   loadUsers() {

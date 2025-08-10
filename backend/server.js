@@ -7,11 +7,9 @@ import profileRoutes from "./routes/profile.js";
 import moneyRoutes from "./routes/money.js";
 import cardsRoutes from "./routes/cards.js";
 import db from "./db.js";
-import { verifyToken } from './auth.js';
-import villageRoutes from './routes/village.js';
-import chatRoutes from './routes/chat.js';
-
-
+import { verifyToken } from "./auth.js";
+import villageRoutes from "./routes/village.js";
+import chatRoutes from "./routes/chat.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,8 +21,8 @@ app.use("/api/scores", scoresRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/money", moneyRoutes);
 app.use("/api/cards", cardsRoutes);
-app.use('/api/village', villageRoutes);
-app.use('/api/chat', chatRoutes);
+app.use("/api/village", villageRoutes);
+app.use("/api/chat", chatRoutes);
 
 const ALL_ACHIEVEMENTS = [
   { name: "First Game 1️⃣", description: "Dein erstes Spiel!" },
@@ -86,7 +84,6 @@ app.post("/api/register", async (req, res) => {
     }
 
     res.status(201).json({ message: "Registrierung & Dorf erfolgreich" });
-
   } catch (err) {
     if (err.message.includes("UNIQUE")) {
       return res.status(409).json({ message: "Benutzername bereits vergeben" });
@@ -153,7 +150,6 @@ app.delete("/api/users/:id", async (req, res) => {
     res.status(500).json({ error: "Fehler beim Löschen des Benutzers" });
   }
 });
-
 
 // Scores abrufen (kann vielleicht weg wegen scores.js)
 app.get("/api/scores/all", async (req, res) => {
@@ -309,12 +305,61 @@ app.get("/api/collect", verifyToken, async (req, res) => {
       args: [now.toISOString(), village.id],
     });
 
-res.json({ earned: income, minutesPassed, villageLevel: village.level, villagers: villagersResult.rows });
+    res.json({
+      earned: income,
+      minutesPassed,
+      villageLevel: village.level,
+      villagers: villagersResult.rows,
+    });
   } catch (err) {
     console.error("💥 Fehler bei /api/collect:", err);
     res.status(500).json({ message: "Serverfehler" });
   }
 });
+
+// Seiten-Konfiguration laden (öffentlich oder mit Login)
+app.get("/api/pages", async (req, res) => {
+  try {
+    const result = await db.execute("SELECT key, enabled FROM page_settings");
+    const pages = {};
+    result.rows.forEach((r) => {
+      pages[r.key] = !!r.enabled;
+    });
+    res.json({ pages });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Fehler beim Laden der Seiten" });
+  }
+});
+
+// Admin-Only: alle Seiten inkl. ändern
+app.put(
+  "/api/admin/pages/:key",
+  requireAuth,
+  requireAdmin,
+  async (req, res) => {
+    const key = req.params.key;
+    const enabled = !!req.body.enabled;
+    try {
+      await db.execute({
+        sql: `INSERT INTO page_settings (key, enabled)
+            VALUES (?, ?)
+            ON CONFLICT(key) DO UPDATE SET enabled=excluded.enabled`,
+        args: [key, enabled ? 1 : 0],
+      });
+
+      const result = await db.execute("SELECT key, enabled FROM page_settings");
+      const pages = {};
+      result.rows.forEach((r) => {
+        pages[r.key] = !!r.enabled;
+      });
+      res.json({ pages });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Fehler beim Speichern der Seite" });
+    }
+  }
+);
 
 // Server starten
 app.listen(PORT, () => {

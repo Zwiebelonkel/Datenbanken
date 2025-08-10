@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   imports: [CommonModule],
@@ -13,17 +14,23 @@ import { CommonModule } from '@angular/common';
 export class SidebarComponent implements OnInit {
   sidebarOpen = false;
   achAmount = 0;
+  pageSettings: any = {};
 
   constructor(
     public authService: AuthService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.isLoggedIn()) {
-      this.loadAch();
-    }
+    this.http.get<any>('API_URL/pages').subscribe((data) => {
+      this.pageSettings = data.pages;
+    });
+  }
+
+  isPageEnabled(pageKey: string): boolean {
+    return this.pageSettings[pageKey] !== false;
   }
 
   loadAch() {
@@ -89,7 +96,7 @@ export class SidebarComponent implements OnInit {
     this.sidebarOpen = false;
   }
 
-    goToSlots() {
+  goToSlots() {
     this.router.navigate(['/slot-maschine']);
     this.sidebarOpen = false;
   }

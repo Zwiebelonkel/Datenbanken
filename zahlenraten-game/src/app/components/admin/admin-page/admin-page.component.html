@@ -38,6 +38,20 @@
     </div>
   </div>
 
+  <section class="admin-section">
+    <h2>📄 Seitenverwaltung</h2>
+    <ul class="admin-list">
+      <li *ngFor="let page of availablePages">
+        <span>{{ page.label }}</span>
+        <input
+          type="checkbox"
+          [checked]="page.enabled"
+          (change)="togglePage(page.key, $event.target.checked)"
+        />
+      </li>
+    </ul>
+  </section>
+
   <!-- Rechte Seite: Fixierte Profilstatistik -->
   <div class="admin-sidebar" *ngIf="selectedStats">
     <h2>📊 Profil von {{ selectedUser }}</h2>

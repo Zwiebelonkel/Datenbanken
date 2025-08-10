@@ -37,8 +37,14 @@ export class SidebarComponent implements OnInit {
       });
   }
 
+  isAdmin(): boolean {
+    return this.authService.getRole()?.toLowerCase() === 'admin';
+  }
+
   isPageEnabled(pageKey: string): boolean {
-    // Standard: wenn kein Flag vorhanden, ist die Seite sichtbar
+    // Admin darf immer alles
+    if (this.isAdmin()) return true;
+    // sonst nach Flags
     return this.pageSettings[pageKey] !== false;
   }
 

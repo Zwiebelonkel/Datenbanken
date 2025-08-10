@@ -7,7 +7,6 @@ import profileRoutes from "./routes/profile.js";
 import moneyRoutes from "./routes/money.js";
 import cardsRoutes from "./routes/cards.js";
 import db from "./db.js";
-import { verifyToken } from "./auth.js";
 import villageRoutes from "./routes/village.js";
 import chatRoutes from "./routes/chat.js";
 import { verifyToken, requireAuth, requireAdmin } from "./auth.js";

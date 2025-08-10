@@ -55,8 +55,27 @@ export class AdminPageComponent implements OnInit {
     this.loadScores();
   }
 
-  togglePage(key: string, enabled: boolean) {
-    this.http.post('API_URL/admin/pages', { key, enabled }).subscribe();
+  togglePage(key: string, ev: Event) {
+    const checked = (ev.target as HTMLInputElement).checked;
+    // Optional UI-Optimismus:
+    const old = this.availablePages.find((p) => p.key === key)?.enabled;
+    this.setLocalEnabled(key, checked);
+
+    this.http.put(`/api/admin/pages/${key}`, { enabled: checked }).subscribe({
+      next: (res: any) => {
+        // Wenn du vom Server das Mapping zurückbekommst, hier übernehmen:
+        // this.applyServerPages(res.pages);
+      },
+      error: () => {
+        // rollback bei Fehler
+        this.setLocalEnabled(key, !!old);
+      },
+    });
+  }
+
+  private setLocalEnabled(key: string, enabled: boolean) {
+    const p = this.availablePages.find((x) => x.key === key);
+    if (p) p.enabled = enabled;
   }
 
   loadUsers() {

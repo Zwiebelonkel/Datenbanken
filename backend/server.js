@@ -10,6 +10,7 @@ import db from "./db.js";
 import { verifyToken } from "./auth.js";
 import villageRoutes from "./routes/village.js";
 import chatRoutes from "./routes/chat.js";
+import { verifyToken, requireAuth, requireAdmin } from "./auth.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;

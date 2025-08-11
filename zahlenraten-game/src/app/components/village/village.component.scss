@@ -204,6 +204,7 @@ input[type="text"]:focus {
 }
 
 .legend {
+  display: none;
   display: flex;
   flex-direction: column;
   padding: 1rem;

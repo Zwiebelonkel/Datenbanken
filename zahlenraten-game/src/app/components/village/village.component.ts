@@ -175,10 +175,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     // ➕ Zentriere Mine und Markt
     this.mine.x = renderWidth / 2 - 100;
     this.market.x = renderWidth / 2 + 60;
-    this.storage.x = renderWidth / 2 + 60;
+    this.storage.x = renderWidth / 2;
     this.mine.y = 10;
     this.market.y = 10;
-    this.storage.y = 50;
+    this.storage.y = 90;
 
 
     this.updateCanvasHeight();
@@ -359,179 +359,179 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     return total;
   }
 
-  animate = (now: number = performance.now()) => {
-    this.animationId = requestAnimationFrame(this.animate);
+animate = (now: number = performance.now()) => {
+  this.animationId = requestAnimationFrame(this.animate);
 
-    // Δt in seconds (frame independent)
-    let dt = (now - this.lastTime) / 1000;
-    this.lastTime = now;
-    if (dt > 0.1) dt = 0.1;
+  // Δt in seconds (frame independent)
+  let dt = (now - this.lastTime) / 1000;
+  this.lastTime = now;
+  if (dt > 0.1) dt = 0.1;
 
-    const canvas = this.canvasRef.nativeElement;
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const canvas = this.canvasRef.nativeElement;
+  this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 🏠 Häuser zeichnen
-    const numHouses = Math.ceil(this.villagers.length / 2);
-    for (let i = 0; i < numHouses; i++) {
-      const col = i % 3;
-      const row = Math.floor(i / 3);
-      const x = 40 + col * 120;
-      const y = 75 + row * 80;
+  // 🏠 Häuser zeichnen
+  const numHouses = Math.ceil(this.villagers.length / 2);
+  for (let i = 0; i < numHouses; i++) {
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const x = 40 + col * 120;
+    const y = 75 + row * 80;
 
-      this.ctx.fillStyle = '#fff';
-      this.ctx.fillRect(x, y, 60, 60);
-      this.ctx.strokeStyle = '#000';
-      this.ctx.lineWidth = 2;
-      this.ctx.strokeRect(x, y, 60, 60);
+    this.ctx.fillStyle = '#fff';
+    this.ctx.fillRect(x, y, 60, 60);
+    this.ctx.strokeStyle = '#000';
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeRect(x, y, 60, 60);
+  }
+
+  // ⛏ Mine
+  this.ctx.fillStyle = '#666';
+  this.ctx.fillRect(this.mine.x, this.mine.y, 40, 40);
+  this.ctx.fillStyle = '#fff';
+  this.ctx.fillText('⛏', this.mine.x + 10, this.mine.y + 25);
+
+  // 💰 Markt
+  this.ctx.fillStyle = '#999';
+  this.ctx.fillRect(this.market.x, this.market.y, 40, 40);
+  this.ctx.fillStyle = '#2ecc71';
+  this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
+
+  // 📦 Storage
+  this.ctx.fillStyle = '#999';
+  this.ctx.fillRect(this.storage.x, this.storage.y, 40, 40);
+  this.ctx.fillStyle = '#2ecc71';
+  this.ctx.fillText('📦', this.storage.x + 10, this.storage.y + 25);
+
+  // Bewohner bewegen/aktualisieren
+  this.villagers.forEach((v) => {
+    const dx = v.targetX - v.x;
+    const dy = v.targetY - v.y;
+    const dist = Math.hypot(dx, dy);
+
+    // Bewegung: px/s * s
+    const step = Math.max(1, v.speed) * dt;
+    if (dist > step) {
+      const nx = dx / dist,
+        ny = dy / dist;
+      v.x += nx * step;
+      v.y += ny * step;
+    } else {
+      v.x = v.targetX;
+      v.y = v.targetY;
     }
 
-    // ⛏ Mine
-    this.ctx.fillStyle = '#666';
-    this.ctx.fillRect(this.mine.x, this.mine.y, 40, 40);
-    this.ctx.fillStyle = '#fff';
-    this.ctx.fillText('⛏', this.mine.x + 10, this.mine.y + 25);
-
-    // 💰 Markt
-    this.ctx.fillStyle = '#999';
-    this.ctx.fillRect(this.market.x, this.market.y, 40, 40);
-    this.ctx.fillStyle = '#2ecc71';
-    this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
-
-      //📦 Storage
-    this.ctx.fillStyle = '#999';
-    this.ctx.fillRect(this.storage.x, this.storage.y, 40, 40);
-    this.ctx.fillStyle = '#2ecc71';
-    this.ctx.fillText('📦', this.storage.x + 10, this.storage.y + 25);
-
-    // Bewohner bewegen/aktualisieren
-    this.villagers.forEach((v) => {
-      const dx = v.targetX - v.x;
-      const dy = v.targetY - v.y;
-      const dist = Math.hypot(dx, dy);
-
-      // Bewegung: px/s * s
-      const step = Math.max(1, v.speed) * dt;
-      if (dist > step) {
-        const nx = dx / dist,
-          ny = dy / dist;
-        v.x += nx * step;
-        v.y += ny * step;
-      } else {
-        v.x = v.targetX;
-        v.y = v.targetY;
-      }
-
-      // Zustandswechsel/Timer
-      if (dist <= 1) {
-        switch (v.state) {
-          case 'goingToMine':
-            v.state = 'working';
-            {
-              const eff = this.efficiencyFromStamina(v.stamina);
-              v.workTimer = Math.max(
-                this.MIN_PHASE_TIME,
-                this.BASE_WORK_TIME / eff
-              );
-            }
-            break;
-
-          case 'goingToMarket':
-            v.state = 'selling';
-            v.workTimer = 1; // fixed 1s
-            break;
-
-          case 'goingHome':
-            v.state = 'resting';
-            {
-              const eff = this.efficiencyFromStamina(v.stamina);
-              v.restTimer = Math.max(
-                this.MIN_PHASE_TIME,
-                this.BASE_REST_TIME / eff
-              );
-            }
-            break;
-        }
-      }
-
-      switch (v.state) {
-        case 'working':
-          v.workTimer -= dt;
-          if (v.workTimer <= 0) {
-            v.state = 'goingToMarket';
-            v.targetX = this.market.x + 20;
-            v.targetY = this.market.y + 20;
-          }
-          break;
-
-case 'selling':
-  v.workTimer -= dt;
-  if (v.workTimer <= 0) {
-    v.state = 'goingToStorage';
-    v.targetX = v.homeX;
-    v.targetY = v.homeY;
-  }
-  break;
-            case 'goingToStorage':
-              v.state = 'storing';
-              v.workTimer = 1; // fixed 1s
-            break;
-
-          case 'storing':
-  v.workTimer -= dt;
-  if (v.workTimer <= 0) {
-    // ➕ Einkommen hinzufügen
-    this.unsavedEarnings += v.income;
-
-    v.state = 'goingHome';
-    v.targetX = v.homeX;
-    v.targetY = v.homeY;
-  }
-  break;
-
-
-        case 'resting':
-          v.restTimer -= dt;
-          if (v.restTimer <= 0) {
-            v.state = 'goingToMine';
-            v.targetX = this.mine.x + 20;
-            v.targetY = this.mine.y + 20;
-          }
-          break;
-      }
-
-      // 🎨 Farbe nach Status
+    // Zustandswechsel bei Ankunft
+    if (dist <= 1) {
       switch (v.state) {
         case 'goingToMine':
-          this.ctx.fillStyle = '#2ecc71';
+          v.state = 'working';
+          {
+            const eff = this.efficiencyFromStamina(v.stamina);
+            v.workTimer = Math.max(this.MIN_PHASE_TIME, this.BASE_WORK_TIME / eff);
+          }
           break;
-        case 'working':
-          this.ctx.fillStyle = '#e67e22';
-          break;
-        case 'goingToMarket':
-          this.ctx.fillStyle = '#9b59b6';
-          break;
-        case 'selling':
-          this.ctx.fillStyle = '#f1c40f';
-          break;
-        case 'goingHome':
-          this.ctx.fillStyle = '#e74c3c';
-          break;
-        case 'resting':
-          this.ctx.fillStyle = '#3498db';
-          break;
-        default:
-          this.ctx.fillStyle = '#95a5a6';
-      }
 
-      // Bewohner zeichnen
-      this.ctx.beginPath();
-      this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
-      this.ctx.fill();
-      this.ctx.lineWidth = 2;
-      this.ctx.strokeStyle = '#000';
-      this.ctx.stroke();
-    });
-  };
+        case 'goingToMarket':
+          v.state = 'selling';
+          v.workTimer = 1; // fixed 1s
+          break;
+
+        case 'goingToStorage':
+          v.state = 'storing';
+          v.workTimer = 1; // fixed 1s
+          break;
+
+        case 'goingHome':
+          v.state = 'resting';
+          {
+            const eff = this.efficiencyFromStamina(v.stamina);
+            v.restTimer = Math.max(this.MIN_PHASE_TIME, this.BASE_REST_TIME / eff);
+          }
+          break;
+      }
+    }
+
+    // Zeitbasierte Zustandsupdates
+    switch (v.state) {
+      case 'working':
+        v.workTimer -= dt;
+        if (v.workTimer <= 0) {
+          v.state = 'goingToMarket';
+          v.targetX = this.market.x + 20;
+          v.targetY = this.market.y + 20;
+        }
+        break;
+
+      case 'selling':
+        v.workTimer -= dt;
+        if (v.workTimer <= 0) {
+          v.state = 'goingToStorage';
+          v.targetX = this.storage.x + 20;
+          v.targetY = this.storage.y + 20;
+        }
+        break;
+
+      case 'storing':
+        v.workTimer -= dt;
+        if (v.workTimer <= 0) {
+          this.unsavedEarnings += v.income;
+          v.state = 'goingHome';
+          v.targetX = v.homeX;
+          v.targetY = v.homeY;
+        }
+        break;
+
+      case 'resting':
+        v.restTimer -= dt;
+        if (v.restTimer <= 0) {
+          v.state = 'goingToMine';
+          v.targetX = this.mine.x + 20;
+          v.targetY = this.mine.y + 20;
+        }
+        break;
+    }
+
+    // 🎨 Farbe nach Status
+    switch (v.state) {
+      case 'goingToMine':
+        this.ctx.fillStyle = '#2ecc71';
+        break;
+      case 'working':
+        this.ctx.fillStyle = '#e67e22';
+        break;
+      case 'goingToMarket':
+        this.ctx.fillStyle = '#9b59b6';
+        break;
+      case 'selling':
+        this.ctx.fillStyle = '#f1c40f';
+        break;
+      case 'goingToStorage':
+        this.ctx.fillStyle = '#f39c12';
+        break;
+      case 'storing':
+        this.ctx.fillStyle = '#d35400';
+        break;
+      case 'goingHome':
+        this.ctx.fillStyle = '#e74c3c';
+        break;
+      case 'resting':
+        this.ctx.fillStyle = '#3498db';
+        break;
+      default:
+        this.ctx.fillStyle = '#95a5a6';
+    }
+
+    // Bewohner zeichnen
+    this.ctx.beginPath();
+    this.ctx.arc(v.x, v.y, 10, 0, Math.PI * 2);
+    this.ctx.fill();
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeStyle = '#000';
+    this.ctx.stroke();
+  });
+};
+
 
   upgrade() {
     this.isLoading = true;

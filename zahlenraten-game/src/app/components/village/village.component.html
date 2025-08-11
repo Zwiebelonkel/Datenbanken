@@ -169,7 +169,7 @@
   (click)="upgradeVillager(v, defaultUpgradeAmount)"
   [disabled]="money < getTotalUpgradeCost(v.level, defaultUpgradeAmount)"
 >
-  ⬆️ +{{ upgradeAmount }} Stufen ({{ getTotalUpgradeCost(v.level, defaultUpgradeAmount) }} 💵)
+  ⬆️ +{{ upgradeAmount }} Stufen ({{ getTotalUpgradeCost(v.level, upgradeAmount) }} 💵)
 </button>
           </div>
 

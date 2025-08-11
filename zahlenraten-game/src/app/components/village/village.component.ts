@@ -357,7 +357,11 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   this.ctx.fillStyle = iconColor;
   this.ctx.font = '20px sans-serif';
-  this.ctx.fillText(icon, x + 7.5 , y + 25);
+  this.ctx.fillText(icon, x + 6.5 , y + 25);
+
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeStyle = '#000';
+    this.ctx.stroke();
 }
 
   getTotalUpgradeCost(currentValue: number, times: number): number {

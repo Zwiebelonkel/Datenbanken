@@ -151,6 +151,13 @@
         </div>
 
         <div class="upgrade-section">
+          <label for="upgradeAmount">Upgrade-Menge:</label>
+            <input
+            id="upgradeAmount"
+            type="number"
+            [(ngModel)]="upgradeAmount"
+            min="1"
+            />
           <div class="upgrade-buttons">
             <button
               (click)="upgradeVillager(v, 1)"

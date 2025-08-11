@@ -448,14 +448,18 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           }
           break;
 
-        case 'selling':
-          v.workTimer -= dt;
-          if (v.workTimer <= 0) {
-            v.state = 'goingHome';
-            v.targetX = v.homeX;
-            v.targetY = v.homeY;
-          }
-          break;
+case 'selling':
+  v.workTimer -= dt;
+  if (v.workTimer <= 0) {
+    // ➕ Einkommen hinzufügen
+    this.unsavedEarnings += v.income;
+
+    v.state = 'goingHome';
+    v.targetX = v.homeX;
+    v.targetY = v.homeY;
+  }
+  break;
+
 
         case 'resting':
           v.restTimer -= dt;

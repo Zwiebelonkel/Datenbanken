@@ -124,6 +124,7 @@
 <div class="popup-backdrop" *ngIf="showVillagerPopup">
   <div class="popup">
     <h3>👥 Bewohnerliste</h3>
+    <app-loader *ngIf=isLoading"></app-loader>
     <ul>
       <li *ngFor="let v of villagers" class="villager-card">
         <input

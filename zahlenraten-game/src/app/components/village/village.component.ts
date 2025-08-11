@@ -175,10 +175,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     // ➕ Zentriere Mine und Markt
     this.mine.x = renderWidth / 2 - 100;
     this.market.x = renderWidth / 2 + 60;
-    this.storage.x = renderWidth / 2;
+    this.storage.x = renderWidth / 2-20;
     this.mine.y = 10;
     this.market.y = 10;
-    this.storage.y = 90;
+    this.storage.y = 10;
 
 
     this.updateCanvasHeight();
@@ -350,6 +350,15 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
   }
+  
+  drawBuilding(x: number, y: number, width: number, height: number, color: string, icon: string, iconColor: string) {
+  this.ctx.fillStyle = color;
+  this.ctx.fillRect(x, y, width, height);
+
+  this.ctx.fillStyle = iconColor;
+  this.ctx.font = '20px sans-serif';
+  this.ctx.fillText(icon, x + 10, y + 25);
+}
 
   getTotalUpgradeCost(currentValue: number, times: number): number {
     let total = 0;
@@ -384,24 +393,15 @@ animate = (now: number = performance.now()) => {
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(x, y, 60, 60);
   }
+// ⛏ Mine
+this.drawBuilding(this.mine.x, this.mine.y, 40, 40, '#666', '⛏', '#fff');
 
-  // ⛏ Mine
-  this.ctx.fillStyle = '#666';
-  this.ctx.fillRect(this.mine.x, this.mine.y, 40, 40);
-  this.ctx.fillStyle = '#fff';
-  this.ctx.fillText('⛏', this.mine.x + 10, this.mine.y + 25);
+// 💰 Markt
+this.drawBuilding(this.market.x, this.market.y, 40, 40, '#999', '💰', '#2ecc71');
 
-  // 💰 Markt
-  this.ctx.fillStyle = '#999';
-  this.ctx.fillRect(this.market.x, this.market.y, 40, 40);
-  this.ctx.fillStyle = '#2ecc71';
-  this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
+// 📦 Storage
+this.drawBuilding(this.storage.x, this.storage.y, 40, 40, '#999', '📦', '#8e6e53');
 
-  // 📦 Storage
-  this.ctx.fillStyle = '#999';
-  this.ctx.fillRect(this.storage.x, this.storage.y, 40, 40);
-  this.ctx.fillStyle = '#2ecc71';
-  this.ctx.fillText('📦', this.storage.x + 10, this.storage.y + 25);
 
   // Bewohner bewegen/aktualisieren
   this.villagers.forEach((v) => {

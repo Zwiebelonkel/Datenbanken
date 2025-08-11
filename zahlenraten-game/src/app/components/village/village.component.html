@@ -83,7 +83,7 @@
 </div>
 
 <!-- 🛠️ Box: Buttons -->
-<div class="village-box">
+<div class="village-box" *ngIf="!isLoading">
   <button
     class="btn"
     [disabled]="money < villageLevel * 100 || isLoading"

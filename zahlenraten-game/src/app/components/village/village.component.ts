@@ -397,10 +397,10 @@ animate = (now: number = performance.now()) => {
 this.drawBuilding(this.mine.x, this.mine.y, 40, 40, '#666', '⛏', '#fff');
 
 // 💰 Markt
-this.drawBuilding(this.market.x, this.market.y, 40, 40, '#999', '💰', '#2ecc71');
+this.drawBuilding(this.market.x, this.market.y, 40, 40, '#a38e03', '💰', '#2ecc71');
 
 // 📦 Storage
-this.drawBuilding(this.storage.x, this.storage.y, 40, 40, '#999', '📦', '#8e6e53');
+this.drawBuilding(this.storage.x, this.storage.y, 40, 40, '#8e6e53', '📦', '#8e6e53');
 
 
   // Bewohner bewegen/aktualisieren

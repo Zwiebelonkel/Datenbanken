@@ -518,6 +518,12 @@ this.drawBuilding(this.storage.x, this.storage.y, 40, 40, '#999', '📦', '#8e6e
       case 'resting':
         this.ctx.fillStyle = '#3498db';
         break;
+      case 'goingToStorage':
+        this.ctx.fillStyle = '#d35400';
+        break;
+      case 'storing':
+        this.ctx.fillStyle = '#a67c52';
+        break;
       default:
         this.ctx.fillStyle = '#95a5a6';
     }

@@ -68,6 +68,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   incomePerMinute = 0;
   showVillagerPopup = false;
   tooltip = { visible: false, x: 0, y: 0, text: '' };
+  
+  upgradeAmount: number = 5; // Sichtbar im Input
+  defaultUpgradeAmount: number = 10; // Tatsächlich verwendet beim Klick
+
 
   animationId = 0;
   ctx!: CanvasRenderingContext2D;

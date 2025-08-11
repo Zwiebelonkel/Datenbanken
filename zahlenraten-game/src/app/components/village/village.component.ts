@@ -30,6 +30,8 @@ type VillagerState =
   | 'working'
   | 'goingToMarket'
   | 'selling'
+  | 'goingToStorage'
+  | 'storing'
   | 'goingHome'
   | 'resting';
 
@@ -89,6 +91,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   mine = { x: 0, y: 0 };
   market = { x: 0, y: 0 };
+  storage = { x: 0, y: 0 };
 
   constructor(
     private villageService: VillageService,
@@ -172,8 +175,11 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     // ➕ Zentriere Mine und Markt
     this.mine.x = renderWidth / 2 - 100;
     this.market.x = renderWidth / 2 + 60;
+    this.storage.x = renderWidth / 2 + 60;
     this.mine.y = 10;
     this.market.y = 10;
+    this.storage.y = 50;
+
 
     this.updateCanvasHeight();
     this.animate();
@@ -189,7 +195,6 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     canvas.height = canvasHeight;
     canvas.style.width = renderWidth + 'px';
     canvas.style.height = canvasHeight + 'px';
-    console.log('resizing');
   }
 
   onCanvasHover(event: MouseEvent) {
@@ -392,6 +397,12 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ctx.fillStyle = '#2ecc71';
     this.ctx.fillText('💰', this.market.x + 10, this.market.y + 25);
 
+      //📦 Storage
+    this.ctx.fillStyle = '#999';
+    this.ctx.fillRect(this.storage.x, this.storage.y, 40, 40);
+    this.ctx.fillStyle = '#2ecc71';
+    this.ctx.fillText('📦', this.storage.x + 10, this.storage.y + 25);
+
     // Bewohner bewegen/aktualisieren
     this.villagers.forEach((v) => {
       const dx = v.targetX - v.x;
@@ -453,6 +464,19 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           break;
 
 case 'selling':
+  v.workTimer -= dt;
+  if (v.workTimer <= 0) {
+    v.state = 'goingToStorage';
+    v.targetX = v.homeX;
+    v.targetY = v.homeY;
+  }
+  break;
+            case 'goingToStorage':
+              v.state = 'storing';
+              v.workTimer = 1; // fixed 1s
+            break;
+
+          case 'storing':
   v.workTimer -= dt;
   if (v.workTimer <= 0) {
     // ➕ Einkommen hinzufügen

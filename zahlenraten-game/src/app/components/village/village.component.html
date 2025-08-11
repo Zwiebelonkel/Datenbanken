@@ -181,10 +181,10 @@
               🚀 +1 Speed ({{ getUpgradeCost(v.speed) }} 💵)
             </button>
 <button
-  (click)="upgradeSpeed(v, defaultUpgradeAmount)"
-  [disabled]="money < getTotalUpgradeCost(v.speed, defaultUpgradeAmount)"
+  (click)="upgradeSpeed(v, upgradeAmount)"
+  [disabled]="money < getTotalUpgradeCost(v.speed, upgradeAmount)"
 >
-  🚀 +{{ upgradeAmount }} Speed ({{ getTotalUpgradeCost(v.speed, defaultUpgradeAmount) }} 💵)
+  🚀 +{{ upgradeAmount * 0.5 }} Speed ({{ getTotalUpgradeCost(v.speed, upgradeAmount) }} 💵)
 </button>
           </div>
 
@@ -196,10 +196,10 @@
               💪 +1 Ausdauer ({{ getUpgradeCost(v.stamina) }} 💵)
             </button>
 <button
-  (click)="upgradeStamina(v, defaultUpgradeAmount)"
-  [disabled]="money < getTotalUpgradeCost(v.stamina, defaultUpgradeAmount)"
+  (click)="upgradeStamina(v, upgradeAmount)"
+  [disabled]="money < getTotalUpgradeCost(v.stamina, upgradeAmount)"
 >
-  💪 +{{ upgradeAmount }} Ausdauer ({{ getTotalUpgradeCost(v.stamina, defaultUpgradeAmount) }} 💵)
+  💪 +{{ upgradeAmount * 0.5 }} Ausdauer ({{ getTotalUpgradeCost(v.stamina, upgradeAmount) }} 💵)
 </button>
           </div>
         </div>

@@ -1,9 +1,10 @@
 <app-sidebar></app-sidebar>
 
 <!-- 📦 Box: Dorfinfo -->
-<div class="village-box" *ngIf="!isLoading">
+<div class="village-box">
   <h2>🏡 Dein Dorf</h2>
-
+  <app-loader *ngIf="isLoading"></app-loader>
+<div *ngIf="!isLoading">
   <div class="info-row">
     <span>💰 Aktuelles Geld:</span>
     <span
@@ -47,6 +48,7 @@
     <span>👥 Bewohner:</span>
     <span>{{ villagers.length }}</span>
   </div>
+</div>
 </div>
 
 <!-- 🆕 Mini-Statistik als eigene Card (gleiche Breite wie andere Cards) -->

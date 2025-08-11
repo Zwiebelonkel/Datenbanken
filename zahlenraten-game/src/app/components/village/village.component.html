@@ -165,12 +165,12 @@
             >
               ⬆️ +1 Stufe ({{ getUpgradeCost(v.level) }} 💵)
             </button>
-<button
-  (click)="upgradeVillager(v, defaultUpgradeAmount)"
-  [disabled]="money < getTotalUpgradeCost(v.level, defaultUpgradeAmount)"
->
-  ⬆️ +{{ upgradeAmount }} Stufen ({{ getTotalUpgradeCost(v.level, upgradeAmount) }} 💵)
-</button>
+            <button
+              (click)="upgradeVillager(v, upgradeAmount)"
+              [disabled]="money < getTotalUpgradeCost(v.level, defaultUpgradeAmount)"
+            >
+              ⬆️ +{{ upgradeAmount }} Stufen ({{ getTotalUpgradeCost(v.level, upgradeAmount) }} 💵)
+            </button>
           </div>
 
           <div class="upgrade-buttons">
@@ -180,12 +180,12 @@
             >
               🚀 +1 Speed ({{ getUpgradeCost(v.speed) }} 💵)
             </button>
-<button
-  (click)="upgradeSpeed(v, upgradeAmount)"
-  [disabled]="money < getTotalUpgradeCost(v.speed, upgradeAmount)"
->
-  🚀 +{{ upgradeAmount * 0.5 }} Speed ({{ getTotalUpgradeCost(v.speed, upgradeAmount) }} 💵)
-</button>
+            <button
+              (click)="upgradeSpeed(v, upgradeAmount)"
+              [disabled]="money < getTotalUpgradeCost(v.speed, upgradeAmount)"
+            >
+              🚀 +{{ upgradeAmount * 0.5 }} Speed ({{ getTotalUpgradeCost(v.speed, upgradeAmount) }} 💵)
+            </button>
           </div>
 
           <div class="upgrade-buttons">
@@ -195,12 +195,12 @@
             >
               💪 +1 Ausdauer ({{ getUpgradeCost(v.stamina) }} 💵)
             </button>
-<button
-  (click)="upgradeStamina(v, upgradeAmount)"
-  [disabled]="money < getTotalUpgradeCost(v.stamina, upgradeAmount)"
->
-  💪 +{{ upgradeAmount * 0.5 }} Ausdauer ({{ getTotalUpgradeCost(v.stamina, upgradeAmount) }} 💵)
-</button>
+            <button
+              (click)="upgradeStamina(v, upgradeAmount)"
+              [disabled]="money < getTotalUpgradeCost(v.stamina, upgradeAmount)"
+            >
+              💪 +{{ upgradeAmount * 0.5 }} Ausdauer ({{ getTotalUpgradeCost(v.stamina, upgradeAmount) }} 💵)
+            </button>
           </div>
         </div>
       </li>

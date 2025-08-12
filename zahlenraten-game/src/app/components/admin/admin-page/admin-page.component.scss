@@ -119,3 +119,20 @@ h1 {
     align-items: center;
   }
 }
+
+/* optional, sorgt für gleichmäßige Breite/Abstände */
+.admin-list li {
+  min-height: 46px;
+}
+
+.page-label {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Checkbox unaufdringlich größer machen */
+.page-toggle {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}

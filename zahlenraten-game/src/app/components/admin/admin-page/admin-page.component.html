@@ -1,10 +1,12 @@
 <app-sidebar></app-sidebar>
+
 <div class="admin-layout">
   <!-- Linke Seite: Hauptinhalte -->
   <div class="admin-main">
     <div class="admin-container">
       <h1>🔧 Admin Panel</h1>
 
+      <!-- 👥 Benutzerverwaltung -->
       <section class="admin-section">
         <h2>👥 Benutzerverwaltung</h2>
         <ul class="admin-list">
@@ -22,6 +24,23 @@
         </ul>
       </section>
 
+      <!-- 📄 Seitenverwaltung (direkt unter Benutzerverwaltung) -->
+      <section class="admin-section">
+        <h2>📄 Seitenverwaltung</h2>
+        <ul class="admin-list">
+          <li *ngFor="let page of availablePages">
+            <span class="page-label">{{ page.label }}</span>
+            <input
+              class="page-toggle"
+              type="checkbox"
+              [checked]="page.enabled"
+              (change)="togglePage(page.key, $event)"
+            />
+          </li>
+        </ul>
+      </section>
+
+      <!-- 🏆 Highscores -->
       <section class="admin-section">
         <h2>🏆 Highscores verwalten</h2>
         <ul class="admin-list">
@@ -37,20 +56,6 @@
       </section>
     </div>
   </div>
-
-  <section class="admin-section">
-    <h2>📄 Seitenverwaltung</h2>
-    <ul class="admin-list">
-      <li *ngFor="let page of availablePages">
-        <span>{{ page.label }}</span>
-        <input
-          type="checkbox"
-          [checked]="page.enabled"
-          (change)="togglePage(page.key, $event)"
-        />
-      </li>
-    </ul>
-  </section>
 
   <!-- Rechte Seite: Fixierte Profilstatistik -->
   <div class="admin-sidebar" *ngIf="selectedStats">

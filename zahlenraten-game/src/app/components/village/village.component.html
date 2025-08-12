@@ -4,51 +4,51 @@
 <div class="village-box">
   <h2>🏡 Dein Dorf</h2>
   <app-loader *ngIf="isLoading"></app-loader>
-<div *ngIf="!isLoading">
-  <div class="info-row">
-    <span>💰 Aktuelles Geld:</span>
-    <span
-      ><strong>{{ money | number : "1.2-2" }} 💵</strong></span
-    >
-  </div>
+  <div *ngIf="!isLoading">
+    <div class="info-row">
+      <span>💰 Aktuelles Geld:</span>
+      <span
+        ><strong>{{ money | number : "1.2-2" }} 💵</strong></span
+      >
+    </div>
 
-  <div class="info-row" *ngIf="unsavedEarnings > 0">
-    <span>📦 Nicht eingesammelt:</span>
-    <span
-      ><strong>{{ unsavedEarnings | number : "1.2-2" }} 💵</strong></span
-    >
-  </div>
+    <div class="info-row" *ngIf="unsavedEarnings > 0">
+      <span>📦 Nicht eingesammelt:</span>
+      <span
+        ><strong>{{ unsavedEarnings | number : "1.2-2" }} 💵</strong></span
+      >
+    </div>
 
-  <div class="info-row">
-    <button
-      class="btn small"
-      (click)="collectEarnings()"
-      [disabled]="isLoading || unsavedEarnings <= 0"
-    >
-      💵 Geld abholen
-    </button>
-  </div>
+    <div class="info-row">
+      <button
+        class="btn small"
+        (click)="collectEarnings()"
+        [disabled]="isLoading || unsavedEarnings <= 0"
+      >
+        💵 Geld abholen
+      </button>
+    </div>
 
-  <div class="info-row" *ngIf="earned > 0">
-    <span>⏱️ Inaktivzeit:</span>
-    <span>{{ minutesPassed }} Minuten</span>
-  </div>
+    <div class="info-row" *ngIf="earned > 0">
+      <span>⏱️ Inaktivzeit:</span>
+      <span>{{ minutesPassed }} Minuten</span>
+    </div>
 
-  <div class="info-row" *ngIf="earned > 0">
-    <span>📈 Einkommen in dieser Zeit:</span>
-    <span>+{{ earned | number : "1.2-2" }} 💵</span>
-  </div>
+    <div class="info-row" *ngIf="earned > 0">
+      <span>📈 Einkommen in dieser Zeit:</span>
+      <span>+{{ earned | number : "1.2-2" }} 💵</span>
+    </div>
 
-  <div class="info-row">
-    <span>🏘️ Dorf-Level:</span>
-    <span>{{ villageLevel }}</span>
-  </div>
+    <div class="info-row">
+      <span>🏘️ Dorf-Level:</span>
+      <span>{{ villageLevel }}</span>
+    </div>
 
-  <div class="info-row">
-    <span>👥 Bewohner:</span>
-    <span>{{ villagers.length }}</span>
+    <div class="info-row">
+      <span>👥 Bewohner:</span>
+      <span>{{ villagers.length }}</span>
+    </div>
   </div>
-</div>
 </div>
 
 <!-- 🆕 Mini-Statistik als eigene Card (gleiche Breite wie andere Cards) -->
@@ -125,17 +125,20 @@
   <div class="popup">
     <h3>👥 Bewohnerliste</h3>
     <ul>
-      <li *ngFor="let v of villagers" class="villager-card">
-        <input
-          *ngIf="editingVillagerId === v.id"
-          [(ngModel)]="newName"
-          (blur)="renameVillager(v)"
-          (keydown.enter)="renameVillager(v)"
-          type="text"
-          placeholder="Neuer Name"
-        />
-        <div class="name-row">
-          <strong (click)="enableRename(v)">
+      <li *ngFor="let v of villagers; trackBy: trackById" class="villager-card">
+        <div class="name-row" [class.editing]="editingVillagerId === v.id">
+          <input
+            #nameInput
+            class="editor"
+            [(ngModel)]="newName"
+            (blur)="renameVillager(v)"
+            (keydown.enter)="renameVillager(v)"
+            (keydown.escape)="editingVillagerId = null"
+            type="text"
+            placeholder="Neuer Name"
+          />
+
+          <strong class="viewer" (click)="enableRename(v, nameInput)">
             {{ v.name }} <span class="level">⭐ {{ v.level }}</span>
           </strong>
         </div>
@@ -153,13 +156,17 @@
         </div>
 
         <div class="upgrade-section">
-          <label for="upgradeAmount">Upgrade-Menge:</label>
-            <input
-            id="upgradeAmount"
-            type="number"
+          <label
+            >Upgrade-Menge: <strong>{{ upgradeAmount }}</strong></label
+          >
+          <input
+            class="upgrade-range"
+            type="range"
             [(ngModel)]="upgradeAmount"
-            min="1"
-            />
+            [min]="1"
+            [max]="200"
+          />
+
           <div class="upgrade-buttons">
             <button
               (click)="upgradeVillager(v, 1)"
@@ -169,9 +176,12 @@
             </button>
             <button
               (click)="upgradeVillager(v, upgradeAmount)"
-              [disabled]="money < getTotalUpgradeCost(v.level, defaultUpgradeAmount)"
+              [disabled]="money < getTotalUpgradeCost(v.level, upgradeAmount)"
             >
-              ⬆️ +{{ upgradeAmount }} Stufen ({{ getTotalUpgradeCost(v.level, upgradeAmount) }} 💵)
+              ⬆️ +{{ upgradeAmount }} Stufen ({{
+                getTotalUpgradeCost(v.level, upgradeAmount)
+              }}
+              💵)
             </button>
           </div>
 
@@ -180,13 +190,16 @@
               (click)="upgradeSpeed(v, 1)"
               [disabled]="money < getUpgradeCost(v.speed)"
             >
-              🚀 +1 Speed ({{ getUpgradeCost(v.speed) }} 💵)
+              🚀 +0.5 Speed ({{ getUpgradeCost(v.speed) }} 💵)
             </button>
             <button
               (click)="upgradeSpeed(v, upgradeAmount)"
               [disabled]="money < getTotalUpgradeCost(v.speed, upgradeAmount)"
             >
-              🚀 +{{ upgradeAmount * 0.5 }} Speed ({{ getTotalUpgradeCost(v.speed, upgradeAmount) }} 💵)
+              🚀 +{{ upgradeAmount * 0.5 }} Speed ({{
+                getTotalUpgradeCost(v.speed, upgradeAmount)
+              }}
+              💵)
             </button>
           </div>
 
@@ -195,13 +208,16 @@
               (click)="upgradeStamina(v, 1)"
               [disabled]="money < getUpgradeCost(v.stamina)"
             >
-              💪 +1 Ausdauer ({{ getUpgradeCost(v.stamina) }} 💵)
+              💪 +0.5 Ausdauer ({{ getUpgradeCost(v.stamina) }} 💵)
             </button>
             <button
               (click)="upgradeStamina(v, upgradeAmount)"
               [disabled]="money < getTotalUpgradeCost(v.stamina, upgradeAmount)"
             >
-              💪 +{{ upgradeAmount * 0.5 }} Ausdauer ({{ getTotalUpgradeCost(v.stamina, upgradeAmount) }} 💵)
+              💪 +{{ upgradeAmount * 0.5 }} Ausdauer ({{
+                getTotalUpgradeCost(v.stamina, upgradeAmount)
+              }}
+              💵)
             </button>
           </div>
         </div>

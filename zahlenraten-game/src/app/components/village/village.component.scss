@@ -31,14 +31,8 @@
 
   canvas {
     display: block;
-
-    // 💣 Diese zwei bitte komplett WEG!
-    // height: auto;
-    // aspect-ratio: 1 / 1;
-
     width: 100%;
     max-width: 380px;
-
     border: 2px solid #000;
     border-radius: 8px;
     background-color: #fff;
@@ -68,7 +62,6 @@
   }
 }
 
-// 📱 Mobile: mehr Seitenrand
 @media (max-width: 500px) {
   .village-box {
     margin: 1.2rem 1rem;
@@ -78,12 +71,11 @@
 .popup-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: #ffffffcc; /* nur eine Hintergrundfarbe */
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffffcc;
   backdrop-filter: blur(5px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -95,8 +87,8 @@
   max-width: 90%;
   width: 400px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  max-height: 80vh; /* Limitiert die Höhe des Popups auf 80% der Bildschirmhöhe */
-  overflow-y: auto; /* Nur vertikal scrollen */
+  max-height: 80vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -113,8 +105,8 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 60vh; /* Verhindert, dass die Liste zu lang wird */
-  overflow-y: auto; /* Nur vertikal scrollen */
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 li {
@@ -123,7 +115,6 @@ li {
   justify-content: flex-start;
   margin: 1rem 0;
   align-items: flex-start;
-  border-bottom: 1px dashed;
 }
 
 button {
@@ -176,25 +167,24 @@ strong:hover {
   border-radius: 4px;
 }
 
-/* Optional: Styling für das Input-Feld */
-input[type="number"] {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 50%;
-  margin-top: 0.5rem;
-  font-size: 1rem;
-}
+/* Einheitliche Input-Styles */
+// .popup input {
+//   width: 100%;
+//   box-sizing: border-box;
+//   padding: 0.4rem 0.6rem;
+//   border: 1px solid #ccc;
+//   border-radius: 6px;
+//   font-size: 1rem;
+//   margin-top: 0.5rem;
 
-input[type="number"]:focus {
-  border-color: #3498db;
-  outline: none;
-}
+//   &:focus {
+//     border-color: #3498db;
+//     outline: none;
+//   }
+// }
 
-/* Mobile Responsiveness */
 @media (max-width: 500px) {
   .popup {
-    width: 90%;
     padding: 1.5rem;
   }
 
@@ -207,7 +197,7 @@ input[type="number"]:focus {
   display: none;
   flex-direction: column;
   padding: 1rem;
-  background-color: #f9f9f9; // Leichtes Grau für besseren Kontrast
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -247,9 +237,49 @@ input[type="number"]:focus {
 }
 
 .name-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  align-items: center;
+  margin: 0.25rem 0 0.5rem;
+}
+.name-row .viewer,
+.name-row .editor {
+  grid-area: 1 / 1;
+}
+
+.name-row .editor {
   width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+  padding: 8px 10px;
+  border: 1.5px solid #cfd6e4;
+  border-radius: 10px;
+  background: #fff;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.12s ease;
+}
+.name-row .editor:focus {
+  border-color: #3b82f6; /* schöneres Blau */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+}
+.name-row .viewer {
+  display: flex;
+  align-items: center;
+}
+
+/* Edit-Modus */
+.name-row.editing .editor {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.name-row.editing .viewer {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .level {
@@ -266,36 +296,29 @@ input[type="number"]:focus {
 }
 
 .upgrade-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  width: 100%;
 }
 
 .upgrade-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 0.5rem;
+  overflow-x: hidden;
 }
 
 .upgrade-buttons button {
-  flex: 1;
-  min-width: 48%;
-  font-size: 0.85rem;
-}
-
-.popup input[type="text"] {
   width: 100%;
-  box-sizing: border-box;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  margin-top: 0.5rem;
+  min-height: 38px; /* feste Höhe → kein „Springen“ */
+  white-space: nowrap; /* keine Zeilenumbrüche im Label */
+  text-align: center;
 }
 
-.popup input[type="text"]:focus {
-  border-color: #3498db;
-  outline: none;
+/* Auf schmalen Screens 1 Spalte */
+@media (max-width: 520px) {
+  .upgrade-buttons {
+    grid-template-columns: 1fr;
+  }
 }
 
 .tooltip {
@@ -318,4 +341,54 @@ input[type="number"]:focus {
   background: #f8f8f8;
   border-radius: 6px;
   margin: 5px 0;
+}
+
+/* dieselbe Optik für beide Klassen */
+.upgrade-range,
+.leaderboard-slider {
+  width: 100%;
+  margin: 1rem auto;
+  appearance: none;
+  height: 8px;
+  border-radius: 5px;
+  background: #4caf50; /* Track-Farbe */
+  outline: none;
+}
+
+/* Track explizit (damit es in allen Browsern gleich aussieht) */
+.upgrade-range::-webkit-slider-runnable-track,
+.leaderboard-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 5px;
+  background: #4caf50;
+}
+.upgrade-range::-moz-range-track,
+.leaderboard-slider::-moz-range-track {
+  height: 8px;
+  border-radius: 5px;
+  background: #4caf50;
+}
+
+/* Thumb */
+.upgrade-range::-webkit-slider-thumb,
+.leaderboard-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 2px solid #4caf50;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: -6px; /* zentriert den Thumb auf dem 8px-Track */
+}
+.upgrade-range::-moz-range-thumb,
+.leaderboard-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 2px solid #4caf50;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }

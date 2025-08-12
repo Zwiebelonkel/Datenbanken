@@ -1,9 +1,10 @@
 <app-sidebar></app-sidebar>
 
 <!-- 📦 Box: Dorfinfo -->
-<div class="village-box" *ngIf="!isLoading">
+<div class="village-box">
   <h2>🏡 Dein Dorf</h2>
-
+  <app-loader *ngIf="isLoading"></app-loader>
+<div *ngIf="!isLoading">
   <div class="info-row">
     <span>💰 Aktuelles Geld:</span>
     <span
@@ -48,6 +49,7 @@
     <span>{{ villagers.length }}</span>
   </div>
 </div>
+</div>
 
 <!-- 🆕 Mini-Statistik als eigene Card (gleiche Breite wie andere Cards) -->
 <div class="village-box" *ngIf="!isLoading && villagers.length">
@@ -81,7 +83,7 @@
 </div>
 
 <!-- 🛠️ Box: Buttons -->
-<div class="village-box">
+<div class="village-box" *ngIf="!isLoading">
   <button
     class="btn"
     [disabled]="money < villageLevel * 100 || isLoading"
@@ -151,6 +153,13 @@
         </div>
 
         <div class="upgrade-section">
+          <label for="upgradeAmount">Upgrade-Menge:</label>
+            <input
+            id="upgradeAmount"
+            type="number"
+            [(ngModel)]="upgradeAmount"
+            min="1"
+            />
           <div class="upgrade-buttons">
             <button
               (click)="upgradeVillager(v, 1)"
@@ -159,10 +168,10 @@
               ⬆️ +1 Stufe ({{ getUpgradeCost(v.level) }} 💵)
             </button>
             <button
-              (click)="upgradeVillager(v, 10)"
-              [disabled]="money < getTotalUpgradeCost(v.level, 10)"
+              (click)="upgradeVillager(v, upgradeAmount)"
+              [disabled]="money < getTotalUpgradeCost(v.level, defaultUpgradeAmount)"
             >
-              ⬆️ +10 Stufen ({{ getTotalUpgradeCost(v.level, 10) }} 💵)
+              ⬆️ +{{ upgradeAmount }} Stufen ({{ getTotalUpgradeCost(v.level, upgradeAmount) }} 💵)
             </button>
           </div>
 
@@ -174,10 +183,10 @@
               🚀 +1 Speed ({{ getUpgradeCost(v.speed) }} 💵)
             </button>
             <button
-              (click)="upgradeSpeed(v, 10)"
-              [disabled]="money < getTotalUpgradeCost(v.speed, 10)"
+              (click)="upgradeSpeed(v, upgradeAmount)"
+              [disabled]="money < getTotalUpgradeCost(v.speed, upgradeAmount)"
             >
-              🚀 +5 Speed ({{ getTotalUpgradeCost(v.speed, 10) }} 💵)
+              🚀 +{{ upgradeAmount * 0.5 }} Speed ({{ getTotalUpgradeCost(v.speed, upgradeAmount) }} 💵)
             </button>
           </div>
 
@@ -189,10 +198,10 @@
               💪 +1 Ausdauer ({{ getUpgradeCost(v.stamina) }} 💵)
             </button>
             <button
-              (click)="upgradeStamina(v, 10)"
-              [disabled]="money < getTotalUpgradeCost(v.stamina, 10)"
+              (click)="upgradeStamina(v, upgradeAmount)"
+              [disabled]="money < getTotalUpgradeCost(v.stamina, upgradeAmount)"
             >
-              💪 +5 Ausdauer ({{ getTotalUpgradeCost(v.stamina, 10) }} 💵)
+              💪 +{{ upgradeAmount * 0.5 }} Ausdauer ({{ getTotalUpgradeCost(v.stamina, upgradeAmount) }} 💵)
             </button>
           </div>
         </div>
@@ -208,5 +217,3 @@
 <div class="toast" *ngIf="achievementMessage">
   {{ achievementMessage }}
 </div>
-
-<app-loader *ngIf="isLoading" />

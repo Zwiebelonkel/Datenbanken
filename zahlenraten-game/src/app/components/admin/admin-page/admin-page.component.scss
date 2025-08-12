@@ -1,15 +1,22 @@
 .admin-layout {
   display: flex;
   align-items: flex-start;
+  justify-content: center; /* Hauptachse zentrieren */
   gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto; /* Layout in der Mitte der Seite */
 }
 
 .admin-main {
   flex: 1;
+  display: flex;
+  justify-content: center; /* Inhalt mittig in main */
 }
 
 .admin-container {
-  max-width: 800px;
+  max-width: 1100px; /* statt 800px */
+  width: 100%;
+  margin: 0 auto;
   padding: 30px;
   font-family: "Nunito Sans", sans-serif;
   background: #f9f9f9;

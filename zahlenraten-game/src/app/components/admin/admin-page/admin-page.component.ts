@@ -131,6 +131,14 @@ export class AdminPageComponent implements OnInit {
   }
 
   showProfile(username: string) {
+    // Wenn derselbe Benutzer erneut angeklickt wird → schließen
+    if (this.selectedUser === username) {
+      this.selectedUser = null;
+      this.selectedStats = null;
+      return;
+    }
+
+    // Sonst laden wir die neuen Stats
     this.profileService.getUserStats(username).subscribe({
       next: (stats) => {
         this.selectedStats = stats;

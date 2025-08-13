@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +28,7 @@ export class ProfileComponent implements OnInit {
   isLoading = true;
   money = 0;
   highscore = 0;
+  profileImage: string = 'assets/profile.png'; // Standardbild
 
   constructor(
     private profileService: ProfileService,
@@ -81,6 +83,28 @@ export class ProfileComponent implements OnInit {
           this.pwChangeSuccess = false;
           this.pwChangeMsg = err.error?.message || '❌ Fehler bei Änderung';
         },
+      });
+  }
+
+    onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.uploadProfileImage(file);
+    }
+  }
+
+  uploadProfileImage(file: File) {
+    const formData = new FormData();
+    formData.append('profileImage', file, file.name);
+
+    this.http.post('https://your-backend-api.com/upload-profile-image', formData)
+      .subscribe({
+        next: (response: any) => {
+          this.profileImage = response.profileImageUrl;  // Update with new image URL
+        },
+        error: (err) => {
+          console.error('Fehler beim Hochladen des Bildes', err);
+        }
       });
   }
 }

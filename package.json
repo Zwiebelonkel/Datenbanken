@@ -9,6 +9,7 @@
         "concurrently": "^8.0.1"
     },
     "dependencies": {
-        "@libsql/client": "^0.15.9"
+        "@libsql/client": "^0.15.9",
+        "multer": "^2.0.2"
     }
 }

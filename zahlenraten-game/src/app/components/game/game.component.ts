@@ -60,50 +60,8 @@ export class GameComponent implements OnInit {
   activeRowIndex: number | null = null;
   selectedUsername: string | null = null;
 
-  portal = {
-    visible: false,
-    left: 0,
-    top: 0,
-    entry: null as any,
-    boardIndex: -1,
-    rowIndex: -1,
-  };
-
-  openPortal(ev: MouseEvent, boardIndex: number, rowIndex: number, entry: any) {
-    ev.stopPropagation();
-    const li = ev.currentTarget as HTMLElement;
-    const r = li.getBoundingClientRect();
-
-    // Basisposition rechts vom LI, mit Fallback nach links
-    const margin = 8;
-    const portalW = 220; // muss zum CSS passen
-    const portalH = 120;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-
-    let left = r.right + margin;
-    if (left + portalW > vw) left = r.left - portalW - margin;
-
-    let top = r.top;
-    if (top + portalH > vh) top = vh - portalH - margin;
-    if (top < margin) top = margin;
-
-    this.portal = { visible: true, left, top, entry, boardIndex, rowIndex };
-  }
-
-  closePortal() {
-    this.portal.visible = false;
-  }
-
-  @HostListener('document:click')
-  onDocClick() {
-    this.closePortal();
-  }
-
-  @HostListener('window:scroll')
-  @HostListener('window:resize')
-  onRelayout() {
-    if (this.portal.visible) this.closePortal();
+  trackByUsername(index: number, item: any) {
+    return item?.username ?? index;
   }
 
   // justAppeared = false; // Für Lava-Animation

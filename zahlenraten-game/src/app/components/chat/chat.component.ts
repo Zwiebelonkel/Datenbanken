@@ -54,6 +54,8 @@ export class ChatComponent implements OnInit {
     el.scrollTop = el.scrollHeight;
   }
 
+  visitProfile(username: string) {}
+
   sendMessage() {
     if (!this.newMessage.trim()) return;
 

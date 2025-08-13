@@ -529,31 +529,25 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           this.ctx.fillStyle = '#2ecc71';
           break;
         case 'working':
-          this.ctx.fillStyle = '#e67e22';
+          this.ctx.fillStyle = '#ff9800';
           break;
         case 'goingToMarket':
-          this.ctx.fillStyle = '#9b59b6';
+          this.ctx.fillStyle = '#9c27b0';
           break;
         case 'selling':
-          this.ctx.fillStyle = '#f1c40f';
+          this.ctx.fillStyle = '#ffc107';
           break;
         case 'goingToStorage':
-          this.ctx.fillStyle = '#f39c12';
+          this.ctx.fillStyle = '#ffb74d';
           break;
         case 'storing':
-          this.ctx.fillStyle = '#d35400';
+          this.ctx.fillStyle = '#8d6e63';
           break;
         case 'goingHome':
           this.ctx.fillStyle = '#e74c3c';
           break;
         case 'resting':
-          this.ctx.fillStyle = '#3498db';
-          break;
-        case 'goingToStorage':
-          this.ctx.fillStyle = '#d35400';
-          break;
-        case 'storing':
-          this.ctx.fillStyle = '#a67c52';
+          this.ctx.fillStyle = '#03a9f4';
           break;
         default:
           this.ctx.fillStyle = '#95a5a6';

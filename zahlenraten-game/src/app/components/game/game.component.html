@@ -216,8 +216,10 @@
         >
           <ul>
             <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
+
             <li
               *ngFor="let entry of board; index as j"
+              (click)="openPortal($event, i, j, entry)"
               [ngClass]="{
                 'gold-bg shimmer-effect': j === 0,
                 'silver-bg shimmer-effect': j === 1,
@@ -229,6 +231,21 @@
             </li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <div
+      class="popup-portal"
+      *ngIf="portal.visible"
+      [style.left.px]="portal.left"
+      [style.top.px]="portal.top"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="popup-card">
+        <div class="popup-title">{{ portal.entry?.username }}</div>
+        <button (click)="goToProfile(portal.entry?.username); closePortal()">
+          visit profile
+        </button>
       </div>
     </div>
 

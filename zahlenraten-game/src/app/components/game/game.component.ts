@@ -15,13 +15,20 @@ import { ChatComponent } from '../chat/chat.component';
 import { CardsService } from '../../services/cards.service';
 import { SoundsService } from '../../services/sound.service';
 import { firstValueFrom } from 'rxjs';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   standalone: true,
   styleUrls: ['./game.component.scss'],
-  imports: [CommonModule, FormsModule, LoaderComponent, SidebarComponent, ChatComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LoaderComponent,
+    SidebarComponent,
+    ChatComponent,
+  ],
   encapsulation: ViewEncapsulation.None,
 })
 export class GameComponent implements OnInit {
@@ -49,6 +56,55 @@ export class GameComponent implements OnInit {
   selectedHeartCard: any = null;
   heartCardUsed: boolean = false;
   cardUsed: boolean = false;
+  activeBoardIndex: number | null = null;
+  activeRowIndex: number | null = null;
+  selectedUsername: string | null = null;
+
+  portal = {
+    visible: false,
+    left: 0,
+    top: 0,
+    entry: null as any,
+    boardIndex: -1,
+    rowIndex: -1,
+  };
+
+  openPortal(ev: MouseEvent, boardIndex: number, rowIndex: number, entry: any) {
+    ev.stopPropagation();
+    const li = ev.currentTarget as HTMLElement;
+    const r = li.getBoundingClientRect();
+
+    // Basisposition rechts vom LI, mit Fallback nach links
+    const margin = 8;
+    const portalW = 220; // muss zum CSS passen
+    const portalH = 120;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let left = r.right + margin;
+    if (left + portalW > vw) left = r.left - portalW - margin;
+
+    let top = r.top;
+    if (top + portalH > vh) top = vh - portalH - margin;
+    if (top < margin) top = margin;
+
+    this.portal = { visible: true, left, top, entry, boardIndex, rowIndex };
+  }
+
+  closePortal() {
+    this.portal.visible = false;
+  }
+
+  @HostListener('document:click')
+  onDocClick() {
+    this.closePortal();
+  }
+
+  @HostListener('window:scroll')
+  @HostListener('window:resize')
+  onRelayout() {
+    if (this.portal.visible) this.closePortal();
+  }
 
   // justAppeared = false; // Für Lava-Animation
   leaderboardTitles = [
@@ -416,8 +472,13 @@ export class GameComponent implements OnInit {
     this.router.navigate(['/achievements']);
   }
 
-  goToProfile() {
-    this.router.navigate(['/profile']);
+  goToProfile(username?: string | null) {
+    const u = username || this.selectedUsername;
+    if (u) {
+      this.router.navigate(['/profile', u]);
+    } else {
+      this.router.navigate(['/profile']);
+    }
   }
 
   howToPlay() {
@@ -712,5 +773,24 @@ export class GameComponent implements OnInit {
     if (livesLeft === 2) return '0.9s';
     if (livesLeft === 1) return '0.6s'; // Panik
     return '1.5s';
+  }
+
+  togglePopup(boardIndex: number, rowIndex: number, username: string) {
+    const isSame =
+      this.activeBoardIndex === boardIndex && this.activeRowIndex === rowIndex;
+    if (isSame) {
+      this.activeBoardIndex = this.activeRowIndex = null;
+      this.selectedUsername = null;
+    } else {
+      this.activeBoardIndex = boardIndex;
+      this.activeRowIndex = rowIndex;
+      this.selectedUsername = username;
+    }
+  }
+
+  isPopupOpen(boardIndex: number, rowIndex: number): boolean {
+    return (
+      this.activeBoardIndex === boardIndex && this.activeRowIndex === rowIndex
+    );
   }
 }

@@ -1,14 +1,42 @@
 <app-sidebar></app-sidebar>
-<div class="profile-container">
-<div class="profile-avatar">
-  <img [src]="profileImage" alt="Profilbild" />
-  <h2>{{ username }}</h2>
-  <input type="file" (change)="onFileSelected($event)" accept="image/*" />
-</div>
 
+<div class="profile-container">
+  <!-- Avatar + Name -->
+  <div class="profile-avatar">
+    <div class="avatar-frame" [class.view-only]="!isOwnProfile">
+      <img [src]="profileImage" alt="Profilbild" />
+
+      <button
+        *ngIf="isOwnProfile"
+        class="edit-overlay"
+        type="button"
+        (click)="fileInput.click()"
+        aria-label="Profilbild ändern"
+      >
+        <span class="camera">📷</span>
+        <span>Bild ändern</span>
+      </button>
+
+      <input
+        #fileInput
+        class="hidden-input"
+        type="file"
+        accept="image/*"
+        (change)="onFileSelected($event)"
+      />
+    </div>
+
+    <h2 class="display-name">{{ username }}</h2>
+    <!-- <div class="handle">{{ username }}</div> -->
+  </div>
+
+  <!-- Loader -->
   <app-loader *ngIf="isLoading"></app-loader>
+
+  <!-- Statistiken -->
   <div *ngIf="!isLoading" class="profile-card">
     <h3>📊 Statistiken</h3>
+
     <div class="stat-row">
       <span>💠 Highscore</span>
       <span>{{ highscore }}</span>
@@ -31,7 +59,8 @@
     </div>
   </div>
 
-  <div class="password-change-box">
+  <!-- Passwort ändern (nur eigenes Profil) -->
+  <div *ngIf="isOwnProfile && !isLoading" class="password-change-box">
     <h3>🔐 Passwort ändern</h3>
 
     <input
@@ -55,6 +84,8 @@
     <div *ngIf="pwChangeSuccess" class="success-msg">
       ✅ Passwort erfolgreich geändert
     </div>
-    <div *ngIf="!pwChangeSuccess" class="error-msg">{{ pwChangeMsg }}</div>
+    <div *ngIf="!pwChangeSuccess && pwChangeMsg" class="error-msg">
+      {{ pwChangeMsg }}
+    </div>
   </div>
 </div>

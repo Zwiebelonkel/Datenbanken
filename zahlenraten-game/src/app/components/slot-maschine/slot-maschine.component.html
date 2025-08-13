@@ -4,44 +4,49 @@
   <div class="slot-header">
     <h2>🎰 Slot Machine</h2>
   </div>
-
-  <div class="slot-status">
+  <div *ngIf="!isLoading" class="slot-status">
     <span>💰 Geld: {{ currentMoney | number : "1.2-2" }}</span>
     <span>🎲 Einsatz: {{ spinCost }} 💰</span>
-    <span>🏆 Gewinn: {{winReward}} 💸</span>
+    <span>🏆 Gewinn: {{ winReward }} 💸</span>
   </div>
+  <app-loader *ngIf="isLoading"></app-loader>
 
   <div class="slot-bet">
     <label for="bet">Einsatz wählen:</label>
-    <input type="number" id="bet" [(ngModel)]="betAmount" min="1" step="1">
+    <input type="number" id="bet" [(ngModel)]="betAmount" min="1" step="1" />
   </div>
 
   <div class="slot-reels">
-<app-reel
-  *ngFor="let reel of reels; let i = index"
-  #reelComp
-></app-reel>
-
+    <app-reel *ngFor="let reel of reels; let i = index" #reelComp></app-reel>
   </div>
 
-<button (click)="spin()" [disabled]="currentMoney < spinCost || isSpinning">Spin</button>
+  <button (click)="spin()" [disabled]="currentMoney < spinCost || isSpinning">
+    Spin
+  </button>
 
-<div *ngIf="results.length" class="slot-result">
-  Ergebnis: 
-  <ng-container *ngFor="let symbol of results; let last = last">
-    <ng-container *ngIf="symbol.type === 'emoji'; else imageTemplate">
-      {{ symbol.value }}
+  <div *ngIf="results.length" class="slot-result">
+    Ergebnis:
+    <ng-container *ngFor="let symbol of results; let last = last">
+      <ng-container *ngIf="symbol.type === 'emoji'; else imageTemplate">
+        {{ symbol.value }}
+      </ng-container>
+      <ng-template #imageTemplate>
+        <img
+          [src]="symbol.value"
+          alt="Symbol"
+          style="width: 30px; height: 30px"
+        />
+      </ng-template>
+      <span *ngIf="!last"> | </span>
     </ng-container>
-    <ng-template #imageTemplate>
-      <img [src]="symbol.value" alt="Symbol" style="width: 30px; height: 30px;" />
-    </ng-template>
-    <span *ngIf="!last"> | </span>
-  </ng-container>
-</div>
+  </div>
 
-
-
-  <div *ngIf="message" [class.win]="isWinner" [class.lose]="!isWinner" class="slot-message">
+  <div
+    *ngIf="message"
+    [class.win]="isWinner"
+    [class.lose]="!isWinner"
+    class="slot-message"
+  >
     {{ message }}
   </div>
 </div>

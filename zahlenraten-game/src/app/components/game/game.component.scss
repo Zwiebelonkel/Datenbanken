@@ -636,8 +636,31 @@ body.dark-mode {
   top: -1.1rem;
 }
 
-
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+ul {
+  cursor: pointer;
+}
+
+/* Sibling, NICHT im Slider! */
+.popup-portal {
+  position: fixed;
+  z-index: 9999; /* über Slider/Sidebar */
+}
+
+.popup-card {
+  min-width: 220px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.popup-title {
+  font-weight: 700;
+  margin-bottom: 8px;
 }

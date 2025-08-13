@@ -19,6 +19,7 @@ export const routes: Routes = [
   { path: 'game', component: GameComponent },
   { path: 'admin', component: AdminPageComponent },
   { path: 'achievements', component: AchievementsComponent },
+  { path: 'profile/:username', component: ProfileComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'how-to-play', component: HowToPlayComponent },
   { path: 'clicker', component: ClickerComponent },

@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -29,27 +29,41 @@ export class ProfileComponent implements OnInit {
   money = 0;
   highscore = 0;
   profileImage: string = 'assets/profile.png'; // Standardbild
+  isOwnProfile = false;
 
   constructor(
     private profileService: ProfileService,
-    private authService: AuthService,
-    private http: HttpClient
+    public authService: AuthService,
+    private http: HttpClient,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    const username = this.authService.getUsername();
-    this.username = username || '';
-    if (!username) return;
+    this.route.paramMap.subscribe((params) => {
+      const paramUser = params.get('username');
+      const selfUser = this.authService.getUsername() || '';
+      this.username = (paramUser || selfUser).trim();
 
-    // Benutzerstatistiken laden
-    this.profileService.getUserStats(username).subscribe({
+      // ✅ Besitzer-Flag setzen
+      this.isOwnProfile = !!selfUser && selfUser === this.username;
+
+      if (!this.username) {
+        this.isLoading = false;
+        return;
+      }
+      this.loadUserStats(this.username);
+    });
+  }
+  private loadUserStats(user: string) {
+    this.isLoading = true;
+    this.profileService.getUserStats(user).subscribe({
       next: (stats) => {
         this.totalScore = stats.totalScore;
         this.totalGames = stats.totalGames;
         this.unlockedAchievements = stats.unlockedAchievements;
-        this.money = stats.money; // 💰 Geld übernehmen
+        this.money = stats.money;
         this.highscore = stats.highscore;
-        this.profileImage = stats.profileImageUrl || this.profileImage; // Profilbild-URL übernehmen
+        this.profileImage = stats.profileImageUrl || this.profileImage;
         this.isLoading = false;
       },
       error: (err) => {
@@ -59,7 +73,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  // Passwort ändern
+  // Passwort ändern (nur eigenes Profil sinnvoll)
   changePassword() {
     if (this.newPassword !== this.repeatPassword) {
       this.pwChangeSuccess = false;
@@ -91,14 +105,18 @@ export class ProfileComponent implements OnInit {
 
   // Profilbild auswählen
   onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.uploadProfileImage(file);
-    }
+    const file = event.target.files?.[0];
+    if (file) this.uploadProfileImage(file);
   }
 
-  // Profilbild hochladen
+  // Profilbild hochladen (nur eigenes Profil)
   uploadProfileImage(file: File) {
+    const selfUser = this.authService.getUsername();
+    if (!selfUser || selfUser !== this.username) {
+      console.warn('Upload nur für das eigene Profil erlaubt.');
+      return;
+    }
+
     this.profileService.uploadProfileImage(file, this.username).subscribe({
       next: (res) => (this.profileImage = res.profileImageUrl),
       error: (err) => console.error('Fehler beim Hochladen des Bildes', err),

@@ -8,7 +8,7 @@ export interface UserStats {
   unlockedAchievements: number;
   money: number;
   highscore: number;
-  profileImageUrl?: string;  // Profilbild-URL (optional)
+  profileImageUrl?: string; // Profilbild-URL (optional)
 }
 
 @Injectable({
@@ -19,7 +19,23 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
+  // 📥 User-Statistiken laden
   getUserStats(username: string): Observable<UserStats> {
     return this.http.get<UserStats>(`${this.apiUrl}?username=${username}`);
+  }
+
+  // 📤 Profilbild hochladen
+  uploadProfileImage(
+    file: File,
+    username: string
+  ): Observable<{ profileImageUrl: string }> {
+    const formData = new FormData();
+    formData.append('profileImage', file, file.name);
+    formData.append('username', username);
+
+    return this.http.post<{ profileImageUrl: string }>(
+      `${this.apiUrl}/upload-profile-image`,
+      formData
+    );
   }
 }

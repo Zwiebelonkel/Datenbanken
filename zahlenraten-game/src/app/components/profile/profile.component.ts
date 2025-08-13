@@ -99,17 +99,9 @@ export class ProfileComponent implements OnInit {
 
   // Profilbild hochladen
   uploadProfileImage(file: File) {
-    const formData = new FormData();
-    formData.append('profileImage', file, file.name);
-
-    this.http.post('https://outside-between.onrender.com/api/profile/upload-profile-image', formData)
-      .subscribe({
-        next: (response: any) => {
-          this.profileImage = response.profileImageUrl;  // Update with new image URL
-        },
-        error: (err) => {
-          console.error('Fehler beim Hochladen des Bildes', err);
-        }
-      });
+    this.profileService.uploadProfileImage(file, this.username).subscribe({
+      next: (res) => (this.profileImage = res.profileImageUrl),
+      error: (err) => console.error('Fehler beim Hochladen des Bildes', err),
+    });
   }
 }

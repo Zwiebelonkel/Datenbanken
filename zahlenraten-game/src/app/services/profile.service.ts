@@ -31,7 +31,7 @@ export class ProfileService {
   ): Observable<{ profileImageUrl: string }> {
     const formData = new FormData();
     formData.append('profileImage', file, file.name);
-    formData.append('username', username);
+    formData.append('username', username); // wichtig für Backend
 
     return this.http.post<{ profileImageUrl: string }>(
       `${this.apiUrl}/upload-profile-image`,

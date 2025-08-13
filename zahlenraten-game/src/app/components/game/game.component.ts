@@ -52,9 +52,9 @@ export class GameComponent implements OnInit {
 
   // justAppeared = false; // Für Lava-Animation
   leaderboardTitles = [
-    '🏆 Top Punkte',
+    '🏆 Top Punkte mit 🃏',
     '🔥 Längste Streak',
-    '💵 Geld pro Runde',
+    '🏆 Top Punkte ohne 🃏',
   ];
   currentLeaderboardIndex = 0;
   currentLeaderboard: { username: string; value: string }[] = [];

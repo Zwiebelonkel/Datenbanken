@@ -102,7 +102,7 @@ export class ProfileComponent implements OnInit {
     const formData = new FormData();
     formData.append('profileImage', file, file.name);
 
-    this.http.post('https://outside-between.onrender.com/api/upload-profile-image', formData)
+    this.http.post('https://outside-between.onrender.com/api/profile/upload-profile-image', formData)
       .subscribe({
         next: (response: any) => {
           this.profileImage = response.profileImageUrl;  // Update with new image URL

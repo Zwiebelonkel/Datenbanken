@@ -90,3 +90,21 @@
   color: red;
   font-weight: bold;
 }
+
+.profile-avatar input[type="file"] {
+  display: none; /* Versteckt das Input-Element */
+}
+
+.profile-avatar img {
+  cursor: pointer; /* Ermöglicht das Klicken auf das Bild */
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #45a049;
+  margin-bottom: 0.5rem;
+}
+
+.profile-avatar:hover input[type="file"] {
+  display: block;
+}
+

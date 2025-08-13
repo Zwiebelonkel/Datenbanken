@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
     this.username = username || '';
     if (!username) return;
 
+    // Benutzerstatistiken laden
     this.profileService.getUserStats(username).subscribe({
       next: (stats) => {
         this.totalScore = stats.totalScore;
@@ -48,6 +49,7 @@ export class ProfileComponent implements OnInit {
         this.unlockedAchievements = stats.unlockedAchievements;
         this.money = stats.money; // 💰 Geld übernehmen
         this.highscore = stats.highscore;
+        this.profileImage = stats.profileImageUrl || this.profileImage; // Profilbild-URL übernehmen
         this.isLoading = false;
       },
       error: (err) => {
@@ -57,6 +59,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // Passwort ändern
   changePassword() {
     if (this.newPassword !== this.repeatPassword) {
       this.pwChangeSuccess = false;
@@ -86,18 +89,20 @@ export class ProfileComponent implements OnInit {
       });
   }
 
-    onFileSelected(event: any) {
+  // Profilbild auswählen
+  onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.uploadProfileImage(file);
     }
   }
 
+  // Profilbild hochladen
   uploadProfileImage(file: File) {
     const formData = new FormData();
     formData.append('profileImage', file, file.name);
 
-    this.http.post('https://your-backend-api.com/upload-profile-image', formData)
+    this.http.post('https://outside-between.onrender.com/api/upload-profile-image', formData)
       .subscribe({
         next: (response: any) => {
           this.profileImage = response.profileImageUrl;  // Update with new image URL

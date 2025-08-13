@@ -23,6 +23,7 @@ app.use("/api/money", moneyRoutes);
 app.use("/api/cards", cardsRoutes);
 app.use("/api/village", villageRoutes);
 app.use("/api/chat", chatRoutes);
+app.use('/uploads', express.static('uploads'));
 
 const ALL_ACHIEVEMENTS = [
   { name: "First Game 1️⃣", description: "Dein erstes Spiel!" },

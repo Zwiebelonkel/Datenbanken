@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
-import { SoundService } from './sound.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +9,6 @@ export class AchievementService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private soundService: SoundService
   ) {}
 
   unlockAchievement(name: string) {
@@ -32,7 +30,6 @@ export class AchievementService {
             );
             console.log('✅ Achievement neu freigeschaltet:', res.name);
             this.emojiRain('🎖️');
-            this.soundService.playSound('message.aac');
           } else {
             console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
           }

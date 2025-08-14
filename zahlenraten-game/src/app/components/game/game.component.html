@@ -217,7 +217,7 @@
           <ul>
             <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
 
- <li
+<li
   *ngFor="let entry of board; index as j; trackBy: trackByUsername"
   (click)="goToProfile(entry.username)"
   tabindex="0"
@@ -228,16 +228,23 @@
     'bronze-bg shimmer-effect': j === 2
   }"
 >
-
-  <span>{{ getMedal(j) }} {{ entry.username }}</span>
-     <img
+  <!-- PROFILBILD LINKS -->
+  <img
     class="avatar"
     [src]="avatar(entry.profileImageUrl, 32)"
-    width="32" height="32"
-    loading="lazy" decoding="async" fetchpriority="low"
+    width="32"
+    height="32"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
     (error)="onAvatarError($event)"
     alt=""
   />
+
+  <!-- NAME + MEDAILLE -->
+  <span>{{ getMedal(j) }} {{ entry.username }}</span>
+
+  <!-- WERT -->
   <strong>{{ entry.value }}</strong>
 </li>
 

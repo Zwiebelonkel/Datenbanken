@@ -1,0 +1,23 @@
+name: Generate frontend package-lock.json
+
+on:
+  workflow_dispatch:
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: npm install (create lockfile)
+        working-directory: zahlenraten-game
+        run: npm install
+      - name: Commit lockfile
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(frontend): add package-lock.json"
+          file_pattern: zahlenraten-game/package-lock.json

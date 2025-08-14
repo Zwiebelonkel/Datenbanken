@@ -19,7 +19,7 @@ router.post("/submit", async (req, res) => {
   }
 });
 
-//Gesamtpunktzahl aktualisieren
+// Gesamtpunktzahl aktualisieren
 router.post("/updateTotalScore", async (req, res) => {
   const { username, score } = req.body;
 
@@ -39,29 +39,46 @@ router.post("/updateTotalScore", async (req, res) => {
   }
 });
 
-//Top 10 Scores abrufen
-router.get("/top", async (req, res) => {
+/** 🔝 Top 10 Einzel-Highscores inkl. Avatar */
+router.get("/top", async (_req, res) => {
   try {
-    const result = await db.execute(
-      "SELECT username, score, created_at FROM scores ORDER BY score DESC LIMIT 10"
-    );
+    const result = await db.execute(`
+      SELECT 
+        s.username,
+        s.score,
+        s.created_at,
+        u.profile_image_url AS profileImageUrl
+      FROM scores s
+      LEFT JOIN users u
+        ON LOWER(u.username) = LOWER(s.username)
+      ORDER BY s.score DESC
+      LIMIT 10
+    `);
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-//Alle Scores abrufen
-router.get("/all", async (req, res) => {
+/** 📜 Alle Scores (falls du es brauchst) inkl. Avatar */
+router.get("/all", async (_req, res) => {
   try {
-    const result = await db.execute("SELECT * FROM scores ORDER BY score DESC");
+    const result = await db.execute(`
+      SELECT 
+        s.*,
+        u.profile_image_url AS profileImageUrl
+      FROM scores s
+      LEFT JOIN users u
+        ON LOWER(u.username) = LOWER(s.username)
+      ORDER BY s.score DESC
+    `);
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: "Fehler beim Laden der Scores" });
   }
 });
 
-//Highscore prüfen
+// Highscore prüfen
 router.post("/isHighscore", async (req, res) => {
   const { score } = req.body;
   try {
@@ -76,43 +93,60 @@ router.post("/isHighscore", async (req, res) => {
   }
 });
 
-//Total Score eines Users abrufen
+// Total Score eines Users abrufen
 router.get("/userTotalScore/:username", async (req, res) => {
   const { username } = req.params;
   try {
     const result = await db.execute({
-      sql: "SELECT total_score FROM users WHERE username = ?",
+      sql: "SELECT total_score FROM users WHERE LOWER(username) = LOWER(?)",
       args: [username],
     });
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "User nicht gefunden" });
     }
-
     res.json({ total_score: result.rows[0].total_score });
   } catch (err) {
     res.status(500).json({ error: "Fehler beim Laden" });
   }
 });
 
-// 🔹 Längste Serien
-router.get("/topStreaks", async (req, res) => {
+/** 🔹 Längste Serien inkl. Avatar */
+router.get("/topStreaks", async (_req, res) => {
   try {
-    const result = await db.execute(
-      "SELECT username, MAX(consecutive_wins) AS consecutive_wins FROM scores GROUP BY username ORDER BY consecutive_wins DESC LIMIT 10"
-    );
+    const result = await db.execute(`
+      SELECT 
+        s.username,
+        MAX(s.consecutive_wins) AS consecutive_wins,
+        u.profile_image_url AS profileImageUrl
+      FROM scores s
+      LEFT JOIN users u
+        ON LOWER(u.username) = LOWER(s.username)
+      GROUP BY s.username, u.profile_image_url
+      ORDER BY consecutive_wins DESC
+      LIMIT 10
+    `);
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// 🔹 Meistes Geld pro Runde
-router.get("/topMoneyPerRound", async (req, res) => {
+/** 🔹 Meistes Geld pro Runde inkl. Avatar */
+router.get("/topMoneyPerRound", async (_req, res) => {
   try {
-    const result = await db.execute(
-      "SELECT username, MAX(money_per_round) AS money_per_round FROM scores GROUP BY username ORDER BY money_per_round DESC LIMIT 10"
-    );
+    const result = await db.execute(`
+      SELECT 
+        s.username,
+        MAX(s.money_per_round) AS money_per_round,
+        u.profile_image_url AS profileImageUrl
+      FROM scores s
+      LEFT JOIN users u
+        ON LOWER(u.username) = LOWER(s.username)
+      GROUP BY s.username, u.profile_image_url
+      ORDER BY money_per_round DESC
+      LIMIT 10
+    `);
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });

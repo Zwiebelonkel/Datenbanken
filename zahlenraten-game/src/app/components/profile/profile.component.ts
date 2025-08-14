@@ -117,6 +117,9 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
+    onImgError(){
+      this.profileImage = 'assets/profile.png';
+    }
     this.profileService.uploadProfileImage(file, this.username).subscribe({
       next: (res) => (this.profileImage = res.profileImageUrl),
       error: (err) => console.error('Fehler beim Hochladen des Bildes', err),

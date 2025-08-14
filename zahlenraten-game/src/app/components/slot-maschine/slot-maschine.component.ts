@@ -45,6 +45,7 @@ export class SlotMaschineComponent implements OnInit {
   betAmount: number = 100;
   isSpinning: boolean = false;
   isLoading: boolean = true;
+  gotLasVegas: boolean = false;
 
   get spinCost() {
     return this.betAmount;
@@ -84,7 +85,10 @@ export class SlotMaschineComponent implements OnInit {
   }
   spin() {
     this.isSpinning = true;
-    this.unlockAch('Las Vegas 🎰')
+    if(!this.gotLasVegas){
+      this.unlockAch('Las Vegas 🎰')
+      this.gotLasVegas = true;
+    }
     this.message = '';
     this.isWinner = false;
 

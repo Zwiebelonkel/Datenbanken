@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Renderer2 } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AchievementService {
-  constructor(private http: HttpClient, private renderer: Renderer2) {}
+  constructor(private http: HttpClient) {}
 
   unlockAchievement(userId: string, name: string) {
     return this.http.post<{ unlocked: boolean; name: string }>(
@@ -41,27 +40,5 @@ export class AchievementService {
       'Lone Wolf': 'Gewinne beim Glücksspiel',
     };
     return descriptions[name] || 'Erfolg freigeschaltet';
-  }
-
-  // Optional: Animationslogik hierher auslagern
-  emojiRain(emoji: string, container: HTMLElement, count = 50) {
-    for (let i = 0; i < count; i++) {
-      const span = this.renderer.createElement('span');
-      const text = this.renderer.createText(emoji);
-      this.renderer.appendChild(span, text);
-      this.renderer.addClass(span, 'emoji-drop');
-
-      const startX = Math.random() * window.innerWidth;
-      const delay = Math.random() * 2;
-
-      this.renderer.setStyle(span, 'left', `${startX}px`);
-      this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
-
-      this.renderer.appendChild(container, span);
-
-      setTimeout(() => {
-        this.renderer.removeChild(container, span);
-      }, (3 + delay) * 1000);
-    }
   }
 }

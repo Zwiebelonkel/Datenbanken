@@ -17,6 +17,7 @@ export class AchievementService {
         description: this.getAchievementDescription(name),
       }
     );
+    console.log("Unlocking: "+name)
   }
 
   getAchievementDescription(name: string): string {

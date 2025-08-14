@@ -51,6 +51,8 @@ const ALL_ACHIEVEMENTS = [
   },
   { name: "Champion 🏆", description: "Sei auf dem Leaderboard" },
   { name: "Bürgermeister", description: "Verbessere dein Dorf" },
+  { name: "Las Vegas", description: "Versuche dein Glück" },
+  { name: "Lone Wolf", description: "Gewinne beim Glücksspiel" },
 ];
 
 // Registrierung mit Dorf und Bewohnern

@@ -27,6 +27,7 @@
 
 /* runder Bildrahmen – separat, damit darunterliegender Text nicht abgeschnitten wird */
 .avatar-frame {
+  transition: 0.5s;
   position: relative;
   width: 140px;
   height: 140px;
@@ -34,6 +35,11 @@
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+.avatar-frame:hover {
+  transition: 0.5s;
+  transform: rotate(360deg); /* rotate on hover */
+}
 
   img {
     width: 100%;

@@ -199,9 +199,17 @@ export class SlotMaschineComponent implements OnInit {
     }
   }
 
-  unlockAch(name: string, user:string){
-    this.achievementService.unlockAchievement(user, name)
-  }
+unlockAch(name: string, user: string) {
+  this.achievementService.unlockAchievement(user, name).subscribe({
+    next: (response) => {
+      console.log(`🎯 Achievement "${response.name}" unlocked!`);
+    },
+    error: (err) => {
+      console.error('❌ Fehler beim Unlock:', err);
+    },
+  });
+}
+
 
   isJackpot(): boolean {
     return (

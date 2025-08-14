@@ -6,6 +6,11 @@
   color: var(--text-color);
 }
 
+  .avatar:hover {
+    transition: 0.5s;
+    transform: rotate(360deg); /* rotate on hover */
+  }
+
 /* ===== Avatar, Name & Handle ===== */
 .profile-avatar {
   text-align: center;
@@ -36,10 +41,10 @@
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 
-.avatar-frame:hover {
-  transition: 0.5s;
-  transform: rotate(360deg); /* rotate on hover */
-}
+  .avatar-frame:hover {
+    transition: 0.5s;
+    transform: rotate(360deg); /* rotate on hover */
+  }
 
   img {
     width: 100%;

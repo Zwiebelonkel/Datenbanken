@@ -229,9 +229,8 @@
   }"
 >
   <!-- NAME + MEDAILLE -->
-  <span>{{ getMedal(j) }} {{ entry.username }}</span>
-    <!-- PROFILBILD LINKS -->
-  <img
+  <span>{{ getMedal(j) }}  
+    <img
     class="avatar"
     [src]="avatar(entry.profileImageUrl, 32)"
     width="32"
@@ -241,7 +240,9 @@
     fetchpriority="low"
     (error)="onAvatarError($event)"
     alt=""
-  />
+  /> 
+    {{ entry.username }}</span>
+    <!-- PROFILBILD LINKS -->
 
   <!-- WERT -->
   <strong>{{ entry.value }}</strong>

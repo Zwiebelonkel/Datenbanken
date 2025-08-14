@@ -228,7 +228,9 @@
     'bronze-bg shimmer-effect': j === 2
   }"
 >
-  <!-- PROFILBILD LINKS -->
+  <!-- NAME + MEDAILLE -->
+  <span>{{ getMedal(j) }} {{ entry.username }}</span>
+    <!-- PROFILBILD LINKS -->
   <img
     class="avatar"
     [src]="avatar(entry.profileImageUrl, 32)"
@@ -240,9 +242,6 @@
     (error)="onAvatarError($event)"
     alt=""
   />
-
-  <!-- NAME + MEDAILLE -->
-  <span>{{ getMedal(j) }} {{ entry.username }}</span>
 
   <!-- WERT -->
   <strong>{{ entry.value }}</strong>

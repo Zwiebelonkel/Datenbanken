@@ -51,8 +51,8 @@
   }
 }
   .avatar-frame:hover {
-    transition: 0.5s;
-    transform: rotate(360deg); /* rotate on hover */
+    transition: 0.75s;
+    transform: rotateX(360deg); /* rotate on hover */
   }
 
 /* Overlay-Button auf dem Avatar (nur bei eigenem Profil sichtbar) */

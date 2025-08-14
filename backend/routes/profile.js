@@ -1,63 +1,44 @@
 import express from "express";
 import multer from "multer";
-import path from "path";
 import db from "../db.js";
-import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const router = express.Router();
 
-// 📂 Multer-Storage-Konfiguration für Bild-Upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = "./uploads/";
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const fileExtension = path.extname(file.originalname);
-    cb(null, uuidv4() + fileExtension); // einzigartiger Dateiname
-  },
+/** 🔐 Cloudinary: ENV Variablen müssen in Render gesetzt sein */
+cloudinary.config({
+  cloud_name: process.env.CLD_NAME,
+  api_key: process.env.CLD_KEY,
+  api_secret: process.env.CLD_SECRET,
 });
 
-const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
-    );
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-      return cb(null, true);
-    }
-    cb(new Error("Nur Bilder sind erlaubt!"));
+/** 🗄️ Multer-Storage direkt in Cloudinary (keine lokale Disk) */
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "profile-pictures",
+    public_id: () => uuidv4(),
+    allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
+    // kleine, quadratische Avatare – spart Traffic
+    transformation: [{ width: 256, height: 256, crop: "fill", gravity: "auto", quality: "auto" }],
   },
-}).single("profileImage"); // Feldname muss im Frontend gleich heißen
+});
+const upload = multer({ storage }).single("profileImage");
 
-// 📤 Profilbild hochladen
+/** 📤 Profilbild hochladen (Username kommt wie bisher im Body mit) */
 router.post("/upload-profile-image", (req, res) => {
   upload(req, res, async (err) => {
-    if (err) {
-      return res.status(400).json({ message: err.message });
-    }
+    if (err) return res.status(400).json({ message: err.message });
 
-    const username = req.body.username; // Username aus dem FormData
-    if (!username) {
-      return res.status(400).json({ message: "Kein Benutzername angegeben" });
-    }
+    const username = (req.body.username || "").trim();
+    if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
+    if (!req.file) return res.status(400).json({ message: "Kein Bild hochgeladen" });
 
-    if (!req.file) {
-      return res.status(400).json({ message: "Kein Bild hochgeladen" });
-    }
-
-    // ✅ URL automatisch aus Host & Protokoll generieren
-    const profileImageUrl = `${req.protocol}://${req.get("host")}/uploads/${
-      req.file.filename
-    }`;
+    // Cloudinary liefert eine sofort-öffentliche URL
+    const profileImageUrl = req.file.secure_url || req.file.path;
+    if (!profileImageUrl) return res.status(500).json({ message: "Upload fehlgeschlagen" });
 
     try {
       const result = await db.execute({
@@ -73,23 +54,18 @@ router.post("/upload-profile-image", (req, res) => {
         return res.status(404).json({ message: "Benutzer nicht gefunden" });
       }
 
-      res.json({
-        message: "Profilbild erfolgreich hochgeladen",
-        profileImageUrl,
-      });
-    } catch (err) {
-      console.error("❌ Fehler beim Speichern des Profilbildes:", err);
+      res.json({ message: "Profilbild erfolgreich hochgeladen", profileImageUrl });
+    } catch (e) {
+      console.error("❌ Fehler beim Speichern des Profilbildes:", e);
       res.status(500).json({ message: "Datenbankfehler" });
     }
   });
 });
 
-// 📥 Profil-Daten abrufen
-router.get("/", async (req, res) => {
-  const username = req.query.username;
-  if (!username) {
-    return res.status(400).json({ message: "Kein Benutzername angegeben" });
-  }
+/** 📥 Profil-Daten abrufen – neue Param-Route */
+router.get("/:username", async (req, res) => {
+  const username = (req.params.username || "").trim();
+  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
 
   try {
     const result = await db.execute({
@@ -110,13 +86,40 @@ router.get("/", async (req, res) => {
       args: [username, username, username, username],
     });
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Benutzer nicht gefunden" });
-    }
-
+    if (result.rows.length === 0) return res.status(404).json({ message: "Benutzer nicht gefunden" });
     res.json(result.rows[0]);
-  } catch (err) {
-    console.error("❌ Fehler beim Laden des Profils:", err);
+  } catch (e) {
+    console.error("❌ Fehler beim Laden des Profils:", e);
+    res.status(500).json({ message: "Datenbankfehler" });
+  }
+});
+
+/** (Optional) Alte Query-Variante beibehalten, falls Frontend sie noch nutzt */
+router.get("/", async (req, res) => {
+  const username = (req.query.username || "").trim();
+  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
+  try {
+    const result = await db.execute({
+      sql: `
+        SELECT 
+          u.total_score AS totalScore,
+          u.money AS money,
+          (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
+          (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
+          (SELECT COUNT(*) FROM achievements a 
+             JOIN users u2 ON u2.id = a.user_id 
+             WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements,
+          u.profile_image_url AS profileImageUrl
+        FROM users u
+        WHERE LOWER(u.username) = LOWER(?)
+        LIMIT 1
+      `,
+      args: [username, username, username, username],
+    });
+    if (result.rows.length === 0) return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    res.json(result.rows[0]);
+  } catch (e) {
+    console.error("❌ Fehler beim Laden des Profils (Query):", e);
     res.status(500).json({ message: "Datenbankfehler" });
   }
 });

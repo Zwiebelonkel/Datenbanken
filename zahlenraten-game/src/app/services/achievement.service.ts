@@ -29,7 +29,6 @@ export class AchievementService {
               `🎉 Erfolg freigeschaltet: ${res.name}`
             );
             console.log('✅ Achievement neu freigeschaltet:', res.name);
-            this.emojiRain('🎖️');
           } else {
             console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
           }
@@ -37,6 +36,12 @@ export class AchievementService {
         error: (err) => console.error('❌ Fehler beim Unlock:', err),
       });
   }
+
+    showAchievementMessage(msg: string) {
+    // ❗ TODO: Diese Methode implementieren (Toast, Modal, etc.)
+    console.log('🔔 Nachricht:', msg);
+  }
+
 
   getAchievementDescription(name: string): string {
     const descriptions: Record<string, string> = {

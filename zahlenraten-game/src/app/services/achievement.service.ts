@@ -59,9 +59,9 @@ export class AchievementService {
       'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
       'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren',
       'Champion 🏆': 'Sei auf dem Leaderboard',
-      'Bürgermeister': 'Verbessere dein Dorf',
-      'Las Vegas': 'Versuche dein Glück',
-      'Lone Wolf': 'Gewinne beim Glücksspiel',
+      'Bürgermeister 🏠': 'Verbessere dein Dorf',
+      'Las Vegas 🎰': 'Versuche dein Glück',
+      'Lone Wolf 🐺': 'Gewinne beim Glücksspiel',
     };
     return descriptions[name] || 'Erfolg freigeschaltet';
   }

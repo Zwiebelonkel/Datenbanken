@@ -66,7 +66,7 @@ export class SlotMaschineComponent implements OnInit {
     private moneyService: MoneyService,
     private renderer: Renderer2,
     private chatService: ChatService,
-    private achievementSerivce: AchievementService,
+    private achievementService: AchievementService,
   ) {}
 
   ngOnInit() {

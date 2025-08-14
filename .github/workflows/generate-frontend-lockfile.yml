@@ -1,4 +1,4 @@
-name: Generate backend package-lock.json
+name: Generate frontend package-lock.json
 
 on:
   workflow_dispatch:

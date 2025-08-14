@@ -12,5 +12,7 @@
         "@libsql/client": "^0.15.9",
         "multer": "^2.0.2",
         "uuid": "^11.1.0"
+        "cloudinary": "^1.41.0",
+        "multer-storage-cloudinary": "^4.0.0"
     }
 }

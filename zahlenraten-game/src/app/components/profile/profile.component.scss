@@ -5,12 +5,6 @@
   font-family: "Nunito", sans-serif;
   color: var(--text-color);
 }
-
-  .avatar:hover {
-    transition: 0.5s;
-    transform: rotate(360deg); /* rotate on hover */
-  }
-
 /* ===== Avatar, Name & Handle ===== */
 .profile-avatar {
   text-align: center;

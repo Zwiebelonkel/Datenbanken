@@ -740,25 +740,7 @@ avatar(url?: string | null, size = 32): string {
 onAvatarError(ev: Event) {
   (ev.target as HTMLImageElement).src = 'assets/profile.png';
 }
+  
 trackByUsername(i: number, item: any) { return item?.username ?? i; }
-
-
-  togglePopup(boardIndex: number, rowIndex: number, username: string) {
-    const isSame =
-      this.activeBoardIndex === boardIndex && this.activeRowIndex === rowIndex;
-    if (isSame) {
-      this.activeBoardIndex = this.activeRowIndex = null;
-      this.selectedUsername = null;
-    } else {
-      this.activeBoardIndex = boardIndex;
-      this.activeRowIndex = rowIndex;
-      this.selectedUsername = username;
-    }
-  }
-
-  isPopupOpen(boardIndex: number, rowIndex: number): boolean {
-    return (
-      this.activeBoardIndex === boardIndex && this.activeRowIndex === rowIndex
-    );
-  }
+}
 }

@@ -67,8 +67,9 @@ export class GameComponent implements OnInit {
     '🏆 Top Punkte ohne 🃏',
   ];
   currentLeaderboardIndex = 0;
-  currentLeaderboard: { username: string; value: string }[] = [];
-  allLeaderboards: { username: string; value: string }[][] = [];
+currentLeaderboard: { username: string; value: string; profileImageUrl?: string }[] = [];
+allLeaderboards: { username: string; value: string; profileImageUrl?: string }[][] = [];
+
   touchStartX = 0;
 
   buttonsDisabled = false;
@@ -358,14 +359,17 @@ export class GameComponent implements OnInit {
         scores.map((s) => ({
           username: s.username,
           value: `${s.score} Punkte`,
+          profileImageUrl: s.profileImageUrl, // 🛠️ HINZUFÜGEN
         })),
         streaks.map((s) => ({
           username: s.username,
           value: `${s.consecutive_wins} 🔁`,
+          profileImageUrl: s.profileImageUrl, // 🛠️ HINZUFÜGEN
         })), // ← geändert
         money.map((s) => ({
           username: s.username,
           value: `${s.money_per_round}€ 💰`,
+          profileImageUrl: s.profileImageUrl, // 🛠️ HINZUFÜGEN
         })), // ← geändert
       ];
       this.setLeaderboard(0);

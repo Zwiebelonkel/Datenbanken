@@ -84,7 +84,7 @@ export class SlotMaschineComponent implements OnInit {
   }
   spin() {
     this.isSpinning = true;
-    this.unlockAch('Las Vegas')
+    this.unlockAch('Las Vegas 🎰')
     this.message = '';
     this.isWinner = false;
 
@@ -120,7 +120,7 @@ export class SlotMaschineComponent implements OnInit {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
                     this.emojiRain('💸');
-                    this.unlockAch('Lone Wolf')
+                    this.unlockAch('Lone Wolf 🐺')
                     this.moneyService
                       .updateMoney({
                         username: this.username,

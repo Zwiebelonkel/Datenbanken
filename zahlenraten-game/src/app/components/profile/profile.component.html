@@ -4,7 +4,7 @@
   <!-- Avatar + Name -->
   <div class="profile-avatar">
     <div class="avatar-frame" [class.view-only]="!isOwnProfile">
-      <img [src]="profileImage" alt="Profilbild" />
+      <img [src]="profileImage" alt="Profilbild" (error)="onImgError()" />
 
       <button
         *ngIf="isOwnProfile"

@@ -119,7 +119,7 @@ export class SlotMaschineComponent implements OnInit {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
                     this.emojiRain('💸');
-                    this.unlockAch('Lone Wolf' this.username)
+                    this.unlockAch('Lone Wolf', this.username)
                     this.moneyService
                       .updateMoney({
                         username: this.username,

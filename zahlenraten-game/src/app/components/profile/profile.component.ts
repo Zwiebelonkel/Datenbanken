@@ -109,16 +109,16 @@ export class ProfileComponent implements OnInit {
     if (file) this.uploadProfileImage(file);
   }
 
+      onImgError(){
+      this.profileImage = 'assets/profile.png';
+    }
+
   // Profilbild hochladen (nur eigenes Profil)
   uploadProfileImage(file: File) {
     const selfUser = this.authService.getUsername();
     if (!selfUser || selfUser !== this.username) {
       console.warn('Upload nur für das eigene Profil erlaubt.');
       return;
-    }
-
-    onImgError(){
-      this.profileImage = 'assets/profile.png';
     }
     this.profileService.uploadProfileImage(file, this.username).subscribe({
       next: (res) => (this.profileImage = res.profileImageUrl),

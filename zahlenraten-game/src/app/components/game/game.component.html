@@ -228,7 +228,9 @@
     'bronze-bg shimmer-effect': j === 2
   }"
 >
-  <img
+
+  <span>{{ getMedal(j) }} {{ entry.username }}</span>
+     <img
     class="avatar"
     [src]="avatar(entry.profileImageUrl, 32)"
     width="32" height="32"
@@ -236,7 +238,6 @@
     (error)="onAvatarError($event)"
     alt=""
   />
-  <span>{{ getMedal(j) }} {{ entry.username }}</span>
   <strong>{{ entry.value }}</strong>
 </li>
 

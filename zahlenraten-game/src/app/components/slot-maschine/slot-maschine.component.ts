@@ -84,7 +84,7 @@ export class SlotMaschineComponent implements OnInit {
   }
   spin() {
     this.isSpinning = true;
- //   this.unlockAch('Las Vegas', this.username)
+    this.unlockAch('Las Vegas')
     this.message = '';
     this.isWinner = false;
 
@@ -120,7 +120,7 @@ export class SlotMaschineComponent implements OnInit {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
                     this.emojiRain('💸');
-                    this.unlockAch('Lone Wolf', this.username)
+                    this.unlockAch('Lone Wolf')
                     this.moneyService
                       .updateMoney({
                         username: this.username,
@@ -199,15 +199,8 @@ export class SlotMaschineComponent implements OnInit {
     }
   }
 
-unlockAch(name: string, user: string) {
-  this.achievementService.unlockAchievement(user, name).subscribe({
-    next: (response) => {
-      console.log(`🎯 Achievement "${response.name}" unlocked!`);
-    },
-    error: (err) => {
-      console.error('❌ Fehler beim Unlock:', err);
-    },
-  });
+unlockAch(name: string) {
+this.achievementService.unlockAchievement(name);
 }
 
 

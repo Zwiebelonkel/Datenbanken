@@ -84,7 +84,7 @@ export class SlotMaschineComponent implements OnInit {
   }
   spin() {
     this.isSpinning = true;
-    this.unlockAch('Las Vegas', this.username)
+ //   this.unlockAch('Las Vegas', this.username)
     this.message = '';
     this.isWinner = false;
 

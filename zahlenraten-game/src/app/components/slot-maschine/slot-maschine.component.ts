@@ -1,6 +1,7 @@
 import { Component, ViewChildren, QueryList, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { AchievementService } from '../../services/achievement.service';
 import { MoneyService } from '../../services/money.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
@@ -64,7 +65,8 @@ export class SlotMaschineComponent implements OnInit {
     private authService: AuthService,
     private moneyService: MoneyService,
     private renderer: Renderer2,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private achievementSerivce: AchievementService,
   ) {}
 
   ngOnInit() {
@@ -117,6 +119,7 @@ export class SlotMaschineComponent implements OnInit {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
                     this.emojiRain('💸');
+                    this.unlockAch('Lone Wolf' this.username)
                     this.moneyService
                       .updateMoney({
                         username: this.username,
@@ -193,6 +196,10 @@ export class SlotMaschineComponent implements OnInit {
         this.renderer.removeChild(container, span);
       }, (3 + delay) * 1000);
     }
+  }
+
+  unlockAch(name: string, user:string){
+    this.achievementSerivice.unlockAchievement(user, name)
   }
 
   isJackpot(): boolean {

@@ -729,11 +729,14 @@ export class GameComponent implements OnInit {
     return '1.5s';
   }
 
-   avatar(url?: string | null, size = 32): string {
+avatar(url?: string | null, size = 32): string {
   if (!url) return 'assets/profile.png';
-  // Cloudinary: Thumbnail klein & günstig ausliefern
-  return url.replace('/upload/', `/upload/w_${size},h_${size},c_fill,g_auto,f_auto,q_auto/`);
+  return url.replace(
+    '/upload/',
+    `/upload/w_${size},h_${size},c_fill,g_auto,f_auto,q_auto/`
+  );
 }
+
 onAvatarError(ev: Event) {
   (ev.target as HTMLImageElement).src = 'assets/profile.png';
 }

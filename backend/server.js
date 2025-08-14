@@ -50,9 +50,9 @@ const ALL_ACHIEVEMENTS = [
     description: "Du hast 20 mal richtig geraten ohne ein Leben zu verlieren",
   },
   { name: "Champion 🏆", description: "Sei auf dem Leaderboard" },
-  { name: "Bürgermeister", description: "Verbessere dein Dorf" },
-  { name: "Las Vegas", description: "Versuche dein Glück" },
-  { name: "Lone Wolf", description: "Gewinne beim Glücksspiel" },
+  { name: "Bürgermeister 🏠", description: "Verbessere dein Dorf" },
+  { name: "Las Vegas 🎰", description: "Versuche dein Glück" },
+  { name: "Lone Wolf 🐺", description: "Gewinne beim Glücksspiel" },
 ];
 
 // Registrierung mit Dorf und Bewohnern

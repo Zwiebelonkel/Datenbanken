@@ -8,6 +8,7 @@ interface ScoreEntry {
   created_at?: string;
   consecutive_wins?: number;
   money_per_round?: number;
+  profileImageUrl?: string | null;
 }
 
 @Injectable({

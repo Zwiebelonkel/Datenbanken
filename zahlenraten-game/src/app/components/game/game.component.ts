@@ -60,10 +60,6 @@ export class GameComponent implements OnInit {
   activeRowIndex: number | null = null;
   selectedUsername: string | null = null;
 
-  trackByUsername(index: number, item: any) {
-    return item?.username ?? index;
-  }
-
   // justAppeared = false; // Für Lava-Animation
   leaderboardTitles = [
     '🏆 Top Punkte mit 🃏',

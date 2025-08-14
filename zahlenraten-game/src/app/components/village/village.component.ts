@@ -15,6 +15,7 @@ import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
 import { AchievementService } from '../../services/achievement.service';
+import { Renderer2 } from '@angular/core';
 
 // import {AchievementService } from '../../services/achievement.service';
 
@@ -99,7 +100,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     private profileService: ProfileService,
     private auth: AuthService,
     private moneyService: MoneyService,
-    private achievementService: AchievementService
+    private achievementService: AchievementService,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
@@ -438,7 +440,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       const dist = Math.hypot(dx, dy);
 
       // Bewegung: px/s * s
-      const step = Math.max(1, v.speed) * dt;
+      const step = Math.max(1, v.speed * 1.05) * dt;
       if (dist > step) {
         const nx = dx / dist,
           ny = dy / dist;
@@ -572,8 +574,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (res) => {
         this.villageLevel = res.newLevel;
         this.money = res.newMoney;
-        this.achievementService.unlockAchievement('Bürgermeister 🏠')
-
+        this.unlockAch('Bürgermeister 🏠');
 
         this.villageService.collectIncome().subscribe({
           next: (res) => {
@@ -683,6 +684,53 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   //      },
   //    });
   //}
+
+  unlockAch(name: string) {
+    this.achievementService.unlockAchievement(name).subscribe({
+      next: (res) => {
+        if (res.unlocked) {
+          this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
+          this.emojiRain('🎖️');
+        } else {
+          // optional: Info anzeigen, dass bereits freigeschaltet
+          // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);
+        }
+      },
+      error: (err) => console.error('❌ Fehler beim Unlock:', err),
+    });
+  }
+
+  showAchievementMessage(message: string) {
+    this.achievementMessage = message;
+    setTimeout(() => {
+      this.achievementMessage = null;
+    }, 3000); // 3 Sekunden sichtbar
+  }
+
+  emojiRain(emoji: string, count: number = 50) {
+    const container = document.querySelector('.emoji-rain-container');
+    if (!container) return;
+
+    for (let i = 0; i < count; i++) {
+      const span = this.renderer.createElement('span');
+      const text = this.renderer.createText(emoji);
+      this.renderer.appendChild(span, text);
+      this.renderer.addClass(span, 'emoji-drop');
+
+      const startX = Math.random() * window.innerWidth;
+      const delay = Math.random() * 2;
+
+      this.renderer.setStyle(span, 'left', `${startX}px`);
+      this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
+
+      this.renderer.appendChild(container, span);
+
+      // ❗ Timeout mit passendem Delay (nicht neu deklarieren)
+      setTimeout(() => {
+        this.renderer.removeChild(container, span);
+      }, (3 + delay) * 1000);
+    }
+  }
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);

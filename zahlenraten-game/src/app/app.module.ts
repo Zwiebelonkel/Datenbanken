@@ -20,10 +20,9 @@ import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { ChatComponent} from './components/chat/chat.component';
+import { ChatComponent } from './components/chat/chat.component';
 import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
-import { ReelComponent } from './components/slot-machine/reel/reel.component';
-
+import { ReelComponent } from './components/slot-maschine/reel/reel.component';
 @NgModule({
   declarations: [
     RegisterComponent,
@@ -43,7 +42,7 @@ import { ReelComponent } from './components/slot-machine/reel/reel.component';
     VillageComponent,
     ChatComponent,
     SlotMaschineComponent,
-    ReelComponent
+    ReelComponent,
   ],
   imports: [
     BrowserModule,

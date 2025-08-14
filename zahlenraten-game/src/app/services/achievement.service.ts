@@ -1,47 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+interface UnlockResponse {
+  unlocked: boolean;
+  name: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class AchievementService {
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  unlockAchievement(name: string) {
-    this.http
-      .post<{ unlocked: boolean; name: string }>(
-        'https://outside-between.onrender.com/api/unlock',
-        {
-          userId: this.authService.getUserId(), // holt sich die User-ID dynamisch
-          name: name,
-          description: this.getAchievementDescription(name),
-        }
-      )
-      .subscribe({
-        next: (res) => {
-          console.log('📡 SERVER-ANTWORT:', res);
-          if (res.unlocked) {
-            this.showAchievementMessage(
-              `🎉 Erfolg freigeschaltet: ${res.name}`
-            );
-            console.log('✅ Achievement neu freigeschaltet:', res.name);
-          } else {
-            console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
-          }
-        },
-        error: (err) => console.error('❌ Fehler beim Unlock:', err),
-      });
+  unlockAchievement(name: string): Observable<UnlockResponse> {
+    return this.http.post<UnlockResponse>(
+      'https://outside-between.onrender.com/api/unlock',
+      {
+        userId: this.authService.getUserId(),
+        name,
+        description: this.getAchievementDescription(name),
+      }
+    );
   }
-
-    showAchievementMessage(msg: string) {
-    // ❗ TODO: Diese Methode implementieren (Toast, Modal, etc.)
-    console.log('🔔 Nachricht:', msg);
-  }
-
 
   getAchievementDescription(name: string): string {
     const descriptions: Record<string, string> = {
@@ -54,9 +34,9 @@ export class AchievementService {
       'Göttlicher Segen 👼🏻': 'Du hast 500 Punkte erreicht!',
       'Gambler 🎲': 'Du hast 3 mal richtig geraten ohne ein Leben zu verlieren',
       'Arbeitswoche 🛠️':
-      'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
+        'Du hast 5 mal richtig geraten ohne ein Leben zu verlieren',
       'Strategieprofi 🧭':
-      'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
+        'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
       'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren',
       'Champion 🏆': 'Sei auf dem Leaderboard',
       'Bürgermeister 🏠': 'Verbessere dein Dorf',

@@ -46,6 +46,7 @@ export class SlotMaschineComponent implements OnInit {
   isSpinning: boolean = false;
   isLoading: boolean = true;
   gotLasVegas: boolean = false;
+  achievementMessage: string | null = null;
 
   get spinCost() {
     return this.betAmount;
@@ -67,7 +68,7 @@ export class SlotMaschineComponent implements OnInit {
     private moneyService: MoneyService,
     private renderer: Renderer2,
     private chatService: ChatService,
-    private achievementService: AchievementService,
+    private achievementService: AchievementService
   ) {}
 
   ngOnInit() {
@@ -85,8 +86,8 @@ export class SlotMaschineComponent implements OnInit {
   }
   spin() {
     this.isSpinning = true;
-    if(!this.gotLasVegas){
-      this.unlockAch('Las Vegas 🎰')
+    if (!this.gotLasVegas) {
+      this.unlockAch('Las Vegas 🎰');
       this.gotLasVegas = true;
     }
     this.message = '';
@@ -124,7 +125,7 @@ export class SlotMaschineComponent implements OnInit {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
                     this.emojiRain('💸');
-                    this.unlockAch('Lone Wolf 🐺')
+                    this.unlockAch('Lone Wolf 🐺');
                     this.moneyService
                       .updateMoney({
                         username: this.username,
@@ -178,6 +179,28 @@ export class SlotMaschineComponent implements OnInit {
       });
   }
 
+  unlockAch(name: string) {
+    this.achievementService.unlockAchievement(name).subscribe({
+      next: (res) => {
+        if (res.unlocked) {
+          this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
+          this.emojiRain('🎖️');
+        } else {
+          // optional: Info anzeigen, dass bereits freigeschaltet
+          // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);
+        }
+      },
+      error: (err) => console.error('❌ Fehler beim Unlock:', err),
+    });
+  }
+
+  showAchievementMessage(message: string) {
+    this.achievementMessage = message;
+    setTimeout(() => {
+      this.achievementMessage = null;
+    }, 3000); // 3 Sekunden sichtbar
+  }
+
   emojiRain(emoji: string, count: number = 50) {
     const container = document.querySelector('.emoji-rain-container');
     if (!container) return;
@@ -202,11 +225,6 @@ export class SlotMaschineComponent implements OnInit {
       }, (3 + delay) * 1000);
     }
   }
-
-unlockAch(name: string) {
-this.achievementService.unlockAchievement(name);
-}
-
 
   isJackpot(): boolean {
     return (

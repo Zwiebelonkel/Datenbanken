@@ -44,6 +44,7 @@ export class RegisterComponent {
           this.errorMessage = '';
           this.username = '';
           this.password = '';
+          setTimeout(() => this.goToLogin(), 1000);
         },
         error: (err) => {
           this.success = false;
@@ -56,4 +57,8 @@ export class RegisterComponent {
         },
       });
   }
+
+goToLogin() {
+  this.router.navigate(['/login']);
+}
 }

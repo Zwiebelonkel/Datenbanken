@@ -14,6 +14,8 @@ import { VillageService } from '../../services/village.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
+import { AchievementService } from '../../services/achievement.service';
+
 // import {AchievementService } from '../../services/achievement.service';
 
 interface Villager {
@@ -96,7 +98,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     private villageService: VillageService,
     private profileService: ProfileService,
     private auth: AuthService,
-    private moneyService: MoneyService //    private achievementService: AchievementService
+    private moneyService: MoneyService,
+    private achievementService: AchievementService
   ) {}
 
   ngOnInit() {
@@ -564,6 +567,9 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   upgrade() {
+    if(villageLevel===1){
+      this.achievementService.unlockAchievement('Bürgermeister 🏠')
+    }
     this.isLoading = true;
 
     this.villageService.upgradeVillage().subscribe({

@@ -359,17 +359,17 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
         scores.map((s) => ({
           username: s.username,
           value: `${s.score} Punkte`,
-          profileImageUrl: s.profileImageUrl,
+          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png'
         })),
         streaks.map((s) => ({
           username: s.username,
           value: `${s.consecutive_wins} 🔁`,
-          profileImageUrl: s.profileImageUrl,
+          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png'
         })), // ← geändert
         money.map((s) => ({
           username: s.username,
           value: `${s.money_per_round}€ 💰`,
-          profileImageUrl: s.profileImageUrl,
+          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png'
         })), // ← geändert
       ];
       this.setLeaderboard(0);

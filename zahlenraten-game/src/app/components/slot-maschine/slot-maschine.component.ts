@@ -199,7 +199,7 @@ export class SlotMaschineComponent implements OnInit {
   }
 
   unlockAch(name: string, user:string){
-    this.achievementSerivice.unlockAchievement(user, name)
+    this.achievementService.unlockAchievement(user, name)
   }
 
   isJackpot(): boolean {

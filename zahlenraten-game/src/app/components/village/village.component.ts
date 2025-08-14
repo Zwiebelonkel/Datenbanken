@@ -567,15 +567,13 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   upgrade() {
-    if(villageLevel===1){
-      this.achievementService.unlockAchievement('Bürgermeister 🏠')
-    }
     this.isLoading = true;
-
     this.villageService.upgradeVillage().subscribe({
       next: (res) => {
         this.villageLevel = res.newLevel;
         this.money = res.newMoney;
+        this.achievementService.unlockAchievement('Bürgermeister 🏠')
+
 
         this.villageService.collectIncome().subscribe({
           next: (res) => {

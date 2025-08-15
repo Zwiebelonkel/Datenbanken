@@ -58,6 +58,11 @@ export class ProfileComponent implements OnInit {
       this.loadUserStats(this.username);
     });
   }
+
+  addXp(amount: number){
+    this.profileService.addXp(this.username, amount);
+  }
+  
   private loadUserStats(user: string) {
     this.isLoading = true;
     this.profileService.getUserStats(user).subscribe({

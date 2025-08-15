@@ -4,6 +4,7 @@ import { Skill } from './skill.model';
 @Component({
   selector: 'app-skillshop',
   templateUrl: './skillshop.component.html',
+  standalone: true,
   styleUrls: ['./skillshop.component.css']
 })
 export class SkillshopComponent {

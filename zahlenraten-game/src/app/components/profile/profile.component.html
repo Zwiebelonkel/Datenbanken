@@ -41,10 +41,13 @@
       <span>⬆️ Level</span>
       <span>{{ level }}</span>
     </div>
-    <div class="stat-row">
-      <span>✨ XP</span>
-      <span>{{ xp }}</span>
-    </div>
+<div class="stat-row">
+  <span>✨ XP</span>
+  <span>{{ xp }} / 100</span>
+</div>
+<div class="xp-progress">
+  <div class="xp-bar" [style.width.%]="getXpProgress()"></div>
+</div>
     <div class="stat-row">
       <span>💠 Highscore</span>
       <span>{{ highscore }}</span>

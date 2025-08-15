@@ -72,7 +72,6 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
     private renderer: Renderer2,
     private chatService: ChatService,
     private achievementService: AchievementService,
-    private rain: RainComponent
   ) {}
 
   ngOnInit() {

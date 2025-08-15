@@ -573,7 +573,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.villageService.upgradeVillage().subscribe({
       next: (res) => {
         
-        switch (villageLevel) {
+        switch (this.villageLevel) {
           case 1:
             this.unlockAch('Gründer 🔰');
             break;

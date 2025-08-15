@@ -55,8 +55,8 @@ const ALL_ACHIEVEMENTS = [
   { name: "Kanzler 🗳️", description: "Verbessere dein Dorf auf Level 10"},
   { name: "Präsident 🦅", description: "Verbessere dein Dorf auf Level 20"},
   { name: "Diktator 👑", description: "Verbessere dein Dorf auf Level 50"},
-  { name: "Las Vegas 🎰", description: "Versuche dein Glück auf Level 5" },
-  { name: "Lone Wolf 🐺", description: "Gewinne beim Glücksspiel auf Level 5" },
+  { name: "Las Vegas 🎰", description: "Versuche dein Glück" },
+  { name: "Lone Wolf 🐺", description: "Gewinne beim Glücksspiel" },
 ];
 
 // Registrierung mit Dorf und Bewohnern

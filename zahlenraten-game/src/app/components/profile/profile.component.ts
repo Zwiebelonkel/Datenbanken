@@ -159,34 +159,39 @@ uploadProfileImage(file: File) {
     return;
   }
 
-  this.isUploading = true; // Setze isUploading auf true, wenn der Upload beginnt
+  this.isUploading = true;
+  let uploadedImageUrl: string | null = null;
 
-  // Übergabe eines File-Objekts an den Service
   this.profileService.uploadProfileImage(file, this.username).subscribe({
     next: (event: any) => {
-      console.log('Event: ', event); // Logge das Event, um zu prüfen, ob der Fortschritt korrekt ermittelt wird
-                  this.uploadProgress = Math.round((100 * event.loaded) / event.total); // Berechne den Fortschritt
+      console.log('Event: ', event);
+
       switch (event.type) {
         case HttpEventType.UploadProgress:
           if (event.total) {
-            this.uploadProgress = Math.round((100 * event.loaded) / event.total); // Berechne den Fortschritt
-            console.log('Upload Progress:', this.uploadProgress); // Weitere Protokollierung
+            this.uploadProgress = Math.round((100 * event.loaded) / event.total);
+            console.log('Upload Progress:', this.uploadProgress);
           }
           break;
+
         case HttpEventType.Response:
-          console.log(this.profileImage);
+          uploadedImageUrl = event.body?.profileImageUrl;
+          console.log('Upload abgeschlossen. Neue Bild-URL:', uploadedImageUrl);
           break;
       }
     },
     error: (err) => {
       console.error('Fehler beim Hochladen des Bildes', err);
-      this.isUploading = false; // Setze isUploading auf false im Fehlerfall
+      this.isUploading = false;
     },
     complete: () => {
-      this.isUploading = false; // Setze isUploading auf false, wenn der Upload abgeschlossen ist
-      this.profileImage = event.body.profileImageUrl; // Update das Profilbild, wenn der Upload abgeschlossen ist
+      this.isUploading = false;
+      if (uploadedImageUrl) {
+        this.profileImage = uploadedImageUrl;
+      }
     }
   });
 }
+
 
 }

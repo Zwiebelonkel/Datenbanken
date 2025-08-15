@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Wichtig für *ngFor, currency
 import { Skill } from './skill.model';
 
 @Component({
   selector: 'app-skill-shop',
   templateUrl: './skill-shop.component.html',
+  imports: [CommonModule], // << Hier importierst du CommonModule
   standalone: true,
   styleUrls: ['./skill-shop.component.scss']
 })

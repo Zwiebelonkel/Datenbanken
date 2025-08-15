@@ -8,7 +8,9 @@ export interface UserStats {
   unlockedAchievements: number;
   money: number;
   highscore: number;
-  profileImageUrl?: string; // Profilbild-URL (optional)
+  profileImageUrl?: string;
+  level: number; // NEU
+  xp: number;    // NEU
 }
 
 @Injectable({

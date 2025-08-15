@@ -128,7 +128,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
                 setTimeout(() => {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
-                    this.emojiRain('💸');
+                    this.rain.emojiRain('💸');
                     this.unlockAch('Lone Wolf 🐺');
                     this.moneyService
                       .updateMoney({

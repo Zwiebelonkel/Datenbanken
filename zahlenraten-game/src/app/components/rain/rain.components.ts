@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-rain',
@@ -7,8 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./rain.component.scss'],
 })
 export class RainComponent {
+  constructor(private renderer: Renderer2) {}
 
-emojiRain(emoji: string, count: number = 50) {
+  emojiRain(emoji: string, count: number = 50) {
     const container = document.querySelector('.emoji-rain-container');
     if (!container) return;
 
@@ -26,7 +27,6 @@ emojiRain(emoji: string, count: number = 50) {
 
       this.renderer.appendChild(container, span);
 
-      // ❗ Timeout mit passendem Delay (nicht neu deklarieren)
       setTimeout(() => {
         this.renderer.removeChild(container, span);
       }, (3 + delay) * 1000);

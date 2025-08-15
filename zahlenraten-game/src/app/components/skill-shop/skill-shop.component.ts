@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Wichtig für *ngFor, currency
-import { Skill, Player } from './skill.model';
+import { Skill, Player } from './skill.model'; // Dein Skill-Model importieren
 
 @Component({
   selector: 'app-skill-shop',

@@ -1,4 +1,4 @@
-import { Component, ViewChild, QueryList, OnInit, AfterViewInit  } from '@angular/core';
+import { Component, ViewChild, ViewChildren, QueryList, OnInit, AfterViewInit  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { AchievementService } from '../../services/achievement.service';

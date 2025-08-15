@@ -174,6 +174,7 @@ uploadProfileImage(file: File) {
           break;
         case HttpEventType.Response:
           this.profileImage = event.body.profileImageUrl; // Update das Profilbild, wenn der Upload abgeschlossen ist
+          console.log(this.profileImage);
           break;
       }
     },

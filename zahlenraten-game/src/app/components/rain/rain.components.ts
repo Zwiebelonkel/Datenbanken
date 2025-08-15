@@ -1,4 +1,14 @@
-  emojiRain(emoji: string, count: number = 50) {
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-rain',
+  standalone: true,
+  templateUrl: './rain.component.html',
+  styleUrls: ['./rain.component.scss'],
+})
+export class RainComponent {
+
+emojiRain(emoji: string, count: number = 50) {
     const container = document.querySelector('.emoji-rain-container');
     if (!container) return;
 
@@ -22,3 +32,4 @@
       }, (3 + delay) * 1000);
     }
   }
+}

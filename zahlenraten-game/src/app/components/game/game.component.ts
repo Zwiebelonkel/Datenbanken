@@ -482,6 +482,18 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
       });
   }
 
+  addXp(amount: number) {
+  this.profileService.addXp(this.username, amount).subscribe({
+    next: (res) => {
+      console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
+      console.log('Neuer Level:', res.level, 'XP:', res.xp);
+    },
+    error: (err) => {
+      console.error('❌ Fehler beim Hinzufügen von XP:', err);
+    }
+  });
+}
+
   useSelectedCards() {
     if (this.selectedCard && this.selectedCard.multiplier !== -1) {
       this.useSelectedCard(); // bestehende Methode für Multikarte
@@ -724,16 +736,4 @@ onAvatarError(ev: Event) {
 }
   
 trackByUsername(i: number, item: any) { return item?.username ?? i; }
-}
-
-addXp(amount: number) {
-  this.profileService.addXp(this.username, amount).subscribe({
-    next: (res) => {
-      console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
-      console.log('Neuer Level:', res.level, 'XP:', res.xp);
-    },
-    error: (err) => {
-      console.error('❌ Fehler beim Hinzufügen von XP:', err);
-    }
-  });
 }

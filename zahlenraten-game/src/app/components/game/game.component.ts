@@ -301,6 +301,8 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
     this.scoreService.isHighscore(this.score).subscribe((res) => {
       this.isHighscore = res.isHighscore;
     });
+
+    this.addXp(this.score/5);
   }
 
   submitScore() {
@@ -722,4 +724,16 @@ onAvatarError(ev: Event) {
 }
   
 trackByUsername(i: number, item: any) { return item?.username ?? i; }
+}
+
+addXp(amount: number) {
+  this.profileService.addXp(this.username, amount).subscribe({
+    next: (res) => {
+      console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
+      console.log('Neuer Level:', res.level, 'XP:', res.xp);
+    },
+    error: (err) => {
+      console.error('❌ Fehler beim Hinzufügen von XP:', err);
+    }
+  });
 }

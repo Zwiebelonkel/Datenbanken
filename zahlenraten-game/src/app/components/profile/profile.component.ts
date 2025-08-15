@@ -28,6 +28,8 @@ export class ProfileComponent implements OnInit {
   isLoading = true;
   money = 0;
   highscore = 0;
+  level = 1;
+  xp = 0;
   profileImage: string = 'assets/profile.png'; // Standardbild
   isOwnProfile = false;
 
@@ -64,6 +66,8 @@ export class ProfileComponent implements OnInit {
         this.money = stats.money;
         this.highscore = stats.highscore;
         this.profileImage = stats.profileImageUrl || this.profileImage;
+        this.level = stats.level;
+        this.xp = stats.xp;
         this.isLoading = false;
       },
       error: (err) => {

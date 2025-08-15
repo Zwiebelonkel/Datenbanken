@@ -75,6 +75,8 @@ router.get("/:username", async (req, res) => {
           u.money AS money,
           u.level AS level,
           u.xp AS xp,
+          ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,
+          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent
           (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
           (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
           (SELECT COUNT(*) FROM achievements a 
@@ -109,6 +111,9 @@ router.get("/", async (req, res) => {
           u.money AS money,
           u.level AS level,              -- HIER ergänzt
           u.xp AS xp,                    -- HIER ergänzt
+          ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,
+          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent
+
           (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
           (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
           (SELECT COUNT(*) FROM achievements a 

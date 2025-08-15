@@ -92,6 +92,8 @@ addXp(amount: number) {
         this.level = stats.level;
 
         this.isLoading = false;
+        this.xpPercent = Math.min((this.xp / this.xpThreshold) * 100, 100);
+
       },
       error: (err) => {
         console.error('Fehler beim Laden der Statistiken', err);

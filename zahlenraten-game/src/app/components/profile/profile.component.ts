@@ -148,16 +148,40 @@ addXp(amount: number) {
   return Math.min((this.xp / threshold) * 100, 100);
 }
 
-  // Profilbild hochladen (nur eigenes Profil)
-  uploadProfileImage(file: File) {
-    const selfUser = this.authService.getUsername();
-    if (!selfUser || selfUser !== this.username) {
-      console.warn('Upload nur für das eigene Profil erlaubt.');
-      return;
-    }
-    this.profileService.uploadProfileImage(file, this.username).subscribe({
-      next: (res) => (this.profileImage = res.profileImageUrl),
-      error: (err) => console.error('Fehler beim Hochladen des Bildes', err),
-    });
+uploadProfileImage(file: File) {
+  const selfUser = this.authService.getUsername();
+  if (!selfUser || selfUser !== this.username) {
+    console.warn('Upload nur für das eigene Profil erlaubt.');
+    return;
   }
+
+  // Progress-Logik
+  const formData = new FormData();
+  formData.append('profileImage', file, file.name);
+
+  this.isUploading = true; // Setze isUploading auf true, wenn der Upload beginnt
+
+  this.profileService.uploadProfileImage(formData, this.username).subscribe({
+    next: (event: any) => {
+      switch (event.type) {
+        case HttpEventType.UploadProgress:
+          if (event.total) {
+            this.uploadProgress = Math.round((100 * event.loaded) / event.total); // Berechne den Fortschritt
+          }
+          break;
+        case HttpEventType.Response:
+          this.profileImage = event.body.profileImageUrl; // Update das Profilbild, wenn der Upload abgeschlossen ist
+          break;
+      }
+    },
+    error: (err) => {
+      console.error('Fehler beim Hochladen des Bildes', err);
+      this.isUploading = false; // Setze isUploading auf false im Fehlerfall
+    },
+    complete: () => {
+      this.isUploading = false; // Setze isUploading auf false, wenn der Upload abgeschlossen ist
+    }
+  });
+}
+
 }

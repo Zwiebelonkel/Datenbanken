@@ -8,6 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { HowToPlayComponent } from './components/how-to-play/how-to-play.component';
 import { ClickerComponent } from './components/clicker/clicker.component';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
+import { SkillShopComponent } from './components/skill-shop/skill-shop.component';
 import { PackOpeningComponent } from './components/pack-opening/pack-opening.component';
 import { VillageComponent } from './components/village/village.component';
 import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'how-to-play', component: HowToPlayComponent },
   { path: 'clicker', component: ClickerComponent },
   { path: 'card-shop', component: CardShopComponent },
+  { path: 'skill-shop', component: SkillShopComponent },
   { path: 'pack-opening', component: PackOpeningComponent },
   { path: 'village', component: VillageComponent },
   { path: 'slot-maschine', component: SlotMaschineComponent },

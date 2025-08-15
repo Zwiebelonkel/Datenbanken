@@ -76,7 +76,7 @@ router.get("/:username", async (req, res) => {
           u.level AS level,
           u.xp AS xp,
           ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,
-          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent
+          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent,
           (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
           (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
           (SELECT COUNT(*) FROM achievements a 
@@ -98,6 +98,66 @@ router.get("/:username", async (req, res) => {
   }
 });
 
+router.post('/:username/add-xp', async (req, res) => {
+  const username = (req.params.username || '').trim();
+  const { xpToAdd } = req.body; // Anzahl der XP, die hinzugefügt werden sollen
+
+  if (!username) return res.status(400).json({ message: 'Kein Benutzername angegeben' });
+  if (typeof xpToAdd !== 'number' || xpToAdd <= 0) {
+    return res.status(400).json({ message: 'Ungültige XP-Anzahl' });
+  }
+
+  try {
+    // Aktuelle Werte aus DB laden
+    const result = await db.execute({
+      sql: `
+        SELECT level, xp
+        FROM users
+        WHERE LOWER(username) = LOWER(?)
+        LIMIT 1
+      `,
+      args: [username],
+    });
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
+    }
+
+    let { level, xp } = result.rows[0];
+    // XP-Schwelle berechnen (wie in deinem Select)
+    let xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
+
+    // XP hinzufügen
+    xp += xpToAdd;
+
+    // Level-Up Logik
+    let leveledUp = false;
+    while (xp >= xpThreshold) {
+      xp -= xpThreshold;
+      level += 1;
+      xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
+      leveledUp = true;
+    }
+
+    // Daten aktualisieren
+    await db.execute({
+      sql: `UPDATE users SET level = ?, xp = ? WHERE LOWER(username) = LOWER(?)`,
+      args: [level, xp, username],
+    });
+
+    res.json({
+      message: `XP hinzugefügt${leveledUp ? ', Level erhöht!' : ''}`,
+      level,
+      xp,
+      xpThreshold,
+    });
+  } catch (e) {
+    console.error('❌ Fehler beim Hinzufügen von XP:', e);
+    res.status(500).json({ message: 'Datenbankfehler' });
+  }
+});
+
+
 /** (Optional) Alte Query-Variante beibehalten, falls Frontend sie noch nutzt */
 router.get("/", async (req, res) => {
   const username = (req.query.username || "").trim();
@@ -112,7 +172,7 @@ router.get("/", async (req, res) => {
           u.level AS level,              -- HIER ergänzt
           u.xp AS xp,                    -- HIER ergänzt
           ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,
-          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent
+          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent,
 
           (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
           (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,

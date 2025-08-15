@@ -61,7 +61,7 @@ export class GameComponent implements OnInit {
   activeBoardIndex: number | null = null;
   activeRowIndex: number | null = null;
   selectedUsername: string | null = null;
-  currentLevel = 0;
+  currentLevel = 1;
   username: string = '';
 
   // justAppeared = false; // Für Lava-Animation

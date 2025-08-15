@@ -64,6 +64,7 @@ addXp(amount: number) {
     next: (res) => {
       console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
       console.log('Neuer Level:', res.level, 'XP:', res.xp);
+      console.log("Response: {res}");
 
       // Optional: Werte im UI aktualisieren
       this.level = res.level;

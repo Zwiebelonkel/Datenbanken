@@ -59,9 +59,24 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  addXp(amount: number){
-    this.profileService.addXp(this.username, amount);
-  }
+addXp(amount: number) {
+  this.profileService.addXp(this.username, amount).subscribe({
+    next: (res) => {
+      console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
+      console.log('Neuer Level:', res.level, 'XP:', res.xp);
+
+      // Optional: Werte im UI aktualisieren
+      this.level = res.level;
+      this.xp = res.xp;
+      this.xpThreshold = res.xpThreshold;
+      this.xpPercent = Math.min((this.xp / this.xpThreshold) * 100, 100);
+    },
+    error: (err) => {
+      console.error('❌ Fehler beim Hinzufügen von XP:', err);
+    }
+  });
+}
+
   
   private loadUserStats(user: string) {
     this.isLoading = true;

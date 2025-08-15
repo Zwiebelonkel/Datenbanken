@@ -50,9 +50,13 @@ const ALL_ACHIEVEMENTS = [
     description: "Du hast 20 mal richtig geraten ohne ein Leben zu verlieren",
   },
   { name: "Champion 🏆", description: "Sei auf dem Leaderboard" },
-  { name: "Bürgermeister 🏠", description: "Verbessere dein Dorf" },
-  { name: "Las Vegas 🎰", description: "Versuche dein Glück" },
-  { name: "Lone Wolf 🐺", description: "Gewinne beim Glücksspiel" },
+  { name: "Gründer 🔰", description: "Verbessere dein Dorf"},
+  { name: "Bürgermeister 🏠", description: "Verbessere dein Dorf auf Level 5" },
+  { name: "Kanzler 🗳️", description: "Verbessere dein Dorf auf Level 10"},
+  { name: "Präsident 🦅", description: "Verbessere dein Dorf auf Level 20"},
+  { name: "Diktator 👑", description: "Verbessere dein Dorf auf Level 50"},
+  { name: "Las Vegas 🎰", description: "Versuche dein Glück auf Level 5" },
+  { name: "Lone Wolf 🐺", description: "Gewinne beim Glücksspiel auf Level 5" },
 ];
 
 // Registrierung mit Dorf und Bewohnern

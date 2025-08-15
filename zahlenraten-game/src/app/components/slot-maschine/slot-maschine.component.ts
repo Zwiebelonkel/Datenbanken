@@ -128,7 +128,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
                 setTimeout(() => {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
-                    this.rain.emojiRain('💸');
+                    this.rainComponent.emojiRain('💸');
                     this.unlockAch('Lone Wolf 🐺');
                     this.moneyService
                       .updateMoney({
@@ -164,6 +164,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
                             'Fehler beim Gutschreiben des Gewinns'),
                       });
                   } else {
+                    this.rainComponent.emojiRain('🌀');
                     this.message =
                       '🌀 Leider kein Gewinn. Versuche es nochmal!';
                     this.isWinner = false;

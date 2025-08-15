@@ -39,7 +39,11 @@ export class AchievementService {
         'Du hast 10 mal richtig geraten ohne ein Leben zu verlieren',
       'Magier 🪄': 'Du hast 20 mal richtig geraten ohne ein Leben zu verlieren',
       'Champion 🏆': 'Sei auf dem Leaderboard',
-      'Bürgermeister 🏠': 'Verbessere dein Dorf',
+      'Gründer 🔰': 'Verbessere dein Dorf',
+      'Bürgermeister 🏠': 'Verbessere dein Dorf auf Level 5',
+      'Kanzler 🗳️': 'Verbessere dein Dorf auf Level 10',
+      'Präsident 🦅': 'Verbessere dein Dorf auf Level 20',
+      'Dikator 👑': 'Verbessere dein Dorf auf Level 50',
       'Las Vegas 🎰': 'Versuche dein Glück',
       'Lone Wolf 🐺': 'Gewinne beim Glücksspiel',
     };

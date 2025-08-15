@@ -134,14 +134,24 @@ export class GameComponent implements OnInit {
     private soundService: SoundsService
   ) {}
 
-  ngOnInit() {
-    this.newRound();
-    this.loadLeaderboards();
+ngOnInit() {
+  // 🔹 Immer ausführbar
+  this.newRound();
+  this.loadLeaderboards();
+
+  // 🔹 Username vom AuthService holen
+  this.username = this.authService.getUsername() ?? '';
+
+  if (this.username) {
+    // Nur wenn eingeloggt: Karten + Profil laden
     this.loadCards();
     this.profileService.getUserStats(this.username).subscribe((p) => {
       this.currentLevel = p.level ?? 0;
     });
+  } else {
+    console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
   }
+}
 
   //   ngOnChanges(): void {
   //   if (this.currentMultiplier > 1 && !this.justAppeared) {

@@ -164,10 +164,12 @@ uploadProfileImage(file: File) {
   // Übergabe eines File-Objekts an den Service
   this.profileService.uploadProfileImage(file, this.username).subscribe({
     next: (event: any) => {
+      console.log('Event: ', event); // Logge das Event, um zu prüfen, ob der Fortschritt korrekt ermittelt wird
       switch (event.type) {
         case HttpEventType.UploadProgress:
           if (event.total) {
             this.uploadProgress = Math.round((100 * event.loaded) / event.total); // Berechne den Fortschritt
+            console.log('Upload Progress:', this.uploadProgress); // Weitere Protokollierung
           }
           break;
         case HttpEventType.Response:
@@ -183,6 +185,8 @@ uploadProfileImage(file: File) {
       this.isUploading = false; // Setze isUploading auf false, wenn der Upload abgeschlossen ist
     }
   });
+}
+
 }
 
 

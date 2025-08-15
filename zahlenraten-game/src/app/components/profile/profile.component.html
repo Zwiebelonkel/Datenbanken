@@ -43,10 +43,10 @@
     </div>
 <div class="stat-row">
   <span>✨ XP</span>
-  <span>{{ xp }} / 100</span>
+  <span>{{ xp }} / {{ xpThreshold }}</span>
 </div>
 <div class="xp-progress">
-  <div class="xp-bar" [style.width.%]="getXpProgress()"></div>
+  <div class="xp-bar" [style.width.%]="xpPercent"></div>
 </div>
     <div class="stat-row">
       <span>💠 Highscore</span>

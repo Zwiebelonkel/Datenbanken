@@ -165,6 +165,8 @@ uploadProfileImage(file: File) {
   this.profileService.uploadProfileImage(file, this.username).subscribe({
     next: (event: any) => {
       console.log('Event: ', event); // Logge das Event, um zu prüfen, ob der Fortschritt korrekt ermittelt wird
+                this.profileImage = event.body.profileImageUrl; // Update das Profilbild, wenn der Upload abgeschlossen ist
+
       switch (event.type) {
         case HttpEventType.UploadProgress:
           if (event.total) {
@@ -173,7 +175,6 @@ uploadProfileImage(file: File) {
           }
           break;
         case HttpEventType.Response:
-          this.profileImage = event.body.profileImageUrl; // Update das Profilbild, wenn der Upload abgeschlossen ist
           console.log(this.profileImage);
           break;
       }

@@ -482,8 +482,14 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
       });
   }
 
-  addXp(amount: number) {  
-    const user = this.authService.getUsername();
+addXp(amount: number) {
+  const user = this.authService.getUsername();
+
+  if (!user) {
+    console.error("⚠️ Kein Benutzer eingeloggt – XP kann nicht hinzugefügt werden.");
+    return;
+  }
+
   this.profileService.addXp(user, amount).subscribe({
     next: (res) => {
       console.log(`✅ ${amount} XP zu ${user} hinzugefügt`);
@@ -494,6 +500,7 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
     }
   });
 }
+
 
   useSelectedCards() {
     if (this.selectedCard && this.selectedCard.multiplier !== -1) {

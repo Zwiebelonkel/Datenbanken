@@ -483,7 +483,7 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
   }
 
   addXp(amount: number) {
-  this.profileService.addXp(this.username, amount).subscribe({
+  this.profileService.addXp(this.authService.getUsername(), amount).subscribe({
     next: (res) => {
       console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
       console.log('Neuer Level:', res.level, 'XP:', res.xp);

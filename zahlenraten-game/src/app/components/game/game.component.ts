@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DarkModeService } from '../../services/dark.service';
 import { ProfileService } from '../../services/profile.service';
-import { Renderer2 } from '@angular/core';
 import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponent
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ChatComponent } from '../chat/chat.component';
@@ -121,7 +120,6 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
     public darkModeService: DarkModeService,
     private moneyService: MoneyService,
     private profileService: ProfileService,
-    private renderer: Renderer2,
     private cardsService: CardsService,
     private soundService: SoundsService
   ) {}
@@ -222,7 +220,7 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
 
       if (this.consecutiveWins % 5 === 0) {
         const intensity = Math.min(10 + this.consecutiveWins * 2, 50);
-        this.emojiRain('🔥', intensity);
+        this.rainComponent.emojiRain('🔥', intensity);
         this.soundService.playSound('fire.aac', 0.3); // Sound für Emoji-Regen abspielen
       }
 
@@ -472,7 +470,7 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
               `🎉 Erfolg freigeschaltet: ${res.name}`
             );
             console.log('✅ Achievement neu freigeschaltet:', res.name);
-            this.emojiRain('🎖️');
+            this.rainComponent.emojiRain('🎖️');
             this.soundService.playSound('message.aac'); // Sound beim Freischalten des Achievements abspielen
           } else {
             console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
@@ -591,31 +589,6 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
     setTimeout(() => {
       this.achievementMessage = null;
     }, 3000); // 3 Sekunden sichtbar
-  }
-
-  emojiRain(emoji: string, count: number = 50) {
-    const container = document.querySelector('.emoji-rain-container');
-    if (!container) return;
-
-    for (let i = 0; i < count; i++) {
-      const span = this.renderer.createElement('span');
-      const text = this.renderer.createText(emoji);
-      this.renderer.appendChild(span, text);
-      this.renderer.addClass(span, 'emoji-drop');
-
-      const startX = Math.random() * window.innerWidth;
-      const delay = Math.random() * 2;
-
-      this.renderer.setStyle(span, 'left', `${startX}px`);
-      this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
-
-      this.renderer.appendChild(container, span);
-
-      // ❗ Timeout mit passendem Delay (nicht neu deklarieren)
-      setTimeout(() => {
-        this.renderer.removeChild(container, span);
-      }, (3 + delay) * 1000);
-    }
   }
 
   getMedal(index: number): string {

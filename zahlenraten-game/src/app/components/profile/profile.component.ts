@@ -188,7 +188,3 @@ uploadProfileImage(file: File) {
 }
 
 }
-
-
-
-}

@@ -117,6 +117,11 @@ export class ProfileComponent implements OnInit {
       this.profileImage = 'assets/profile.png';
     }
 
+  getXpProgress(): number {
+  const threshold = 100; // 100 XP = Balken voll
+  return Math.min((this.xp / threshold) * 100, 100);
+}
+
   // Profilbild hochladen (nur eigenes Profil)
   uploadProfileImage(file: File) {
     const selfUser = this.authService.getUsername();

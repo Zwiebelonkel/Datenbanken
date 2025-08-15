@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ActivatedRoute } from '@angular/router';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
@@ -35,6 +36,7 @@ export class ProfileComponent implements OnInit {
   isOwnProfile = false;
   xpThreshold = 100;
   xpPercent = 0;
+  uploadProgress: number = 0; // Diese Variable für den Upload-Fortschritt
 
   constructor(
     private profileService: ProfileService,
@@ -149,6 +151,7 @@ addXp(amount: number) {
   return Math.min((this.xp / threshold) * 100, 100);
 }
 
+// Profilbild hochladen
 uploadProfileImage(file: File) {
   const selfUser = this.authService.getUsername();
   if (!selfUser || selfUser !== this.username) {
@@ -156,12 +159,12 @@ uploadProfileImage(file: File) {
     return;
   }
 
-  // Progress-Logik
   const formData = new FormData();
   formData.append('profileImage', file, file.name);
 
   this.isUploading = true; // Setze isUploading auf true, wenn der Upload beginnt
 
+  // Übergabe von formData an die Methode, die FormData erwartet
   this.profileService.uploadProfileImage(formData, this.username).subscribe({
     next: (event: any) => {
       switch (event.type) {
@@ -184,5 +187,6 @@ uploadProfileImage(file: File) {
     }
   });
 }
+
 
 }

@@ -10,7 +10,7 @@ import { ChatService } from '../../services/chat.service';
 import { ReelComponent } from './reel/reel.component';
 import { FormsModule } from '@angular/forms';
 import { Renderer2 } from '@angular/core';
-import { RainComponent } from '../../rain/rain.component';
+import { RainComponent } from '../rain/rain.component';
 
 type SymbolData = { type: 'emoji' | 'image'; value: string };
 

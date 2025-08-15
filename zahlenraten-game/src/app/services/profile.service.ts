@@ -1,7 +1,3 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
 export interface UserStats {
   totalScore: number;
   totalGames: number;
@@ -9,8 +5,10 @@ export interface UserStats {
   money: number;
   highscore: number;
   profileImageUrl?: string;
-  level: number; // NEU
-  xp: number;    // NEU
+  level: number;
+  xp: number;
+  xpThreshold: number;  // neu
+  xpPercent: number;    // neu
 }
 
 @Injectable({
@@ -33,11 +31,19 @@ export class ProfileService {
   ): Observable<{ profileImageUrl: string }> {
     const formData = new FormData();
     formData.append('profileImage', file, file.name);
-    formData.append('username', username); // wichtig für Backend
+    formData.append('username', username);
 
     return this.http.post<{ profileImageUrl: string }>(
       `${this.apiUrl}/upload-profile-image`,
       formData
+    );
+  }
+
+  // ➕ XP hinzufügen
+  addXp(username: string, xpToAdd: number): Observable<{ message: string; level: number; xp: number; xpThreshold: number }> {
+    return this.http.post<{ message: string; level: number; xp: number; xpThreshold: number }>(
+      `${this.apiUrl}/${username}/add-xp`,
+      { xpToAdd }
     );
   }
 }

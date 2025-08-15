@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Skill } from './skill.model';
 
 @Component({
-  selector: 'app-skillshop',
-  templateUrl: './skillshop.component.html',
+  selector: 'app-skill-shop',
+  templateUrl: './skill-shop.component.html',
   standalone: true,
-  styleUrls: ['./skillShop.component.scss']
+  styleUrls: ['./skill-shop.component.scss']
 })
 export class SkillShopComponent {
   skills: Skill[] = [

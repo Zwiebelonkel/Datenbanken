@@ -9,7 +9,6 @@ import { ProfileService } from '../../services/profile.service';
 import { ChatService } from '../../services/chat.service';
 import { ReelComponent } from './reel/reel.component';
 import { FormsModule } from '@angular/forms';
-import { Renderer2 } from '@angular/core';
 import { RainComponent } from '../rain/rain.component';
 
 type SymbolData = { type: 'emoji' | 'image'; value: string };
@@ -69,7 +68,6 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
     private profileService: ProfileService,
     private authService: AuthService,
     private moneyService: MoneyService,
-    private renderer: Renderer2,
     private chatService: ChatService,
     private achievementService: AchievementService,
   ) {}
@@ -80,7 +78,6 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
   }
 
     ngAfterViewInit() {
-    this.rainComponent.emojiRain('👼🏻');
   }
 
   loadMoney() {
@@ -191,7 +188,8 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
       next: (res) => {
         if (res.unlocked) {
           this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
-          this.emojiRain('🎖️');
+          this.rainComponent.emojiRain('🎖️');
+
         } else {
           // optional: Info anzeigen, dass bereits freigeschaltet
           // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);
@@ -206,31 +204,6 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.achievementMessage = null;
     }, 3000); // 3 Sekunden sichtbar
-  }
-
-  emojiRain(emoji: string, count: number = 50) {
-    const container = document.querySelector('.emoji-rain-container');
-    if (!container) return;
-
-    for (let i = 0; i < count; i++) {
-      const span = this.renderer.createElement('span');
-      const text = this.renderer.createText(emoji);
-      this.renderer.appendChild(span, text);
-      this.renderer.addClass(span, 'emoji-drop');
-
-      const startX = Math.random() * window.innerWidth;
-      const delay = Math.random() * 2;
-
-      this.renderer.setStyle(span, 'left', `${startX}px`);
-      this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
-
-      this.renderer.appendChild(container, span);
-
-      // ❗ Timeout mit passendem Delay (nicht neu deklarieren)
-      setTimeout(() => {
-        this.renderer.removeChild(container, span);
-      }, (3 + delay) * 1000);
-    }
   }
 
   isJackpot(): boolean {

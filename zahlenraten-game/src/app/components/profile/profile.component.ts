@@ -32,6 +32,8 @@ export class ProfileComponent implements OnInit {
   xp = 0;
   profileImage: string = 'assets/profile.png'; // Standardbild
   isOwnProfile = false;
+  xpThreshold = 100;
+  xpPercent = 0;
 
   constructor(
     private profileService: ProfileService,
@@ -66,8 +68,11 @@ export class ProfileComponent implements OnInit {
         this.money = stats.money;
         this.highscore = stats.highscore;
         this.profileImage = stats.profileImageUrl || this.profileImage;
-        this.level = stats.level;
         this.xp = stats.xp;
+        this.level = stats.level;
+        this.xpThreshold = stats.xpThreshold;
+        this.xpPercent = stats.xpPercent;
+
         this.isLoading = false;
       },
       error: (err) => {

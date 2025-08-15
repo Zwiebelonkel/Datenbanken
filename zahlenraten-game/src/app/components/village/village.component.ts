@@ -260,7 +260,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!username || this.unsavedEarnings === 0) return;
 
     this.isLoading = true;
-    const xpAmount = Math.floor(this.unsavedEarnings);
+    const xpAmount = Math.floor(this.unsavedEarnings/10);
 
     this.moneyService
       .updateMoney({ username, amount: this.unsavedEarnings })

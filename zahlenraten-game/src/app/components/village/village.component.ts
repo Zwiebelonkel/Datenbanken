@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule} from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { VillageService } from '../../services/village.service';
@@ -15,8 +15,7 @@ import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
 import { AchievementService } from '../../services/achievement.service';
-import { Renderer2 } from '@angular/core';
-
+import { RainComponent } from '../rain/rain.component';
 // import {AchievementService } from '../../services/achievement.service';
 
 interface Villager {
@@ -55,10 +54,11 @@ interface VillagerAnim extends Villager {
   selector: 'app-village',
   templateUrl: './village.component.html',
   styleUrls: ['./village.component.scss'],
-  imports: [CommonModule, LoaderComponent, SidebarComponent, FormsModule],
+  imports: [CommonModule, LoaderComponent, SidebarComponent, FormsModule, RainComponent],
 })
 export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('villageCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('rain') rainComponent!: RainComponent;
 
   money = 0;
   earned = 0;
@@ -690,7 +690,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   //          this.achievementService.showAchievementMessage(
   //           `🎉 Erfolg freigeschaltet: ${res.name}`
   //         );
-  //          this.achievementService.emojiRain(
+  //          this.achievementService.Rain(
   //            '🎖️',
   //            document.querySelector('.emoji-rain-container')
   //          );
@@ -708,7 +708,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (res) => {
         if (res.unlocked) {
           this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
-          this.emojiRain('🎖️');
+          this.rainComponent.emojiRain('🎖️');
         } else {
           // optional: Info anzeigen, dass bereits freigeschaltet
           // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);
@@ -723,31 +723,6 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.achievementMessage = null;
     }, 3000); // 3 Sekunden sichtbar
-  }
-
-  emojiRain(emoji: string, count: number = 50) {
-    const container = document.querySelector('.emoji-rain-container');
-    if (!container) return;
-
-    for (let i = 0; i < count; i++) {
-      const span = this.renderer.createElement('span');
-      const text = this.renderer.createText(emoji);
-      this.renderer.appendChild(span, text);
-      this.renderer.addClass(span, 'emoji-drop');
-
-      const startX = Math.random() * window.innerWidth;
-      const delay = Math.random() * 2;
-
-      this.renderer.setStyle(span, 'left', `${startX}px`);
-      this.renderer.setStyle(span, 'animationDelay', `${delay}s`);
-
-      this.renderer.appendChild(container, span);
-
-      // ❗ Timeout mit passendem Delay (nicht neu deklarieren)
-      setTimeout(() => {
-        this.renderer.removeChild(container, span);
-      }, (3 + delay) * 1000);
-    }
   }
 
   ngOnDestroy() {

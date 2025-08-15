@@ -70,8 +70,6 @@ export class ProfileComponent implements OnInit {
         this.profileImage = stats.profileImageUrl || this.profileImage;
         this.xp = stats.xp;
         this.level = stats.level;
-        this.xpThreshold = stats.xpThreshold;
-        this.xpPercent = stats.xpPercent;
 
         this.isLoading = false;
       },

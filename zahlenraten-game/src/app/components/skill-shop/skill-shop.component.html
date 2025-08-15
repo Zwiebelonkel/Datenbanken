@@ -13,9 +13,10 @@
     <h3>{{ skill.name }}</h3>
     <p>{{ skill.description }}</p>
     <p><strong>Preis:</strong> {{ skill.price | currency:'EUR' }}</p>
-    <button (click)="purchase(skill)" [disabled]="skill.purchased || player.skillPoints < skill.price">
-      {{ skill.purchased ? 'Gekauft' : 'Kaufen' }}
-    </button>
+<button (click)="purchase(skill)" *ngFor="let skill of skills">
+  {{ skill.purchased ? 'Gekauft' : 'Kaufen' }}
+</button>
+
   </div>
 
   <!-- Optional: Mehr Upgrades oder andere Funktionen -->

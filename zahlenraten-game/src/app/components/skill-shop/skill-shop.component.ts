@@ -5,7 +5,7 @@ import { Skill } from './skill.model';
   selector: 'app-skillshop',
   templateUrl: './skillshop.component.html',
   standalone: true,
-  styleUrls: ['./skillshop.component.css']
+  styleUrls: ['./skillShop.component.scss']
 })
 export class SkillshopComponent {
   skills: Skill[] = [

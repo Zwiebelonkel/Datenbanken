@@ -47,7 +47,7 @@
     </div>
 <div class="stat-row">
   <span>✨ XP</span>
-  <span>{{ xp }} / {{ xpThreshold }}</span>
+  <span>{{ xp | number : "1.2-2" }} / {{ xpThreshold }}</span>
 </div>
 <div class="xp-progress">
   <div class="xp-bar" [style.width.%]="xpPercent"></div>

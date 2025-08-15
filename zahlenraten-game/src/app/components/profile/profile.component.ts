@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
   pwChangeMsg = '';
   pwChangeSuccess = false;
   isLoading = true;
-  isUploading = true;
+  isUploading = false;
   money = 0;
   highscore = 0;
   level = 1;

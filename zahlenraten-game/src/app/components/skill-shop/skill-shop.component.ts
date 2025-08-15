@@ -7,7 +7,7 @@ import { Skill } from './skill.model';
   standalone: true,
   styleUrls: ['./skillShop.component.scss']
 })
-export class SkillshopComponent {
+export class SkillShopComponent {
   skills: Skill[] = [
     { id: 1, name: 'Angular Basics', description: 'Einführung in Angular', price: 29.99, purchased: false },
     { id: 2, name: 'TypeScript Advanced', description: 'Fortgeschrittene TypeScript-Techniken', price: 39.99, purchased: false },

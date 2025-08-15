@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ScoreService } from '../../services/score.service';
 import { MoneyService } from '../../services/money.service';
 import { CommonModule } from '@angular/common';
@@ -16,6 +16,7 @@ import { CardsService } from '../../services/cards.service';
 import { SoundsService } from '../../services/sound.service';
 import { firstValueFrom } from 'rxjs';
 import { HostListener } from '@angular/core';
+import { RainComponent } from '../rain/rain.component';
 
 @Component({
   selector: 'app-game',
@@ -28,10 +29,12 @@ import { HostListener } from '@angular/core';
     LoaderComponent,
     SidebarComponent,
     ChatComponent,
+    RainComponent
   ],
   encapsulation: ViewEncapsulation.None,
 })
 export class GameComponent implements OnInit {
+  @ViewChild('rain') rainComponent!: RainComponent;
   num1 = 0;
   num2 = 0;
   testNum = 0;

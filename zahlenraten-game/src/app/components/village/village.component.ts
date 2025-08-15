@@ -572,9 +572,27 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoading = true;
     this.villageService.upgradeVillage().subscribe({
       next: (res) => {
+        
+        switch (villageLevel) {
+          case 1:
+            this.unlockAch('Gründer 🔰');
+            break;
+          case 4:
+            this.unlockAch('Bürgermeister 🏠');
+            break;
+          case 9:
+            this.unlockAch('Kanzler 🗳️');
+            break;
+          case 19:
+            this.unlockAch('Präsident 🦅');
+            break;
+          case 49:
+            this.unlockAch('Dikator 👑');
+            break;
+        }
+        
         this.villageLevel = res.newLevel;
         this.money = res.newMoney;
-        this.unlockAch('Bürgermeister 🏠');
 
         this.villageService.collectIncome().subscribe({
           next: (res) => {

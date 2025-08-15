@@ -42,8 +42,8 @@ export class ProfileService {
   }
 
   // ➕ XP hinzufügen
-  addXp(username: string, xpToAdd: number): Observable<{ message: string; level: number; xp: number; xpThreshold: number }> {
-    return this.http.post<{ message: string; level: number; xp: number; xpThreshold: number }>(
+  addXp(username: string, xpToAdd: number): Observable<{ message: string; leveledUp: boolean; level: number; xp: number; xpThreshold: number }> {
+    return this.http.post<{ message: string; leveledUp: boolean; level: number; xp: number; xpThreshold: number }>(
       `${this.apiUrl}/${username}/add-xp`,
       { xpToAdd }
     );

@@ -1,4 +1,4 @@
-import { Component, ViewChildren, QueryList, OnInit } from '@angular/core';
+import { Component, ViewChildren, QueryList, OnInit, AfterViewInit  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { AchievementService } from '../../services/achievement.service';
@@ -28,7 +28,8 @@ type SymbolData = { type: 'emoji' | 'image'; value: string };
     ReelComponent,
   ],
 })
-export class SlotMaschineComponent implements OnInit {
+export class SlotMaschineComponent implements OnInit, AfterViewInit {
+  @ViewChild('rain') rainComponent!: RainComponent;
   reels = [0, 1, 2];
   symbols: SymbolData[] = [
     { type: 'emoji', value: '🍒' },
@@ -77,7 +78,10 @@ export class SlotMaschineComponent implements OnInit {
   ngOnInit() {
     this.username = this.authService.getUsername() ?? '';
     this.loadMoney();
-    this.rain.emojiRain('👼🏻')
+  }
+
+    ngAfterViewInit() {
+    this.rainComponent.emojiRain('👼🏻');
   }
 
   loadMoney() {

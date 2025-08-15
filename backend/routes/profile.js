@@ -147,6 +147,7 @@ router.post('/:username/add-xp', async (req, res) => {
 
     res.json({
       message: `XP hinzugefügt${leveledUp ? ', Level erhöht!' : ''}`,
+      leveledUp,
       level,
       xp,
       xpThreshold,

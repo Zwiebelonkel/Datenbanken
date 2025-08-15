@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { VillageService } from '../../services/village.service';
@@ -16,7 +16,6 @@ import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
 import { AchievementService } from '../../services/achievement.service';
 import { RainComponent } from '../rain/rain.component';
-// import {AchievementService } from '../../services/achievement.service';
 
 interface Villager {
   id: number;
@@ -54,7 +53,13 @@ interface VillagerAnim extends Villager {
   selector: 'app-village',
   templateUrl: './village.component.html',
   styleUrls: ['./village.component.scss'],
-  imports: [CommonModule, LoaderComponent, SidebarComponent, FormsModule, RainComponent],
+  imports: [
+    CommonModule,
+    LoaderComponent,
+    SidebarComponent,
+    FormsModule,
+    RainComponent,
+  ],
 })
 export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('villageCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -73,6 +78,8 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   incomePerMinute = 0;
   showVillagerPopup = false;
   tooltip = { visible: false, x: 0, y: 0, text: '' };
+  username: string = '';
+  currentLevel = 0;
 
   upgradeAmount: number = 5; // Sichtbar im Input
   defaultUpgradeAmount: number = 10; // Tatsächlich verwendet beim Klick
@@ -100,7 +107,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     private profileService: ProfileService,
     private auth: AuthService,
     private moneyService: MoneyService,
-    private achievementService: AchievementService,
+    private achievementService: AchievementService
   ) {}
 
   ngOnInit() {
@@ -111,6 +118,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (stats) => {
         this.money = stats.money;
       },
+    });
+
+    this.profileService.getUserStats(username).subscribe((p) => {
+      this.currentLevel = p.level ?? 0;
     });
 
     this.villageService.collectIncome().subscribe({
@@ -161,6 +172,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    this.username = this.auth.getUsername() ?? '';
     const canvas = this.canvasRef.nativeElement;
     const neededRows = Math.ceil(this.villageLevel / 3);
     const canvasHeight = Math.max(400, neededRows * 80 + 100);
@@ -248,6 +260,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!username || this.unsavedEarnings === 0) return;
 
     this.isLoading = true;
+    const xpAmount = Math.floor(this.unsavedEarnings);
 
     this.moneyService
       .updateMoney({ username, amount: this.unsavedEarnings })
@@ -256,6 +269,9 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
           this.unsavedEarnings = 0;
           this.loadMoney(); // ✅ Geld neu laden aus dem Server
           // this.soundService.playSound('win.aac', 0.5); // Falls du einen Sound willst
+          if (xpAmount > 0) {
+            this.addXp(xpAmount);
+          }
           this.isLoading = false;
         },
         error: (err) => {
@@ -571,7 +587,6 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoading = true;
     this.villageService.upgradeVillage().subscribe({
       next: (res) => {
-        
         switch (this.villageLevel) {
           case 1:
             this.unlockAch('Gründer 🔰');
@@ -589,7 +604,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
             this.unlockAch('Dikator 👑');
             break;
         }
-        
+
         this.villageLevel = res.newLevel;
         this.money = res.newMoney;
 
@@ -726,5 +741,26 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
+  }
+  levelUp(newLevel: number) {
+    this.achievementMessage = `🎉 Level up! Neues Level: ${newLevel}`;
+    setTimeout(() => {
+      this.achievementMessage = null;
+    }, 3000); // Toast nach 3 Sek. ausblenden
+  }
+
+  addXp(amount: number) {
+    const prevLevel = this.currentLevel;
+
+    this.profileService.addXp(this.username, amount).subscribe({
+      next: (res) => {
+        if (res.level > prevLevel) {
+          this.levelUp(res.level);
+        }
+        this.currentLevel = res.level;
+        console.log(`XP hinzugefügt: ${amount}, neues Level: ${res.level}`);
+      },
+      error: (err) => console.error('❌ XP-Update fehlgeschlagen', err),
+    });
   }
 }

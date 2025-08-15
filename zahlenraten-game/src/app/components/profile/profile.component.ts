@@ -62,26 +62,29 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-addXp(amount: number) {
-  this.profileService.addXp(this.username, amount).subscribe({
-    next: (res) => {
-      console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
-      console.log('Neuer Level:', res.level, 'XP:', res.xp);
-      console.log("Response: {res}");
+  addXp(amount: number) {
+    this.profileService.addXp(this.username, amount).subscribe({
+      next: (res) => {
+        console.log(`✅ ${amount} XP zu ${this.username} hinzugefügt`);
+        console.log('Neuer Level:', res.level, 'XP:', res.xp);
+        console.log('Response: {res}');
 
-      // Optional: Werte im UI aktualisieren
-      this.level = res.level;
-      this.xp = res.xp;
-      this.xpThreshold = res.xpThreshold;
-      this.xpPercent = Math.min((this.xp / this.xpThreshold) * 100, 100);
-    },
-    error: (err) => {
-      console.error('❌ Fehler beim Hinzufügen von XP:', err);
-    }
-  });
-}
+        // Optional: Werte im UI aktualisieren
+        this.level = res.level;
+        this.xp = res.xp;
+        this.xpThreshold = res.xpThreshold;
+        this.xpPercent = Math.min((this.xp / this.xpThreshold) * 100, 100);
+      },
+      error: (err) => {
+        console.error('❌ Fehler beim Hinzufügen von XP:', err);
+      },
+    });
+  }
 
-  
+  private xpForLevel(level: number) {
+    return Math.round(100 * Math.pow(1.05, Math.max(1, level) - 1));
+  }
+
   private loadUserStats(user: string) {
     this.isLoading = true;
     this.profileService.getUserStats(user).subscribe({
@@ -92,12 +95,20 @@ addXp(amount: number) {
         this.money = stats.money;
         this.highscore = stats.highscore;
         this.profileImage = stats.profileImageUrl || this.profileImage;
-        this.xp = stats.xp;
-        this.level = stats.level;
+
+        this.level = stats.level ?? 1;
+        this.xp = stats.xp ?? 0;
+
+        // 👇 vom Backend nehmen, sonst lokal berechnen
+        this.xpThreshold = stats.xpThreshold ?? this.xpForLevel(this.level);
+
+        // Prozent sauber berechnen & clampen
+        this.xpPercent =
+          this.xpThreshold > 0
+            ? Math.min(100, (this.xp / this.xpThreshold) * 100)
+            : 0;
 
         this.isLoading = false;
-        this.xpPercent = Math.min((this.xp / this.xpThreshold) * 100, 100);
-
       },
       error: (err) => {
         console.error('Fehler beim Laden der Statistiken', err);
@@ -142,56 +153,59 @@ addXp(amount: number) {
     if (file) this.uploadProfileImage(file);
   }
 
-      onImgError(){
-      this.profileImage = 'assets/profile.png';
-    }
-
-  getXpProgress(): number {
-  const threshold = 100; // 100 XP = Balken voll
-  return Math.min((this.xp / threshold) * 100, 100);
-}
-
-// Profilbild hochladen
-uploadProfileImage(file: File) {
-  const selfUser = this.authService.getUsername();
-  if (!selfUser || selfUser !== this.username) {
-    console.warn('Upload nur für das eigene Profil erlaubt.');
-    return;
+  onImgError() {
+    this.profileImage = 'assets/profile.png';
   }
 
-  this.isUploading = true;
-  let uploadedImageUrl: string | null = null;
+  //   getXpProgress(): number {
+  //   const threshold = 100; // 100 XP = Balken voll
+  //   return Math.min((this.xp / threshold) * 100, 100);
+  // }
 
-  this.profileService.uploadProfileImage(file, this.username).subscribe({
-    next: (event: any) => {
-      console.log('Event: ', event);
-
-      switch (event.type) {
-        case HttpEventType.UploadProgress:
-          if (event.total) {
-            this.uploadProgress = Math.round((100 * event.loaded) / event.total);
-            console.log('Upload Progress:', this.uploadProgress);
-          }
-          break;
-
-        case HttpEventType.Response:
-          uploadedImageUrl = event.body?.profileImageUrl;
-          console.log('Upload abgeschlossen. Neue Bild-URL:', uploadedImageUrl);
-          break;
-      }
-    },
-    error: (err) => {
-      console.error('Fehler beim Hochladen des Bildes', err);
-      this.isUploading = false;
-    },
-    complete: () => {
-      this.isUploading = false;
-      if (uploadedImageUrl) {
-        this.profileImage = uploadedImageUrl;
-      }
+  // Profilbild hochladen
+  uploadProfileImage(file: File) {
+    const selfUser = this.authService.getUsername();
+    if (!selfUser || selfUser !== this.username) {
+      console.warn('Upload nur für das eigene Profil erlaubt.');
+      return;
     }
-  });
-}
 
+    this.isUploading = true;
+    let uploadedImageUrl: string | null = null;
 
+    this.profileService.uploadProfileImage(file, this.username).subscribe({
+      next: (event: any) => {
+        console.log('Event: ', event);
+
+        switch (event.type) {
+          case HttpEventType.UploadProgress:
+            if (event.total) {
+              this.uploadProgress = Math.round(
+                (100 * event.loaded) / event.total
+              );
+              console.log('Upload Progress:', this.uploadProgress);
+            }
+            break;
+
+          case HttpEventType.Response:
+            uploadedImageUrl = event.body?.profileImageUrl;
+            console.log(
+              'Upload abgeschlossen. Neue Bild-URL:',
+              uploadedImageUrl
+            );
+            break;
+        }
+      },
+      error: (err) => {
+        console.error('Fehler beim Hochladen des Bildes', err);
+        this.isUploading = false;
+      },
+      complete: () => {
+        this.isUploading = false;
+        if (uploadedImageUrl) {
+          this.profileImage = uploadedImageUrl;
+        }
+      },
+    });
+  }
 }

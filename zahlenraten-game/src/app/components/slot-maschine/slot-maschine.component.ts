@@ -1,4 +1,11 @@
-import { Component, ViewChild, ViewChildren, QueryList, OnInit, AfterViewInit  } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { AchievementService } from '../../services/achievement.service';
@@ -49,6 +56,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
   isLoading: boolean = true;
   gotLasVegas: boolean = false;
   achievementMessage: string | null = null;
+  currentLevel = 0;
 
   get spinCost() {
     return this.betAmount;
@@ -69,16 +77,18 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private moneyService: MoneyService,
     private chatService: ChatService,
-    private achievementService: AchievementService,
+    private achievementService: AchievementService
   ) {}
 
   ngOnInit() {
     this.username = this.authService.getUsername() ?? '';
     this.loadMoney();
+    this.profileService.getUserStats(this.username).subscribe((p) => {
+      this.currentLevel = p.level ?? 0;
+    });
   }
 
-    ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   loadMoney() {
     this.isLoading = true;
@@ -128,6 +138,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
                 setTimeout(() => {
                   this.results = [...newResults];
                   if (this.isJackpot()) {
+                    this.addXp(this.winReward / 10);
                     this.rainComponent.emojiRain('💸');
                     this.unlockAch('Lone Wolf 🐺');
                     this.moneyService
@@ -164,6 +175,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
                             'Fehler beim Gutschreiben des Gewinns'),
                       });
                   } else {
+                    this.addXp(this.betAmount / 10);
                     this.rainComponent.emojiRain('🌀');
                     this.message =
                       '🌀 Leider kein Gewinn. Versuche es nochmal!';
@@ -190,7 +202,6 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
         if (res.unlocked) {
           this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
           this.rainComponent.emojiRain('🎖️');
-
         } else {
           // optional: Info anzeigen, dass bereits freigeschaltet
           // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);
@@ -212,5 +223,29 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
       this.results.length === 3 &&
       this.results.every((s) => s === this.results[0])
     );
+  }
+
+  levelUp(newLevel: number) {
+    this.achievementMessage = `🎉 Level up! Neues Level: ${newLevel}`;
+    setTimeout(() => {
+      this.achievementMessage = null;
+    }, 3000); // Toast nach 3 Sek. ausblenden
+  }
+
+  addXp(amount: number) {
+    const user = this.authService.getUsername();
+    if (!user) return;
+
+    const prevLevel = this.currentLevel;
+
+    this.profileService.addXp(user, amount).subscribe({
+      next: (res) => {
+        if (res.level > prevLevel) {
+          this.levelUp(res.level);
+        }
+        this.currentLevel = res.level;
+      },
+      error: (err) => console.error('❌ XP-Update fehlgeschlagen', err),
+    });
   }
 }

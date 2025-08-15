@@ -28,7 +28,7 @@ import { RainComponent } from '../rain/rain.component';
     LoaderComponent,
     SidebarComponent,
     ChatComponent,
-    RainComponent
+    RainComponent,
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -61,6 +61,8 @@ export class GameComponent implements OnInit {
   activeBoardIndex: number | null = null;
   activeRowIndex: number | null = null;
   selectedUsername: string | null = null;
+  currentLevel = 0;
+  username: string = '';
 
   // justAppeared = false; // Für Lava-Animation
   leaderboardTitles = [
@@ -69,8 +71,16 @@ export class GameComponent implements OnInit {
     '🏆 Top Punkte ohne 🃏',
   ];
   currentLeaderboardIndex = 0;
-currentLeaderboard: { username: string; value: string; profileImageUrl?: string }[] = [];
-allLeaderboards: { username: string; value: string; profileImageUrl?: string }[][] = [];
+  currentLeaderboard: {
+    username: string;
+    value: string;
+    profileImageUrl?: string;
+  }[] = [];
+  allLeaderboards: {
+    username: string;
+    value: string;
+    profileImageUrl?: string;
+  }[][] = [];
 
   touchStartX = 0;
 
@@ -128,6 +138,9 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
     this.newRound();
     this.loadLeaderboards();
     this.loadCards();
+    this.profileService.getUserStats(this.username).subscribe((p) => {
+      this.currentLevel = p.level ?? 0;
+    });
   }
 
   //   ngOnChanges(): void {
@@ -302,7 +315,7 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
       this.isHighscore = res.isHighscore;
     });
 
-    this.addXp(this.score/5);
+    this.addXp(this.score / 5);
   }
 
   submitScore() {
@@ -362,17 +375,17 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
         scores.map((s) => ({
           username: s.username,
           value: `${s.score} Punkte`,
-          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png'
+          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png',
         })),
         streaks.map((s) => ({
           username: s.username,
           value: `${s.consecutive_wins} 🔁`,
-          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png'
+          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png',
         })), // ← geändert
         money.map((s) => ({
           username: s.username,
           value: `${s.money_per_round}€ 💰`,
-          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png'
+          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png',
         })), // ← geändert
       ];
       this.setLeaderboard(0);
@@ -482,25 +495,29 @@ allLeaderboards: { username: string; value: string; profileImageUrl?: string }[]
       });
   }
 
-addXp(amount: number) {
-  const user = this.authService.getUsername();
-
-  if (!user) {
-    console.error("⚠️ Kein Benutzer eingeloggt – XP kann nicht hinzugefügt werden.");
-    return;
+  levelUp(newLevel: number) {
+    this.achievementMessage = `🎉 Level up! Neues Level: ${newLevel}`;
+    setTimeout(() => {
+      this.achievementMessage = null;
+    }, 3000); // Toast nach 3 Sek. ausblenden
   }
 
-  this.profileService.addXp(user, amount).subscribe({
-    next: (res) => {
-      console.log(`✅ ${amount} XP zu ${user} hinzugefügt`);
-      console.log('Neuer Level:', res.level, 'XP:', res.xp);
-    },
-    error: (err) => {
-      console.error('❌ Fehler beim Hinzufügen von XP:', err);
-    }
-  });
-}
+  addXp(amount: number) {
+    const user = this.authService.getUsername();
+    if (!user) return;
 
+    const prevLevel = this.currentLevel;
+
+    this.profileService.addXp(user, amount).subscribe({
+      next: (res) => {
+        if (res.level > prevLevel) {
+          this.levelUp(res.level);
+        }
+        this.currentLevel = res.level;
+      },
+      error: (err) => console.error('❌ XP-Update fehlgeschlagen', err),
+    });
+  }
 
   useSelectedCards() {
     if (this.selectedCard && this.selectedCard.multiplier !== -1) {
@@ -731,17 +748,19 @@ addXp(amount: number) {
     return '1.5s';
   }
 
-avatar(url?: string | null, size = 32): string {
-  if (!url) return 'assets/profile.png';
-  return url.replace(
-    '/upload/',
-    `/upload/w_${size},h_${size},c_fill,g_auto,f_auto,q_auto/`
-  );
-}
+  avatar(url?: string | null, size = 32): string {
+    if (!url) return 'assets/profile.png';
+    return url.replace(
+      '/upload/',
+      `/upload/w_${size},h_${size},c_fill,g_auto,f_auto,q_auto/`
+    );
+  }
 
-onAvatarError(ev: Event) {
-  (ev.target as HTMLImageElement).src = 'assets/profile.png';
-}
-  
-trackByUsername(i: number, item: any) { return item?.username ?? i; }
+  onAvatarError(ev: Event) {
+    (ev.target as HTMLImageElement).src = 'assets/profile.png';
+  }
+
+  trackByUsername(i: number, item: any) {
+    return item?.username ?? i;
+  }
 }

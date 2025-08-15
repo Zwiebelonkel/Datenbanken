@@ -1,7 +1,7 @@
 <div class="skillshop">
   <h2>SkillShop</h2>
 
-  <!-- Anzeige der Skillpunkte und Multiplikatoren -->
+  <!-- Anzeige der Spieler-Info -->
   <div class="player-info">
     <p><strong>Skillpunkte:</strong> {{ player.skillPoints }}</p>
     <p><strong>Score Multiplikator:</strong> {{ player.scoreMultiplier }}x</p>
@@ -13,16 +13,36 @@
     <h3>{{ skill.name }}</h3>
     <p>{{ skill.description }}</p>
     <p><strong>Preis:</strong> {{ skill.price | currency:'EUR' }}</p>
-<button (click)="purchase(skill)" *ngFor="let skill of skills">
-  {{ skill.purchased ? 'Gekauft' : 'Kaufen' }}
-</button>
-
+    <button (click)="purchase(skill)" [disabled]="skill.purchased || player.skillPoints < skill.price">
+      {{ skill.purchased ? 'Gekauft' : 'Kaufen' }}
+    </button>
   </div>
 
-  <!-- Optional: Mehr Upgrades oder andere Funktionen -->
+  <!-- Beispiel für Upgrades -->
   <div class="upgrade-section">
     <h3>Upgrades</h3>
-    <button (click)="purchase({id: 1, name: 'Score Multiplikator', price: 50, purchased: false, level: 1, type: 'score'})">Score Multiplikator upgraden</button>
-    <button (click)="purchase({id: 2, name: 'Monetary Multiplikator', price: 40, purchased: false, level: 1, type: 'money'})">Monetary Multiplikator upgraden</button>
+
+    <button (click)="purchase({
+      id: 1,
+      name: 'Score Multiplikator +1',
+      price: 50,
+      purchased: false,
+      level: 1,
+      type: 'score',
+      description: 'Erhöhe deinen Score-Multiplikator um 1x'
+    })">
+      Score Multiplikator upgraden
+    </button>
+    <button (click)="purchase({
+      id: 2,
+      name: 'Monetary Multiplikator +0.5x',
+      price: 40,
+      purchased: false,
+      level: 1,
+      type: 'money',
+      description: 'Erhöhe deinen monetären Multiplikator um 0.5x'
+    })">
+      Monetary Multiplikator upgraden
+    </button>
   </div>
 </div>

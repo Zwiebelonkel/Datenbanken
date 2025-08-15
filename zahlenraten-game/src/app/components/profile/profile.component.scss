@@ -212,7 +212,8 @@
   background: #eee;
   border-radius: 999px;
   overflow: hidden;
-  margin: 12px auto 0;
+  margin: 12px auto;
+  max-width: 300px;
 
   .bar {
     height: 100%;

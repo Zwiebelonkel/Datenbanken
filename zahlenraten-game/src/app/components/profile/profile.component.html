@@ -36,7 +36,11 @@
   <!-- Statistiken -->
   <div *ngIf="!isLoading" class="profile-card">
     <h3>📊 Statistiken</h3>
-
+    
+    <div class="stat-row">
+      <span>⬆️ Level</span>
+      <span>{{ level }}</span>
+    </div>
     <div class="stat-row">
       <span>💠 Highscore</span>
       <span>{{ highscore }}</span>

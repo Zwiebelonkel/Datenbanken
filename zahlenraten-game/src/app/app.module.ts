@@ -24,6 +24,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
 import { ReelComponent } from './components/slot-maschine/reel/reel.component';
+import { SkillShopComponent } from './components/skill-shop/skill-shop.component';
 @NgModule({
   declarations: [
     RegisterComponent,
@@ -37,6 +38,7 @@ import { ReelComponent } from './components/slot-maschine/reel/reel.component';
     ClickerComponent,
     DarkModeService,
     CardShopComponent,
+    SkillShopComponent,
     PackOpeningComponent,
     LoaderComponent,
     RainComponent,

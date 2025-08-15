@@ -86,6 +86,11 @@ export class SidebarComponent implements OnInit {
     this.router.navigate(['/card-shop']);
     this.sidebarOpen = false;
   }
+  skillShop() {
+    this.router.navigate(['/skill-shop']);
+    this.sidebarOpen = false;
+  }
+  
   toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
   }

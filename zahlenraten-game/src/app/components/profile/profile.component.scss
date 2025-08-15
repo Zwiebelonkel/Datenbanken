@@ -243,3 +243,21 @@
     padding: 1.2rem;
   }
 }
+
+/* ===== XP Progress Bar ===== */
+.xp-progress {
+  width: 100%;
+  height: 10px;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 4px 0 14px;
+
+  .xp-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4caf50, #81c784);
+    transition: width 0.3s ease;
+  }
+}
+

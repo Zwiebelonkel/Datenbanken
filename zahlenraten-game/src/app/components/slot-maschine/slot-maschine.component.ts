@@ -10,6 +10,7 @@ import { ChatService } from '../../services/chat.service';
 import { ReelComponent } from './reel/reel.component';
 import { FormsModule } from '@angular/forms';
 import { Renderer2 } from '@angular/core';
+import { RainComponent } from '../rain/rain.component';
 
 type SymbolData = { type: 'emoji' | 'image'; value: string };
 
@@ -22,6 +23,7 @@ type SymbolData = { type: 'emoji' | 'image'; value: string };
     CommonModule,
     FormsModule,
     LoaderComponent,
+    RainComponent,
     SidebarComponent,
     ReelComponent,
   ],
@@ -68,12 +70,14 @@ export class SlotMaschineComponent implements OnInit {
     private moneyService: MoneyService,
     private renderer: Renderer2,
     private chatService: ChatService,
-    private achievementService: AchievementService
+    private achievementService: AchievementService,
+    private rain: RainComponent
   ) {}
 
   ngOnInit() {
     this.username = this.authService.getUsername() ?? '';
     this.loadMoney();
+    this.rain.emojiRain('👼🏻')
   }
 
   loadMoney() {

@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
   pwChangeMsg = '';
   pwChangeSuccess = false;
   isLoading = true;
-  isUploading = true;
+  isUploading = false;
   money = 0;
   highscore = 0;
   level = 1;
@@ -166,6 +166,8 @@ uploadProfileImage(file: File) {
     next: (event: any) => {
       console.log('Event: ', event); // Logge das Event, um zu prüfen, ob der Fortschritt korrekt ermittelt wird
                 this.profileImage = event.body.profileImageUrl; // Update das Profilbild, wenn der Upload abgeschlossen ist
+                  this.uploadProgress = Math.round((100 * event.loaded) / event.total); // Berechne den Fortschritt
+
 
       switch (event.type) {
         case HttpEventType.UploadProgress:

@@ -115,16 +115,15 @@ router.get("/userTotalScore/:username", async (req, res) => {
 router.get("/topStreaks", async (_req, res) => {
   try {
     const result = await db.execute(`
-      SELECT 
-        s.username,
-        MAX(s.consecutive_wins) AS consecutive_wins,
-        u.profile_image_url AS profileImageUrl
-      FROM scores s
-      LEFT JOIN users u
-        ON LOWER(u.username) = LOWER(s.username)
-      GROUP BY s.username, u.profile_image_url
-      ORDER BY consecutive_wins DESC
-      LIMIT 10
+      SELECT
+  s.username,
+  s.consecutive_wins,
+  u.profile_image_url AS profileImageUrl
+FROM scores s
+LEFT JOIN users u
+  ON LOWER(u.username) = LOWER(s.username)
+ORDER BY s.consecutive_wins DESC
+LIMIT 10;
     `);
     res.json(result.rows);
   } catch (err) {
@@ -136,17 +135,15 @@ router.get("/topStreaks", async (_req, res) => {
 router.get("/topMoneyPerRound", async (_req, res) => {
   try {
     const result = await db.execute(`
-      SELECT 
-        s.username,
-        MAX(s.money_per_round) AS money_per_round,
-        u.profile_image_url AS profileImageUrl
-      FROM scores s
-      LEFT JOIN users u
-        ON LOWER(u.username) = LOWER(s.username)
-      GROUP BY s.username, u.profile_image_url
-      ORDER BY money_per_round DESC
-      LIMIT 10
-    `);
+      SELECT
+  s.username,
+  s.money_per_round,
+  u.profile_image_url AS profileImageUrl
+FROM scores s
+LEFT JOIN users u
+  ON LOWER(u.username) = LOWER(s.username)
+ORDER BY s.money_per_round DESC
+LIMIT 10;`);
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });

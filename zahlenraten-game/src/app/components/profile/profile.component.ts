@@ -159,13 +159,10 @@ uploadProfileImage(file: File) {
     return;
   }
 
-  const formData = new FormData();
-  formData.append('profileImage', file, file.name);
-
   this.isUploading = true; // Setze isUploading auf true, wenn der Upload beginnt
 
-  // Übergabe von formData an die Methode, die FormData erwartet
-  this.profileService.uploadProfileImage(formData, this.username).subscribe({
+  // Übergabe eines File-Objekts an den Service
+  this.profileService.uploadProfileImage(file, this.username).subscribe({
     next: (event: any) => {
       switch (event.type) {
         case HttpEventType.UploadProgress:
@@ -187,6 +184,7 @@ uploadProfileImage(file: File) {
     }
   });
 }
+
 
 
 }

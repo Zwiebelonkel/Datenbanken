@@ -101,7 +101,6 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     private auth: AuthService,
     private moneyService: MoneyService,
     private achievementService: AchievementService,
-    private renderer: Renderer2
   ) {}
 
   ngOnInit() {

@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core'; import { HttpClient } from '@angular/common/http'; import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface UserStats {
   totalScore: number;
@@ -30,15 +32,17 @@ export class ProfileService {
   uploadProfileImage(
     file: File,
     username: string
-  ): Observable<{ profileImageUrl: string }> {
+  ): Observable<any> {  // Beobachtungs-Typ sollte HttpEvent sein
     const formData = new FormData();
     formData.append('profileImage', file, file.name);
     formData.append('username', username);
 
-    return this.http.post<{ profileImageUrl: string }>(
-      `${this.apiUrl}/upload-profile-image`,
-      formData
-    );
+    // Anfrage mit reportProgress und observe: 'events'
+    return this.http.post<any>(`${this.apiUrl}/upload-profile-image`, formData, {
+      headers: new HttpHeaders(),
+      reportProgress: true,
+      observe: 'events',  // Wird notwendig, um alle Events zu beobachten
+    });
   }
 
   // ➕ XP hinzufügen

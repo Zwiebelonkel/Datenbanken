@@ -51,7 +51,7 @@ ALTER TABLE users ADD COLUMN monetary_multiplier REAL DEFAULT 1.0;
 /** GET /api/skills/:username
  *  -> Katalog + Userstände mergen
  */
-router.get("/:username", async (req, res) => {
+router.get("/:username/skills", async (req, res) => {
   const username = (req.params.username || "").trim();
   if (!username) return res.status(400).json({ message: "Kein Benutzername" });
 
@@ -91,7 +91,7 @@ router.get("/:username", async (req, res) => {
  * Body: { skillName: string }
  * Preis/MaxLevel kommen aus dem KATALOG (nicht vom Client!)
  */
-router.post("/:username/upgrade", async (req, res) => {
+router.post('/:username/skills/upgrade', async (req, res) => {
   const username = (req.params.username || "").trim();
   const { skillName } = req.body;
 

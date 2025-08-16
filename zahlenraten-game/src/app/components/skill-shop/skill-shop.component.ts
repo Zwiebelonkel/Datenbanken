@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfileService, Skill, Player } from './profile.service';
+import { ProfileService, Skill, Player } from '../../services/profile.service';
 
 @Component({
   selector: 'app-skill-shop',

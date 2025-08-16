@@ -1,4 +1,3 @@
-// In skills.js (Backend API)
 import express from "express";
 import db from "../db.js";
 const router = express.Router();
@@ -13,20 +12,20 @@ router.get("/:username", async (req, res) => {
       sql: `
         SELECT s.id, s.skill_name, IFNULL(us.skill_level, 1) AS skill_level, s.price, IFNULL(us.purchased, FALSE) AS purchased
         FROM skills s
-        LEFT JOIN user_skills us ON us.skill_name = s.skill_name AND us.username = ?
+        LEFT JOIN user_skills us ON us.skill_name = s.skill_name AND LOWER(us.username) = LOWER(?)
         `,
       args: [username],
     });
 
     // Falls keine Skills für den Benutzer gefunden wurden
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Keine Skills gefunden." });
+      return res.status(404).json({ message: `Skills für den Benutzer '${username}' nicht gefunden.` });
     }
 
     res.json(result.rows); // Gibt die Liste der Skills mit Level zurück
   } catch (error) {
     console.error("Fehler beim Abrufen der Skills:", error);
-    res.status(500).json({ message: "Datenbankfehler beim Abrufen der Skills." });
+    res.status(500).json({ message: "Datenbankfehler beim Abrufen der Skills.", error: error.message });
   }
 });
 
@@ -58,7 +57,7 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       sql: `
         INSERT INTO user_skills (username, skill_name, skill_level, purchased)
         VALUES (?, ?, ?, TRUE)
-        ON DUPLICATE KEY UPDATE skill_level = skill_level + 1
+        ON DUPLICATE KEY UPDATE skill_level = LEAST(skill_level + 1, 5)
       `,
       args: [username, skillName, skillLevel],
     });
@@ -85,9 +84,8 @@ router.post("/:username/skills/upgrade", async (req, res) => {
     res.json({ message: `Skill "${skillName}" erfolgreich gekauft!` });
   } catch (error) {
     console.error("Fehler beim Upgrade des Skills:", error);
-    res.status(500).json({ message: "Datenbankfehler beim Upgrade des Skills." });
+    res.status(500).json({ message: "Datenbankfehler beim Upgrade des Skills.", error: error.message });
   }
 });
-
 
 export default router;

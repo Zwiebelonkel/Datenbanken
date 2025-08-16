@@ -1,4 +1,4 @@
-/* ========== Skill Shop ========== */
+/* ========== Skill Shop (an Profil-Design angelehnt) ========== */
 .skill-shop {
   max-width: 800px;
   margin: 2rem auto;
@@ -11,6 +11,18 @@
     font-weight: 800;
     color: #4A90E2;
     margin-bottom: 2rem;
+  }
+
+  .loading,
+  .error,
+  .empty {
+    text-align: center;
+    margin: 1rem 0;
+  }
+
+  .error {
+    color: #e74c3c;
+    font-weight: 700;
   }
 }
 
@@ -61,22 +73,28 @@
   .skill-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     margin-bottom: 12px;
 
     .skill-name {
       font-size: 1.3rem;
       font-weight: 700;
       color: #333;
+
+      .lvl {
+        font-weight: 600;
+        color: #666;
+        margin-left: 6px;
+      }
     }
 
     .skill-price {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #e74c3c;
       font-weight: 800;
 
       .currency {
-        font-size: 1rem;
+        font-size: 0.95rem;
         margin-left: 2px;
       }
     }
@@ -108,26 +126,10 @@
   }
 
   &:disabled {
-    background: #ccc;
+    background: #ddd;
+    color: #777;
     cursor: not-allowed;
     transform: none;
-  }
-}
-
-/* ===== XP Progress Bar (wie bei Profil) ===== */
-.xp-progress {
-  width: 100%;
-  height: 10px;
-  background: #eee;
-  border-radius: 999px;
-  overflow: hidden;
-  margin: 10px 0 20px;
-
-  .xp-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #4caf50, #81c784);
-    transition: width 0.3s ease;
   }
 }
 

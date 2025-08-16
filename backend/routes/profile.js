@@ -4,7 +4,7 @@ import db from "../db.js";
 import { v4 as uuidv4 } from "uuid";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import { getUserSkills, purchaseSkill } from "../skills.js";  // Importiere Skill-bezogene Funktionen
+import { getUserSkills, purchaseSkill } from "./skills.js";  // Importiere Skill-bezogene Funktionen
 
 const router = express.Router();
 

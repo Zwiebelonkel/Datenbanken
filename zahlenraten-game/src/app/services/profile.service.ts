@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface UserStats {
@@ -13,7 +13,10 @@ export interface UserStats {
   xp: number;
   xpThreshold: number;
   xpPercent: number;
-  skills: Skill[]; // Array von Skills des Benutzers
+  skills: Skill[];
+  skillPoints: number;      // Hinzugefügt: Skill-Punkte des Benutzers
+  scoreMultiplier: number;  // Hinzugefügt: Score-Multiplikator
+  monetaryMultiplier: number;  // Hinzugefügt: Monetary-Multiplikator
 }
 
 export interface Skill {
@@ -22,7 +25,7 @@ export interface Skill {
   description: string;
   price: number;
   purchased: boolean;
-  skill_level: number;  // Hinzugefügt, um das Level des Skills zu verfolgen
+  skill_level: number;
 }
 
 @Injectable({

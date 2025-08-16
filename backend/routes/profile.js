@@ -69,23 +69,27 @@ router.get("/:username", async (req, res) => {
     const result = await db.execute({
       sql: `
         SELECT 
-          u.total_score AS totalScore,
-          u.money AS money,
-          u.level AS level,
-          u.xp AS xp,
-          ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,
-          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent,
-          (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
-          (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
+          u.username AS username,  -- Benutzername
+          u.total_score AS totalScore,  -- Gesamtpunkte
+          u.money AS money,  -- Geld
+          u.level AS level,  -- Level
+          u.xp AS xp,  -- XP
+          ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,  -- XP-Schwelle
+          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent,  -- XP-Prozent
+          (SELECT COUNT(*) FROM scores WHERE username = u.username) AS totalGames,  -- Gesamtzahl der Spiele
+          (SELECT MAX(score) FROM scores WHERE username = u.username) AS highscore,  -- Höchster Score
           (SELECT COUNT(*) FROM achievements a 
              JOIN users u2 ON u2.id = a.user_id 
-             WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements,
-          u.profile_image_url AS profileImageUrl
+             WHERE LOWER(u2.username) = LOWER(u.username)) AS unlockedAchievements,  -- Anzahl der freigeschalteten Erfolge
+          u.profile_image_url AS profileImageUrl,  -- Profilbild-URL
+          u.skill_points AS skillPoints,  -- Skill-Punkte
+          u.score_multiplier AS scoreMultiplier,  -- Score-Multiplikator
+          u.monetary_multiplier AS monetaryMultiplier  -- Monetärer Multiplikator
         FROM users u
         WHERE LOWER(u.username) = LOWER(?)
         LIMIT 1
       `,
-      args: [username, username, username, username],
+      args: [username],
     });
 
     if (result.rows.length === 0) return res.status(404).json({ message: "Benutzer nicht gefunden" });

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService, Skill, Player } from '../../services/profile.service';
+import { CommonModule } from @angular/common;
 
 @Component({
   selector: 'app-skill-shop',

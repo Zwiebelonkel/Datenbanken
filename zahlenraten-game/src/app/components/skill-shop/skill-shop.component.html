@@ -1,20 +1,36 @@
 <div class="skill-shop">
-  <h2>Skill-Shop</h2>
+  <h2 class="shop-title">Skill-Shop</h2>
 
   <!-- Anzeige der Spieler-Info -->
   <div class="player-info">
-    <p><strong>Skillpunkte:</strong> {{ player.skillPoints }}</p>
-    <p><strong>Score Multiplikator:</strong> {{ player.scoreMultiplier }}x</p>
-    <p><strong>Monetary Multiplikator:</strong> {{ player.monetaryMultiplier }}x</p>
+    <div class="info-item">
+      <span class="info-title">Skillpunkte:</span>
+      <span class="info-value">{{ player.skillPoints }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-title">Score Multiplikator:</span>
+      <span class="info-value">{{ player.scoreMultiplier }}x</span>
+    </div>
+    <div class="info-item">
+      <span class="info-title">Monetary Multiplikator:</span>
+      <span class="info-value">{{ player.monetaryMultiplier }}x</span>
+    </div>
   </div>
 
   <!-- Skill-Items -->
-  <div *ngFor="let skill of skills">
-    <h3>{{ skill.name }}</h3>
-    <p>{{ skill.description }}</p>
-    <p><strong>Preis:</strong> {{ skill.price }}</p>
-    <button (click)="upgrade(skill)" [disabled]="skill.purchased || player.skillPoints < skill.price">
-      {{ skill.purchased ? 'Gekauft' : 'Upgrade' }}
-    </button>
+  <div *ngFor="let skill of skills" class="skill-item">
+    <div class="skill-card">
+      <div class="skill-header">
+        <h3 class="skill-name">{{ skill.name }}</h3>
+        <div class="skill-price">Preis: {{ skill.price }}<span class="currency">€</span></div>
+      </div>
+      <p class="skill-description">{{ skill.description }}</p>
+      <button 
+        (click)="upgrade(skill)" 
+        [disabled]="skill.purchased || player.skillPoints < skill.price" 
+        class="upgrade-button">
+        {{ skill.purchased ? 'Gekauft' : 'Upgrade' }}
+      </button>
+    </div>
   </div>
 </div>

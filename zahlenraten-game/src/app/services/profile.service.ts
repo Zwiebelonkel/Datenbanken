@@ -59,8 +59,11 @@ export class ProfileService {
   }
 
 getUserSkills(username: string) {
-  return this.http.get<Skill[]>(`https://outside-between.onrender.com/api/skills/${encodeURIComponent(username)}`);
+  return this.http.get<Skill[]>(
+    `https://outside-between.onrender.com/api/skills/${encodeURIComponent(username)}`
+  );
 }
+
 
 
 

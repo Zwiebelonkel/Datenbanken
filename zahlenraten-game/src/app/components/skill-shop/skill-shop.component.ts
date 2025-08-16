@@ -75,7 +75,7 @@ export class SkillShopComponent implements OnInit {
 
   trackBySkill = (_: number, s: Skill) => s.name || s.id;
 
-  // Skill upgraden (Skillpunkte als Währung)
+  // 🔹 Skill upgraden
   upgrade(skill: Skill) {
     if (!this.username) return;
 
@@ -83,38 +83,33 @@ export class SkillShopComponent implements OnInit {
     const atMax = typeof skill.max_level === 'number' && skill.skill_level >= skill.max_level;
     if (notEnough || atMax) return;
 
-    // Optimistisch im UI updaten
+    // Optimistisches Update im UI
     this.player.skillPoints -= skill.price;
     skill.skill_level += 1;
 
-    this.profileService
-      // ⚠️ Nutze HIER deinen echten Service-Call; ich lasse deine Signatur,
-      // ersetze aber das harte 'username123' durch this.username:
-      .upgradeSkill(this.username, skill.name, skill.price, skill.skill_level - 1)
-      .subscribe({
-        next: (res: any) => {
-          // Falls Backend neue Werte schickt, sauber übernehmen:
-          if (typeof res?.newSkillLevel === 'number') {
-            skill.skill_level = res.newSkillLevel;
-          }
-          if (typeof res?.skillPoints === 'number') {
-            this.player.skillPoints = res.skillPoints;
-          }
-          if (typeof res?.scoreMultiplier === 'number') {
-            this.player.scoreMultiplier = res.scoreMultiplier;
-          }
-          if (typeof res?.monetaryMultiplier === 'number') {
-            this.player.monetaryMultiplier = res.monetaryMultiplier;
-          }
-        },
-        error: (err) => {
-          // Rollback bei Fehler
-          console.error('Upgrade fehlgeschlagen:', err);
-          skill.skill_level -= 1;
-          this.player.skillPoints += skill.price;
-          this.errorMsg = err?.error?.message || 'Upgrade fehlgeschlagen.';
-        },
-      });
+    this.profileService.upgradeSkill(this.username, skill.name).subscribe({
+      next: (res: any) => {
+        if (typeof res?.newSkillLevel === 'number') {
+          skill.skill_level = res.newSkillLevel;
+        }
+        if (typeof res?.skillPoints === 'number') {
+          this.player.skillPoints = res.skillPoints;
+        }
+        if (typeof res?.scoreMultiplier === 'number') {
+          this.player.scoreMultiplier = res.scoreMultiplier;
+        }
+        if (typeof res?.monetaryMultiplier === 'number') {
+          this.player.monetaryMultiplier = res.monetaryMultiplier;
+        }
+      },
+      error: (err) => {
+        console.error('Upgrade fehlgeschlagen:', err);
+        // Rollback im UI
+        skill.skill_level -= 1;
+        this.player.skillPoints += skill.price;
+        this.errorMsg = err?.error?.message || 'Upgrade fehlgeschlagen.';
+      },
+    });
   }
 
   canUpgrade(skill: Skill): boolean {

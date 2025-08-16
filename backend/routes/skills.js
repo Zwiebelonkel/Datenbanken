@@ -63,3 +63,5 @@ export const purchaseSkill = async (username, skillName, skillLevel, skillPrice)
     throw new Error('Datenbankfehler');
   }
 };
+
+export default router;

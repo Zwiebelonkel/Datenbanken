@@ -58,9 +58,9 @@ export class ProfileService {
     );
   }
 
-  getUserSkills(username: string): Observable<Skill[]> {
-    return this.http.get<Skill[]>(`${this.apiUrl}/skills/${encodeURIComponent(username)}`);
-  }
+getUserSkills(username: string): Observable<Skill[]> {
+  return this.http.get<Skill[]>(`${this.apiUrl}/${encodeURIComponent(username)}/skills`);
+}
 
   upgradeSkill(
     username: string,

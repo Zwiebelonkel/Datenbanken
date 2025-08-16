@@ -388,5 +388,5 @@ app.put(
 
 // Server starten
 app.listen(PORT, () => {
-  console.log(`✅ Server läuft auf http://localhost:${PORT}`);
+  console.log(`✅ Server läuft auf: ${PORT}. Jetzt nurnoch Eier schaukeln.🥚`);
 });

@@ -11,9 +11,9 @@ export interface UserStats {
   profileImageUrl?: string;
   level: number;
   xp: number;
-  xpThreshold: number;  // neu
-  xpPercent: number;    // neu
-  skills: Skill[];      // neu: Array von Skills des Benutzers
+  xpThreshold: number;
+  xpPercent: number;
+  skills: Skill[]; // Array von Skills des Benutzers
 }
 
 export interface Skill {
@@ -22,21 +22,19 @@ export interface Skill {
   description: string;
   price: number;
   purchased: boolean;
+  skill_level: number;  // Hinzugefügt, um das Level des Skills zu verfolgen
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiUrl = 'https://outside-between.onrender.com/api/profile';
+  private apiUrl = 'https://outside-between.onrender.com/api/profile'; // Basis-URL für API
 
   constructor(private http: HttpClient) {}
 
   // 📤 Profilbild hochladen
-  uploadProfileImage(
-    file: File,
-    username: string
-  ): Observable<any> {  // Beobachtungs-Typ sollte HttpEvent sein
+  uploadProfileImage(file: File, username: string): Observable<any> {
     const formData = new FormData();
     formData.append('profileImage', file, file.name);
     formData.append('username', username);
@@ -61,13 +59,13 @@ export class ProfileService {
     return this.http.get<Skill[]>(`${this.apiUrl}/skills/${username}`);
   }
 
-  // 📤 Skill upgraden
+  // 📤 Skill upgraden (Level erhöhen)
   upgradeSkill(username: string, skillName: string, skillPrice: number, skillLevel: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${username}/skills/upgrade`, { skillName, skillPrice, skillLevel });
   }
 
   // 📥 Benutzerstatistiken laden (z. B. Skill-Punkte)
-  getUserStats(username: string): Observable<Player> {
-    return this.http.get<Player>(`${this.apiUrl}/${username}`);
+  getUserStats(username: string): Observable<UserStats> {
+    return this.http.get<UserStats>(`${this.apiUrl}/${username}`);
   }
 }

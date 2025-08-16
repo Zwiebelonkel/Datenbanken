@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService, Skill, UserStats } from '../../services/profile.service';
-import { AuthService } from '../../services/auth.serivce'
+import { AuthService } from '../../services/auth.service'
 import { CommonModule } from '@angular/common';
 
 @Component({

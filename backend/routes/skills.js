@@ -15,7 +15,8 @@ const router = express.Router();
 */
 
 /** 🔹 Skills eines Users laden */
-router.get("/:username/skills", async (req, res) => {
+
+router.get("/:username", async (req, res) => {
   const username = (req.params.username || "").trim();
   if (!username) return res.status(400).json({ message: "Kein Benutzername" });
 
@@ -58,7 +59,7 @@ router.get("/:username/skills", async (req, res) => {
 });
 
 /** 🔹 Skill upgraden (Skillpunkte als Währung) */
-router.post("/:username/skills/upgrade", async (req, res) => {
+ router.post("/:username/upgrade", async (req, res) =>{
   const username = (req.params.username || "").trim();
   const { skillName, skillPrice, skillLevel } = req.body;
 

@@ -1,6 +1,6 @@
-// skills.js
-
+import express from "express";
 import db from "../db.js";
+const router = express.Router();
 
 // Funktion zum Abrufen der Skills eines Benutzers
 export const getUserSkills = async (username) => {

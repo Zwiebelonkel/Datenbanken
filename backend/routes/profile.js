@@ -129,62 +129,82 @@ router.get("/:username", async (req, res) => {
 });
 
 /** 📤 XP hinzufügen */
-router.post("/:username/add-xp", async (req, res) => {
-  const username = (req.params.username || "").trim();
-  const { xpToAdd } = req.body;
+router.post('/:username/add-xp', async (req, res) => {
+  const username = (req.params.username || '').trim();
+  let { xpToAdd } = req.body;
 
-  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
-  if (typeof xpToAdd !== 'number' || xpToAdd <= 0) {
-    return res.status(400).json({ message: "Ungültige XP-Anzahl" });
+  // Eingaben prüfen/konvertieren
+  xpToAdd = Number(xpToAdd);
+  if (!username) return res.status(400).json({ message: 'Kein Benutzername angegeben' });
+  if (!Number.isFinite(xpToAdd) || xpToAdd <= 0) {
+    return res.status(400).json({ message: 'Ungültige XP-Anzahl' });
   }
 
   try {
+    // Aktuelle Werte laden
     const result = await db.execute({
-      sql: `
-        SELECT level, xp
-        FROM users
-        WHERE LOWER(username) = LOWER(?)
-        LIMIT 1
-      `,
+      sql: `SELECT level, xp FROM users WHERE LOWER(username) = LOWER(?) LIMIT 1`,
       args: [username],
     });
-
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
     }
 
-    let { level, xp } = result.rows[0];
-    let xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
+    // Zahlen sicher machen + Defaults
+    let level = Number(result.rows[0].level);
+    let xp    = Number(result.rows[0].xp);
+    if (!Number.isFinite(level) || level < 1) level = 1;
+    if (!Number.isFinite(xp)    || xp   < 0)  xp    = 0;
 
-    // XP hinzufügen und Level-Up prüfen
-    xp += xpToAdd;
+    // Schwelle-Funktion
+    const xpForLevel = (lvl) => Math.round(100 * Math.pow(1.05, Math.max(1, lvl) - 1));
 
+    // XP addieren + Level-Ups zählen
+    let gainedSkillPoints = 0;     // ⬅️ nur Zunahme, totaler Wert wird DB-seitig addiert
     let leveledUp = false;
+
+    xp += xpToAdd;
+    let xpThreshold = xpForLevel(level);  // aktuelle Schwelle für dieses Level
+
     while (xp >= xpThreshold) {
       xp -= xpThreshold;
       level += 1;
-      skillPoints += 1;
-      xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
+      gainedSkillPoints += 1;
       leveledUp = true;
+      xpThreshold = xpForLevel(level);    // neue Schwelle für das neue Level
     }
 
-    // Daten aktualisieren
+    // Update: Level/XP setzen, Skillpunkte erhöhen
+    // (setzt skill_points falls Spalte existiert; sonst diesen Teil entfernen)
     await db.execute({
-      sql: `UPDATE users SET level = ?, skill_points = ?, xp = ? WHERE LOWER(username) = LOWER(?)`,
-      args: [level, skillPoints, xp, username],
+      sql: `
+        UPDATE users
+        SET level = ?,
+            xp    = ?,
+            skill_points = COALESCE(skill_points, 0) + ?
+        WHERE LOWER(username) = LOWER(?)
+      `,
+      args: [level, xp, gainedSkillPoints, username],
     });
 
+    // Optional: aktuellen Gesamt-Skillpunktestand zurückgeben (wenn du ihn brauchst)
+    // const sp = await db.execute({
+    //   sql: `SELECT COALESCE(skill_points,0) AS skill_points FROM users WHERE LOWER(username)=LOWER(?)`,
+    //   args: [username],
+    // });
+
     res.json({
-      message: `XP hinzugefügt${leveledUp ? ", Level erhöht!" : ""}`,
+      message: `XP hinzugefügt${leveledUp ? ', Level erhöht!' : ''}`,
       leveledUp,
       level,
-      skillPoints,
+      // skillPointsTotal: sp.rows[0]?.skill_points ?? undefined,
+      skillPointsGained: gainedSkillPoints,
       xp,
-      xpThreshold,
+      xpThreshold, // Schwelle für das *aktuelle* Level (nächster Balken)
     });
   } catch (e) {
-    console.error("❌ Fehler beim Hinzufügen von XP:", e);
-    res.status(500).json({ message: "Datenbankfehler" });
+    console.error('❌ add-xp Fehler:', e);
+    res.status(500).json({ message: 'Datenbankfehler' });
   }
 });
 

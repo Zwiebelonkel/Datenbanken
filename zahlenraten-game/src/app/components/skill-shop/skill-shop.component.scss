@@ -1,145 +1,122 @@
-/* Grundlegende Struktur */
-.skillshop {
+/* Grunddesign für den Skill-Shop */
+.skill-shop {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
 }
 
-h2 {
+.shop-title {
   text-align: center;
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 2.5em;
+  color: #4A90E2;
+  margin-bottom: 30px;
 }
 
-/* Anzeige der Spieler-Info */
+/* Spieler-Info Bereich */
 .player-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.info-item {
+  padding: 15px;
   background-color: #fff;
-  padding: 15px;
   border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-
-  p {
-    margin: 5px 0;
-    font-size: 1rem;
-    color: #555;
-  }
-
-  strong {
-    font-weight: bold;
-    color: #333;
-  }
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Skill Cards */
+.info-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.info-value {
+  font-size: 1.2em;
+  color: #4A90E2;
+  margin-left: 10px;
+}
+
+/* Skill-Items Bereich */
+.skill-item {
+  margin-bottom: 20px;
+}
+
 .skill-card {
-  background-color: #ffffff;
-  padding: 15px;
+  background-color: #fff;
   border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.skill-card:hover {
+  transform: translateY(-5px);
+}
+
+.skill-header {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  h3 {
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: #333;
-  }
-
-  p {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 10px;
-  }
-
-  button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    
-    &:hover {
-      background-color: #0056b3;
-    }
-
-    &:disabled {
-      background-color: #aaa;
-      cursor: not-allowed;
-    }
-  }
-
-  /* Badge, wenn gekauft */
-  &.purchased {
-    opacity: 0.6;
-    pointer-events: none;
-  }
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-/* Upgrade Buttons */
-.upgrade-section {
-  background-color: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-top: 20px;
-
-  h3 {
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: #333;
-  }
-
-  button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    
-    &:hover {
-      background-color: #218838;
-    }
-
-    &:disabled {
-      background-color: #aaa;
-      cursor: not-allowed;
-    }
-  }
+.skill-name {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
 }
 
-/* Responsive Design */
+.skill-price {
+  font-size: 1.2em;
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.currency {
+  font-size: 1em;
+  color: #e74c3c;
+}
+
+.skill-description {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Button Styling */
+.upgrade-button {
+  padding: 12px 25px;
+  font-size: 1.1em;
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upgrade-button:hover {
+  background-color: #357ABD;
+}
+
+.upgrade-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.upgrade-button:disabled:hover {
+  background-color: #ddd;
+}
+
+/* Responsivität */
 @media (max-width: 768px) {
-  .skillshop {
-    padding: 10px;
-  }
-
-  .player-info, .skill-card, .upgrade-section {
-    padding: 10px;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  .skill-card {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  button {
-    width: 100%;
-    padding: 12px;
+  .player-info {
+    grid-template-columns: 1fr;
   }
 }

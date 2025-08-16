@@ -1,36 +1,55 @@
 <div class="skill-shop">
   <h2 class="shop-title">Skill-Shop</h2>
 
-  <!-- Anzeige der Spieler-Info -->
-  <div class="player-info">
+  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+  <div *ngIf="isLoading" class="loading">Lade…</div>
+
+  <div class="player-info" *ngIf="!isLoading && !errorMsg">
     <div class="info-item">
       <span class="info-title">Skillpunkte:</span>
       <span class="info-value">{{ player.skillPoints }}</span>
     </div>
     <div class="info-item">
-      <span class="info-title">Score Multiplikator:</span>
-      <span class="info-value">{{ player.scoreMultiplier }}x</span>
+      <span class="info-title">Score-Multiplikator:</span>
+      <span class="info-value">{{ player.scoreMultiplier | number: '1.0-2' }}x</span>
     </div>
     <div class="info-item">
-      <span class="info-title">Monetary Multiplikator:</span>
-      <span class="info-value">{{ player.monetaryMultiplier }}x</span>
+      <span class="info-title">Monetary-Multiplikator:</span>
+      <span class="info-value">{{ player.monetaryMultiplier | number: '1.0-2' }}x</span>
     </div>
   </div>
 
-  <!-- Skill-Items -->
-  <div *ngFor="let skill of skills" class="skill-item">
+  <!-- Skill-Karten -->
+  <div *ngFor="let skill of skills; trackBy: trackBySkill" class="skill-item">
     <div class="skill-card">
       <div class="skill-header">
-        <h3 class="skill-name">{{ skill.name }}</h3>
-        <div class="skill-price">Preis: {{ skill.price }}<span class="currency">€</span></div>
+        <h3 class="skill-name">
+          {{ skill.name }}
+          <small *ngIf="skill.max_level != null" class="lvl">
+            (Lv {{ skill.skill_level }}/{{ skill.max_level }})
+          </small>
+        </h3>
+
+        <div class="skill-price">
+          Preis: {{ skill.price }}
+          <span class="currency">SP</span>
+        </div>
       </div>
-      <p class="skill-description">{{ skill.description }}</p>
-      <button 
-        (click)="upgrade(skill)" 
-        [disabled]="skill.purchased || player.skillPoints < skill.price" 
-        class="upgrade-button">
-        {{ skill.purchased ? 'Gekauft' : 'Upgrade' }}
+
+      <p class="skill-description">
+        {{ skill.description || '—' }}
+      </p>
+
+      <button
+        class="upgrade-button"
+        (click)="upgrade(skill)"
+        [disabled]="!canUpgrade(skill)">
+        {{ buttonLabel(skill) }}
       </button>
     </div>
+  </div>
+
+  <div *ngIf="!skills?.length && !isLoading" class="empty">
+    Keine Skills verfügbar.
   </div>
 </div>

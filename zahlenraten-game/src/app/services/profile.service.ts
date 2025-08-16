@@ -63,16 +63,16 @@ export class ProfileService {
 
   // 📥 Skills des Benutzers abrufen
   getUserSkills(username: string): Observable<Skill[]> {
-    return this.http.get<Skill[]>(`${this.apiUrl}/${username}/skills`);
+    return this.http.get<Skill[]>(`${this.apiUrl}/skills/${username}`);
   }
 
-  // 📤 Skill kaufen
-  purchaseSkill(username: string, skillId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/${username}/skills/purchase`, { skillId });
+  // 📤 Skill upgraden
+  upgradeSkill(username: string, skillName: string, skillPrice: number, skillLevel: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${username}/skills/upgrade`, { skillName, skillPrice, skillLevel });
   }
 
-  // 📥 Aktuelle Skill-Punkte des Benutzers abrufen
-  getSkillPoints(username: string): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/${username}/skill-points`);
+  // 📥 Benutzerstatistiken laden (z. B. Skill-Punkte)
+  getUserStats(username: string): Observable<Player> {
+    return this.http.get<Player>(`${this.apiUrl}/${username}`);
   }
 }

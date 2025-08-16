@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService, Skill, UserStats } from '../../services/profile.service';
+import { AuthService } from '../../services/auth.serivce'
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -26,7 +27,7 @@ export class SkillShopComponent implements OnInit {
     monetaryMultiplier: 1.0,  // Multiplikator für Money
   };
 
-  constructor(private profileService: ProfileService) {}
+  constructor(private profileService: ProfileService, private authService: AuthService) {}
 
   ngOnInit() {
     this.username = this.authService.getUsername() ?? '';

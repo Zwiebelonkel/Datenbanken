@@ -14,6 +14,25 @@ cloudinary.config({
   api_secret: process.env.CLD_SECRET,
 });
 
+async function getUserSkills(username) {
+  try {
+    const result = await db.execute({
+      sql: `
+        SELECT skill_name, skill_level
+        FROM user_skills
+        WHERE username = ?
+      `,
+      args: [username],
+    });
+
+    return result.rows;
+  } catch (error) {
+    console.error("Fehler beim Abrufen der Skills:", error);
+    throw error;  // Fehler weiterwerfen, damit der Fehler im Aufrufer sichtbar ist
+  }
+}
+
+
 /** 🗄️ Multer-Storage direkt in Cloudinary (keine lokale Disk) */
 const storage = new CloudinaryStorage({
   cloudinary,

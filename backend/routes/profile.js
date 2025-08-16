@@ -4,6 +4,7 @@ import db from "../db.js";
 import { v4 as uuidv4 } from "uuid";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { getUserSkills, purchaseSkill } from "../skills.js";  // Importiere Skill-bezogene Funktionen
 
 const router = express.Router();
 
@@ -21,13 +22,12 @@ const storage = new CloudinaryStorage({
     folder: "profile-pictures",
     public_id: () => uuidv4(),
     allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
-    // kleine, quadratische Avatare – spart Traffic
     transformation: [{ width: 256, height: 256, crop: "fill", gravity: "auto", quality: "auto" }],
   },
 });
 const upload = multer({ storage }).single("profileImage");
 
-/** 📤 Profilbild hochladen (Username kommt wie bisher im Body mit) */
+/** 📤 Profilbild hochladen */
 router.post("/upload-profile-image", (req, res) => {
   upload(req, res, async (err) => {
     if (err) return res.status(400).json({ message: err.message });
@@ -36,7 +36,6 @@ router.post("/upload-profile-image", (req, res) => {
     if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
     if (!req.file) return res.status(400).json({ message: "Kein Bild hochgeladen" });
 
-    // Cloudinary liefert eine sofort-öffentliche URL
     const profileImageUrl = req.file.secure_url || req.file.path;
     if (!profileImageUrl) return res.status(500).json({ message: "Upload fehlgeschlagen" });
 
@@ -62,9 +61,112 @@ router.post("/upload-profile-image", (req, res) => {
   });
 });
 
-/** 📥 Profil-Daten abrufen – neue Param-Route */
+/** 📥 Profil-Daten abrufen */
 router.get("/:username", async (req, res) => {
   const username = (req.params.username || "").trim();
+  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
+
+  try {
+    const result = await db.execute({
+      sql: `
+        SELECT 
+          u.total_score AS totalScore,
+          u.money AS money,
+          u.level AS level,
+          u.xp AS xp,
+          ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,
+          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent,
+          (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
+          (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
+          (SELECT COUNT(*) FROM achievements a 
+             JOIN users u2 ON u2.id = a.user_id 
+             WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements,
+          u.profile_image_url AS profileImageUrl
+        FROM users u
+        WHERE LOWER(u.username) = LOWER(?)
+        LIMIT 1
+      `,
+      args: [username, username, username, username],
+    });
+
+    if (result.rows.length === 0) return res.status(404).json({ message: "Benutzer nicht gefunden" });
+
+    const userStats = result.rows[0];
+
+    // Abrufen der Benutzer-Skills
+    const userSkills = await getUserSkills(username);
+
+    res.json({
+      ...userStats,
+      skills: userSkills,  // Füge Skills zu den Benutzer-Daten hinzu
+    });
+  } catch (e) {
+    console.error("❌ Fehler beim Laden des Profils:", e);
+    res.status(500).json({ message: "Datenbankfehler" });
+  }
+});
+
+/** 📤 XP hinzufügen */
+router.post("/:username/add-xp", async (req, res) => {
+  const username = (req.params.username || "").trim();
+  const { xpToAdd } = req.body;
+
+  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
+  if (typeof xpToAdd !== 'number' || xpToAdd <= 0) {
+    return res.status(400).json({ message: "Ungültige XP-Anzahl" });
+  }
+
+  try {
+    const result = await db.execute({
+      sql: `
+        SELECT level, xp
+        FROM users
+        WHERE LOWER(username) = LOWER(?)
+        LIMIT 1
+      `,
+      args: [username],
+    });
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    }
+
+    let { level, xp } = result.rows[0];
+    let xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
+
+    // XP hinzufügen und Level-Up prüfen
+    xp += xpToAdd;
+
+    let leveledUp = false;
+    while (xp >= xpThreshold) {
+      xp -= xpThreshold;
+      level += 1;
+      xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
+      leveledUp = true;
+    }
+
+    // Daten aktualisieren
+    await db.execute({
+      sql: `UPDATE users SET level = ?, xp = ? WHERE LOWER(username) = LOWER(?)`,
+      args: [level, xp, username],
+    });
+
+    res.json({
+      message: `XP hinzugefügt${leveledUp ? ", Level erhöht!" : ""}`,
+      leveledUp,
+      level,
+      xp,
+      xpThreshold,
+    });
+  } catch (e) {
+    console.error("❌ Fehler beim Hinzufügen von XP:", e);
+    res.status(500).json({ message: "Datenbankfehler" });
+  }
+});
+
+/** Optional: Alte Query-Variante für Kompatibilität */
+router.get("/", async (req, res) => {
+  const username = (req.query.username || "").trim();
   if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
 
   try {
@@ -97,104 +199,5 @@ router.get("/:username", async (req, res) => {
     res.status(500).json({ message: "Datenbankfehler" });
   }
 });
-
-router.post('/:username/add-xp', async (req, res) => {
-  const username = (req.params.username || '').trim();
-  const { xpToAdd } = req.body; // Anzahl der XP, die hinzugefügt werden sollen
-
-  if (!username) return res.status(400).json({ message: 'Kein Benutzername angegeben' });
-  if (typeof xpToAdd !== 'number' || xpToAdd <= 0) {
-    return res.status(400).json({ message: 'Ungültige XP-Anzahl' });
-  }
-
-  try {
-    // Aktuelle Werte aus DB laden
-    const result = await db.execute({
-      sql: `
-        SELECT level, xp
-        FROM users
-        WHERE LOWER(username) = LOWER(?)
-        LIMIT 1
-      `,
-      args: [username],
-    });
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
-    }
-
-    let { level, xp } = result.rows[0];
-    // XP-Schwelle berechnen (wie in deinem Select)
-    let xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
-
-    // XP hinzufügen
-    xp += xpToAdd;
-
-    // Level-Up Logik
-    let leveledUp = false;
-    while (xp >= xpThreshold) {
-      xp -= xpThreshold;
-      level += 1;
-      xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
-      leveledUp = true;
-    }
-
-    // Daten aktualisieren
-    await db.execute({
-      sql: `UPDATE users SET level = ?, xp = ? WHERE LOWER(username) = LOWER(?)`,
-      args: [level, xp, username],
-    });
-
-    res.json({
-      message: `XP hinzugefügt${leveledUp ? ', Level erhöht!' : ''}`,
-      leveledUp,
-      level,
-      xp,
-      xpThreshold,
-    });
-  } catch (e) {
-    console.error('❌ Fehler beim Hinzufügen von XP:', e);
-    res.status(500).json({ message: 'Datenbankfehler' });
-  }
-});
-
-
-/** (Optional) Alte Query-Variante beibehalten, falls Frontend sie noch nutzt */
-router.get("/", async (req, res) => {
-  const username = (req.query.username || "").trim();
-  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
-
-  try {
-    const result = await db.execute({
-      sql: `
-        SELECT 
-          u.total_score AS totalScore,
-          u.money AS money,
-          u.level AS level,              -- HIER ergänzt
-          u.xp AS xp,                    -- HIER ergänzt
-          ROUND(100 * POWER(1.05, u.level - 1), 0) AS xpThreshold,
-          ROUND((u.xp / (100 * POWER(1.05, u.level - 1))) * 100, 0) AS xpPercent,
-
-          (SELECT COUNT(*) FROM scores WHERE username = ?) AS totalGames,
-          (SELECT MAX(score) FROM scores WHERE username = ?) AS highscore,
-          (SELECT COUNT(*) FROM achievements a 
-             JOIN users u2 ON u2.id = a.user_id 
-             WHERE LOWER(u2.username) = LOWER(?)) AS unlockedAchievements,
-          u.profile_image_url AS profileImageUrl
-        FROM users u
-        WHERE LOWER(u.username) = LOWER(?)
-        LIMIT 1
-      `,
-      args: [username, username, username, username],
-    });
-
-    if (result.rows.length === 0) return res.status(404).json({ message: "Benutzer nicht gefunden" });
-    res.json(result.rows[0]);
-  } catch (e) {
-    console.error("❌ Fehler beim Laden des Profils (Query):", e);
-    res.status(500).json({ message: "Datenbankfehler" });
-  }
-});
-
 
 export default router;

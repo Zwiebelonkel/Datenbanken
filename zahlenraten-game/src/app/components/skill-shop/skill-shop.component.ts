@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./skill-shop.component.scss']
 })
 export class SkillShopComponent implements OnInit {
+  username: string = '';
   skills: Skill[] = [];
   player: UserStats = {  
     totalScore: 0,
@@ -28,7 +29,7 @@ export class SkillShopComponent implements OnInit {
   constructor(private profileService: ProfileService) {}
 
   ngOnInit() {
-    const username = 'username123'; // Dynamisch setzen
+    this.username = this.authService.getUsername() ?? '';
 
     // Benutzerstatistiken (inkl. Skill-Punkte und Multiplikatoren) laden
     this.profileService.getUserStats(username).subscribe((player) => {

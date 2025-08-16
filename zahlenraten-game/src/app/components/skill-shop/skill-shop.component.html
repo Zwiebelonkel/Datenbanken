@@ -13,7 +13,7 @@
     <h3>{{ skill.name }}</h3>
     <p>{{ skill.description }}</p>
     <p><strong>Aktuelles Level:</strong> {{ skill.skill_level }}</p>
-    <p><strong>Preis für das nächste Level:</strong> {{ skill.price | currency:'EUR' }}</p>
+    <p><strong>Preis für das nächste Level:</strong> {{ skill.price }}</p>
     <button (click)="upgrade(skill)" [disabled]="skill.purchased || player.skillPoints < skill.price">
       {{ skill.purchased ? 'Bereits gekauft' : 'Upgrade' }}
     </button>

@@ -1,120 +1,137 @@
-/* Grunddesign für den Skill-Shop */
+/* ========== Skill Shop ========== */
 .skill-shop {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 800px;
-  margin: 0 auto;
-  font-family: 'Arial', sans-serif;
+  margin: 2rem auto;
+  font-family: "Nunito", sans-serif;
+  color: var(--text-color);
+
+  .shop-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #4A90E2;
+    margin-bottom: 2rem;
+  }
 }
 
-.shop-title {
-  text-align: center;
-  font-size: 2.5em;
-  color: #4A90E2;
-  margin-bottom: 30px;
-}
-
-/* Spieler-Info Bereich */
+/* ===== Spieler-Info ===== */
 .player-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 30px;
+  gap: 14px;
+  margin-bottom: 2rem;
+
+  .info-item {
+    background-color: var(--card-bg, #fff);
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+
+    .info-title {
+      font-weight: 700;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    .info-value {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #4A90E2;
+      margin-top: 4px;
+    }
+  }
 }
 
-.info-item {
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.info-title {
-  font-weight: bold;
-  color: #333;
-}
-
-.info-value {
-  font-size: 1.2em;
-  color: #4A90E2;
-  margin-left: 10px;
-}
-
-/* Skill-Items Bereich */
+/* ===== Skill-Karten ===== */
 .skill-item {
   margin-bottom: 20px;
 }
 
 .skill-card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+  background-color: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .skill-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .skill-price {
+      font-size: 1.2rem;
+      color: #e74c3c;
+      font-weight: 800;
+
+      .currency {
+        font-size: 1rem;
+        margin-left: 2px;
+      }
+    }
+  }
+
+  .skill-description {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 1.2rem;
+  }
 }
 
-.skill-card:hover {
-  transform: translateY(-5px);
-}
-
-.skill-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.skill-name {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #333;
-}
-
-.skill-price {
-  font-size: 1.2em;
-  color: #e74c3c;
-  font-weight: bold;
-}
-
-.currency {
-  font-size: 1em;
-  color: #e74c3c;
-}
-
-.skill-description {
-  font-size: 1em;
-  color: #555;
-  margin-bottom: 20px;
-}
-
-/* Button Styling */
+/* ===== Buttons ===== */
 .upgrade-button {
-  padding: 12px 25px;
-  font-size: 1.1em;
-  background-color: #4A90E2;
-  color: white;
+  display: inline-block;
+  padding: 0.7rem 1.6rem;
+  font-size: 1rem;
+  background: linear-gradient(90deg, #4A90E2, #357ABD);
+  color: #fff;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  transition: transform 0.2s, background 0.2s;
+
+  &:hover {
+    background: linear-gradient(90deg, #357ABD, #2c5fa5);
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
 }
 
-.upgrade-button:hover {
-  background-color: #357ABD;
+/* ===== XP Progress Bar (wie bei Profil) ===== */
+.xp-progress {
+  width: 100%;
+  height: 10px;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 10px 0 20px;
+
+  .xp-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4caf50, #81c784);
+    transition: width 0.3s ease;
+  }
 }
 
-.upgrade-button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-.upgrade-button:disabled:hover {
-  background-color: #ddd;
-}
-
-/* Responsivität */
+/* ===== Responsiv ===== */
 @media (max-width: 768px) {
   .player-info {
     grid-template-columns: 1fr;

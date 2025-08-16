@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface UserStats {
@@ -13,6 +13,15 @@ export interface UserStats {
   xp: number;
   xpThreshold: number;  // neu
   xpPercent: number;    // neu
+  skills: Skill[];      // neu: Array von Skills des Benutzers
+}
+
+export interface Skill {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  purchased: boolean;
 }
 
 @Injectable({
@@ -37,11 +46,10 @@ export class ProfileService {
     formData.append('profileImage', file, file.name);
     formData.append('username', username);
 
-    // Anfrage mit reportProgress und observe: 'events'
     return this.http.post<any>(`${this.apiUrl}/upload-profile-image`, formData, {
       headers: new HttpHeaders(),
       reportProgress: true,
-      observe: 'events',  // Wird notwendig, um alle Events zu beobachten
+      observe: 'events',
     });
   }
 
@@ -51,5 +59,20 @@ export class ProfileService {
       `${this.apiUrl}/${username}/add-xp`,
       { xpToAdd }
     );
+  }
+
+  // 📥 Skills des Benutzers abrufen
+  getUserSkills(username: string): Observable<Skill[]> {
+    return this.http.get<Skill[]>(`${this.apiUrl}/${username}/skills`);
+  }
+
+  // 📤 Skill kaufen
+  purchaseSkill(username: string, skillId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${username}/skills/purchase`, { skillId });
+  }
+
+  // 📥 Aktuelle Skill-Punkte des Benutzers abrufen
+  getSkillPoints(username: string): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/${username}/skill-points`);
   }
 }

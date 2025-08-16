@@ -21,7 +21,7 @@ app.use(express.json());
 app.use("/api/scores", scoresRoutes);
 app.use("/api/profile", profileRoutes);
 app.use('/api/skills', skillRoutes);
-app.use("api/money", moneyRoutes);
+app.use("/api/money", moneyRoutes);
 app.use("/api/cards", cardsRoutes);
 app.use("/api/village", villageRoutes);
 app.use("/api/chat", chatRoutes);

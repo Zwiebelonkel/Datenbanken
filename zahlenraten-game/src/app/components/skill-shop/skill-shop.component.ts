@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfileService, Skill, Player } from '../../services/profile.service';
-import { CommonModule } from @angular/common;
+import { ProfileService, Skill, UserStats } from '../../services/profile.service'; // Ersetze Player durch UserStats
+import { CommonModule } from '@angular/common'; // Korrekte Import-Syntax
 
 @Component({
   selector: 'app-skill-shop',
@@ -9,10 +9,17 @@ import { CommonModule } from @angular/common;
 })
 export class SkillShopComponent implements OnInit {
   skills: Skill[] = [];
-  player: Player = {
-    skillPoints: 0,
-    scoreMultiplier: 1.0,
-    monetaryMultiplier: 1.0,
+  player: UserStats = {   // Ersetze Player durch UserStats
+    totalScore: 0,
+    totalGames: 0,
+    unlockedAchievements: 0,
+    money: 0,
+    highscore: 0,
+    level: 1,
+    xp: 0,
+    xpThreshold: 100,
+    xpPercent: 0,
+    skills: [], // Initialisiere die Skills als leeres Array
   };
 
   constructor(private profileService: ProfileService) {}

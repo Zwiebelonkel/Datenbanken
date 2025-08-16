@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfileService, Skill, UserStats } from '../../services/profile.service';  // Verwendet jetzt UserStats
-import { CommonModule } from '@angular/common'; // Korrekte Import-Syntax
+import { ProfileService, Skill, UserStats } from '../../services/profile.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-skill-shop',
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common'; // Korrekte Import-Syntax
 })
 export class SkillShopComponent implements OnInit {
   skills: Skill[] = [];
-  player: UserStats = {   // Verwendet UserStats
+  player: UserStats = {  
     totalScore: 0,
     totalGames: 0,
     unlockedAchievements: 0,
@@ -20,9 +20,9 @@ export class SkillShopComponent implements OnInit {
     xpThreshold: 100,
     xpPercent: 0,
     skills: [],
-    skillPoints: 0,         // skillPoints korrekt initialisiert
-    scoreMultiplier: 1.0,  // scoreMultiplier korrekt initialisiert
-    monetaryMultiplier: 1.0, // monetaryMultiplier korrekt initialisiert
+    skillPoints: 0,
+    scoreMultiplier: 1.0,  // Multiplikator für Score
+    monetaryMultiplier: 1.0,  // Multiplikator für Money
   };
 
   constructor(private profileService: ProfileService) {}
@@ -30,7 +30,7 @@ export class SkillShopComponent implements OnInit {
   ngOnInit() {
     const username = 'username123'; // Dynamisch setzen
 
-    // Benutzerstatistiken (inkl. Skill-Punkte) laden
+    // Benutzerstatistiken (inkl. Skill-Punkte und Multiplikatoren) laden
     this.profileService.getUserStats(username).subscribe((player) => {
       this.player = player;
     });

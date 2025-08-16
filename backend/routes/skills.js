@@ -36,7 +36,6 @@ router.post("/:username/skills/upgrade", async (req, res) => {
   const { skillName, skillPrice, skillLevel } = req.body;
 
   try {
-    // Überprüfen, ob der Benutzer genügend Skill-Punkte hat
     const userResult = await db.execute({
       sql: 'SELECT skill_points FROM users WHERE LOWER(username) = LOWER(?)',
       args: [username],
@@ -54,7 +53,7 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       return res.status(400).json({ message: "Nicht genügend Skill-Punkte" });
     }
 
-    // Skill-Level erhöhen (wenn der Skill bereits vorhanden ist)
+    // Skill-Level erhöhen (falls vorhanden)
     await db.execute({
       sql: `
         INSERT INTO user_skills (username, skill_name, skill_level, purchased)
@@ -70,11 +69,25 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       args: [skillPrice, username],
     });
 
-    res.json({ message: `Skill "${skillName}" auf Level ${skillLevel + 1} erfolgreich gekauft!` });
+    // Multiplikatoren aktualisieren, je nachdem, welchen Skill der Benutzer gekauft hat
+    if (skillName === 'Score Multiplier') {
+      await db.execute({
+        sql: 'UPDATE users SET score_multiplier = score_multiplier + 0.5 WHERE LOWER(username) = LOWER(?)',
+        args: [username],
+      });
+    } else if (skillName === 'Monetary Multiplier') {
+      await db.execute({
+        sql: 'UPDATE users SET monetary_multiplier = monetary_multiplier + 0.5 WHERE LOWER(username) = LOWER(?)',
+        args: [username],
+      });
+    }
+
+    res.json({ message: `Skill "${skillName}" erfolgreich gekauft!` });
   } catch (error) {
     console.error("Fehler beim Upgrade des Skills:", error);
     res.status(500).json({ message: "Datenbankfehler beim Upgrade des Skills." });
   }
 });
+
 
 export default router;

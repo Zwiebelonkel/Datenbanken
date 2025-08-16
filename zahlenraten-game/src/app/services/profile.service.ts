@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpHeaders } from '@angular/common/http';
 
 export interface UserStats {
   totalScore: number;
@@ -27,53 +26,48 @@ export interface Skill {
   price: number;
   purchased: boolean;
   skill_level: number;
-  max_level?: number;          // 👈 hinzugefügt (optional)
+  max_level?: number | null;   // ⬅️ neu: optional
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class ProfileService {
   private apiUrl = 'https://outside-between.onrender.com/api/profile';
 
   constructor(private http: HttpClient) {}
 
+  // 📤 Profilbild hochladen
   uploadProfileImage(file: File, username: string): Observable<any> {
     const formData = new FormData();
     formData.append('profileImage', file, file.name);
     formData.append('username', username);
-
-    return this.http.post<any>(`${this.apiUrl}/upload-profile-image`, formData, {
-      headers: new HttpHeaders(),
-      reportProgress: true,
-      observe: 'events',
-    });
+    return this.http.post<any>(`${this.apiUrl}/upload-profile-image`, formData);
   }
 
+  // ➕ XP hinzufügen
   addXp(
     username: string,
     xpToAdd: number
   ): Observable<{ message: string; leveledUp: boolean; level: number; xp: number; xpThreshold: number }> {
     return this.http.post<{ message: string; leveledUp: boolean; level: number; xp: number; xpThreshold: number }>(
-      `${this.apiUrl}/${encodeURIComponent(username)}/add-xp`,
+      `${this.apiUrl}/${username}/add-xp`,
       { xpToAdd }
     );
   }
 
-  getUserStats(username: string): Observable<UserStats> {
-    return this.http.get<UserStats>(`${this.apiUrl}/${encodeURIComponent(username)}`);
+  // 📥 Skills des Benutzers abrufen
+  getUserSkills(username: string): Observable<Skill[]> {
+    return this.http.get<Skill[]>(`${this.apiUrl}/${username}/skills`);
   }
 
-getUserSkills(username: string) {
-  return this.http.get<Skill[]>(
-    `https://outside-between.onrender.com/api/skills/${encodeURIComponent(username)}`
-  );
-}
+  // 📤 Skill upgraden (nur Skill-Name notwendig)
+  upgradeSkill(username: string, skillName: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${username}/skills/upgrade`, { skillName });
+  }
 
-upgradeSkill(username: string, skillName: string, _skillPrice: number, _skillLevel: number) {
-  // Preis & Level kommen serverseitig aus dem Katalog; Client-Werte sind egal
-  return this.http.post(
-    `https://outside-between.onrender.com/api/skills/${encodeURIComponent(username)}/upgrade`,
-    { skillName }
-  );
-}
-
+  // 📥 Benutzerstatistiken laden
+  getUserStats(username: string): Observable<UserStats> {
+    return this.http.get<UserStats>(`${this.apiUrl}/${username}`);
+  }
 }

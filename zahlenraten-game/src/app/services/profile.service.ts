@@ -58,23 +58,22 @@ export class ProfileService {
     );
   }
 
+  getUserStats(username: string): Observable<UserStats> {
+    return this.http.get<UserStats>(`${this.apiUrl}/${encodeURIComponent(username)}`);
+  }
+
 getUserSkills(username: string) {
   return this.http.get<Skill[]>(
     `https://outside-between.onrender.com/api/skills/${encodeURIComponent(username)}`
   );
 }
 
-
-
-
-  upgradeSkill(username: string, skillName: string, skillPrice: number, skillLevel: number) {
+upgradeSkill(username: string, skillName: string, _skillPrice: number, _skillLevel: number) {
+  // Preis & Level kommen serverseitig aus dem Katalog; Client-Werte sind egal
   return this.http.post(
     `https://outside-between.onrender.com/api/skills/${encodeURIComponent(username)}/upgrade`,
-    { skillName, skillPrice, skillLevel }
+    { skillName }
   );
 }
 
-  getUserStats(username: string): Observable<UserStats> {
-    return this.http.get<UserStats>(`${this.apiUrl}/${encodeURIComponent(username)}`);
-  }
 }

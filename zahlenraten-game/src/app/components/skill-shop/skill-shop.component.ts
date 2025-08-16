@@ -33,12 +33,12 @@ export class SkillShopComponent implements OnInit {
     this.username = this.authService.getUsername() ?? '';
 
     // Benutzerstatistiken (inkl. Skill-Punkte und Multiplikatoren) laden
-    this.profileService.getUserStats(username).subscribe((player) => {
+    this.profileService.getUserStats(this.username).subscribe((player) => {
       this.player = player;
     });
 
     // Skills des Benutzers laden
-    this.profileService.getUserSkills(username).subscribe((skills) => {
+    this.profileService.getUserSkills(this.username).subscribe((skills) => {
       this.skills = skills;
     });
   }

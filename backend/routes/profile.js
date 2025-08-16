@@ -163,20 +163,22 @@ router.post("/:username/add-xp", async (req, res) => {
     while (xp >= xpThreshold) {
       xp -= xpThreshold;
       level += 1;
+      skillPoints += 1;
       xpThreshold = Math.round(100 * Math.pow(1.05, level - 1));
       leveledUp = true;
     }
 
     // Daten aktualisieren
     await db.execute({
-      sql: `UPDATE users SET level = ?, xp = ? WHERE LOWER(username) = LOWER(?)`,
-      args: [level, xp, username],
+      sql: `UPDATE users SET level = ?, skill_points = ?, xp = ? WHERE LOWER(username) = LOWER(?)`,
+      args: [level, skillPoints, xp, username],
     });
 
     res.json({
       message: `XP hinzugefügt${leveledUp ? ", Level erhöht!" : ""}`,
       leveledUp,
       level,
+      skillPoints,
       xp,
       xpThreshold,
     });

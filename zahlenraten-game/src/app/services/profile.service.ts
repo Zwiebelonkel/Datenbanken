@@ -32,11 +32,6 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
-  // 📥 User-Statistiken laden
-  getUserStats(username: string): Observable<UserStats> {
-    return this.http.get<UserStats>(`${this.apiUrl}?username=${username}`);
-  }
-
   // 📤 Profilbild hochladen
   uploadProfileImage(
     file: File,

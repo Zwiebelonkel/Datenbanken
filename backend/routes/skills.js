@@ -1,79 +1,80 @@
+// In skills.js (Backend API)
 import express from "express";
 import db from "../db.js";
 const router = express.Router();
 
-// Funktion zum Abrufen der Skills eines Benutzers
-export const getUserSkills = async (username) => {
+// Endpunkt zum Abrufen der Skills eines Benutzers mit Level
+router.get("/:username", async (req, res) => {
+  const username = req.params.username;
+
   try {
+    // Abfrage der Skills des Benutzers mit Level aus der Datenbank
     const result = await db.execute({
       sql: `
-        SELECT skill_name, skill_level, purchased
-        FROM user_skills
-        WHERE LOWER(username) = LOWER(?)
-      `,
+        SELECT s.id, s.skill_name, IFNULL(us.skill_level, 1) AS skill_level, s.price, IFNULL(us.purchased, FALSE) AS purchased
+        FROM skills s
+        LEFT JOIN user_skills us ON us.skill_name = s.skill_name AND us.username = ?
+        `,
       args: [username],
     });
 
-    return result.rows; // Gibt eine Liste von Skills zurück
-  } catch (e) {
-    console.error("Fehler beim Abrufen der Skills:", e);
-    throw new Error("Fehler beim Abrufen der Skills.");
-  }
-};
+    // Falls keine Skills für den Benutzer gefunden wurden
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Keine Skills gefunden." });
+    }
 
-// Funktion zum Kauf eines Skills
-export const purchaseSkill = async (username, skillName, skillPrice) => {
+    res.json(result.rows); // Gibt die Liste der Skills mit Level zurück
+  } catch (error) {
+    console.error("Fehler beim Abrufen der Skills:", error);
+    res.status(500).json({ message: "Datenbankfehler beim Abrufen der Skills." });
+  }
+});
+
+// Endpunkt zum Upgrade eines Skills (Level erhöhen)
+router.post("/:username/skills/upgrade", async (req, res) => {
+  const { username } = req.params;
+  const { skillName, skillPrice, skillLevel } = req.body;
+
   try {
-    // Aktuelle Skillpunkte aus der DB abrufen
-    const result = await db.execute({
+    // Überprüfen, ob der Benutzer genügend Skill-Punkte hat
+    const userResult = await db.execute({
       sql: 'SELECT skill_points FROM users WHERE LOWER(username) = LOWER(?)',
       args: [username],
     });
 
-    if (result.rows.length === 0) {
-      throw new Error("Benutzer nicht gefunden");
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
     }
 
-    const currentSkillPoints = result.rows[0].skill_points;
+    const user = userResult.rows[0];
+    const currentSkillPoints = user.skill_points;
 
-    // Überprüfen, ob der Benutzer genügend Skillpunkte hat
+    // Überprüfen, ob der Benutzer genügend Skill-Punkte hat
     if (currentSkillPoints < skillPrice) {
-      throw new Error("Nicht genügend Skillpunkte");
+      return res.status(400).json({ message: "Nicht genügend Skill-Punkte" });
     }
 
-    // Skill-Level des Benutzers prüfen und ggf. erhöhen
-    const skillResult = await db.execute({
-      sql: 'SELECT skill_level FROM user_skills WHERE LOWER(username) = LOWER(?) AND skill_name = ?',
-      args: [username, skillName],
-    });
-
-    let newSkillLevel = 1; // Default-Wert, wenn der Benutzer den Skill noch nicht hat
-    if (skillResult.rows.length > 0) {
-      // Wenn der Skill bereits gekauft wurde, das Level erhöhen
-      newSkillLevel = skillResult.rows[0].skill_level + 1;  // Skill-Level erhöhen
-    }
-
-    // Skill als gekauft markieren (wenn nicht schon gekauft) und das Level setzen
+    // Skill-Level erhöhen (wenn der Skill bereits vorhanden ist)
     await db.execute({
       sql: `
         INSERT INTO user_skills (username, skill_name, skill_level, purchased)
-        VALUES (?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE purchased = TRUE, skill_level = ?
+        VALUES (?, ?, ?, TRUE)
+        ON DUPLICATE KEY UPDATE skill_level = skill_level + 1
       `,
-      args: [username, skillName, newSkillLevel, true, newSkillLevel],
+      args: [username, skillName, skillLevel],
     });
 
-    // Skillpunkte abziehen
+    // Skill-Punkte abziehen
     await db.execute({
       sql: 'UPDATE users SET skill_points = skill_points - ? WHERE LOWER(username) = LOWER(?)',
       args: [skillPrice, username],
     });
 
-    return { message: `Skill "${skillName}" erfolgreich gekauft!`, newSkillLevel };
-  } catch (e) {
-    console.error('Fehler beim Kauf des Skills:', e);
-    throw new Error('Datenbankfehler');
+    res.json({ message: `Skill "${skillName}" auf Level ${skillLevel + 1} erfolgreich gekauft!` });
+  } catch (error) {
+    console.error("Fehler beim Upgrade des Skills:", error);
+    res.status(500).json({ message: "Datenbankfehler beim Upgrade des Skills." });
   }
-};
+});
 
 export default router;

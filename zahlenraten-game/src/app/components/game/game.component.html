@@ -41,27 +41,9 @@
       >❤</span
     >
   </div>
-  <!--
-        Die beiden Zufallszahlen (num1 und num2) werden jetzt nicht mehr
-        untereinander angezeigt. Stattdessen platzieren wir sie auf einer
-        gemeinsamen Achse. Zwischen den Zahlen befindet sich eine waagrechte
-        Leiste (Balken). Dadurch wirken die Zahlen wie Endpunkte einer Linie
-        beziehungsweise eines Zahlenstrahls. Die Test‑Zahl bleibt weiterhin
-        innerhalb des Elements mit der ID "finalNumber" und wird erst nach
-        einer Schätzung sichtbar, wie zuvor.
-      -->
+
   <div class="numbers">
-    <!--
-          Visualisierung der beiden Zufallszahlen auf einem Zahlenstrahl (0–100).
-          Jede Zahl wird anhand ihres Wertes relativ zur Breite der Leiste
-          positioniert. Kleinere Werte erscheinen weiter links, größere weiter
-          rechts. Die Position wird durch getOffset(num) berechnet und als
-          Prozentwert an das left‑Attribut gebunden. Durch transform: translateX(-50%)
-          werden die Marker zentriert, sodass der Mittelpunkt exakt auf der
-          berechneten Position liegt.
-        -->
     <div class="number-scale">
-      <!-- Endpunkte des Zahlenstrahls: die beiden Zufallszahlen -->
       <span
         class="number-marker"
         [ngStyle]="{ 'left.%': getOffset(num1) }"
@@ -76,7 +58,6 @@
         >{{ num2 }}
         <div class="marker"></div>
       </span>
-      <!-- Testzahl wird auf der gleichen Leiste angezeigt, sobald geschätzt wurde -->
       <span
         *ngIf="showTest"
         class="number-marker"
@@ -103,13 +84,11 @@
 
   <div class="multiplier-display" *ngIf="currentMultiplier > 1">
     🔥 Multiplikator:
-    <strong>{{ currentMultiplier | number : "1.1-1" }}x</strong>
+    <strong>{{ currentMultiplier | number : '1.1-1' }}x</strong>
   </div>
   <p class="money">
     💰 Geld: <span>{{ money }}€</span>
   </p>
-
-  <!-- Nur anzeigen, wenn multiplier aktiv -->
 </div>
 
 <!-- Spiel vorbei -->
@@ -154,7 +133,7 @@
         [ngValue]="card"
         [disabled]="card.amount <= 0"
       >
-        {{ card.multiplier + "x" }} (x{{ card.amount }})
+        {{ card.multiplier + 'x' }} (x{{ card.amount }})
       </option>
     </select>
 
@@ -205,9 +184,7 @@
     <div class="slider-wrapper">
       <div
         class="slider"
-        [style.transform]="
-          'translateX(-' + currentLeaderboardIndex * 100 + '%)'
-        "
+        [style.transform]="'translateX(-' + currentLeaderboardIndex * 100 + '%)'"
       >
         <div
           class="leaderboard"
@@ -216,59 +193,72 @@
           <ul>
             <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
 
-<li
-  *ngFor="let entry of board; index as j; trackBy: trackByUsername"
-  (click)="goToProfile(entry.username)"
-  tabindex="0"
-  role="button"
-  [ngClass]="{
-    'gold-bg shimmer-effect': j === 0,
-    'silver-bg shimmer-effect': j === 1,
-    'bronze-bg shimmer-effect': j === 2
-  }"
->
-      <img
-    class="avatar"
-    [src]="avatar(entry.profileImageUrl, 32)"
-    width="32"
-    height="32"
-    loading="lazy"
-    decoding="async"
-    fetchpriority="low"
-    (error)="onAvatarError($event)"
-    alt=""
-  /> 
-  <!-- NAME + MEDAILLE -->
-  <span>{{ getMedal(j) }}  
-    {{ entry.username }}</span>
-    <!-- PROFILBILD LINKS -->
-
-  <!-- WERT -->
-  <strong>{{ entry.value }}</strong>
-</li>
-
+            <li
+              *ngFor="let entry of board; index as j; trackBy: trackByUsername"
+              (click)="goToProfile(entry.username)"
+              tabindex="0"
+              role="button"
+              [ngClass]="{
+                'gold-bg shimmer-effect': j === 0,
+                'silver-bg shimmer-effect': j === 1,
+                'bronze-bg shimmer-effect': j === 2
+              }"
+            >
+              <img
+                class="avatar"
+                [src]="avatar(entry.profileImageUrl, 32)"
+                width="32"
+                height="32"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+                (error)="onAvatarError($event)"
+                alt=""
+              />
+              <!-- NAME + MEDAILLE -->
+              <span>{{ getMedal(j) }} {{ entry.username }}</span>
+              <!-- WERT -->
+              <strong>{{ entry.value }}</strong>
+            </li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- <div 
-  class="lava-fill" 
-  [class.lava-enter]="justAppeared"
-  *ngIf="currentMultiplier > 1"
-  [ngStyle]="{
-    height: getLavaHeight(),
-    opacity: getLavaOpacity()
-  }"
->
-  <svg class="lava-wave" viewBox="0 0 100 10" preserveAspectRatio="none">
-    <path d="M0,5 C30,0 70,10 100,5 L100,10 L0,10 Z" fill="#ff8a00"></path>
-  </svg>
-</div> -->
     <div class="toast" *ngIf="achievementMessage">
       {{ achievementMessage }}
     </div>
   </div>
+</div>
+
+<!-- ✅ NEUER BLOCK: Level-Liste OHNE Medaillen, direkt unter dem Carousel -->
+<div class="highscores-carousel" *ngIf="!isLoading && levelUsers?.length">
+  <h3>🏅 Höchstes Level</h3>
+  <ul>
+    <li
+      *ngFor="let u of levelUsers; trackBy: trackByUsername"
+      (click)="goToProfile(u.username)"
+      tabindex="0"
+      role="button"
+    >
+      <!-- Avatar -->
+      <img
+        class="avatar"
+        [src]="avatar(u.profileImageUrl, 32)"
+        width="32"
+        height="32"
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
+        (error)="onAvatarError($event)"
+        alt=""
+      />
+      <!-- Name -->
+      <span>{{ u.username }}</span>
+      <!-- Level rechts -->
+      <strong>Lvl {{ u.level }} • {{ u.xpPercent }}%</strong>
+    </li>
+  </ul>
 </div>
 
 <app-global-chat

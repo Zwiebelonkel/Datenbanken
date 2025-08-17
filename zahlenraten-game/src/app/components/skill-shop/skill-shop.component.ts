@@ -23,6 +23,9 @@ export class SkillShopComponent implements OnInit {
 
   skills: Skill[] = [];
 
+  // optional: blocke Doppelklicks pro Skill
+  busy = new Set<string>();
+
   player: UserStats = {
     totalScore: 0,
     totalGames: 0,
@@ -50,7 +53,6 @@ export class SkillShopComponent implements OnInit {
       this.errorMsg = 'Bitte einloggen, um den Skill-Shop zu benutzen.';
       return;
     }
-
     this.loadData();
   }
 
@@ -74,7 +76,8 @@ export class SkillShopComponent implements OnInit {
       next: (skills) => {
         this.skills = (skills ?? []).map((s) => ({
           ...s,
-          base_price: s.base_price ?? s.price ?? 1,
+          // base_price einmalig normalisieren (fällt auf price oder 1 zurück)
+          base_price: (s as any).base_price ?? s.price ?? 1,
         }));
       },
       error: (err) => {
@@ -86,6 +89,12 @@ export class SkillShopComponent implements OnInit {
 
   trackBySkill = (_: number, s: Skill) => s.name || s.id;
 
+  // 💰 Preisberechnung: Basis + aktuelles Level  (→ +1 je Upgrade)
+  nextPrice(skill: Skill): number {
+    const base = (skill as any).base_price ?? skill.price ?? 1;
+    return base + skill.skill_level;
+  }
+
   // 🔹 Skill upgraden
   upgrade(skill: Skill) {
     if (!this.username) return;
@@ -95,15 +104,19 @@ export class SkillShopComponent implements OnInit {
       skill.skill_level >= skill.max_level;
     if (atMax) return;
 
+    if (this.busy.has(skill.name)) return; // Doppel-Click Schutz
+
     const cost = this.nextPrice(skill);
     if (this.player.skillPoints < cost) return;
 
-    // Optimistisches UI
+    // ✅ Optimistisches UI
+    this.busy.add(skill.name);
     this.player.skillPoints -= cost;
     skill.skill_level += 1;
 
     this.profileService.upgradeSkill(this.username, skill.name).subscribe({
       next: (res: any) => {
+        // Server ist Quelle der Wahrheit
         if (typeof res?.newSkillLevel === 'number') {
           skill.skill_level = res.newSkillLevel;
         }
@@ -116,14 +129,16 @@ export class SkillShopComponent implements OnInit {
         if (typeof res?.monetaryMultiplier === 'number') {
           this.player.monetaryMultiplier = res.monetaryMultiplier;
         }
-        // Preis wird nicht gespeichert – ergibt sich aus nextPrice()
       },
       error: (err) => {
         console.error('Upgrade fehlgeschlagen:', err);
-        // Rollback exakt
+        // 🔁 Rollback exakt
         skill.skill_level -= 1;
         this.player.skillPoints += cost;
         this.errorMsg = err?.error?.message || 'Upgrade fehlgeschlagen.';
+      },
+      complete: () => {
+        this.busy.delete(skill.name);
       },
     });
   }
@@ -132,18 +147,17 @@ export class SkillShopComponent implements OnInit {
     const atMax =
       typeof skill.max_level === 'number' &&
       skill.skill_level >= skill.max_level;
-    return !atMax && this.player.skillPoints >= this.nextPrice(skill);
-  }
-
-  nextPrice(skill: Skill): number {
-    const base = skill.base_price ?? skill.price ?? 1;
-    return base + skill.skill_level; // +1 je Upgrade
+    return (
+      !atMax &&
+      !this.busy.has(skill.name) &&
+      this.player.skillPoints >= this.nextPrice(skill)
+    );
   }
 
   buttonLabel(skill: Skill): string {
     const atMax =
       typeof skill.max_level === 'number' &&
       skill.skill_level >= skill.max_level;
-    return atMax ? 'Max' : 'Upgrade';
+    return atMax ? 'Max' : this.busy.has(skill.name) ? '…' : 'Upgrade';
   }
 }

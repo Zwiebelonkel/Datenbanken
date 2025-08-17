@@ -2,16 +2,10 @@ import express from "express";
 import db from "../db.js";
 
 const router = express.Router();
-
-/**
- * Fester Skill-Katalog (kein DB-Table nötig)
- * price: Kosten in Skillpunkten pro Upgrade
- * max_level: Maximum; null/undefined = kein Limit
- */
 const CATALOG = {
   "Score Multiplier": {
     description: "+10% Score pro Level",
-    price: 1,
+    price: 1, // == base_price
     max_level: 20,
     apply: async (tx, username) => {
       await tx.execute({
@@ -22,7 +16,7 @@ const CATALOG = {
   },
   "Monetary Multiplier": {
     description: "+10% Geld pro Level",
-    price: 1,
+    price: 1, // == base_price
     max_level: 20,
     apply: async (tx, username) => {
       await tx.execute({
@@ -73,9 +67,10 @@ router.get("/:username/skills", async (req, res) => {
         id: id++,
         name,
         description: def.description,
-        price: def.price,
+        price: def.price, // für Rückwärtskompatibilität
+        base_price: def.price, // NEU: explizit
         max_level: def.max_level ?? null,
-        skill_level: row ? Number(row.skill_level) : 0, // 0 = noch nicht gekauft
+        skill_level: row ? Number(row.skill_level) : 0,
         purchased: !!(row && row.purchased),
       };
     });
@@ -94,7 +89,6 @@ router.get("/:username/skills", async (req, res) => {
 router.post("/:username/skills/upgrade", async (req, res) => {
   const username = (req.params.username || "").trim();
   const { skillName } = req.body;
-
   if (!username || !skillName)
     return res.status(400).json({ message: "Fehlende Daten" });
 
@@ -103,30 +97,9 @@ router.post("/:username/skills/upgrade", async (req, res) => {
 
   let tx;
   try {
-    // Transaktion starten (libsql)
     tx = await db.transaction("write");
 
-    // Userpunkte laden
-    const u = await tx.execute({
-      sql: `SELECT 
-              COALESCE(skill_points,0) AS sp,
-              COALESCE(score_multiplier,1.0) AS sm,
-              COALESCE(monetary_multiplier,1.0) AS mm
-            FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1`,
-      args: [username],
-    });
-    if (!u.rows.length) {
-      await tx.rollback();
-      return res.status(404).json({ message: "Benutzer nicht gefunden" });
-    }
-
-    const sp = Number(u.rows[0].sp);
-    if (sp < def.price) {
-      await tx.rollback();
-      return res.status(400).json({ message: "Nicht genügend Skill-Punkte" });
-    }
-
-    // aktuelles Level
+    // aktuelles Level laden (VOR Kostenberechnung!)
     const curRes = await tx.execute({
       sql: `SELECT skill_level FROM user_skills
             WHERE LOWER(username)=LOWER(?) AND skill_name=? LIMIT 1`,
@@ -140,6 +113,30 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       await tx.rollback();
       return res.status(400).json({ message: "Max-Level erreicht" });
     }
+
+    // 💰 dynamische Kosten: base_price + aktuelles Level
+    const cost = def.price + curLevel;
+
+    // Userpunkte laden und prüfen
+    const u = await tx.execute({
+      sql: `SELECT COALESCE(skill_points,0) AS sp,
+                   COALESCE(score_multiplier,1.0) AS sm,
+                   COALESCE(monetary_multiplier,1.0) AS mm
+            FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1`,
+      args: [username],
+    });
+    if (!u.rows.length) {
+      await tx.rollback();
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    }
+    const sp = Number(u.rows[0].sp);
+    if (sp < cost) {
+      await tx.rollback();
+      return res
+        .status(400)
+        .json({ message: "Nicht genügend Skill-Punkte", needed: cost });
+    }
+
     const nextLevel = curLevel + 1;
 
     // Upsert user_skills
@@ -151,29 +148,36 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       args: [username, skillName, Math.max(1, nextLevel), def.max_level],
     });
 
-    // Skillpunkte abziehen
+    // Skillpunkte abziehen (mit dynamischen Kosten!)
     await tx.execute({
       sql: `UPDATE users SET skill_points = skill_points - ? WHERE LOWER(username)=LOWER(?)`,
-      args: [def.price, username],
+      args: [cost, username],
     });
 
-    // Effekt anwenden (jetzt MIT tx!)
+    // Effekt anwenden
     await def.apply(tx, username);
 
     // neue Userwerte
     const back = await tx.execute({
-      sql: `SELECT 
-              COALESCE(skill_points,0) AS skill_points,
-              COALESCE(score_multiplier,1.0) AS score_multiplier,
-              COALESCE(monetary_multiplier,1.0) AS monetary_multiplier
+      sql: `SELECT COALESCE(skill_points,0) AS skill_points,
+                   COALESCE(score_multiplier,1.0) AS score_multiplier,
+                   COALESCE(monetary_multiplier,1.0) AS monetary_multiplier
             FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1`,
       args: [username],
     });
 
     await tx.commit();
 
+    // optional: nützliche Preise zurückgeben (aktueller Kaufpreis & nächster)
+    const nextCost =
+      def.max_level != null && nextLevel >= def.max_level
+        ? null
+        : def.price + nextLevel;
+
     return res.json({
       message: `Skill "${skillName}" erfolgreich verbessert!`,
+      cost, // was gerade bezahlt wurde
+      nextCost, // was das nächste Upgrade kosten würde (oder null bei Max)
       newSkillLevel: nextLevel,
       skillPoints: Number(back.rows[0].skill_points),
       scoreMultiplier: Number(back.rows[0].score_multiplier),
@@ -186,11 +190,13 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       } catch {}
     }
     console.error("❌ upgrade tx error:", error);
-    return res.status(500).json({
-      message: "Datenbankfehler beim Upgrade",
-      detail: error?.message,
-      code: error?.code,
-    });
+    return res
+      .status(500)
+      .json({
+        message: "Datenbankfehler beim Upgrade",
+        detail: error?.message,
+        code: error?.code,
+      });
   }
 });
 

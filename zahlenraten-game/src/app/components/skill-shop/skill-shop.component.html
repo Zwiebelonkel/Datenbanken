@@ -11,11 +11,15 @@
     </div>
     <div class="info-item">
       <span class="info-title">Score-Multiplikator:</span>
-      <span class="info-value">{{ player.scoreMultiplier | number: '1.0-2' }}x</span>
+      <span class="info-value"
+        >{{ player.scoreMultiplier | number : "1.0-2" }}x</span
+      >
     </div>
     <div class="info-item">
       <span class="info-title">Monetary-Multiplikator:</span>
-      <span class="info-value">{{ player.monetaryMultiplier | number: '1.0-2' }}x</span>
+      <span class="info-value"
+        >{{ player.monetaryMultiplier | number : "1.0-2" }}x</span
+      >
     </div>
   </div>
 
@@ -37,13 +41,18 @@
       </div>
 
       <p class="skill-description">
-        {{ skill.description || '—' }}
+        {{ skill.description || "—" }}
       </p>
 
       <button
         class="upgrade-button"
         (click)="upgrade(skill)"
-        [disabled]="!canUpgrade(skill)">
+        [disabled]="!canUpgrade(skill)"
+      >
+        <span class="emoji" *ngIf="skill.name === 'Monetary Multiplier'"
+          >💵</span
+        >
+        <span class="emoji" *ngIf="skill.name === 'Score Multiplier'">💯</span>
         {{ buttonLabel(skill) }}
       </button>
     </div>

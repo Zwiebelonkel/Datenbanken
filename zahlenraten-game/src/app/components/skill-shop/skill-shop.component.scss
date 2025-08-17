@@ -1,16 +1,20 @@
-/* ========== Skill Shop (an Profil-Design angelehnt) ========== */
+/* ========== Skill Shop (Game Look) ========== */
 .skill-shop {
   max-width: 800px;
   margin: 2rem auto;
-  font-family: "Nunito", sans-serif;
-  color: var(--text-color);
+  font-family: "Press Start 2P", "Nunito", sans-serif; // Game-Font optional
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 
   .shop-title {
     text-align: center;
-    font-size: 2rem;
-    font-weight: 800;
-    color: #4A90E2;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #4caf50;
     margin-bottom: 2rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px #4caf50, 0 0 20px #2c7a2c;
   }
 
   .loading,
@@ -18,15 +22,16 @@
   .empty {
     text-align: center;
     margin: 1rem 0;
+    font-weight: bold;
   }
 
   .error {
-    color: #e74c3c;
-    font-weight: 700;
+    color: #ff5555;
+    text-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
   }
 }
 
-/* ===== Spieler-Info ===== */
+/* ===== Spieler-Info (Karten HUD) ===== */
 .player-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -34,22 +39,24 @@
   margin-bottom: 2rem;
 
   .info-item {
-    background-color: var(--card-bg, #fff);
+    background: #1c1c1c;
+    border: 2px solid #4caf50;
     padding: 1.2rem;
     border-radius: 12px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 12px rgba(76, 175, 80, 0.5);
 
     .info-title {
       font-weight: 700;
-      color: #333;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
+      color: #ddd;
+      margin-bottom: 6px;
     }
 
     .info-value {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 800;
-      color: #4A90E2;
-      margin-top: 4px;
+      color: #4caf50;
+      text-shadow: 0 0 8px #4caf50;
     }
   }
 }
@@ -60,14 +67,16 @@
 }
 
 .skill-card {
-  background-color: var(--card-bg, #fff);
-  border-radius: 12px;
+  background: #1c1c1c;
+  border: 2px solid #4caf50;
+  border-radius: 14px;
   padding: 1.5rem;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 0 25px rgba(76, 175, 80, 0.6);
   }
 
   .skill-header {
@@ -77,59 +86,83 @@
     margin-bottom: 12px;
 
     .skill-name {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      color: #333;
+      color: #fff;
 
       .lvl {
         font-weight: 600;
-        color: #666;
+        color: #bbb;
         margin-left: 6px;
       }
     }
 
     .skill-price {
-      font-size: 1.1rem;
-      color: #e74c3c;
+      font-size: 1rem;
+      color: #4caf50;
       font-weight: 800;
+      text-shadow: 0 0 6px #4caf50;
 
       .currency {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         margin-left: 2px;
       }
     }
   }
 
   .skill-description {
-    font-size: 1rem;
-    color: #555;
+    font-size: 0.95rem;
+    color: #aaa;
     margin-bottom: 1.2rem;
   }
 }
 
-/* ===== Buttons ===== */
+/* ===== Buttons mit Icons ===== */
 .upgrade-button {
-  display: inline-block;
-  padding: 0.7rem 1.6rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 0.8rem 1.6rem;
   font-size: 1rem;
-  background: linear-gradient(90deg, #4A90E2, #357ABD);
+  background: linear-gradient(90deg, #4caf50, #2c7a2c);
   color: #fff;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
 
   &:hover {
-    background: linear-gradient(90deg, #357ABD, #2c5fa5);
-    transform: scale(1.05);
+    background: linear-gradient(90deg, #2c7a2c, #1e5a1e);
+    transform: scale(1.08);
   }
 
   &:disabled {
-    background: #ddd;
-    color: #777;
+    background: #555;
+    color: #aaa;
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
+  }
+
+  /* Emoji-Icon innen */
+  .emoji {
+    font-size: 1.2rem;
+    animation: floaty 1.5s infinite ease-in-out;
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
   }
 }
 

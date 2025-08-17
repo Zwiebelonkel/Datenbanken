@@ -224,7 +224,19 @@
         </div>
       </div>
     </div>
-    
+
+    <div class="toast" *ngIf="achievementMessage">
+      {{ achievementMessage }}
+    </div>
+  </div>
+</div>
+
+
+
+<app-global-chat
+  *ngIf="authService.isLoggedIn() && !isLoading"
+></app-global-chat>
+
     <!-- Button zum Aufklappen -->
 <div class="highscores-carousel">
   <button class="btn toggle-btn" (click)="toggleLevelList()">
@@ -264,15 +276,3 @@
     Keine Spieler gefunden…
   </p>
 </div>
-
-    <div class="toast" *ngIf="achievementMessage">
-      {{ achievementMessage }}
-    </div>
-  </div>
-</div>
-
-
-
-<app-global-chat
-  *ngIf="authService.isLoggedIn() && !isLoading"
-></app-global-chat>

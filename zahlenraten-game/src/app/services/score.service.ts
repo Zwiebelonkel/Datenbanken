@@ -11,21 +11,30 @@ interface ScoreEntry {
   profileImageUrl?: string | null;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+export interface SubmitScoreResponse {
+  success: boolean;
+  score: number; // final (server-multipliziert)
+  money_per_round: number; // final (server-multipliziert)
+  scoreMultiplier: number;
+  monetaryMultiplier: number;
+  savedAt: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class ScoreService {
   private apiUrl = 'https://outside-between.onrender.com/api/scores';
 
   constructor(private http: HttpClient) {}
 
-  submitScore(scoreData: {
+  submitScore(data: {
     username: string;
-    score: number;
+    baseScore?: number;
+    baseMoneyPerRound?: number;
+    score?: number; // legacy
+    money_per_round?: number; // legacy
     consecutive_wins?: number;
-    money_per_round?: number;
-  }) {
-    return this.http.post(`${this.apiUrl}/submit`, scoreData);
+  }): Observable<SubmitScoreResponse> {
+    return this.http.post<SubmitScoreResponse>(`${this.apiUrl}/submit`, data);
   }
 
   getTopScores(): Observable<ScoreEntry[]> {
@@ -47,13 +56,17 @@ export class ScoreService {
     );
   }
 
-  updateTotalScore(scoreData: { username: string; score: number }) {
-    return this.http.post(`${this.apiUrl}/updateTotalScore`, scoreData);
+  updateTotalScore(data: {
+    username: string;
+    baseScore?: number;
+    score?: number;
+  }) {
+    return this.http.post(`${this.apiUrl}/updateTotalScore`, data);
   }
 
   getTotalScore(username: string): Observable<{ total_score: number }> {
     return this.http.get<{ total_score: number }>(
-      `https://outside-between.onrender.com/api/scores/userTotalScore/${username}`
+      `${this.apiUrl}/userTotalScore/${encodeURIComponent(username)}`
     );
   }
 }

@@ -1,62 +1,59 @@
-/* ========== Skill Shop (Game Look) ========== */
+/* 🎮 Skill-Shop Styling */
 .skill-shop {
   max-width: 800px;
   margin: 2rem auto;
-  font-family: "Press Start 2P", "Nunito", sans-serif; // Game-Font optional
-  color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  font-family: "Nunito", sans-serif;
+  color: var(--text-color);
+  text-align: center;
 
   .shop-title {
-    text-align: center;
-    font-size: 2.2rem;
-    font-weight: 900;
+    font-size: 2rem;
+    font-weight: 800;
     color: #4caf50;
     margin-bottom: 2rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px #4caf50, 0 0 20px #2c7a2c;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   .loading,
   .error,
   .empty {
-    text-align: center;
     margin: 1rem 0;
-    font-weight: bold;
+    font-weight: 600;
   }
 
   .error {
-    color: #ff5555;
-    text-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
+    color: #e74c3c;
   }
 }
 
-/* ===== Spieler-Info (Karten HUD) ===== */
+/* ===== Spieler-Info ===== */
 .player-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 
   .info-item {
-    background: #1c1c1c;
+    background: #fff;
     border: 2px solid #4caf50;
-    padding: 1.2rem;
     border-radius: 12px;
-    box-shadow: 0 0 12px rgba(76, 175, 80, 0.5);
+    padding: 1rem 1.5rem;
+    min-width: 160px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
     .info-title {
-      font-weight: 700;
+      display: block;
+      font-weight: 600;
       font-size: 0.9rem;
-      color: #ddd;
-      margin-bottom: 6px;
+      color: #333;
     }
 
     .info-value {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: #4caf50;
-      text-shadow: 0 0 8px #4caf50;
+      margin-top: 5px;
     }
   }
 }
@@ -67,32 +64,32 @@
 }
 
 .skill-card {
-  background: #1c1c1c;
-  border: 2px solid #4caf50;
-  border-radius: 14px;
+  background: #fff;
+  border-radius: 15px;
   padding: 1.5rem;
-  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+  border: 2px solid #f2f2f2;
 
   &:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 0 25px rgba(76, 175, 80, 0.6);
+    transform: translateY(-5px);
+    border-color: #4caf50;
   }
 
   .skill-header {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     margin-bottom: 12px;
 
     .skill-name {
       font-size: 1.2rem;
       font-weight: 700;
-      color: #fff;
+      color: #333;
 
       .lvl {
         font-weight: 600;
-        color: #bbb;
+        color: #666;
         margin-left: 6px;
       }
     }
@@ -100,8 +97,7 @@
     .skill-price {
       font-size: 1rem;
       color: #4caf50;
-      font-weight: 800;
-      text-shadow: 0 0 6px #4caf50;
+      font-weight: 700;
 
       .currency {
         font-size: 0.9rem;
@@ -112,63 +108,62 @@
 
   .skill-description {
     font-size: 0.95rem;
-    color: #aaa;
+    color: #555;
     margin-bottom: 1.2rem;
   }
 }
 
-/* ===== Buttons mit Icons ===== */
+/* ===== Buttons ===== */
 .upgrade-button {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-
-  padding: 0.8rem 1.6rem;
+  padding: 0.6rem 1.4rem;
   font-size: 1rem;
-  background: linear-gradient(90deg, #4caf50, #2c7a2c);
+  background: linear-gradient(90deg, #4caf50, #43a047);
   color: #fff;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 600;
   transition: transform 0.2s, background 0.2s;
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+  .emoji {
+    font-size: 1.2rem;
+    animation: float 1.5s ease-in-out infinite;
+  }
 
   &:hover {
-    background: linear-gradient(90deg, #2c7a2c, #1e5a1e);
-    transform: scale(1.08);
+    background: linear-gradient(90deg, #43a047, #2e7d32);
+    transform: scale(1.05);
   }
 
   &:disabled {
-    background: #555;
-    color: #aaa;
+    background: #ddd;
+    color: #777;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
   }
-
-  /* Emoji-Icon innen */
-  .emoji {
-    font-size: 1.2rem;
-    animation: floaty 1.5s infinite ease-in-out;
-  }
 }
 
-@keyframes floaty {
+/* ✨ Emoji Animation */
+@keyframes float {
   0%,
   100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
   }
 }
 
 /* ===== Responsiv ===== */
 @media (max-width: 768px) {
   .player-info {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
   }
 }

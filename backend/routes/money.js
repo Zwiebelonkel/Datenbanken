@@ -11,11 +11,28 @@ router.post("/update", async (req, res) => {
   }
 
   try {
+    // 1. Multiplier aus der User-Tabelle holen
+    const userRes = await db.execute({
+      sql: "SELECT monetary_multiplier FROM users WHERE LOWER(username) = LOWER(?)",
+      args: [username],
+    });
+
+    if (userRes.rows.length === 0) {
+      return res.status(404).json({ message: "User nicht gefunden" });
+    }
+
+    const multiplier = userRes.rows[0].monetary_multiplier || 1;
+
+    // 2. Betrag mit Multiplier berechnen
+    const finalAmount = Math.floor(amount * multiplier);
+
+    // 3. Geld updaten
     await db.execute({
       sql: "UPDATE users SET money = money + ? WHERE LOWER(username) = LOWER(?)",
-      args: [amount, username],
+      args: [finalAmount, username],
     });
-    res.json({ success: true });
+
+    res.json({ success: true, appliedAmount: finalAmount });
   } catch (err) {
     console.error("❌ Fehler beim money Update:", err);
     res.status(500).json({ message: "Money-Update fehlgeschlagen" });

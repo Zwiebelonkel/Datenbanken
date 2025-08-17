@@ -1,64 +1,70 @@
-<div class="skill-shop">
-  <h2 class="shop-title">Skill-Shop</h2>
+<app-sidebar></app-sidebar>
+<app-loader *ngIf="isLoading"></app-loader>
+<div *ngIf="!isLoading">
+  <div class="skill-shop">
+    <h2 class="shop-title">Skill-Shop</h2>
 
-  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
-  <div *ngIf="isLoading" class="loading">Lade…</div>
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+    <div *ngIf="isLoading" class="loading">Lade…</div>
 
-  <div class="player-info" *ngIf="!isLoading && !errorMsg">
-    <div class="info-item">
-      <span class="info-title">Skillpunkte:</span>
-      <span class="info-value">{{ player.skillPoints }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-title">Score-Multiplikator:</span>
-      <span class="info-value"
-        >{{ player.scoreMultiplier | number : "1.0-2" }}x</span
-      >
-    </div>
-    <div class="info-item">
-      <span class="info-title">Monetary-Multiplikator:</span>
-      <span class="info-value"
-        >{{ player.monetaryMultiplier | number : "1.0-2" }}x</span
-      >
-    </div>
-  </div>
-
-  <!-- Skill-Karten -->
-  <div *ngFor="let skill of skills; trackBy: trackBySkill" class="skill-item">
-    <div class="skill-card">
-      <div class="skill-header">
-        <h3 class="skill-name">
-          {{ skill.name }}
-          <small *ngIf="skill.max_level != null" class="lvl">
-            (Lv {{ skill.skill_level }}/{{ skill.max_level }})
-          </small>
-        </h3>
-
-        <div class="skill-price">
-          Preis: {{ skill.price }}
-          <span class="currency">SP</span>
-        </div>
+    <div class="player-info" *ngIf="!isLoading && !errorMsg">
+      <div class="info-item">
+        <span class="info-title">Skillpunkte:</span>
+        <span class="info-value">{{ player.skillPoints }}</span>
       </div>
-
-      <p class="skill-description">
-        {{ skill.description || "—" }}
-      </p>
-
-      <button
-        class="upgrade-button"
-        (click)="upgrade(skill)"
-        [disabled]="!canUpgrade(skill)"
-      >
-        <span class="emoji" *ngIf="skill.name === 'Monetary Multiplier'"
-          >💵</span
+      <div class="info-item">
+        <span class="info-title">Score-Multiplikator:</span>
+        <span class="info-value"
+          >{{ player.scoreMultiplier | number : "1.0-2" }}x</span
         >
-        <span class="emoji" *ngIf="skill.name === 'Score Multiplier'">💯</span>
-        {{ buttonLabel(skill) }}
-      </button>
+      </div>
+      <div class="info-item">
+        <span class="info-title">Monetary-Multiplikator:</span>
+        <span class="info-value"
+          >{{ player.monetaryMultiplier | number : "1.0-2" }}x</span
+        >
+      </div>
     </div>
-  </div>
 
-  <div *ngIf="!skills?.length && !isLoading" class="empty">
-    Keine Skills verfügbar.
+    <!-- Skill-Karten -->
+    <div *ngFor="let skill of skills; trackBy: trackBySkill" class="skill-item">
+      <div class="skill-card">
+        <div class="skill-header">
+          <h3 class="skill-name">
+            {{ skill.name }}
+            <small *ngIf="skill.max_level != null" class="lvl">
+              (Lv {{ skill.skill_level }}/{{ skill.max_level }})
+            </small>
+          </h3>
+
+          <div class="skill-price">
+            Preis: {{ skill.price }}
+            <span class="currency">SP</span>
+          </div>
+        </div>
+
+        <p class="skill-description">
+          {{ skill.description || "—" }}
+        </p>
+
+        <button
+          class="upgrade-button"
+          (click)="upgrade(skill)"
+          [disabled]="!canUpgrade(skill)"
+        >
+          <span class="emoji" *ngIf="skill.name === 'Monetary Multiplier'"
+            >💵</span
+          >
+          <span class="emoji" *ngIf="skill.name === 'Score Multiplier'"
+            >💯</span
+          >
+          {{ buttonLabel(skill) }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="!skills?.length && !isLoading" class="empty">
+      Keine Skills verfügbar.
+    </div>
   </div>
 </div>

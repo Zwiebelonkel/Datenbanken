@@ -15,7 +15,9 @@
     <div class="info-row" *ngIf="unsavedEarnings > 0">
       <span>📦 Nicht eingesammelt:</span>
       <span
-        ><strong>{{ unsavedEarnings | number : "1.2-2" }} 💵</strong></span
+        ><strong
+          >{{ unsavedEarnings * moneyMultiplier | number : "1.2-2" }} 💵</strong
+        ></span
       >
     </div>
 

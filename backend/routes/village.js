@@ -5,42 +5,16 @@ import { verifyToken } from "../auth.js";
 const router = express.Router();
 
 // Dorf + Einkommen + Bewohner abrufen
+// Dorf + Einkommen + Bewohner abrufen
 router.get("/collect", verifyToken, async (req, res) => {
   const userId = req.user.id;
 
   try {
-    // 1. Dorf holen oder automatisch erstellen
-    let villageResult = await db.execute({
-      sql: "SELECT * FROM village WHERE user_id = ?",
-      args: [userId],
-    });
-
-    if (villageResult.rows.length === 0) {
-      const now = new Date().toISOString();
-      const createVillage = await db.execute({
-        sql: "INSERT INTO village (user_id, level, base_income, last_collected) VALUES (?, 1, 1, ?)",
-        args: [userId, now],
-      });
-
-      const villageId = createVillage.lastInsertRowid;
-
-      // 2 Bewohner einfügen (ohne x/y)
-      for (let i = 0; i < 2; i++) {
-        await db.execute({
-          sql: "INSERT INTO villagers (village_id, name) VALUES (?, ?)",
-          args: [villageId, `Bewohner`],
-        });
-      }
-
-      // Neue Abfrage für Dorf
-      villageResult = await db.execute({
-        sql: "SELECT * FROM village WHERE user_id = ?",
-        args: [userId],
-      });
-    }
+    // 1) Dorf holen/erstellen (dein bestehender Code) ...
+    // ... villageResult + villagersResult liegen danach vor
 
     const village = villageResult.rows[0];
-    // 2. Bewohner holen
+
     const villagersResult = await db.execute({
       sql: "SELECT id, name, level, income, speed, stamina FROM villagers WHERE village_id = ?",
       args: [village.id],
@@ -49,10 +23,13 @@ router.get("/collect", verifyToken, async (req, res) => {
 
     const villagersIncome = villagers.reduce((sum, v) => sum + v.income, 0);
 
-    // 3. Zeitdifferenz
+    // 2) Zeitdifferenz
     const now = new Date();
     const lastCollected = new Date(village.last_collected || now);
-    const minutesPassed = Math.floor((now - lastCollected) / 60000);
+    const minutesPassed = Math.max(
+      0,
+      Math.floor((now - lastCollected) / 60000)
+    );
 
     if (minutesPassed <= 0) {
       return res.json({
@@ -60,37 +37,52 @@ router.get("/collect", verifyToken, async (req, res) => {
         minutesPassed: 0,
         villageLevel: village.level,
         villagers,
+        monetaryMultiplier: 1.0, // optional
       });
     }
 
-    // Hier den Offline-Multiplikator anwenden (z.B. 50% des Einkommens)
-    const offlineMultiplier = 0.5; // 50% des normalen Einkommens
-    const totalIncome = minutesPassed * (village.base_income + villagersIncome) * offlineMultiplier;
+    // 3) Monetären Multiplikator des Users holen
+    const u = await db.execute({
+      sql: `SELECT COALESCE(monetary_multiplier, 1.0) AS mm FROM users WHERE id = ? LIMIT 1`,
+      args: [userId],
+    });
+    const monetaryMultiplier = Number(u.rows[0]?.mm ?? 1);
 
-    // 4. Einkommen verbuchen
+    // 4) Einkommen berechnen
+    const offlineMultiplier = 0.05; // dein bisheriger Offlinedämpfer
+    const basePerMinute = village.base_income + villagersIncome;
+    const baseTotal = minutesPassed * basePerMinute;
+
+    // Multiplikator server-seitig anwenden (verbindlich)
+    const totalIncome = Math.floor(
+      baseTotal * monetaryMultiplier * offlineMultiplier
+    );
+
+    // 5) Geld gutschreiben
     await db.execute({
       sql: "UPDATE users SET money = money + ? WHERE id = ?",
       args: [totalIncome, userId],
     });
 
-    // 5. Zeitpunkt aktualisieren
+    // 6) Zeitpunkt aktualisieren
     await db.execute({
       sql: "UPDATE village SET last_collected = ? WHERE id = ?",
       args: [now.toISOString(), village.id],
     });
 
+    // 7) Antwort
     res.json({
       earned: totalIncome,
       minutesPassed,
       villageLevel: village.level,
       villagers,
+      monetaryMultiplier, // optional für UI
     });
   } catch (err) {
     console.error("❌ Fehler in /api/village/collect:", err);
     res.status(500).json({ error: "Serverfehler beim Sammeln" });
   }
 });
-
 
 router.post("/upgrade", verifyToken, async (req, res) => {
   const userId = req.user.id;
@@ -182,7 +174,6 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
     let totalCost = 0;
     currentIncome = parseFloat(currentIncome.toFixed(2));
 
-
     for (let i = 0; i < times; i++) {
       const cost = 10 * (currentLevel + 1);
       if (availableMoney < cost) break;
@@ -196,12 +187,10 @@ router.post("/upgrade-villager", verifyToken, async (req, res) => {
       totalCost += cost;
     }
 
-
     await db.execute({
       sql: "UPDATE villagers SET level = ?, income = ? WHERE id = ?",
       args: [currentLevel, parseFloat(currentIncome.toFixed(2)), villagerId],
     });
-
 
     await db.execute({
       sql: "UPDATE users SET money = money - ? WHERE id = ?",

@@ -1,12 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProfileService, Skill, UserStats } from '../../services/profile.service';
+import {
+  ProfileService,
+  Skill,
+  UserStats,
+} from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-skill-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SidebarComponent, LoaderComponent],
   templateUrl: './skill-shop.component.html',
   styleUrls: ['./skill-shop.component.scss'],
 })
@@ -80,7 +86,9 @@ export class SkillShopComponent implements OnInit {
     if (!this.username) return;
 
     const notEnough = this.player.skillPoints < skill.price;
-    const atMax = typeof skill.max_level === 'number' && skill.skill_level >= skill.max_level;
+    const atMax =
+      typeof skill.max_level === 'number' &&
+      skill.skill_level >= skill.max_level;
     if (notEnough || atMax) return;
 
     // Optimistisches Update im UI
@@ -113,12 +121,16 @@ export class SkillShopComponent implements OnInit {
   }
 
   canUpgrade(skill: Skill): boolean {
-    const atMax = typeof skill.max_level === 'number' && skill.skill_level >= skill.max_level;
+    const atMax =
+      typeof skill.max_level === 'number' &&
+      skill.skill_level >= skill.max_level;
     return !atMax && this.player.skillPoints >= skill.price;
   }
 
   buttonLabel(skill: Skill): string {
-    const atMax = typeof skill.max_level === 'number' && skill.skill_level >= skill.max_level;
+    const atMax =
+      typeof skill.max_level === 'number' &&
+      skill.skill_level >= skill.max_level;
     return atMax ? 'Max' : 'Upgrade';
   }
 }

@@ -63,8 +63,12 @@ export class GameComponent implements OnInit {
   selectedUsername: string | null = null;
   currentLevel = 1;
   username: string = '';
+  scoreMultiplier = 1; // aus DB
+  monetaryMultiplier = 1; // aus DB
 
-  // justAppeared = false; // Für Lava-Animation
+  private baseScoreAccum = 0;
+  private baseMoneyAccum = 0;
+
   leaderboardTitles = [
     '🏆 Top Punkte mit 🃏',
     '🔥 Längste Streak',
@@ -87,34 +91,16 @@ export class GameComponent implements OnInit {
   buttonsDisabled = false;
   currentMultiplier: number = 1.0;
   cardMultiplier: any = 1.0;
-  /**
-   * Steuert, ob die Testzahl auf dem Zahlenstrahl angezeigt wird.
-   * Wird beim Raten auf true gesetzt und nach kurzer Zeit wieder
-   * auf false zurückgesetzt. Dies verhindert, dass die Testzahl
-   * vorzeitig im DOM existiert und so via Entwicklertools sichtbar wird.
-   */
   showTest = false;
 
-  /**
-   * Bestimmt, ob ein Marker unterhalb der Leiste platziert werden soll.
-   * Um Überlappungen zu vermeiden, verschieben wir einen Marker nach
-   * unten, wenn die Werte sehr nah beieinander liegen. Es wird
-   * vorzugsweise der größere der beiden Zufallszahlen verschoben oder
-   * die Testzahl, wenn sie sich nahe an einer der Zufallszahlen
-   * befindet.
-   *
-   * @param value Der Zahlenwert des zu prüfenden Markers
-   */
   shouldPlaceBelow(value: number): boolean {
-    const threshold = 5; // Ab welcher Differenz Werte als überlappend gelten
-    // Wenn Testzahl sichtbar ist und nahe an einer der Zufallszahlen liegt
+    const threshold = 5;
     if (this.showTest && value === this.testNum) {
       return (
         Math.abs(this.testNum - this.num1) < threshold ||
         Math.abs(this.testNum - this.num2) < threshold
       );
     }
-    // Prüfe nahe beieinander liegende Zufallszahlen und verschiebe den größeren Wert
     if (value === this.num2 && Math.abs(this.num1 - this.num2) < threshold) {
       return true;
     }
@@ -134,35 +120,26 @@ export class GameComponent implements OnInit {
     private soundService: SoundsService
   ) {}
 
-ngOnInit() {
-  // 🔹 Immer ausführbar
-  this.newRound();
-  this.loadLeaderboards();
+  ngOnInit() {
+    // 🔹 Immer ausführbar
+    this.newRound();
+    this.loadLeaderboards();
 
-  // 🔹 Username vom AuthService holen
-  this.username = this.authService.getUsername() ?? '';
+    // 🔹 Username vom AuthService holen
+    this.username = this.authService.getUsername() ?? '';
 
-  if (this.username) {
-    // Nur wenn eingeloggt: Karten + Profil laden
-    this.loadCards();
-    this.profileService.getUserStats(this.username).subscribe((p) => {
-      this.currentLevel = p.level ?? 0;
-    });
-  } else {
-    console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
+    if (this.username) {
+      // Nur wenn eingeloggt: Karten + Profil laden
+      this.loadCards();
+      this.profileService.getUserStats(this.username).subscribe((p) => {
+        this.currentLevel = p.level ?? 0;
+        this.scoreMultiplier = p.scoreMultiplier ?? 1;
+        this.monetaryMultiplier = p.monetaryMultiplier ?? 1;
+      });
+    } else {
+      console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
+    }
   }
-}
-
-  //   ngOnChanges(): void {
-  //   if (this.currentMultiplier > 1 && !this.justAppeared) {
-  //     this.justAppeared = true;
-
-  //     // Kleine Pause, dann "hochfahren"
-  //     setTimeout(() => {
-  //       this.justAppeared = false;
-  //     }, 50); // 50 ms Delay reicht für Transition-Start
-  //   }
-  // }
 
   loadCards() {
     this.cardsService.getCards().subscribe({
@@ -196,15 +173,6 @@ ngOnInit() {
     return this.testNum > min && this.testNum < max;
   }
 
-  /**
-   * Berechnet die Position einer Zahl auf einem Zahlenstrahl von 0 bis 100.
-   * Der Rückgabewert ist ein Prozentwert für das CSS‑left‑Attribut. Werte
-   * außerhalb des Bereichs [0,100] werden entsprechend an die Grenzen
-   * angeglichen. Durch diese Methode können num1 und num2 relativ zueinander
-   * positioniert werden, sodass kleine Werte links und große Werte rechts
-   * erscheinen.
-   * @param num Der zu positionierende Zahlenwert
-   */
   getOffset(num: number): number {
     const clamped = Math.max(0, Math.min(num, 100));
     return clamped;
@@ -213,6 +181,7 @@ ngOnInit() {
   guess(answer: 'inside' | 'outside') {
     this.gameStarted = true;
     this.soundService.playSound('softClick.aac');
+
     const correct = this.isBetween() ? 'inside' : 'outside';
     const resultElement = document.querySelector(
       '.game-container'
@@ -226,25 +195,39 @@ ngOnInit() {
         this.highestStreak = this.consecutiveWins;
       }
 
-      // Serien-Multiplikator bleibt sichtbar
+      // Serien-Multiplikator (sichtbar im UI)
       const seriesMultiplier =
         this.consecutiveWins >= 2 ? 1 + (this.consecutiveWins - 1) * 0.2 : 1.0;
       this.currentMultiplier = seriesMultiplier;
 
-      // Gesamt-Multiplikator nur intern für Punkteberechnung
+      // Nur gameinterne Multis (Serie * Karte) fließen in den *Basis-Score*
       const totalMultiplier = seriesMultiplier * this.cardMultiplier;
 
-      const points = Math.round(1 * this.lives * totalMultiplier);
+      // ---- BASISWERTE (für Server) ----
+      const baseScoreRound = Math.round(1 * this.lives * totalMultiplier);
+      const baseMoneyRound = this.lives;
 
-      this.score += points;
-      this.money += this.lives;
+      // Accumulatoren für den Server
+      this.baseScoreAccum += baseScoreRound;
+      this.baseMoneyAccum += baseMoneyRound;
+
+      // ---- UI-WERTE (geboostet, nur Anzeige) ----
+      const shownPoints = Math.round(
+        baseScoreRound * (this.scoreMultiplier ?? 1)
+      );
+      const shownCash = Math.round(
+        baseMoneyRound * (this.monetaryMultiplier ?? 1)
+      );
+
+      this.score += shownPoints;
+      this.money += shownCash;
 
       this.flashBackground(resultElement, 'rgb(177, 255, 168)');
 
       if (this.consecutiveWins % 5 === 0) {
         const intensity = Math.min(10 + this.consecutiveWins * 2, 50);
         this.rainComponent.emojiRain('🔥', intensity);
-        this.soundService.playSound('fire.aac', 0.3); // Sound für Emoji-Regen abspielen
+        this.soundService.playSound('fire.aac', 0.3);
       }
 
       setTimeout(() => this.newRound(), 500);
@@ -253,11 +236,11 @@ ngOnInit() {
       this.consecutiveWins = 0;
       this.currentMultiplier = 1.0;
       this.flashBackground(resultElement, 'rgb(255, 168, 168)');
-      this.soundService.playSound('damage.aac', 0.1); // Sound für falsche Antwort abspielen
+      this.soundService.playSound('damage.aac', 0.1);
       setTimeout(() => this.newRound(), 500);
     } else {
       this.gameOver = true;
-      this.soundService.playSound('end.aac', 0.2); // Sound für Spielende abspielen
+      this.soundService.playSound('end.aac', 0.2);
       this.consecutiveWins = 0;
       this.currentMultiplier = 1.0;
       this.lives = 0;
@@ -268,17 +251,9 @@ ngOnInit() {
     this.checkForAchievements();
   }
 
-  /**
-   * Zeigt die Testzahl kurzzeitig an. Statt über CSS visibility zu arbeiten,
-   * wird eine boolsche Variable verwendet, die ein *ngIf in der Vorlage
-   * steuert. So wird der DOM-Knoten nur erzeugt, wenn die Testzahl
-   * tatsächlich angezeigt werden soll. Nach Ablauf der Anzeigezeit wird
-   * die Variable wieder zurückgesetzt und die Knöpfe reaktiviert.
-   */
   showTestNum() {
     this.buttonsDisabled = true;
     this.showTest = true;
-    // Nach 0.5 Sekunden Testzahl ausblenden und Buttons reaktivieren
     setTimeout(() => {
       this.showTest = false;
       this.buttonsDisabled = false;
@@ -306,26 +281,54 @@ ngOnInit() {
     this.gameStarted = false;
     this.gameOver = true;
 
-    // ✅ total_score aktualisieren
-    this.scoreService
-      .updateTotalScore({ username, score: this.score })
+    // 💾 Geld (nur Basis) – Backend multipliziert mit monetary_multiplier
+    this.moneyService
+      .updateMoney({ username, amount: this.baseMoneyAccum })
       .subscribe({
-        next: () => console.log('✅ total_score aktualisiert'),
-        error: (err) => console.error('❌ Fehler beim total_score:', err),
+        next: () =>
+          console.log('💰 Geld (Basis) gesendet – Server hat multipliziert'),
+        error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
       });
 
-    // 💰 money aktualisieren
-    this.moneyService.updateMoney({ username, amount: this.money }).subscribe({
-      next: () => console.log('💰 Geld aktualisiert'),
-      error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
-    });
+    // ✅ Score & Highscore & Total: über submitScore mit BASIS-Score,
+    // Server multipliziert mit score_multiplier und speichert final.
+    this.scoreService
+      .submitScore({
+        username,
+        baseScore: this.baseScoreAccum, // <— NEU: Basis schicken!
+        consecutive_wins: this.highestStreak,
+        money_per_round: this.baseMoneyAccum, // optional: ebenfalls Basis; Server kann mm anwenden, falls gewünscht
+      })
+      .subscribe({
+        next: (res) => {
+          // res.score = final server score (mit Multiplier)
+          // total_score könnte serverseitig bereits aktualisiert worden sein.
+          console.log(
+            '✅ Score gespeichert (server-multipliziert):',
+            res?.score
+          );
 
-    // ✅ Highscore prüfen
-    this.scoreService.isHighscore(this.score).subscribe((res) => {
-      this.isHighscore = res.isHighscore;
-    });
+          // XP lieber auf Basis des finalen Server-Scores vergeben:
+          const xpFromFinal = Math.floor((res?.score ?? 0) / 5);
+          if (xpFromFinal > 0) this.addXp(xpFromFinal);
 
-    this.addXp(this.score / 5);
+          // Highscore check (falls Endpoint Basis erwartet, dann dort auch anpassen)
+          this.scoreService.isHighscore(res?.score ?? 0).subscribe({
+            next: (hs) => {
+              this.isHighscore = hs.isHighscore;
+              if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
+            },
+            error: (err) =>
+              console.error('❌ Fehler bei Highscore-Prüfung:', err),
+          });
+
+          this.loadLeaderboards();
+          this.restart();
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Score-Submit:', err);
+        },
+      });
   }
 
   submitScore() {
@@ -358,20 +361,6 @@ ngOnInit() {
       },
     });
   }
-
-  // loadHighscores() {
-  //   this.isLoading = true;
-  //   this.scoreService.getTopScores().subscribe(
-  //     (scores) => {
-  //       this.topScores = scores;
-  //       this.isLoading = false;
-  //     },
-  //     (error) => {
-  //       console.error('Fehler beim Laden der Highscores', error);
-  //       this.isLoading = false;
-  //     }
-  //   );
-  // }
 
   loadLeaderboards() {
     this.isLoading = true;
@@ -424,6 +413,8 @@ ngOnInit() {
     this.lives = 3;
     this.score = 0;
     this.money = 0;
+    this.baseMoneyAccum = 0;
+    this.baseScoreAccum = 0;
     this.cardMultiplier = 1.0;
     this.cardMultiplierUsed = false;
     this.heartCardUsed = false;
@@ -653,16 +644,6 @@ ngOnInit() {
     }
   }
 
-  // getLavaHeight(): string {
-  //   const base = 10;
-  //   const multiplierFactor = Math.min(this.currentMultiplier - 1, 4);
-  //   return `${base + multiplierFactor * 15}%`;
-  // }
-
-  // getLavaOpacity(): number {
-  //   return Math.min((this.currentMultiplier - 1) / 3 + 0.2, 1);
-  // }
-
   onTouchStart(event: TouchEvent) {
     this.touchStartX = event.changedTouches[0].screenX;
   }
@@ -673,10 +654,8 @@ ngOnInit() {
 
     if (Math.abs(deltaX) > 50) {
       if (deltaX > 0) {
-        // Nach links gewischt → nächstes Leaderboard
         this.nextLeaderboard();
       } else {
-        // Nach rechts gewischt → vorheriges Leaderboard
         this.prevLeaderboard();
       }
     }
@@ -724,19 +703,16 @@ ngOnInit() {
   useHeartCard() {
     if (!this.selectedHeartCard) return;
 
-    // Die Anzahl der hinzuzufügenden Leben entspricht dem absoluten Wert des Multipliers
     const heartsToAdd = Math.abs(this.selectedHeartCard.multiplier);
     this.lives += heartsToAdd;
     this.heartCardUsed = true;
     this.cardUsed = true;
     this.soundService.playSound('hardPop.aac', 0.6);
 
-    // Ausgewählte Herzkarte beim Backend einlösen
     this.cardsService.useCard(this.selectedHeartCard.multiplier).subscribe({
       next: () => {
         this.selectedHeartCard.amount--;
         if (this.selectedHeartCard.amount <= 0) {
-          // Karte aus dem Array entfernen
           this.cards = this.cards.filter(
             (c) => c.multiplier !== this.selectedHeartCard.multiplier
           );

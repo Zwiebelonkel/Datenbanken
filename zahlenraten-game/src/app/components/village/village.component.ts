@@ -80,6 +80,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   tooltip = { visible: false, x: 0, y: 0, text: '' };
   username: string = '';
   currentLevel = 0;
+  monetaryMutiplier = 1.0; // Standardwert, kann später angepasst werden
 
   upgradeAmount: number = 5; // Sichtbar im Input
   defaultUpgradeAmount: number = 10; // Tatsächlich verwendet beim Klick
@@ -117,23 +118,22 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.profileService.getUserStats(username).subscribe({
       next: (stats) => {
         this.money = stats.money;
+        this.monetaryMutiplier = stats.monetaryMultiplier ?? 1.0; // ⬅️ hier setzen
       },
-    });
-
-    this.profileService.getUserStats(username).subscribe((p) => {
-      this.currentLevel = p.level ?? 0;
+      error: (e) => console.error(e),
     });
 
     this.villageService.collectIncome().subscribe({
       next: (res) => {
-        const OFFLINE_EARNINGS_FACTOR = 0.05;
-        res.earned = Math.floor((res.earned || 0) * OFFLINE_EARNINGS_FACTOR);
-        this.earned = res.earned;
-        this.minutesPassed = res.minutesPassed;
-        this.money += res.earned;
+        // Server hat bereits offline + monetary angewendet → direkt übernehmen
+        const earnedFinal = Math.floor(res?.earned ?? 0);
+
+        this.earned = earnedFinal;
+        this.minutesPassed = res.minutesPassed ?? 0;
+        this.money += earnedFinal;
 
         this.villageLevel = res.villageLevel || 1;
-        this.incomePerMinute = res.villagers.reduce(
+        this.incomePerMinute = (res.villagers ?? []).reduce(
           (sum, v) => sum + v.income,
           0
         );
@@ -260,7 +260,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!username || this.unsavedEarnings === 0) return;
 
     this.isLoading = true;
-    const xpAmount = Math.floor(this.unsavedEarnings/10);
+    const xpAmount = Math.floor(this.unsavedEarnings / 10);
 
     this.moneyService
       .updateMoney({ username, amount: this.unsavedEarnings })

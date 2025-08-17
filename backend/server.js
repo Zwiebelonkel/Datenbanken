@@ -395,7 +395,6 @@ app.get("/api/users/levels", async (_req, res) => {
           username,
           COALESCE(level, 1)          AS level,
           COALESCE(xp, 0)             AS xp,
-          COALESCE(xp_threshold, 100) AS xpThreshold,
           COALESCE(total_score, 0)    AS total_score,
           profile_image_url           AS profileImageUrl
         FROM users

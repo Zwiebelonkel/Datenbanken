@@ -16,6 +16,7 @@ import { SoundsService } from '../../services/sound.service';
 import { firstValueFrom } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { RainComponent } from '../rain/rain.component';
+import { LevelsService, LevelUser } from '../../services/levels.service';
 
 @Component({
   selector: 'app-game',
@@ -65,6 +66,7 @@ export class GameComponent implements OnInit {
   username: string = '';
   scoreMultiplier = 1; // aus DB
   monetaryMultiplier = 1; // aus DB
+  levelUsers: LevelUser[] = [];
 
   private baseScoreAccum = 0;
   private baseMoneyAccum = 0;
@@ -117,7 +119,8 @@ export class GameComponent implements OnInit {
     private moneyService: MoneyService,
     private profileService: ProfileService,
     private cardsService: CardsService,
-    private soundService: SoundsService
+    private soundService: SoundsService,
+    private levelsService: LevelsService
   ) {}
 
   ngOnInit() {
@@ -139,6 +142,9 @@ export class GameComponent implements OnInit {
     } else {
       console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
     }
+this.levelsService.load().subscribe(users => {
+    this.levelUsers = users;
+  });
   }
 
   loadCards() {

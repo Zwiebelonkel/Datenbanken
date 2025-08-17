@@ -38,12 +38,20 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   // 📤 Profilbild hochladen
-  uploadProfileImage(file: File, username: string): Observable<any> {
-    const formData = new FormData();
-    formData.append('profileImage', file, file.name);
-    formData.append('username', username);
-    return this.http.post<any>(`${this.apiUrl}/upload-profile-image`, formData);
-  }
+uploadProfileImage(file: File, username: string) {
+  const formData = new FormData();
+  formData.append('profileImage', file, file.name);
+  formData.append('username', username);
+
+  return this.http.post<any>(
+    `${this.apiUrl}/upload-profile-image`,
+    formData,
+    {
+      reportProgress: true,       // <—
+      observe: 'events'           // <—
+    }
+  );
+}
 
   // ➕ XP hinzufügen
   addXp(

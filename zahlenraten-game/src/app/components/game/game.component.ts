@@ -271,96 +271,71 @@ export class GameComponent implements OnInit {
   }
 
   endGame() {
-    const username = this.authService.getUsername();
-    if (!username) {
-      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
-      this.gameOver = true;
-      return;
-    }
-
-    this.gameStarted = false;
+  const username = this.authService.getUsername();
+  if (!username) {
+    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
     this.gameOver = true;
-
-    // 💾 Geld (nur Basis) – Backend multipliziert mit monetary_multiplier
-    this.moneyService
-      .updateMoney({ username, amount: this.baseMoneyAccum })
-      .subscribe({
-        next: () =>
-          console.log('💰 Geld (Basis) gesendet – Server hat multipliziert'),
-        error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
-      });
-
-    // ✅ Score & Highscore & Total: über submitScore mit BASIS-Score,
-    // Server multipliziert mit score_multiplier und speichert final.
-    this.scoreService
-      .submitScore({
-        username,
-        baseScore: this.baseScoreAccum, // <— NEU: Basis schicken!
-        consecutive_wins: this.highestStreak,
-        money_per_round: this.baseMoneyAccum, // optional: ebenfalls Basis; Server kann mm anwenden, falls gewünscht
-      })
-      .subscribe({
-        next: (res) => {
-          // res.score = final server score (mit Multiplier)
-          // total_score könnte serverseitig bereits aktualisiert worden sein.
-          console.log(
-            '✅ Score gespeichert (server-multipliziert):',
-            res?.score
-          );
-
-          // XP lieber auf Basis des finalen Server-Scores vergeben:
-          const xpFromFinal = Math.floor((res?.score ?? 0) / 5);
-          if (xpFromFinal > 0) this.addXp(xpFromFinal);
-
-          // Highscore check (falls Endpoint Basis erwartet, dann dort auch anpassen)
-          this.scoreService.isHighscore(res?.score ?? 0).subscribe({
-            next: (hs) => {
-              this.isHighscore = hs.isHighscore;
-              if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
-            },
-            error: (err) =>
-              console.error('❌ Fehler bei Highscore-Prüfung:', err),
-          });
-
-          this.loadLeaderboards();
-          this.restart();
-        },
-        error: (err) => {
-          console.error('❌ Fehler beim Score-Submit:', err);
-        },
-      });
+    return;
   }
+
+  this.gameStarted = false;
+  this.gameOver = true;
+
+  // 💾 Geld (nur Basis) – Backend multipliziert mit monetary_multiplier
+  this.moneyService
+    .updateMoney({ username, amount: this.baseMoneyAccum })
+    .subscribe({
+      next: () =>
+        console.log('💰 Geld (Basis) gesendet – Server hat multipliziert'),
+      error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
+    });
+
+  // ⭐ XP direkt nach Spielende berechnen (lokal)
+  const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
+  if (xpFromLocal > 0) this.addXp(xpFromLocal);
+
+  // ❌ Score wird hier NICHT gespeichert!
+}
 
   submitScore() {
-    this.soundService.playSound('hardPop.aac', 0.6); // Sound beim Einreichen des Scores abspielen
-    const username = this.authService.getUsername();
-    if (!username) {
-      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
-      return;
-    }
+  this.soundService.playSound('hardPop.aac', 0.6);
 
-    this.scoreService
-      .submitScore({
-        username,
-        score: this.score,
-        consecutive_wins: this.highestStreak,
-        money_per_round: this.money,
-      })
-      .subscribe(() => {
+  const username = this.authService.getUsername();
+  if (!username) {
+    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    return;
+  }
+
+  this.scoreService
+    .submitScore({
+      username,
+      baseScore: this.baseScoreAccum,       // Basiswerte schicken
+      consecutive_wins: this.highestStreak,
+      money_per_round: this.baseMoneyAccum,
+    })
+    .subscribe({
+      next: (res) => {
+        const finalScore = res?.score ?? 0;
+        console.log('✅ Score gespeichert (server-multipliziert):', finalScore);
+
+        // 🏆 Highscore-Prüfung mit finalem Score
+        this.scoreService.isHighscore(finalScore).subscribe({
+          next: (hs) => {
+            this.isHighscore = hs.isHighscore;
+            if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
+          },
+          error: (err) =>
+            console.error('❌ Fehler bei Highscore-Prüfung:', err),
+        });
+
         this.loadLeaderboards();
         this.restart();
-      });
-    this.scoreService.isHighscore(this.score).subscribe({
-      next: (res) => {
-        if (res.isHighscore) {
-          this.unlockAchievement('Champion 🏆');
-        }
       },
       error: (err) => {
-        console.error('❌ Fehler bei Highscore-Prüfung:', err);
+        console.error('❌ Fehler beim Score-Submit:', err);
       },
     });
-  }
+}
 
   loadLeaderboards() {
     this.isLoading = true;

@@ -752,5 +752,6 @@ toggleLevelList() {
       }
     });
   }
+}
 
 }

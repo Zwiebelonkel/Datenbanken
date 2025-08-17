@@ -28,7 +28,7 @@ export class AdminPageComponent implements OnInit {
     { key: 'village', label: '🛖 Dorf', enabled: true },
     { key: 'clicker', label: '💰 Clicker', enabled: true },
     { key: 'shop', label: '🃏 Karten', enabled: true },
-    { key: 'SkillShop', label: '⬆️ Skills', enabled: true },
+    { key: 'skillShop', label: '⬆️ Skills', enabled: true },
     { key: 'tutorial', label: '❓ Tutorial', enabled: true },
   ];
 

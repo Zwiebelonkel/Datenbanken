@@ -124,19 +124,28 @@ router.post("/updateTotalScore", async (req, res) => {
   }
 });
 
-/** 🔝 Top 10 Einzel-Highscores inkl. Avatar */
+/** 🔝 Top 10 Einzel-Highscores inkl. Avatar – je Spieler nur ein Eintrag (bester) */
 router.get("/top", async (_req, res) => {
   try {
     const result = await db.execute(`
-      SELECT 
-        s.username,
-        s.score,
-        s.created_at,
-        u.profile_image_url AS profileImageUrl
-      FROM scores s
-      LEFT JOIN users u
-        ON LOWER(u.username) = LOWER(s.username)
-      ORDER BY s.score DESC
+      WITH ranked AS (
+        SELECT
+          s.username,
+          s.score,
+          s.created_at,
+          u.profile_image_url AS profileImageUrl,
+          ROW_NUMBER() OVER (
+            PARTITION BY LOWER(s.username)
+            ORDER BY s.score DESC, s.created_at ASC
+          ) AS rn
+        FROM scores s
+        LEFT JOIN users u
+          ON LOWER(u.username) = LOWER(s.username)
+      )
+      SELECT username, score, created_at, profileImageUrl
+      FROM ranked
+      WHERE rn = 1
+      ORDER BY score DESC
       LIMIT 10
     `);
     res.json(result.rows);
@@ -145,7 +154,7 @@ router.get("/top", async (_req, res) => {
   }
 });
 
-/** 📜 Alle Scores inkl. Avatar */
+/** 📜 Alle Scores inkl. Avatar (volle Liste, NICHT dedupliziert) */
 router.get("/all", async (_req, res) => {
   try {
     const result = await db.execute(`
@@ -163,16 +172,24 @@ router.get("/all", async (_req, res) => {
   }
 });
 
-/** ❓ Highscore prüfen */
+/** ❓ Highscore prüfen – Top-10 mit „ein Eintrag pro Spieler“ Logik */
 router.post("/isHighscore", async (req, res) => {
-  const { score } = req.body; // erwartet finalen Score (wie gespeichert)
+  const { score } = req.body; // finaler Score
+  const s = Number(score) || 0;
   try {
-    const result = await db.execute({
-      sql: "SELECT COUNT(*) AS betterScores FROM scores WHERE score > ?",
-      args: [Number(score) || 0],
-    });
-    const count = result.rows[0].betterScores;
-    res.json({ isHighscore: count < 10 });
+    // Anzahl Spieler mit einem besseren *Bestwert* ermitteln
+    const result = await db.execute(`
+      SELECT COUNT(*) AS betterPlayers
+      FROM (
+        SELECT LOWER(username) AS uname, MAX(score) AS best
+        FROM scores
+        GROUP BY uname
+      ) t
+      WHERE t.best > ?
+    `, [s]);
+
+    const betterPlayers = Number(result.rows?.[0]?.betterPlayers || 0);
+    res.json({ isHighscore: betterPlayers < 10 });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -196,18 +213,25 @@ router.get("/userTotalScore/:username", async (req, res) => {
   }
 });
 
-/** 🔹 Längste Serien (Top 10) inkl. Avatar */
+/** 🔹 Längste Serien (Top 10) inkl. Avatar – je Spieler nur ein Eintrag (beste Serie) */
 router.get("/topStreaks", async (_req, res) => {
   try {
     const result = await db.execute(`
+      WITH best AS (
+        SELECT
+          s.username,
+          MAX(COALESCE(s.consecutive_wins, 0)) AS best_streak
+        FROM scores s
+        GROUP BY LOWER(s.username)
+      )
       SELECT
-        s.username,
-        s.consecutive_wins,
+        b.username,
+        b.best_streak AS consecutive_wins,
         u.profile_image_url AS profileImageUrl
-      FROM scores s
+      FROM best b
       LEFT JOIN users u
-        ON LOWER(u.username) = LOWER(s.username)
-      ORDER BY s.consecutive_wins DESC
+        ON LOWER(u.username) = LOWER(b.username)
+      ORDER BY b.best_streak DESC
       LIMIT 10
     `);
     res.json(result.rows);
@@ -216,18 +240,25 @@ router.get("/topStreaks", async (_req, res) => {
   }
 });
 
-/** 🔹 Meistes Geld pro Runde (Top 10) inkl. Avatar */
+/** 🔹 Meistes Geld pro Runde (Top 10) inkl. Avatar – je Spieler nur ein Eintrag (bester Wert) */
 router.get("/topMoneyPerRound", async (_req, res) => {
   try {
     const result = await db.execute(`
+      WITH best AS (
+        SELECT
+          s.username,
+          MAX(COALESCE(s.money_per_round, 0)) AS best_mpr
+        FROM scores s
+        GROUP BY LOWER(s.username)
+      )
       SELECT
-        s.username,
-        s.money_per_round,
+        b.username,
+        b.best_mpr AS money_per_round,
         u.profile_image_url AS profileImageUrl
-      FROM scores s
+      FROM best b
       LEFT JOIN users u
-        ON LOWER(u.username) = LOWER(s.username)
-      ORDER BY s.money_per_round DESC
+        ON LOWER(u.username) = LOWER(b.username)
+      ORDER BY b.best_mpr DESC
       LIMIT 10
     `);
     res.json(result.rows);

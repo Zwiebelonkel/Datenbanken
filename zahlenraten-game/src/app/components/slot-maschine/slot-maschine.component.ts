@@ -202,6 +202,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
         if (res.unlocked) {
           this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
           this.rainComponent.emojiRain('🎖️');
+          this.addXp(20);
         } else {
           // optional: Info anzeigen, dass bereits freigeschaltet
           // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);

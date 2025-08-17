@@ -462,6 +462,7 @@ export class GameComponent implements OnInit {
             );
             console.log('✅ Achievement neu freigeschaltet:', res.name);
             this.rainComponent.emojiRain('🎖️');
+            this.addXp(20);
             this.soundService.playSound('message.aac'); // Sound beim Freischalten des Achievements abspielen
           } else {
             console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);

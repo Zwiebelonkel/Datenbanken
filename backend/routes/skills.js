@@ -12,7 +12,7 @@ const CATALOG = {
   "Score Multiplier": {
     description: "+10% Score pro Level",
     price: 1,
-    max_level: 10,
+    max_level: 20,
     apply: async (tx, username) => {
       await tx.execute({
         sql: `UPDATE users SET score_multiplier = score_multiplier + 0.1 WHERE LOWER(username)=LOWER(?)`,
@@ -23,7 +23,7 @@ const CATALOG = {
   "Monetary Multiplier": {
     description: "+10% Geld pro Level",
     price: 1,
-    max_level: 10,
+    max_level: 20,
     apply: async (tx, username) => {
       await tx.execute({
         sql: `UPDATE users SET monetary_multiplier = monetary_multiplier + 0.1 WHERE LOWER(username)=LOWER(?)`,

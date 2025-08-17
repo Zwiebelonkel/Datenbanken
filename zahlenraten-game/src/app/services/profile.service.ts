@@ -24,9 +24,10 @@ export interface Skill {
   name: string;
   description: string;
   price: number;
+  base_price?: number;
   purchased: boolean;
   skill_level: number;
-  max_level?: number | null;   // ⬅️ neu: optional
+  max_level?: number | null;
 }
 
 @Injectable({
@@ -38,30 +39,39 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   // 📤 Profilbild hochladen
-uploadProfileImage(file: File, username: string) {
-  const formData = new FormData();
-  formData.append('profileImage', file, file.name);
-  formData.append('username', username);
+  uploadProfileImage(file: File, username: string) {
+    const formData = new FormData();
+    formData.append('profileImage', file, file.name);
+    formData.append('username', username);
 
-  return this.http.post<any>(
-    `${this.apiUrl}/upload-profile-image`,
-    formData,
-    {
-      reportProgress: true,       // <—
-      observe: 'events'           // <—
-    }
-  );
-}
+    return this.http.post<any>(
+      `${this.apiUrl}/upload-profile-image`,
+      formData,
+      {
+        reportProgress: true, // <—
+        observe: 'events', // <—
+      }
+    );
+  }
 
   // ➕ XP hinzufügen
   addXp(
     username: string,
     xpToAdd: number
-  ): Observable<{ message: string; leveledUp: boolean; level: number; xp: number; xpThreshold: number }> {
-    return this.http.post<{ message: string; leveledUp: boolean; level: number; xp: number; xpThreshold: number }>(
-      `${this.apiUrl}/${username}/add-xp`,
-      { xpToAdd }
-    );
+  ): Observable<{
+    message: string;
+    leveledUp: boolean;
+    level: number;
+    xp: number;
+    xpThreshold: number;
+  }> {
+    return this.http.post<{
+      message: string;
+      leveledUp: boolean;
+      level: number;
+      xp: number;
+      xpThreshold: number;
+    }>(`${this.apiUrl}/${username}/add-xp`, { xpToAdd });
   }
 
   // 📥 Skills des Benutzers abrufen
@@ -71,7 +81,9 @@ uploadProfileImage(file: File, username: string) {
 
   // 📤 Skill upgraden (nur Skill-Name notwendig)
   upgradeSkill(username: string, skillName: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/${username}/skills/upgrade`, { skillName });
+    return this.http.post<any>(`${this.apiUrl}/${username}/skills/upgrade`, {
+      skillName,
+    });
   }
 
   // 📥 Benutzerstatistiken laden

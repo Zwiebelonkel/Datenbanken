@@ -71,7 +71,12 @@ export class SkillShopComponent implements OnInit {
     });
 
     this.profileService.getUserSkills(this.username).subscribe({
-      next: (skills) => (this.skills = skills ?? []),
+      next: (skills) => {
+        this.skills = (skills ?? []).map((s) => ({
+          ...s,
+          base_price: s.base_price ?? s.price ?? 1,
+        }));
+      },
       error: (err) => {
         this.errorMsg = 'Skills konnten nicht geladen werden.';
         console.error(err);
@@ -85,14 +90,16 @@ export class SkillShopComponent implements OnInit {
   upgrade(skill: Skill) {
     if (!this.username) return;
 
-    const notEnough = this.player.skillPoints < skill.price;
     const atMax =
       typeof skill.max_level === 'number' &&
       skill.skill_level >= skill.max_level;
-    if (notEnough || atMax) return;
+    if (atMax) return;
 
-    // Optimistisches Update im UI
-    this.player.skillPoints -= skill.price;
+    const cost = this.nextPrice(skill);
+    if (this.player.skillPoints < cost) return;
+
+    // Optimistisches UI
+    this.player.skillPoints -= cost;
     skill.skill_level += 1;
 
     this.profileService.upgradeSkill(this.username, skill.name).subscribe({
@@ -109,12 +116,13 @@ export class SkillShopComponent implements OnInit {
         if (typeof res?.monetaryMultiplier === 'number') {
           this.player.monetaryMultiplier = res.monetaryMultiplier;
         }
+        // Preis wird nicht gespeichert – ergibt sich aus nextPrice()
       },
       error: (err) => {
         console.error('Upgrade fehlgeschlagen:', err);
-        // Rollback im UI
+        // Rollback exakt
         skill.skill_level -= 1;
-        this.player.skillPoints += skill.price;
+        this.player.skillPoints += cost;
         this.errorMsg = err?.error?.message || 'Upgrade fehlgeschlagen.';
       },
     });
@@ -124,7 +132,12 @@ export class SkillShopComponent implements OnInit {
     const atMax =
       typeof skill.max_level === 'number' &&
       skill.skill_level >= skill.max_level;
-    return !atMax && this.player.skillPoints >= skill.price;
+    return !atMax && this.player.skillPoints >= this.nextPrice(skill);
+  }
+
+  nextPrice(skill: Skill): number {
+    const base = skill.base_price ?? skill.price ?? 1;
+    return base + skill.skill_level; // +1 je Upgrade
   }
 
   buttonLabel(skill: Skill): string {

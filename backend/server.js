@@ -386,6 +386,38 @@ app.put(
   }
 );
 
+// 🔝 Alle Spieler nach Level (absteigend) inkl. Profilbild
+app.get("/api/users/levels", async (_req, res) => {
+  try {
+    const rows = await db.execute({
+      sql: `
+        SELECT
+          username,
+          COALESCE(level, 1)          AS level,
+          COALESCE(xp, 0)             AS xp,
+          COALESCE(xp_threshold, 100) AS xpThreshold,
+          COALESCE(total_score, 0)    AS total_score,
+          profile_image_url           AS profileImageUrl
+        FROM users
+        ORDER BY level DESC, xp DESC, total_score DESC, LOWER(username) ASC
+      `,
+      args: [],
+    });
+
+    const users = rows.rows.map((u) => {
+      const xp = Number(u.xp) || 0;
+      const thr = Math.max(1, Number(u.xpThreshold) || 100);
+      const xpPercent = Math.min(100, Math.floor((xp / thr) * 100));
+      return { ...u, xpPercent };
+    });
+
+    res.json({ users });
+  } catch (err) {
+    console.error("❌ /api/users/levels Fehler:", err);
+    res.status(500).json({ error: "Fehler beim Laden der Level-Liste" });
+  }
+});
+
 // Server starten
 app.listen(PORT, () => {
   console.log(`✅ Server läuft auf: ${PORT}. Jetzt nurnoch Eier schaukeln.🥚`);

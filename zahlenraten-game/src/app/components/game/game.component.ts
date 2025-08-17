@@ -66,7 +66,10 @@ export class GameComponent implements OnInit {
   username: string = '';
   scoreMultiplier = 1; // aus DB
   monetaryMultiplier = 1; // aus DB
+
   levelUsers: LevelUser[] = [];
+  isLevelListOpen = false;
+  loadingLevels = false;
 
   private baseScoreAccum = 0;
   private baseMoneyAccum = 0;
@@ -731,4 +734,23 @@ this.levelsService.load().subscribe(users => {
   trackByUsername(i: number, item: any) {
     return item?.username ?? i;
   }
+
+toggleLevelList() {
+  this.isLevelListOpen = !this.isLevelListOpen;
+
+  // Erst laden, wenn geöffnet und Daten noch nicht da
+  if (this.isLevelListOpen && this.levelUsers.length === 0) {
+    this.loadingLevels = true;
+    this.levelsService.load().subscribe({
+      next: (users) => {
+        this.levelUsers = users;
+        this.loadingLevels = false;
+      },
+      error: (err) => {
+        console.error("❌ Fehler beim Laden der Level-Liste:", err);
+        this.loadingLevels = false;
+      }
+    });
+  }
+
 }

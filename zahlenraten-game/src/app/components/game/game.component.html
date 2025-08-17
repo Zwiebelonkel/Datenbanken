@@ -224,24 +224,25 @@
         </div>
       </div>
     </div>
+    
+    <!-- Button zum Aufklappen -->
+<div class="highscores-carousel">
+  <button class="btn toggle-btn" (click)="toggleLevelList()">
+    <span *ngIf="!isLevelListOpen">⬇️ Alle Spieler anzeigen</span>
+    <span *ngIf="isLevelListOpen">⬆️ Liste einklappen</span>
+  </button>
 
-    <div class="toast" *ngIf="achievementMessage">
-      {{ achievementMessage }}
-    </div>
-  </div>
-</div>
+  <!-- Ladeanzeige -->
+  <app-loader *ngIf="loadingLevels"></app-loader>
 
-<!-- ✅ NEUER BLOCK: Level-Liste OHNE Medaillen, direkt unter dem Carousel -->
-<div class="highscores-carousel" *ngIf="!isLoading && levelUsers?.length">
-  <h3>🏅 Höchstes Level</h3>
-  <ul>
+  <!-- Liste (nur sichtbar, wenn geöffnet) -->
+  <ul *ngIf="isLevelListOpen && levelUsers?.length">
     <li
       *ngFor="let u of levelUsers; trackBy: trackByUsername"
       (click)="goToProfile(u.username)"
       tabindex="0"
       role="button"
     >
-      <!-- Avatar -->
       <img
         class="avatar"
         [src]="avatar(u.profileImageUrl, 32)"
@@ -253,13 +254,24 @@
         (error)="onAvatarError($event)"
         alt=""
       />
-      <!-- Name -->
       <span>{{ u.username }}</span>
-      <!-- Level rechts -->
       <strong>Lvl {{ u.level }} • {{ u.xpPercent }}%</strong>
     </li>
   </ul>
+
+  <!-- Fallback -->
+  <p *ngIf="isLevelListOpen && !loadingLevels && !levelUsers.length" style="color: gray;">
+    Keine Spieler gefunden…
+  </p>
 </div>
+
+    <div class="toast" *ngIf="achievementMessage">
+      {{ achievementMessage }}
+    </div>
+  </div>
+</div>
+
+
 
 <app-global-chat
   *ngIf="authService.isLoggedIn() && !isLoading"

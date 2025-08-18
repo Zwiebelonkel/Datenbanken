@@ -5,11 +5,49 @@
   max-width: 500px;
   margin: 1rem auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  &.collapsed {
+    /* Chat eingeklappt → weniger Platz */
+    max-height: 4rem;
+    overflow: hidden;
+    cursor: pointer;
+  }
 }
 
 h3 {
   text-align: center;
   margin-bottom: 1rem;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .85rem;
+  padding: .3rem .6rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+
+  .chevron {
+    transition: transform 0.2s ease;
+  }
+  .chevron.up {
+    transform: rotate(180deg);
+  }
 }
 
 .messages {
@@ -22,26 +60,18 @@ h3 {
 }
 
 .message {
-  transition:0.25s;
+  transition: 0.25s;
   position: relative;
   padding: 0.75rem 1rem;
   border-radius: 6px;
   background-color: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   font-size: 0.95rem;
-  /* Kein border-left oder border-right hier! */
-}
 
-.message:hover{
-  transition:0.25s;
-  scale:0.95;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
-
-}
-
-.user-message {
-  background-color: #d4f1f4;
-  color: #2c3e50;
+  &:hover {
+    scale: 0.95;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+  }
 }
 
 .user-message {
@@ -54,22 +84,22 @@ h3 {
   background-color: #ffe5e5;
   border-left: 4px solid #e74c3c;
   border-right: 4px solid #e74c3c;
-}
 
-.other-message {
-  border-right: 4px solid #555; /* dunkelgrauer Rand */
-}
-
-.admin-message .user {
-  color: #c0392b;
-  font-weight: bold;
+  .user {
+    color: #c0392b;
+    font-weight: bold;
+  }
 }
 
 .info-message {
   background-color: #e6f9e6;
-  color: #2c852f;      
+  color: #2c852f;
   border-left: 4px solid #4caf50;
   border-right: 4px solid #4caf50;
+}
+
+.other-message {
+  border-right: 4px solid #555; /* dunkelgrauer Rand */
 }
 
 .text {
@@ -106,9 +136,14 @@ button {
   background-color: #007bff;
   color: white;
   cursor: pointer;
-}
+  transition: background 0.2s ease;
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+  &:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 }

@@ -63,7 +63,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
   }
 
   get winReward() {
-    return this.betAmount * 10;
+    return this.betAmount * 15;
   }
 
   get resultString(): string {

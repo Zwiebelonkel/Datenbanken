@@ -37,7 +37,7 @@ export class PackOpeningComponent implements OnInit {
   achievementMessage: string | null = null;  money: number = 0;
   username: string = '';
   isLoading = true;
-  currentLevel: number = 1;
+  currentLevel: number = 0;
 
   maxCards: number = 5;
   cardsRemaining: number = 0;

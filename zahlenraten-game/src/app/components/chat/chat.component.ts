@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../services/auth.service';
-import { ViewChild, ElementRef } from '@angular/core';
+import { Subscription, interval, Subject, switchMap, takeUntil } from 'rxjs';
 
 interface ChatMessage {
   username: string;
@@ -19,53 +19,120 @@ interface ChatMessage {
   standalone: true,
   imports: [CommonModule, FormsModule],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   messages: ChatMessage[] = [];
   newMessage = '';
   username = '';
-  loading = false;
-  showAll = false;
+  isExpanded = false;
+
   @ViewChild('messageContainer') messageContainer!: ElementRef;
+
+  private pollingSub: Subscription | null = null;
+  private destroy$ = new Subject<void>();
 
   constructor(private chatService: ChatService, private auth: AuthService) {}
 
   ngOnInit() {
     this.username = this.auth.getUsername() || 'Unbekannt';
+    // Optional: Zustand merken
+    const saved = localStorage.getItem('globalChatExpanded');
+    if (saved === '1') {
+      this.isExpanded = true;
+      this.openAndStart();
+    }
+  }
+
+  ngOnDestroy() {
+    this.stopPolling();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  toggleExpanded() {
+    this.isExpanded = !this.isExpanded;
+    localStorage.setItem('globalChatExpanded', this.isExpanded ? '1' : '0');
+    if (this.isExpanded) {
+      this.openAndStart();
+    } else {
+      this.stopPolling();
+    }
+  }
+
+  private openAndStart() {
     this.loadMessages(true);
-    setInterval(() => this.loadMessages(), 20000);
+    this.startPolling();
+  }
+
+  private startPolling() {
+    this.stopPolling(); // safety
+    this.pollingSub = interval(20000)
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(() => this.chatService.getLatestMessages(20))
+      )
+      .subscribe({
+        next: (data) => {
+          this.messages = data;
+          // Kein Auto-Scroll hier, sonst springt's beim Lesen
+        },
+        error: (err) => console.error('Chat-Polling Fehler:', err),
+      });
+  }
+
+  private stopPolling() {
+    if (this.pollingSub) {
+      this.pollingSub.unsubscribe();
+      this.pollingSub = null;
+    }
   }
 
   loadMessages(scrollToBottom: boolean = false) {
-    this.chatService.getLatestMessages(20).subscribe((data) => {
-      this.messages = data;
-      if (scrollToBottom) {
-        setTimeout(() => this.scrollToBottom(), 100);
-      }
+    // Achtung: nur laden, wenn expanded
+    if (!this.isExpanded) return;
+
+    this.chatService.getLatestMessages(20).subscribe({
+      next: (data) => {
+        this.messages = data;
+        if (scrollToBottom) {
+          setTimeout(() => this.scrollToBottom(), 0);
+        }
+      },
+      error: (err) => console.error('Fehler beim Laden der Chat-Nachrichten:', err),
     });
   }
 
-  toggleShowAll() {
-    this.showAll = !this.showAll;
-    this.loadMessages();
-  }
-
   scrollToBottom() {
-    const el = this.messageContainer.nativeElement;
+    if (!this.messageContainer) return;
+    const el = this.messageContainer.nativeElement as HTMLElement;
     el.scrollTop = el.scrollHeight;
   }
 
-  visitProfile(username: string) {}
-
   sendMessage() {
-    if (!this.newMessage.trim()) return;
+    if (!this.isExpanded) return; // nur senden, wenn offen
+    const text = this.newMessage.trim();
+    if (!text) return;
 
-    const msg = this.newMessage;
-    this.newMessage = '';
-    this.chatService
-      .sendMessage({ username: this.username, message: msg })
-      .subscribe(() => {
-        this.loadMessages();
-      });
+    // Optimistic UI
+    const temp: ChatMessage = {
+      username: this.username,
+      message: text,
+      created_at: new Date().toISOString(),
+    };
+    this.messages = [...this.messages, temp];
     this.scrollToBottom();
+    this.newMessage = '';
+
+    this.chatService.sendMessage({ username: this.username, message: text }).subscribe({
+      next: () => this.loadMessages(), // echte Liste nachziehen
+      error: (err) => console.error('Senden fehlgeschlagen:', err),
+    });
   }
+
+  trackByMsg(index: number, msg: ChatMessage) {
+    // Falls die API IDs liefert, hier stattdessen id nehmen
+    return msg.created_at + '_' + index;
+  }
+
+  // Optional: Profil besuchen (später implementieren)
+  visitProfile(username: string) {}
 }

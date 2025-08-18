@@ -71,7 +71,7 @@ chances: Record<string, CardOutcome[]> = {
     { type: 'multiplier', value: '10x', chance: 3 },
     { type: 'multiplier', value: '-1', chance: 15 },
     { type: 'multiplier', value: '-2', chance: 1 },
-    { type: 'multiplier', value: '-3', chance: 0.5 },
+    { type: 'multiplier', value: '-3', chance: 100 },
     { type: 'money', value: 250, chance: 20 }, // Erhöht
     { type: 'xp', value: 100, chance: 15 },    // Erhöht
   ],
@@ -188,7 +188,9 @@ drawCard() {
       if (entry.type === 'multiplier') {
         this.result = entry.value;
         const numericVal = parseFloat(this.result);
-
+        if(this.result === '-3'){
+          this.unlockAch('Joker 🃏')
+        }
         if (!isNaN(numericVal) && numericVal < 0) {
           this.displayResult = `${Math.abs(numericVal)}❤️`;
         } else {

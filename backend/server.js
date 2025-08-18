@@ -60,6 +60,7 @@ const ALL_ACHIEVEMENTS = [
   { name: "Diktator 👑", description: "Verbessere dein Dorf auf Level 50"},
   { name: "Las Vegas 🎰", description: "Versuche dein Glück" },
   { name: "Lone Wolf 🐺", description: "Gewinne beim Glücksspiel" },
+  { name: "Joker 🃏", description: "Ziehe die seltenste Karte im Spiel" },
 ];
 
 // Registrierung mit Dorf und Bewohnern

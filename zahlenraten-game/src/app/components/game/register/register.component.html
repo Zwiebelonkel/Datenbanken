@@ -3,11 +3,16 @@
   rel="stylesheet"
 />
 
-<div class="form-container">
+<div class="card form-container">
   <h2>📝 Registrieren</h2>
 
   <input type="text" [(ngModel)]="username" placeholder="Benutzername" />
-  <input type="password" [(ngModel)]="password" placeholder="Passwort" (keydown.enter)="register()" />
+  <input
+    type="password"
+    [(ngModel)]="password"
+    placeholder="Passwort"
+    (keydown.enter)="register()"
+  />
   <button (click)="register()" [disabled]="!username || !password">
     Registrieren
   </button>

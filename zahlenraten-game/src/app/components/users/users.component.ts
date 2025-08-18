@@ -18,9 +18,7 @@ import { LevelsService, LevelUser } from '../../services/levels.service';
 export class UsersComponent{
 
   constructor(
-      private profileService: ProfileService,
-    private cardsService: CardsService,
-    private soundService: SoundsService,
+    private profileService: ProfileService,
     private levelsService: LevelsService
   ){}
 

@@ -17,7 +17,6 @@ import { firstValueFrom } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { RainComponent } from '../rain/rain.component';
 import { LevelsService, LevelUser } from '../../services/levels.service';
-import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-game',
@@ -31,7 +30,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     SidebarComponent,
     ChatComponent,
     RainComponent,
-    MatExpansionModule
   ],
   encapsulation: ViewEncapsulation.None,
 })

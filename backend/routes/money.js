@@ -23,10 +23,15 @@ router.post("/update", async (req, res) => {
 
     const multiplier = userRes.rows[0].monetary_multiplier || 1;
 
-    // 2. Betrag mit Multiplier berechnen
-    const finalAmount = Math.floor(amount * multiplier);
+    // 2. Wenn amount negativ ist (Einsatz), keinen Multiplier anwenden
+    let finalAmount = amount;
+    
+    if (amount > 0) {
+      // Wenn Betrag positiv ist (also ein Gewinn), Multiplier anwenden
+      finalAmount = Math.floor(amount * multiplier);
+    }
 
-    // 3. Geld updaten
+    // 3. Geld updaten: Betrag + Multiplier für Gewinn, sonst nur der Einsatzbetrag
     await db.execute({
       sql: "UPDATE users SET money = money + ? WHERE LOWER(username) = LOWER(?)",
       args: [finalAmount, username],

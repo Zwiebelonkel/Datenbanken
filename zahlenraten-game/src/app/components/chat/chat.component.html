@@ -1,21 +1,20 @@
-<div class="card chat-box" [class.collapsed]="!isExpanded">
+<div class="card chat-box" [class.expanded]="isExpanded">
   <div class="chat-header">
     <h3>💬 Globaler Chat</h3>
   </div>
 
-  <!-- Toggle Button unten, volle Breite -->
   <button
     class="toggle-btn"
+    type="button"
     (click)="toggleExpanded()"
     [attr.aria-expanded]="isExpanded"
-    type="button"
   >
     {{ isExpanded ? '⬆️ Einklappen' : '⬇️ Ausklappen' }}
   </button>
 
-  <div class="chat-content" *ngIf="isExpanded">
+  <!-- NICHT mit *ngIf ausblenden, damit die Transition läuft -->
+  <div class="chat-content" [attr.aria-hidden]="!isExpanded">
     <div class="messages" #messageContainer>
-      <!-- Nachrichten -->
       <div
         class="message"
         *ngFor="let msg of messages; trackBy: trackByMsg"
@@ -29,14 +28,14 @@
         <div class="message-content">
           <span class="user"><b>{{ msg.username }}</b></span>
           <span class="text">{{ msg.message }}</span>
-          <span class="timestamp">{{ msg.created_at | date: 'HH:mm' }}</span>
+          <span class="timestamp">{{ msg.created_at | date:'HH:mm' }}</span>
         </div>
       </div>
     </div>
 
-<form (ngSubmit)="sendMessage()" class="chat-form">
-  <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht schreiben..." />
-  <button class="send-btn" [disabled]="newMessage.trim() === ''" type="submit">📤 Senden</button>
-</form>
+    <form (ngSubmit)="sendMessage()" class="chat-form">
+      <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht schreiben..." />
+      <button class="send-btn" [disabled]="newMessage.trim()===''" type="submit">📤 Senden</button>
+    </form>
   </div>
 </div>

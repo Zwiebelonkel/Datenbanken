@@ -38,6 +38,12 @@ export class UsersComponent{
     );
   }
 
+  ngOninit(){
+  this.levelsService.load().subscribe(users => {
+    this.levelUsers = users;
+  });
+}
+
   onAvatarError(ev: Event) {
     (ev.target as HTMLImageElement).src = 'assets/profile.png';
   }

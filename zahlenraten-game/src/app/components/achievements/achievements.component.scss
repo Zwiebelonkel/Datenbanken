@@ -13,6 +13,7 @@
   }
 
   li {
+    transition: 0.25s;
     display: flex;
     gap: 1rem;
     padding: 1rem;
@@ -56,4 +57,9 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+li:hover {
+  transition: 0.25s;
+  scale: 1.1
 }

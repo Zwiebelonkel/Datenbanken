@@ -71,7 +71,7 @@ chances: Record<string, CardOutcome[]> = {
     { type: 'multiplier', value: '10x', chance: 3 },
     { type: 'multiplier', value: '-1', chance: 15 },
     { type: 'multiplier', value: '-2', chance: 1 },
-    { type: 'multiplier', value: '-3', chance: 100 },
+    { type: 'multiplier', value: '-3', chance: 0.5 },
     { type: 'money', value: 250, chance: 20 }, // Erhöht
     { type: 'xp', value: 100, chance: 15 },    // Erhöht
   ],

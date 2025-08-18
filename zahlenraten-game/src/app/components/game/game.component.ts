@@ -68,10 +68,6 @@ export class GameComponent implements OnInit {
   scoreMultiplier = 1; // aus DB
   monetaryMultiplier = 1; // aus DB
 
-  levelUsers: LevelUser[] = [];
-  isLevelListOpen = false;
-  loadingLevels = false;
-
   private baseScoreAccum = 0;
   private baseMoneyAccum = 0;
 

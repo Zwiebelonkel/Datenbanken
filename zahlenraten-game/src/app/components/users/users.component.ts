@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule],
 })
-export class UsersComponent implements OnInit, OnDestroy {
+export class UsersComponent{
 
 levelUsers: LevelUser[] = [];
   isLevelListOpen = false;

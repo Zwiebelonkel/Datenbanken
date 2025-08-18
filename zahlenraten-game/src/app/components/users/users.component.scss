@@ -1,0 +1,42 @@
+.highscores-carousel {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.highscores-carousel li {
+  background: #fff;
+  padding: 0.8rem;
+  border-bottom: 1px dashed #ccc;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s ease;
+}
+.highscores-carousel li:hover {
+  background: #d8d8d8;
+  transform: scale(1.02);
+}
+.highscores-carousel li span {
+  font-weight: bold;
+}
+.leaderboard li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+}

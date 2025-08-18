@@ -1,4 +1,20 @@
-  levelUsers: LevelUser[] = [];
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ChatService } from '../../services/chat.service';
+import { AuthService } from '../../services/auth.service';
+
+@Component({
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  standalone: true,
+  imports: [CommonModule],
+})
+export class UsersComponent implements OnInit, OnDestroy {
+
+levelUsers: LevelUser[] = [];
   isLevelListOpen = false;
   loadingLevels = false;
 

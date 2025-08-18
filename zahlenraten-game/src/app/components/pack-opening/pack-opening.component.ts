@@ -200,7 +200,7 @@ drawCard() {
         });
 
       } else if (entry.type === 'money') {
-        this.displayResult = `💰 +${entry.value}`;
+        this.displayResult = `${entry.value} 💰`;
         this.moneyService
           .updateMoney({ username: this.username, amount: entry.value })
           .subscribe({
@@ -213,7 +213,7 @@ drawCard() {
           });
 
       } else if (entry.type === 'xp') {
-        this.displayResult = `⭐️ +${entry.value} XP`;
+        this.displayResult = `${entry.value}⭐️`;
         this.addXp(entry.value);
       }
       this.drawnCards.push(this.displayResult);

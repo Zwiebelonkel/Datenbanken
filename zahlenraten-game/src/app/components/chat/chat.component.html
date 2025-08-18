@@ -34,9 +34,9 @@
       </div>
     </div>
 
-    <form (ngSubmit)="sendMessage()" class="chat-form">
-      <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht schreiben..." />
-      <button [disabled]="newMessage.trim() === ''" type="submit">📤 Senden</button>
-    </form>
+<form (ngSubmit)="sendMessage()" class="chat-form">
+  <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht schreiben..." />
+  <button class="send-btn" [disabled]="newMessage.trim() === ''" type="submit">📤 Senden</button>
+</form>
   </div>
 </div>

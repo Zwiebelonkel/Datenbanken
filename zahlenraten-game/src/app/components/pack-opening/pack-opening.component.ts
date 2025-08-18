@@ -9,6 +9,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { RainComponent } from '../rain/rain.component';
+import { ViewChild } from '@angular/core'
 
   type CardOutcome =
   | { type: 'multiplier'; value: string; chance: number }
@@ -210,7 +211,7 @@ drawCard() {
 
       } else if (entry.type === 'xp') {
         this.displayResult = `⭐️ +${entry.value} XP`;
-        this.addXp(enty.value);
+        this.addXp(entry.value);
       }
       this.drawnCards.push(this.displayResult);
       this.cardsRemaining--;

@@ -66,30 +66,11 @@ h3 {
 }
 
 .info-message {
-  color: #2c852f;
-  background: linear-gradient(
-    0deg,
-    #bbeabd 0%,
-    #4caf50 50%,
-    #bbeabd 100%
-  );
-  background-size: 100% 200%; /* doppelte Höhe für Animation */
-  background-position: 0% 100%; /* Start: ganz unten */
+  background-color: #e6f9e6;
+  color: #2c852f;      
   border-left: 4px solid #4caf50;
   border-right: 4px solid #4caf50;
-
-  animation: gradient-move 6s linear infinite alternate; /* Hin- und Zurück */
 }
-
-@keyframes gradient-move {
-  0% {
-    background-position: 0% 100%; /* unten */
-  }
-  100% {
-    background-position: 0% 0%; /* oben */
-  }
-}
-
 
 .text {
   color: #333;

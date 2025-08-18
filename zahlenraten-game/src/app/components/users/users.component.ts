@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
@@ -18,6 +19,8 @@ import { LevelsService, LevelUser } from '../../services/levels.service';
 export class UsersComponent{
 
   constructor(
+    private router: Router,
+    private http: HttpClient,
     private profileService: ProfileService,
     private levelsService: LevelsService
   ){}
@@ -40,6 +43,15 @@ levelUsers: LevelUser[] = [];
 
   trackByUsername(i: number, item: any) {
     return item?.username ?? i;
+  }
+
+    goToProfile(username?: string | null) {
+    const u = username || this.selectedUsername;
+    if (u) {
+      this.router.navigate(['/profile', u]);
+    } else {
+      this.router.navigate(['/profile']);
+    }
   }
 
 toggleLevelList() {

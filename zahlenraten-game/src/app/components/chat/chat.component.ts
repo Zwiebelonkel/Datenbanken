@@ -65,7 +65,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private startPolling() {
     this.stopPolling(); // safety
-    this.pollingSub = interval(20000)
+    this.pollingSub = interval(5000)
       .pipe(
         takeUntil(this.destroy$),
         switchMap(() => this.chatService.getLatestMessages(20))

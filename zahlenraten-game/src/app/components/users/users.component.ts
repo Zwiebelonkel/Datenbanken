@@ -25,9 +25,10 @@ export class UsersComponent{
     private levelsService: LevelsService
   ){}
 
-levelUsers: LevelUser[] = [];
+  levelUsers: LevelUser[] = [];
   isLevelListOpen = false;
   loadingLevels = false;
+  selectedUsername: string | null = null;
 
   avatar(url?: string | null, size = 32): string {
     if (!url) return 'assets/profile.png';

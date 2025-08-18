@@ -1,29 +1,42 @@
-<div class="card chat-box">
-  <h3>💬 Globaler Chat</h3>
+<div class="card chat-box" [class.collapsed]="!isExpanded">
+  <div class="chat-header">
+    <h3>💬 Globaler Chat</h3>
 
-  <div class="messages" #messageContainer>
-    <div
-      class="message"
-      *ngFor="let msg of messages"
-      [ngClass]="{
-        'user-message': msg.username === username,
-        'admin-message': msg.username === 'admin',
-        'info-message': msg.username === 'Info',
-        'other-message': msg.username !== username && msg.username !== 'admin' && msg.username !== 'Info'
-      }"
+    <button
+      class="toggle-btn"
+      (click)="toggleExpanded()"
+      [attr.aria-expanded]="isExpanded"
+      [attr.aria-controls]="'chat-content'"
+      type="button"
     >
-      <div class="message-content">
-        <span class="user"
-          ><b>{{ msg.username }}</b></span
-        >
-        <span class="text">{{ msg.message }}</span>
-        <span class="timestamp">{{ msg.created_at | date : "HH:mm" }}</span>
-      </div>
-    </div>
+      <span>{{ isExpanded ? 'Einklappen' : 'Ausklappen' }}</span>
+      <span class="chevron" [class.up]="isExpanded">▾</span>
+    </button>
   </div>
 
-  <form (ngSubmit)="sendMessage()" class="chat-form">
-    <input [(ngModel)]="newMessage" name="message" placeholder="" />
-    <button [disabled]="newMessage === ''" type="submit">📤 Senden</button>
-  </form>
+  <div id="chat-content" *ngIf="isExpanded">
+    <div class="messages" #messageContainer>
+      <div
+        class="message"
+        *ngFor="let msg of messages; trackBy: trackByMsg"
+        [ngClass]="{
+          'user-message': msg.username === username,
+          'admin-message': msg.username === 'admin',
+          'info-message': msg.username === 'Info',
+          'other-message': msg.username !== username && msg.username !== 'admin' && msg.username !== 'Info'
+        }"
+      >
+        <div class="message-content">
+          <span class="user"><b>{{ msg.username }}</b></span>
+          <span class="text">{{ msg.message }}</span>
+          <span class="timestamp">{{ msg.created_at | date: 'HH:mm' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <form (ngSubmit)="sendMessage()" class="chat-form">
+      <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht schreiben..." />
+      <button [disabled]="newMessage.trim() === ''" type="submit">📤 Senden</button>
+    </form>
+  </div>
 </div>

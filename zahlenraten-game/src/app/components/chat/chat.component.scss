@@ -11,13 +11,13 @@
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.3s ease;
+    transition: max-height .4s ease, opacity .4s ease, padding .3s ease;
     padding-top: 0;
   }
 
   &.expanded {
     .chat-content {
-      max-height: 600px; /* genug, um alles aufzunehmen */
+      max-height: 1000px; /* groß genug wählen */
       opacity: 1;
       padding-top: 1rem;
     }

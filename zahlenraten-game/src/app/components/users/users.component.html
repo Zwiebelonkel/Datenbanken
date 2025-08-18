@@ -1,0 +1,38 @@
+<div class="highscores-carousel">
+  <button class="btn toggle-btn" (click)="toggleLevelList()">
+    <span *ngIf="!isLevelListOpen">⬇️ Alle Spieler anzeigen</span>
+    <span *ngIf="isLevelListOpen">⬆️ Liste einklappen</span>
+  </button>
+
+  <!-- Ladeanzeige -->
+  <app-loader *ngIf="loadingLevels"></app-loader>
+
+  <!-- Liste (nur sichtbar, wenn geöffnet) -->
+  <ul *ngIf="isLevelListOpen && levelUsers?.length">
+    <li
+      *ngFor="let u of levelUsers; trackBy: trackByUsername"
+      (click)="goToProfile(u.username)"
+      tabindex="0"
+      role="button"
+    >
+      <img
+        class="avatar"
+        [src]="avatar(u.profileImageUrl, 32)"
+        width="32"
+        height="32"
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
+        (error)="onAvatarError($event)"
+        alt=""
+      />
+      <span>{{ u.username }}</span>
+      <strong>Lvl {{ u.level }} • {{ u.xpPercent }}%</strong>
+    </li>
+  </ul>
+
+  <!-- Fallback -->
+  <p *ngIf="isLevelListOpen && !loadingLevels && !levelUsers.length" style="color: gray;">
+    Keine Spieler gefunden…
+  </p>
+</div>

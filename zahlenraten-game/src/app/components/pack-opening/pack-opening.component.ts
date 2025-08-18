@@ -35,6 +35,7 @@ export class PackOpeningComponent implements OnInit {
   achievementMessage: string | null = null;  money: number = 0;
   username: string = '';
   isLoading = true;
+  currentLevel: number = 1;
 
   maxCards: number = 5;
   cardsRemaining: number = 0;
@@ -209,16 +210,8 @@ drawCard() {
 
       } else if (entry.type === 'xp') {
         this.displayResult = `⭐️ +${entry.value} XP`;
-        this.profileService
-          .addXP(this.username, entry.value)
-          .subscribe({
-            next: () =>
-              console.log(`⭐️ +${entry.value} XP gutgeschrieben`),
-            error: (err) =>
-              console.error('❌ Fehler beim Hinzufügen von XP:', err),
-          });
+        this.addXp(enty.value);
       }
-
       this.drawnCards.push(this.displayResult);
       this.cardsRemaining--;
       break;

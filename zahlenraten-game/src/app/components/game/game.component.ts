@@ -31,6 +31,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     SidebarComponent,
     ChatComponent,
     RainComponent,
+    MatExpansionModule
   ],
   encapsulation: ViewEncapsulation.None,
 })

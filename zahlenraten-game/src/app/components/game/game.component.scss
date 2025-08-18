@@ -645,18 +645,3 @@ ul {
   cursor: pointer;
 }
 
-.leaderboard li {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 8px;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
-}
-

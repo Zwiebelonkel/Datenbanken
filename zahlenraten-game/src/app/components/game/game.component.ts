@@ -11,6 +11,7 @@ import { ProfileService } from '../../services/profile.service';
 import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponent
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ChatComponent } from '../chat/chat.component';
+import { UsersComponent } from '../users/users.component';
 import { CardsService } from '../../services/cards.service';
 import { SoundsService } from '../../services/sound.service';
 import { firstValueFrom } from 'rxjs';
@@ -29,6 +30,7 @@ import { LevelsService, LevelUser } from '../../services/levels.service';
     LoaderComponent,
     SidebarComponent,
     ChatComponent,
+    UsersComponent,
     RainComponent,
   ],
   encapsulation: ViewEncapsulation.None,

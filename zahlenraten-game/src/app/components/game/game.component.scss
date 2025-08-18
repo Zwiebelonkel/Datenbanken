@@ -611,4 +611,10 @@ ul {
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+  transition: 0.5s;
+}
+
+.avatar:hover{
+  transition:0.5s;
+  scale:1.1;
 }

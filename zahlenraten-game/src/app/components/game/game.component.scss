@@ -1,49 +1,10 @@
-/* ===================================
-   1. Global Styles & Base Elements
-=================================== */
-body {
-  margin: 0;
-  color: #333;
-  background-color: #ffffff;
-}
-
 body.dark-mode {
-  background-color: #1f1f1fdd;
+  background-color: #121212;
   color: #f1f1f1;
   transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-input,
-button,
-select {
-  font-family: inherit;
-}
-
-input.input {
-  width: 80%;
-  padding: 0.6rem;
-  margin-top: 1rem;
-  border: 1px solid #ddd;
-  font-size: 1rem;
-  background: white;
-  color: #333;
-}
-
-body.dark-mode .input {
-  background: #2c2c2c;
-  color: #f1f1f1;
-  border: 1px solid #555;
-}
-
-/* ===================================
-   2. Containers & Layout
-=================================== */
 .game-container,
 .game-over,
 .highscores-carousel {
@@ -60,24 +21,155 @@ body.dark-mode .highscores-carousel {
   color: #f1f1f1;
 }
 
-/* ===================================
-   3. Topbar
-=================================== */
+.numbers p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.number-scale {
+  position: relative;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+}
+.number-scale .number-marker,
+.marker {
+  position: absolute;
+  top: -1.2rem;
+  transform: translateX(-50%);
+  font-size: 0.9rem;
+  font-weight: bold;
+  white-space: nowrap;
+  transition: left 0.4s ease;
+}
+
+.number-scale .number-marker.test-num {
+  color: #e91e63;
+}
+
+.number-scale .marker {
+  background-color: black;
+  width: 2px;
+  height: 10px;
+  top: 1.1rem;
+  left: 50%;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.62);
+}
+
+.number-scale .number-marker.below {
+  top: 1rem;
+}
+
+.buttons {
+  margin: 1.5rem 0;
+  transition: 0.2s;
+}
+
+.btn,
+.arrow-buttons {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  margin: 0.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background: #45a049;
+  transform: scale(1.1);
+}
+
+.btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.restart {
+  background: #2196f3;
+}
+.restart:hover {
+  background: #1e88e5;
+}
+
+.score,
+.final-score {
+  font-size: 1.3rem;
+  margin-top: 1rem;
+}
+
+.input {
+  width: 80%;
+  padding: 0.6rem;
+  margin-top: 1rem;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background: white;
+  color: #333;
+}
+body.dark-mode .input {
+  background: #2c2c2c;
+  color: #f1f1f1;
+  border: 1px solid #555;
+}
+
+.highscore-form {
+  margin: 1.5rem 0;
+}
+
+.highscores-carousel ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.highscores-carousel li {
+  background: #fff;
+  padding: 0.8rem;
+  border-bottom: 1px dashed #ccc;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s ease;
+}
+.highscores-carousel li:hover {
+  background: #d8d8d8;
+  transform: scale(1.02);
+}
+.highscores-carousel li span {
+  font-weight: bold;
+}
+
+body.dark-mode .highscores-carousel li {
+  background: #2c2c2c;
+  border-bottom: 1px solid #444;
+}
+body.dark-mode .highscores-carousel li:hover {
+  background: #3a3a3a;
+}
+
 .topbar {
   position: sticky;
   top: 0;
   z-index: 1000;
   margin: 0;
-  padding: 1rem;
+  padding: 1rem 1rem;
   background: #ffffffcc;
   backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   font-size: 1rem;
   color: #333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   border-radius: 0 0 10px 10px;
   box-sizing: border-box;
 }
@@ -116,57 +208,36 @@ body.dark-mode .topbar {
   gap: 6px;
   transition: all 0.2s ease;
 }
-
 .topbar-buttons button:hover {
   background-color: #3367d6;
   transform: scale(1.05);
 }
 
-/* ===================================
-   4. Buttons
-=================================== */
-.btn,
-.arrow-buttons,
-.card-selection-block .btn,
-.card-combined-inline .btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.hearts {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hearts span {
+  display: inline-block;
+  transform-origin: center;
+  animation: pulse 0.8s infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
 }
 
-.btn:hover,
-.card-selection-block .btn:hover,
-.card-combined-inline .btn:hover {
-  background: #45a049;
-  transform: scale(1.1);
-}
-
-.btn:disabled,
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.restart {
-  background: #2196f3;
-}
-.restart:hover {
-  background: #1e88e5;
-}
-
-/* ===================================
-   5. Score, Money & Combo Display
-=================================== */
-.score,
-.final-score {
-  font-size: 1.3rem;
-  margin-top: 1rem;
+#finalNumber {
+  visibility: hidden;
 }
 
 .money {
@@ -174,9 +245,46 @@ button:disabled {
   color: #2ecc71;
   margin-top: 0.5rem;
 }
-
 body.dark-mode .money {
   color: #7dffb2;
+}
+
+body.dark-mode {
+  background: #1f1f1fdd;
+  color: white;
+}
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #323232;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  z-index: 9999;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
 }
 
 .combo {
@@ -187,171 +295,6 @@ body.dark-mode .money {
   text-shadow: 0 0 8px #ffa726, 0 0 12px #ff9800;
   transform-origin: center;
   margin-top: -10px;
-}
-
-/* ===================================
-   6. Numbers & Scales
-=================================== */
-.numbers p {
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
-}
-
-.number-scale {
-  position: relative;
-  height: 8px;
-  background-color: #e0e0e0;
-  border-radius: 4px;
-  margin: 1.5rem 0;
-}
-
-.number-scale .number-marker,
-.marker {
-  position: absolute;
-  top: -1.2rem;
-  transform: translateX(-50%);
-  font-size: 0.9rem;
-  font-weight: bold;
-  white-space: nowrap;
-  transition: left 0.4s ease;
-}
-
-.number-scale .number-marker.test-num {
-  color: #e91e63;
-}
-
-.number-scale .marker {
-  background-color: black;
-  width: 2px;
-  height: 10px;
-  top: 1.1rem;
-  left: 50%;
-  border-radius: 10px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.62);
-}
-
-.number-scale .number-marker.below {
-  top: 1rem;
-}
-
-.number-scale .number-marker.below .marker {
-  top: -1.1rem;
-}
-
-/* ===================================
-   7. Highscores & Leaderboards
-=================================== */
-.highscores-carousel {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.highscores-carousel li {
-  background: #fff;
-  padding: 0.8rem;
-  border-bottom: 1px dashed #ccc;
-  font-size: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: 0.2s ease;
-}
-
-.highscores-carousel li:hover {
-  background: #d8d8d8;
-  transform: scale(1.02);
-}
-
-.highscores-carousel li span {
-  font-weight: bold;
-}
-
-body.dark-mode .highscores-carousel li {
-  background: #2c2c2c;
-  border-bottom: 1px solid #444;
-}
-
-body.dark-mode .highscores-carousel li:hover {
-  background: #3a3a3a;
-}
-
-/* Gold/Silver/Bronze Effects */
-.highscores-carousel li.gold-bg {
-  background: linear-gradient(90deg, #ffd700 0%, #ffea70 100%) !important;
-  color: black !important;
-}
-
-.highscores-carousel li.silver-bg {
-  background: linear-gradient(90deg, #c0c0c0 0%, #e0e0e0 100%) !important;
-  color: black !important;
-}
-
-.highscores-carousel li.bronze-bg {
-  background: linear-gradient(90deg, #cd7f32 0%, #f4a460 100%) !important;
-  color: black !important;
-}
-
-/* ===================================
-   8. Card Selection & Multiplier
-=================================== */
-.card-selection-block,
-.card-combined-box {
-  text-align: center;
-  margin-top: 1.5rem;
-}
-
-.card-selection-block label,
-.card-combined-box .combined-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.card-selection-inline,
-.card-combined-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.dropdown {
-  padding: 0.5rem;
-  font-size: 1rem;
-  font-family: Nunito, sans-serif;
-}
-
-.multiplier-display {
-  font-size: 1.2rem;
-  color: #ff5722;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  animation: pulse 1s infinite alternate;
-}
-
-.card-multiplier-banner {
-  background-color: #fff2f8;
-  color: #e91e63;
-  padding: 0.5rem 2rem;
-  box-shadow: 0 0 10px #e91e6355;
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin: 2rem auto 1rem auto;
-  text-align: center;
-}
-
-/* ===================================
-   9. Animations & Effects
-=================================== */
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(0.9);
-  }
 }
 
 @keyframes fireWobble {
@@ -377,6 +320,211 @@ body.dark-mode .highscores-carousel li:hover {
   }
 }
 
+.card-selection {
+  margin-top: 1rem;
+  text-align: center;
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .dropdown {
+    padding: 0.4rem;
+  //  border-radius: 8px;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  button {
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+  }
+}
+
+.multiplier-display {
+  font-size: 1.2rem;
+  color: #ff5722;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  animation: pulse 1s infinite alternate;
+}
+
+.card-multiplier-banner {
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  background-color: #fff2f8;
+  color: #e91e63;
+  padding: 0.5rem 2rem;
+  box-shadow: 0 0 10px #e91e6355;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-selection-block {
+  text-align: center;
+  margin-top: 1.5rem;
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-selection-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dropdown {
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: Nunito,sans-serif;
+  }
+
+  .btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btn:hover {
+    background: #45a049;
+  }
+}
+
+.highscores-carousel {
+  text-align: center;
+  margin-top: 2rem;
+  
+  h3 {
+    margin-bottom: 1rem;
+  }
+
+  .leaderboard-slider {
+    width: 300px;
+    margin: 1rem auto;
+    appearance: none;
+    height: 8px;
+    border-radius: 5px;
+    background: #4caf50;
+    outline: none;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border: 2px solid #4caf50;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    &::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border: 2px solid #4caf50;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+  }
+
+  .slider-wrapper {
+    overflow: hidden;
+    width: 500px;
+    margin: auto;
+    border-radius: 10px;
+    max-width: 100%;
+  }
+
+  .slider {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+  }
+
+  .leaderboard {
+    min-width: 100%;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      background: #fff;
+      padding: 0.8rem;
+      border-bottom: 1px dashed #ccc;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    span {
+      font-weight: bold;
+    }
+  }
+}
+
+.highscores-carousel li.gold-bg {
+  background: linear-gradient(90deg, #ffd700 0%, #ffea70 100%) !important;
+  color: black !important;
+}
+
+.highscores-carousel li.silver-bg {
+  background: linear-gradient(90deg, #c0c0c0 0%, #e0e0e0 100%) !important;
+  color: black !important;
+}
+
+.highscores-carousel li.bronze-bg {
+  background: linear-gradient(90deg, #cd7f32 0%, #f4a460 100%) !important;
+  color: black !important;
+}
+
+.leaderboard-wrapper {
+  touch-action: pan-y; // erlaubt horizontales Swipen ohne Scrollblock
+  overflow: hidden;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    transform: skewX(-20deg);
+    animation: shimmerAnim 2s infinite;
+    z-index: 1;
+  }
+}
+
 @keyframes shimmerAnim {
   0% {
     left: -75%;
@@ -386,59 +534,75 @@ body.dark-mode .highscores-carousel li:hover {
   }
 }
 
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-  10% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-20px);
-  }
+.gold-bg,
+.silver-bg,
+.bronze-bg {
+  position: relative;
+  z-index: 0;
 }
 
-/* ===================================
-   10. Miscellaneous Elements
-=================================== */
-.hearts {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.hearts span {
-  display: inline-block;
-  transform-origin: center;
-  animation: pulse 0.8s infinite;
-}
-
-.toast {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #323232;
-  color: white;
+.card-combined-box {
+  margin-top: 2rem;
+  text-align: center;
   padding: 1rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  font-size: 1rem;
-  z-index: 9999;
-  animation: fadeInOut 3s ease-in-out;
+  margin-left: auto;
+  margin-right: auto;
+
+  .combined-label {
+    font-weight: bold;
+    font-size: 1.1rem;
+    font-family: Nunito,sans-serif;
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .card-combined-inline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .dropdown {
+      padding: 0.5rem;
+      font-size: 1rem;
+      font-family: Nunito,sans-serif;
+     // border-radius: 8px;
+    }
+
+    .btn {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: #388e3c;
+      }
+    }
+  }
 }
 
 .symbol-label {
   font-size: 1.8rem;
+}
+
+/* Marker-Position korrigieren: Zeigt der Marker nach oben, wenn die zugehörige Zahl unterhalb der Leiste liegt */
+.number-scale .number-marker.below .marker {
+  top: -1.1rem;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+ul {
+  cursor: pointer;
 }
 
 .avatar {

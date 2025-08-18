@@ -1,8 +1,7 @@
 .chat-box {
   padding: 1rem;
   margin: 1rem auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+  
   /* Animation fürs Ein-/Ausklappen */
   .chat-content {
     max-height: 0;
@@ -73,7 +72,7 @@
   font-size: 0.95rem;
 
   &:hover {
-    scale: 0.95;
+    scale: 0.975;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
   }
 }

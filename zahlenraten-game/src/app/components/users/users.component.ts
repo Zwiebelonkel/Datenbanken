@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../services/auth.service';
-import { LoaderComponent } from '../../components/loader.component';
+import { ProfileService } from '../../services/profile.service';
+import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponentimport { LevelService } from ''
+import { LevelsService, LevelUser } from '../../services/levels.service';
 
 @Component({
   selector: 'app-users',
@@ -14,6 +16,13 @@ import { LoaderComponent } from '../../components/loader.component';
   imports: [CommonModule, LoaderComponent],
 })
 export class UsersComponent{
+
+  constructor(
+      private profileService: ProfileService,
+    private cardsService: CardsService,
+    private soundService: SoundsService,
+    private levelsService: LevelsService
+  ){}
 
 levelUsers: LevelUser[] = [];
   isLevelListOpen = false;

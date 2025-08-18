@@ -15,6 +15,13 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss'],
 })
+
+type CardOutcome =
+  | { type: 'multiplier'; value: string; chance: number }
+  | { type: 'money'; value: number; chance: number }
+  | { type: 'xp'; value: number; chance: number };
+
+  
 export class CardShopComponent implements OnInit {
   money: number = 0;
   username: string = '';
@@ -29,32 +36,36 @@ export class CardShopComponent implements OnInit {
     // { name: 'Hearts', price: 200, image: 'assets/packs/hearts.png' }
   ];
 
-  chances: Record<string, { multiplier: string; chance: number }[]> = {
-    Basic: [
-      { multiplier: '1.2x', chance: 65 },
-      { multiplier: '1.5x', chance: 20 },
-      { multiplier: '2x', chance: 7.5 },
-      { multiplier: '-1', chance: 7.5 },
-      { multiplier: '-2', chance: 0 },
-      { multiplier: '-3', chance: 0 },
-    ],
-    Premium: [
-      { multiplier: '1.5x', chance: 50 },
-      { multiplier: '2x', chance: 20 },
-      { multiplier: '5x', chance: 15 },
-      { multiplier: '-1', chance: 13 },
-      { multiplier: '-2', chance: 2 },
-      { multiplier: '-3', chance: 0 },
-    ],
-    Ultra: [
-      { multiplier: '2x', chance: 40 },
-      { multiplier: '5x', chance: 35 },
-      { multiplier: '10x', chance: 5 },
-      { multiplier: '-1', chance: 18.5 },
-      { multiplier: '-2', chance: 1 },
-      { multiplier: '-3', chance: 0.5 },
-    ],
-  };
+chances: Record<string, CardOutcome[]> = {
+  Basic: [
+    { type: 'multiplier', value: '1.2x', chance: 60 },
+    { type: 'multiplier', value: '1.5x', chance: 20 },
+    { type: 'multiplier', value: '2x', chance: 7.5 },
+    { type: 'multiplier', value: '-1', chance: 7.5 },
+    { type: 'money', value: 50, chance: 3 },
+    { type: 'xp', value: 25, chance: 2 },
+  ],
+  Premium: [
+    { type: 'multiplier', value: '1.5x', chance: 45 },
+    { type: 'multiplier', value: '2x', chance: 20 },
+    { type: 'multiplier', value: '5x', chance: 15 },
+    { type: 'multiplier', value: '-1', chance: 13 },
+    { type: 'multiplier', value: '-2', chance: 2 },
+    { type: 'money', value: 100, chance: 3 },
+    { type: 'xp', value: 50, chance: 2 },
+  ],
+  Ultra: [
+    { type: 'multiplier', value: '2x', chance: 35 },
+    { type: 'multiplier', value: '5x', chance: 30 },
+    { type: 'multiplier', value: '10x', chance: 5 },
+    { type: 'multiplier', value: '-1', chance: 18.5 },
+    { type: 'multiplier', value: '-2', chance: 1 },
+    { type: 'multiplier', value: '-3', chance: 0.5 },
+    { type: 'money', value: 250, chance: 5 },
+    { type: 'xp', value: 100, chance: 5 },
+  ],
+};
+
 
   constructor(
     private router: Router,

@@ -10,6 +10,11 @@ import { SoundsService } from '../../services/sound.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { RainComponent } from '../rain/rain.component';
 
+  type CardOutcome =
+  | { type: 'multiplier'; value: string; chance: number }
+  | { type: 'money'; value: number; chance: number }
+  | { type: 'xp'; value: number; chance: number };
+
 @Component({
   selector: 'app-pack-opening',
   standalone: true,
@@ -38,12 +43,6 @@ export class PackOpeningComponent implements OnInit {
   lastCardText: string = '';
   lastCardOut = false;
   cardStack: string[] = [];
-
-  type CardOutcome =
-  | { type: 'multiplier'; value: string; chance: number }
-  | { type: 'money'; value: number; chance: number }
-  | { type: 'xp'; value: number; chance: number };
-
 
 chances: Record<string, CardOutcome[]> = {
   Basic: [

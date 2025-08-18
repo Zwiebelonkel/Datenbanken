@@ -5,23 +5,10 @@
   rel="stylesheet"
 />
 <app-sidebar *ngIf="!isLoading"></app-sidebar>
-<div class="topbar" *ngIf="authService.isLoggedIn()">
-  <!-- <div class="user-info">
-    <span>👤 Eingeloggt als: <strong>{{ authService.getUsername() }}</strong></span>
-    <span>🛡️ Rolle: <strong>{{ authService.getRole()?.toLowerCase() }}</strong></span>
-  </div> -->
-  <span
-    >👤 Welcome <strong>{{ authService.getUsername() }}</strong></span
-  >
-</div>
 
 <app-rain #rain></app-rain>
+<app-topbar page=""></app-topbar>
 <!-- Falls nicht eingeloggt -->
-<div class="topbar" *ngIf="!authService.isLoggedIn()">
-  <div class="topbar-buttons">
-    <button (click)="goToLogin()">🔐 Login</button>
-  </div>
-</div>
 
 <div
   *ngIf="cardMultiplierUsed && cardMultiplier > 1.0"
@@ -84,7 +71,7 @@
 
   <div class="multiplier-display" *ngIf="currentMultiplier > 1">
     🔥 Multiplikator:
-    <strong>{{ currentMultiplier | number : '1.1-1' }}x</strong>
+    <strong>{{ currentMultiplier | number : "1.1-1" }}x</strong>
   </div>
   <p class="money">
     💰 Geld: <span>{{ money }}€</span>
@@ -133,7 +120,7 @@
         [ngValue]="card"
         [disabled]="card.amount <= 0"
       >
-        {{ card.multiplier + 'x' }} (x{{ card.amount }})
+        {{ card.multiplier + "x" }} (x{{ card.amount }})
       </option>
     </select>
 
@@ -184,7 +171,9 @@
     <div class="slider-wrapper">
       <div
         class="slider"
-        [style.transform]="'translateX(-' + currentLeaderboardIndex * 100 + '%)'"
+        [style.transform]="
+          'translateX(-' + currentLeaderboardIndex * 100 + '%)'
+        "
       >
         <div
           class="leaderboard"

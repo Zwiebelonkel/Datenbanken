@@ -6,13 +6,20 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent, SidebarComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LoaderComponent,
+    SidebarComponent,
+    TopbarComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })

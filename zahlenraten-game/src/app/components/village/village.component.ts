@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 import { VillageService } from '../../services/village.service';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
@@ -57,6 +58,7 @@ interface VillagerAnim extends Villager {
     CommonModule,
     LoaderComponent,
     SidebarComponent,
+    TopbarComponent,
     FormsModule,
     RainComponent,
   ],

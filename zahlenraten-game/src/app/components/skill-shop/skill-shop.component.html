@@ -1,9 +1,8 @@
 <app-sidebar></app-sidebar>
+<app-topbar page="⬆️ Skill-Shop"></app-topbar>
 <app-loader *ngIf="isLoading"></app-loader>
 <div *ngIf="!isLoading">
   <div class="skill-shop">
-    <h2 class="shop-title">Skill-Shop</h2>
-
     <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
     <div *ngIf="isLoading" class="loading">Lade…</div>
 

@@ -7,12 +7,13 @@ import {
 } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-skill-shop',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, LoaderComponent],
+  imports: [CommonModule, SidebarComponent, LoaderComponent, TopbarComponent],
   templateUrl: './skill-shop.component.html',
   styleUrls: ['./skill-shop.component.scss'],
 })

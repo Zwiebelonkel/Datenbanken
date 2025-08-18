@@ -1,8 +1,10 @@
 <app-sidebar></app-sidebar>
+<app-topbar page="🎴 Karten Shop"></app-topbar>
 <div class="card card-shop">
-  <h2>🎴 Karten Shop</h2>
   <app-loader *ngIf="isLoading"></app-loader>
-  <div class="money-display">💼 Dein Geld: {{ money | number : "1.2-2" }} €</div>
+  <div class="money-display">
+    💼 Dein Geld: {{ money | number : "1.2-2" }} €
+  </div>
 
   <div *ngIf="!isLoading" class="packs">
     <div
@@ -18,32 +20,32 @@
       <p>💰 {{ pack.price }} €</p>
 
       <!-- 📊 Zeige die Chancen für das Pack -->
-<ul class="chances" *ngIf="chances[pack.name]">
-  <li *ngFor="let entry of chances[pack.name]">
-    <span class="label">
-      <!-- Multiplier mit Herz bei negativem Wert -->
-      <ng-container *ngIf="entry.type === 'multiplier'">
-        <ng-container *ngIf="entry.value.startsWith('-'); else normalText">
-          {{ entry.value | slice : 1 }}❤️
-        </ng-container>
-        <ng-template #normalText>{{ entry.value }}</ng-template>
-      </ng-container>
-      
-      <!-- Money mit Geld-Symbol -->
-      <ng-container *ngIf="entry.type === 'money'">
-        💰 {{ entry.value }}
-      </ng-container>
-      
-      <!-- XP mit Stern-Symbol -->
-      <ng-container *ngIf="entry.type === 'xp'">
-        ⭐️ {{ entry.value }}
-      </ng-container>
-    </span>
-    <span class="percentage">{{ entry.chance }}%</span>
-  </li>
-</ul>
+      <ul class="chances" *ngIf="chances[pack.name]">
+        <li *ngFor="let entry of chances[pack.name]">
+          <span class="label">
+            <!-- Multiplier mit Herz bei negativem Wert -->
+            <ng-container *ngIf="entry.type === 'multiplier'">
+              <ng-container
+                *ngIf="entry.value.startsWith('-'); else normalText"
+              >
+                {{ entry.value | slice : 1 }}❤️
+              </ng-container>
+              <ng-template #normalText>{{ entry.value }}</ng-template>
+            </ng-container>
 
+            <!-- Money mit Geld-Symbol -->
+            <ng-container *ngIf="entry.type === 'money'">
+              💰 {{ entry.value }}
+            </ng-container>
 
+            <!-- XP mit Stern-Symbol -->
+            <ng-container *ngIf="entry.type === 'xp'">
+              ⭐️ {{ entry.value }}
+            </ng-container>
+          </span>
+          <span class="percentage">{{ entry.chance }}%</span>
+        </li>
+      </ul>
 
       <button
         (click)="buyPack(pack)"

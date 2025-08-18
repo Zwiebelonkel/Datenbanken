@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 
 @Component({
   selector: 'app-achievements',
   templateUrl: './achievements.component.html',
   styleUrls: ['./achievements.component.scss'],
-  imports: [CommonModule, SidebarComponent],
+  imports: [CommonModule, SidebarComponent, TopbarComponent],
   standalone: true,
 })
 export class AchievementsComponent implements OnInit {

@@ -155,64 +155,6 @@ body.dark-mode .highscores-carousel li:hover {
   background: #3a3a3a;
 }
 
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  margin: 0;
-  padding: 1rem 1rem;
-  background: #ffffffcc;
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  font-size: 1rem;
-  color: #333;
-  border-radius: 0 0 10px 10px;
-  box-sizing: border-box;
-}
-
-body.dark-mode .topbar {
-  background: #1a1a1acc;
-  color: #f1f1f1;
-  border-bottom: 1px solid #444;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.topbar-buttons {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.topbar-buttons button {
-  background-color: #4285f4;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
-}
-.topbar-buttons button:hover {
-  background-color: #3367d6;
-  transform: scale(1.05);
-}
-
 .hearts {
   font-size: 1.5rem;
   margin-bottom: 1rem;
@@ -332,7 +274,7 @@ body.dark-mode {
 
   .dropdown {
     padding: 0.4rem;
-  //  border-radius: 8px;
+    //  border-radius: 8px;
     font-size: 1rem;
     margin-right: 0.5rem;
   }
@@ -385,7 +327,7 @@ body.dark-mode {
   .dropdown {
     padding: 0.5rem;
     font-size: 1rem;
-    font-family: Nunito,sans-serif;
+    font-family: Nunito, sans-serif;
   }
 
   .btn {
@@ -407,7 +349,7 @@ body.dark-mode {
 .highscores-carousel {
   text-align: center;
   margin-top: 2rem;
-  
+
   h3 {
     margin-bottom: 1rem;
   }
@@ -551,7 +493,7 @@ body.dark-mode {
   .combined-label {
     font-weight: bold;
     font-size: 1.1rem;
-    font-family: Nunito,sans-serif;
+    font-family: Nunito, sans-serif;
     display: block;
     margin-bottom: 0.8rem;
   }
@@ -566,8 +508,8 @@ body.dark-mode {
     .dropdown {
       padding: 0.5rem;
       font-size: 1rem;
-      font-family: Nunito,sans-serif;
-     // border-radius: 8px;
+      font-family: Nunito, sans-serif;
+      // border-radius: 8px;
     }
 
     .btn {
@@ -614,7 +556,7 @@ ul {
   transition: 0.5s;
 }
 
-.avatar:hover{
-  transition:0.5s;
-  scale:1.5;
+.avatar:hover {
+  transition: 0.5s;
+  scale: 1.5;
 }

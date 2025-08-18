@@ -1,0 +1,69 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin: 0;
+  padding: 1rem 1rem;
+  background: #ffffffcc;
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-size: 1rem;
+  color: #333;
+  border-radius: 0 0 10px 10px;
+  box-sizing: border-box;
+}
+
+/* Dark Mode */
+body.dark-mode .topbar {
+  background: #1a1a1acc;
+  color: #f1f1f1;
+  border-bottom: 1px solid #444;
+}
+
+/* Titel standardmäßig zentriert */
+.page-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Wenn Fallback aktiv → linksbündig */
+.page-title.left-align {
+  text-align: left;
+  margin-right: auto; /* schiebt alles andere nach rechts */
+  font-size: 1rem;
+}
+
+/* Buttons rechts */
+.topbar-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.topbar-buttons button {
+  background-color: #4285f4;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.topbar-buttons button:hover {
+  background-color: #3367d6;
+  transform: scale(1.05);
+}

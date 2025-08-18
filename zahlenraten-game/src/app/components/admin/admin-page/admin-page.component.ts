@@ -5,13 +5,14 @@ import { AuthService } from '../../../services/auth.service';
 import { ProfileService, UserStats } from '../../../services/profile.service';
 import { Router } from '@angular/router';
 import { SidebarComponent } from '../../sidebar/sidebar.component';
+import { TopbarComponent } from '../../topbar/topbar.component';
 
 @Component({
   selector: 'app-admin-page',
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, SidebarComponent],
+  imports: [CommonModule, SidebarComponent, TopbarComponent],
 })
 export class AdminPageComponent implements OnInit {
   private baseUrl = 'https://outside-between.onrender.com/api';

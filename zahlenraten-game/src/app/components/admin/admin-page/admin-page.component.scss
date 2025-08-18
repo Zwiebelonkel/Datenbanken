@@ -3,7 +3,7 @@
   align-items: flex-start;
   justify-content: center; /* Hauptachse zentrieren */
   gap: 30px;
-  max-width: 1400px;
+  max-width: 1000px;
   margin: 0 auto; /* Layout in der Mitte der Seite */
 }
 
@@ -19,9 +19,6 @@
   margin: 0 auto;
   padding: 30px;
   font-family: "Nunito Sans", sans-serif;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
 }
 
 h1 {

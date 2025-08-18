@@ -12,6 +12,7 @@ import { AchievementService } from '../../services/achievement.service';
 import { MoneyService } from '../../services/money.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 import { ProfileService } from '../../services/profile.service';
 import { ChatService } from '../../services/chat.service';
 import { ReelComponent } from './reel/reel.component';
@@ -31,6 +32,7 @@ type SymbolData = { type: 'emoji' | 'image'; value: string };
     LoaderComponent,
     RainComponent,
     SidebarComponent,
+    TopbarComponent,
     ReelComponent,
   ],
 })
@@ -98,101 +100,109 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
     });
     this.isLoading = false;
   }
-  
-spin() {
-  this.isSpinning = true;
-  if (!this.gotLasVegas) {
-    this.unlockAch('Las Vegas 🎰');
-    this.gotLasVegas = true;
+
+  spin() {
+    this.isSpinning = true;
+    if (!this.gotLasVegas) {
+      this.unlockAch('Las Vegas 🎰');
+      this.gotLasVegas = true;
+    }
+    this.message = '';
+    this.isWinner = false;
+
+    if (this.currentMoney < this.spinCost) {
+      this.message = '❌ Nicht genug Coins!';
+      this.isSpinning = false; // Status zurücksetzen, da kein Spin möglich
+      return;
+    }
+
+    // Geld abziehen via Service (asynchron)
+    this.moneyService
+      .updateMoney({ username: this.username, amount: -this.spinCost })
+      .subscribe({
+        next: () => {
+          // Geld wurde erfolgreich abgezogen, UI jetzt aktualisieren
+          this.currentMoney -= this.spinCost;
+          this.results = [
+            { type: 'emoji', value: '⏳' },
+            { type: 'emoji', value: '⏳' },
+            { type: 'emoji', value: '⏳' },
+          ];
+
+          const spinDelay = 500; // ms zwischen den Rollen starten
+          const newResults: SymbolData[] = [];
+
+          this.reelComponents.forEach((reel, i) => {
+            setTimeout(() => {
+              const index = Math.floor(Math.random() * this.symbols.length);
+              newResults[i] = this.symbols[index];
+              reel.spin(newResults[i]);
+
+              if (i === this.reelComponents.length - 1) {
+                setTimeout(() => {
+                  this.results = [...newResults];
+
+                  if (this.isJackpot()) {
+                    this.addXp(this.winReward / 10);
+                    this.rainComponent.emojiRain('💸');
+                    this.unlockAch('Lone Wolf 🐺');
+
+                    // Nachricht an den Chat senden
+                    this.chatService
+                      .sendMessage({
+                        username: 'Info',
+                        message: `${this.username} hat gerade einen Jackpot geknackt und ${this.winReward} 💸 gewonnen! `,
+                      })
+                      .subscribe({
+                        next: () => {
+                          console.log('Nachricht erfolgreich gesendet!');
+                        },
+                        error: (err) => {
+                          console.error(
+                            'Fehler beim Senden der Nachricht:',
+                            err
+                          );
+                        },
+                      });
+
+                    this.moneyService
+                      .updateMoney({
+                        username: this.username,
+                        amount: this.winReward,
+                      })
+                      .subscribe({
+                        next: () => {
+                          this.message = `🎉 Jackpot! Du hast ${this.winReward} Coins gewonnen!`;
+                          this.isWinner = true;
+                          this.loadMoney();
+                          this.isSpinning = false;
+                        },
+                        error: () => {
+                          this.message = 'Fehler beim Gutschreiben des Gewinns';
+                          this.isSpinning = false;
+                        },
+                      });
+                  } else {
+                    this.addXp(this.betAmount / 10);
+                    this.rainComponent.emojiRain('🌀');
+                    this.message =
+                      '🌀 Leider kein Gewinn. Versuche es nochmal!';
+                    this.isWinner = false;
+                    this.loadMoney();
+                    this.isSpinning = false;
+                  }
+                }, 1100); // etwas länger als Reel spin Dauer
+              }
+            }, i * spinDelay);
+          });
+        },
+        error: () => {
+          this.message = '❌ Fehler beim Abziehen der Coins';
+          this.isSpinning = false;
+          this.loadMoney();
+        },
+      });
   }
-  this.message = '';
-  this.isWinner = false;
-
-  if (this.currentMoney < this.spinCost) {
-    this.message = '❌ Nicht genug Coins!';
-    this.isSpinning = false; // Status zurücksetzen, da kein Spin möglich
-    return;
-  }
-
-  // Geld abziehen via Service (asynchron)
-  this.moneyService.updateMoney({ username: this.username, amount: -this.spinCost })
-    .subscribe({
-      next: () => {
-        // Geld wurde erfolgreich abgezogen, UI jetzt aktualisieren
-        this.currentMoney -= this.spinCost;
-        this.results = [
-          { type: 'emoji', value: '⏳' },
-          { type: 'emoji', value: '⏳' },
-          { type: 'emoji', value: '⏳' },
-        ];
-
-        const spinDelay = 500; // ms zwischen den Rollen starten
-        const newResults: SymbolData[] = [];
-
-        this.reelComponents.forEach((reel, i) => {
-          setTimeout(() => {
-            const index = Math.floor(Math.random() * this.symbols.length);
-            newResults[i] = this.symbols[index];
-            reel.spin(newResults[i]);
-
-            if (i === this.reelComponents.length - 1) {
-              setTimeout(() => {
-                this.results = [...newResults];
-
-                if (this.isJackpot()) {
-                  this.addXp(this.winReward / 10);
-                  this.rainComponent.emojiRain('💸');
-                  this.unlockAch('Lone Wolf 🐺');
-
-                  // Nachricht an den Chat senden
-                  this.chatService.sendMessage({
-                    username: 'Info',
-                    message: `${this.username} hat gerade einen Jackpot geknackt und ${this.winReward} 💸 gewonnen! `,
-                  }).subscribe({
-                    next: () => {
-                      console.log('Nachricht erfolgreich gesendet!');
-                    },
-                    error: (err) => {
-                      console.error('Fehler beim Senden der Nachricht:', err);
-                    },
-                  });
-
-                  this.moneyService.updateMoney({
-                    username: this.username,
-                    amount: this.winReward,
-                  }).subscribe({
-                    next: () => {
-                      this.message = `🎉 Jackpot! Du hast ${this.winReward} Coins gewonnen!`;
-                      this.isWinner = true;
-                      this.loadMoney();
-                      this.isSpinning = false;
-                    },
-                    error: () => {
-                      this.message = 'Fehler beim Gutschreiben des Gewinns';
-                      this.isSpinning = false;
-                    },
-                  });
-                } else {
-                  this.addXp(this.betAmount / 10);
-                  this.rainComponent.emojiRain('🌀');
-                  this.message = '🌀 Leider kein Gewinn. Versuche es nochmal!';
-                  this.isWinner = false;
-                  this.loadMoney();
-                  this.isSpinning = false;
-                }
-              }, 1100); // etwas länger als Reel spin Dauer
-            }
-          }, i * spinDelay);
-        });
-      },
-      error: () => {
-        this.message = '❌ Fehler beim Abziehen der Coins';
-        this.isSpinning = false;
-        this.loadMoney();
-      },
-    });
-}
-
 
   unlockAch(name: string) {
     this.achievementService.unlockAchievement(name).subscribe({

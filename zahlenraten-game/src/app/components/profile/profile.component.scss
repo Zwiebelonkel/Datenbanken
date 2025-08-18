@@ -50,10 +50,10 @@
     pointer-events: none;
   }
 }
-  .avatar-frame:hover {
-    transition: 0.5s;
-    transform: rotate(360deg);
-  }
+.avatar-frame:hover {
+  transition: 0.5s;
+  transform: rotate(360deg);
+}
 
 /* Overlay-Button auf dem Avatar (nur bei eigenem Profil sichtbar) */
 .hidden-input {
@@ -90,10 +90,7 @@
 /* ===== Cards (Stats & Passwort) ===== */
 .profile-card,
 .password-change-box {
-  background-color: var(--card-bg);
   padding: 1.8rem;
-  border-radius: 12px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
 
   h3 {
@@ -261,4 +258,3 @@
     transition: width 0.3s ease;
   }
 }
-

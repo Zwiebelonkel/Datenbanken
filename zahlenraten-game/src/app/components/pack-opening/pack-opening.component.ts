@@ -1,42 +1,49 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { CardsService } from "../../services/cards.service";
-import { MoneyService } from "../../services/money.service";
-import { AuthService } from "../../services/auth.service";
-import { ProfileService } from "../../services/profile.service";
-import { LoaderComponent } from "../loader/loader.component";
-import { SoundsService } from "../../services/sound.service";
-import { AchievementService } from "../../services/achievement.service";
-import { SidebarComponent } from "../sidebar/sidebar.component";
-import { RainComponent } from "../rain/rain.component";
-import { ViewChild } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { CardsService } from '../../services/cards.service';
+import { MoneyService } from '../../services/money.service';
+import { AuthService } from '../../services/auth.service';
+import { ProfileService } from '../../services/profile.service';
+import { LoaderComponent } from '../loader/loader.component';
+import { SoundsService } from '../../services/sound.service';
+import { AchievementService } from '../../services/achievement.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
+import { RainComponent } from '../rain/rain.component';
+import { ViewChild } from '@angular/core';
 
 type CardOutcome =
-  | { type: "multiplier"; value: string; chance: number }
-  | { type: "money"; value: number; chance: number }
-  | { type: "xp"; value: number; chance: number };
+  | { type: 'multiplier'; value: string; chance: number }
+  | { type: 'money'; value: number; chance: number }
+  | { type: 'xp'; value: number; chance: number };
 
 @Component({
-  selector: "app-pack-opening",
+  selector: 'app-pack-opening',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, SidebarComponent, RainComponent],
-  templateUrl: "./pack-opening.component.html",
-  styleUrls: ["./pack-opening.component.scss"],
+  imports: [
+    CommonModule,
+    LoaderComponent,
+    SidebarComponent,
+    RainComponent,
+    TopbarComponent,
+  ],
+  templateUrl: './pack-opening.component.html',
+  styleUrls: ['./pack-opening.component.scss'],
 })
 export class PackOpeningComponent implements OnInit {
-  @ViewChild("rain") rainComponent!: RainComponent;
-  packName: string = "";
-  result: string = "";
-  displayResult: string = "";
+  @ViewChild('rain') rainComponent!: RainComponent;
+  packName: string = '';
+  result: string = '';
+  displayResult: string = '';
   reveal = false;
-  packImagePath = "assets/packs/basicOpen.png";
+  packImagePath = 'assets/packs/basicOpen.png';
   showPack = true;
   packDropped = false;
-  message = "";
+  message = '';
   achievementMessage: string | null = null;
   money: number = 0;
-  username: string = "";
+  username: string = '';
   isLoading = true;
   currentLevel: number = 0;
 
@@ -44,37 +51,37 @@ export class PackOpeningComponent implements OnInit {
   cardsRemaining: number = 0;
   drawnCards: string[] = [];
 
-  lastCardText: string = "";
+  lastCardText: string = '';
   lastCardOut = false;
   cardStack: string[] = [];
 
   chances: Record<string, CardOutcome[]> = {
     Basic: [
-      { type: "multiplier", value: "1.2x", chance: 50 },
-      { type: "multiplier", value: "1.5x", chance: 15 },
-      { type: "multiplier", value: "2x", chance: 5 },
-      { type: "multiplier", value: "-1", chance: 5 },
-      { type: "money", value: 50, chance: 15 }, // Erhöht
-      { type: "xp", value: 25, chance: 10 }, // Erhöht
+      { type: 'multiplier', value: '1.2x', chance: 50 },
+      { type: 'multiplier', value: '1.5x', chance: 15 },
+      { type: 'multiplier', value: '2x', chance: 5 },
+      { type: 'multiplier', value: '-1', chance: 5 },
+      { type: 'money', value: 50, chance: 15 }, // Erhöht
+      { type: 'xp', value: 25, chance: 10 }, // Erhöht
     ],
     Premium: [
-      { type: "multiplier", value: "1.5x", chance: 35 },
-      { type: "multiplier", value: "2x", chance: 15 },
-      { type: "multiplier", value: "5x", chance: 10 },
-      { type: "multiplier", value: "-1", chance: 10 },
-      { type: "multiplier", value: "-2", chance: 5 },
-      { type: "money", value: 100, chance: 15 }, // Erhöht
-      { type: "xp", value: 50, chance: 10 }, // Erhöht
+      { type: 'multiplier', value: '1.5x', chance: 35 },
+      { type: 'multiplier', value: '2x', chance: 15 },
+      { type: 'multiplier', value: '5x', chance: 10 },
+      { type: 'multiplier', value: '-1', chance: 10 },
+      { type: 'multiplier', value: '-2', chance: 5 },
+      { type: 'money', value: 100, chance: 15 }, // Erhöht
+      { type: 'xp', value: 50, chance: 10 }, // Erhöht
     ],
     Ultra: [
-      { type: "multiplier", value: "2x", chance: 25 },
-      { type: "multiplier", value: "5x", chance: 20 },
-      { type: "multiplier", value: "10x", chance: 3 },
-      { type: "multiplier", value: "-1", chance: 15 },
-      { type: "multiplier", value: "-2", chance: 1 },
-      { type: "multiplier", value: "-3", chance: 0.5 },
-      { type: "money", value: 250, chance: 20 }, // Erhöht
-      { type: "xp", value: 100, chance: 15 }, // Erhöht
+      { type: 'multiplier', value: '2x', chance: 25 },
+      { type: 'multiplier', value: '5x', chance: 20 },
+      { type: 'multiplier', value: '10x', chance: 3 },
+      { type: 'multiplier', value: '-1', chance: 15 },
+      { type: 'multiplier', value: '-2', chance: 1 },
+      { type: 'multiplier', value: '-3', chance: 0.5 },
+      { type: 'money', value: 250, chance: 20 }, // Erhöht
+      { type: 'xp', value: 100, chance: 15 }, // Erhöht
     ],
   };
 
@@ -96,14 +103,14 @@ export class PackOpeningComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.username = this.authService.getUsername() || "";
+    this.username = this.authService.getUsername() || '';
     this.loadMoney();
     this.profileService.getUserStats(this.username).subscribe((p) => {
       this.currentLevel = p.level ?? 0;
     });
 
     this.route.queryParams.subscribe((params) => {
-      this.packName = params["pack"] || "Basic";
+      this.packName = params['pack'] || 'Basic';
       this.packImagePath = `assets/packs/${this.packName.toLowerCase()}Open.png`;
     });
   }
@@ -116,7 +123,7 @@ export class PackOpeningComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error("❌ Fehler beim Laden der Statistiken:", err);
+        console.error('❌ Fehler beim Laden der Statistiken:', err);
         this.isLoading = false;
       },
     });
@@ -128,8 +135,8 @@ export class PackOpeningComponent implements OnInit {
     const price = this.packPrices[this.packName] || 0;
 
     if (this.money < price) {
-      this.message = "❌ Nicht genug Geld!";
-      this.router.navigate(["/card-shop"]);
+      this.message = '❌ Nicht genug Geld!';
+      this.router.navigate(['/card-shop']);
       return;
     }
 
@@ -139,16 +146,16 @@ export class PackOpeningComponent implements OnInit {
         next: () => {
           this.money -= price;
           this.packDropped = true;
-          this.message = "";
+          this.message = '';
           this.cardsRemaining = this.maxCards;
           this.drawnCards = [];
           this.reveal = false;
-          this.displayResult = "";
-          this.cardStack = Array(this.maxCards).fill("🃏");
+          this.displayResult = '';
+          this.cardStack = Array(this.maxCards).fill('🃏');
         },
         error: (err) => {
-          console.error("❌ Fehler beim Geldabzug:", err);
-          this.message = "❌ Kauf fehlgeschlagen!";
+          console.error('❌ Fehler beim Geldabzug:', err);
+          this.message = '❌ Kauf fehlgeschlagen!';
         },
       });
   }
@@ -179,16 +186,16 @@ export class PackOpeningComponent implements OnInit {
     const pack = this.chances[this.packName];
     const rand = Math.random() * 100;
     let cumulative = 0;
-    this.soundService.playSound("win.aac", 0.5);
+    this.soundService.playSound('win.aac', 0.5);
 
     for (const entry of pack) {
       cumulative += entry.chance;
       if (rand <= cumulative) {
-        if (entry.type === "multiplier") {
+        if (entry.type === 'multiplier') {
           this.result = entry.value;
           const numericVal = parseFloat(this.result);
-          if (this.result === "-3") {
-            this.unlockAch("Joker 🃏");
+          if (this.result === '-3') {
+            this.unlockAch('Joker 🃏');
           }
           if (!isNaN(numericVal) && numericVal < 0) {
             this.displayResult = `${Math.abs(numericVal)}❤️`;
@@ -198,11 +205,11 @@ export class PackOpeningComponent implements OnInit {
 
           // Nur Multiplier-Karten speichern
           this.cardsService.addCard(numericVal).subscribe({
-            next: () => console.log("Karte gespeichert:", this.result),
+            next: () => console.log('Karte gespeichert:', this.result),
             error: (err) =>
-              console.error("❌ Fehler beim Speichern der Karte:", err),
+              console.error('❌ Fehler beim Speichern der Karte:', err),
           });
-        } else if (entry.type === "money") {
+        } else if (entry.type === 'money') {
           this.displayResult = `${entry.value} 💰`;
           this.moneyService
             .updateMoney({ username: this.username, amount: entry.value })
@@ -212,9 +219,9 @@ export class PackOpeningComponent implements OnInit {
                 console.log(`💰 +${entry.value} Geld gutgeschrieben`);
               },
               error: (err) =>
-                console.error("❌ Fehler beim Hinzufügen von Geld:", err),
+                console.error('❌ Fehler beim Hinzufügen von Geld:', err),
             });
-        } else if (entry.type === "xp") {
+        } else if (entry.type === 'xp') {
           this.displayResult = `${entry.value}⭐️`;
           this.addXp(entry.value);
         }
@@ -230,14 +237,14 @@ export class PackOpeningComponent implements OnInit {
       next: (res) => {
         if (res.unlocked) {
           this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
-          this.rainComponent.emojiRain("🎖️");
+          this.rainComponent.emojiRain('🎖️');
           this.addXp(20);
         } else {
           // optional: Info anzeigen, dass bereits freigeschaltet
           // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);
         }
       },
-      error: (err) => console.error("❌ Fehler beim Unlock:", err),
+      error: (err) => console.error('❌ Fehler beim Unlock:', err),
     });
   }
 
@@ -268,7 +275,7 @@ export class PackOpeningComponent implements OnInit {
         }
         this.currentLevel = res.level;
       },
-      error: (err) => console.error("❌ XP-Update fehlgeschlagen", err),
+      error: (err) => console.error('❌ XP-Update fehlgeschlagen', err),
     });
   }
 }

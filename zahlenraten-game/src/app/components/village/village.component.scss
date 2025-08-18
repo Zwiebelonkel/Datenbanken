@@ -1,10 +1,6 @@
 .village-box {
-  background: white;
-  border-radius: 12px;
   padding: 1.5rem;
   margin: 1.2rem auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  max-width: 500px;
   text-align: left;
 
   h2 {
@@ -26,8 +22,6 @@
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 2rem;
-  border-radius: 12px;
-  background-color: #fff;
 
   canvas {
     display: block;
@@ -35,7 +29,7 @@
     max-width: 380px;
     border: 2px solid #000;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #ffffff;
   }
 }
 

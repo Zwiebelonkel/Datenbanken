@@ -17,6 +17,7 @@ import { SoundsService } from '../../services/sound.service';
 import { firstValueFrom } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { RainComponent } from '../rain/rain.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 
 @Component({
   selector: 'app-game',
@@ -28,6 +29,7 @@ import { RainComponent } from '../rain/rain.component';
     FormsModule,
     LoaderComponent,
     SidebarComponent,
+    TopbarComponent,
     ChatComponent,
     UsersComponent,
     RainComponent,
@@ -119,7 +121,7 @@ export class GameComponent implements OnInit {
     private moneyService: MoneyService,
     private profileService: ProfileService,
     private cardsService: CardsService,
-    private soundService: SoundsService,
+    private soundService: SoundsService
   ) {}
 
   ngOnInit() {
@@ -142,7 +144,7 @@ export class GameComponent implements OnInit {
       console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
     }
   }
-    avatar(url?: string | null, size = 32): string {
+  avatar(url?: string | null, size = 32): string {
     if (!url) return 'assets/profile.png';
     return url.replace(
       '/upload/',
@@ -280,71 +282,74 @@ export class GameComponent implements OnInit {
   }
 
   endGame() {
-  const username = this.authService.getUsername();
-  if (!username) {
-    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    const username = this.authService.getUsername();
+    if (!username) {
+      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+      this.gameOver = true;
+      return;
+    }
+
+    this.gameStarted = false;
     this.gameOver = true;
-    return;
+
+    // 💾 Geld (nur Basis) – Backend multipliziert mit monetary_multiplier
+    this.moneyService
+      .updateMoney({ username, amount: this.baseMoneyAccum })
+      .subscribe({
+        next: () =>
+          console.log('💰 Geld (Basis) gesendet – Server hat multipliziert'),
+        error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
+      });
+
+    // ⭐ XP direkt nach Spielende berechnen (lokal)
+    const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
+    if (xpFromLocal > 0) this.addXp(xpFromLocal);
+
+    // ❌ Score wird hier NICHT gespeichert!
   }
-
-  this.gameStarted = false;
-  this.gameOver = true;
-
-  // 💾 Geld (nur Basis) – Backend multipliziert mit monetary_multiplier
-  this.moneyService
-    .updateMoney({ username, amount: this.baseMoneyAccum })
-    .subscribe({
-      next: () =>
-        console.log('💰 Geld (Basis) gesendet – Server hat multipliziert'),
-      error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
-    });
-
-  // ⭐ XP direkt nach Spielende berechnen (lokal)
-  const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
-  if (xpFromLocal > 0) this.addXp(xpFromLocal);
-
-  // ❌ Score wird hier NICHT gespeichert!
-}
 
   submitScore() {
-  this.soundService.playSound('hardPop.aac', 0.6);
+    this.soundService.playSound('hardPop.aac', 0.6);
 
-  const username = this.authService.getUsername();
-  if (!username) {
-    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
-    return;
+    const username = this.authService.getUsername();
+    if (!username) {
+      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+      return;
+    }
+
+    this.scoreService
+      .submitScore({
+        username,
+        baseScore: this.baseScoreAccum, // Basiswerte schicken
+        consecutive_wins: this.highestStreak,
+        money_per_round: this.baseMoneyAccum,
+      })
+      .subscribe({
+        next: (res) => {
+          const finalScore = res?.score ?? 0;
+          console.log(
+            '✅ Score gespeichert (server-multipliziert):',
+            finalScore
+          );
+
+          // 🏆 Highscore-Prüfung mit finalem Score
+          this.scoreService.isHighscore(finalScore).subscribe({
+            next: (hs) => {
+              this.isHighscore = hs.isHighscore;
+              if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
+            },
+            error: (err) =>
+              console.error('❌ Fehler bei Highscore-Prüfung:', err),
+          });
+
+          this.loadLeaderboards();
+          this.restart();
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Score-Submit:', err);
+        },
+      });
   }
-
-  this.scoreService
-    .submitScore({
-      username,
-      baseScore: this.baseScoreAccum,       // Basiswerte schicken
-      consecutive_wins: this.highestStreak,
-      money_per_round: this.baseMoneyAccum,
-    })
-    .subscribe({
-      next: (res) => {
-        const finalScore = res?.score ?? 0;
-        console.log('✅ Score gespeichert (server-multipliziert):', finalScore);
-
-        // 🏆 Highscore-Prüfung mit finalem Score
-        this.scoreService.isHighscore(finalScore).subscribe({
-          next: (hs) => {
-            this.isHighscore = hs.isHighscore;
-            if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
-          },
-          error: (err) =>
-            console.error('❌ Fehler bei Highscore-Prüfung:', err),
-        });
-
-        this.loadLeaderboards();
-        this.restart();
-      },
-      error: (err) => {
-        console.error('❌ Fehler beim Score-Submit:', err);
-      },
-    });
-}
 
   loadLeaderboards() {
     this.isLoading = true;
@@ -710,7 +715,7 @@ export class GameComponent implements OnInit {
     });
   }
 
-    onAvatarError(ev: Event) {
+  onAvatarError(ev: Event) {
     (ev.target as HTMLImageElement).src = 'assets/profile.png';
   }
 

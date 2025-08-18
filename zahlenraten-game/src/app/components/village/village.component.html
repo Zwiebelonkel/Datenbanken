@@ -1,8 +1,8 @@
 <app-sidebar *ngIf="!showVillagerPopup"></app-sidebar>
+<app-topbar *ngIf="!showVillagerPopup" page="🏡 Dein Dorf"></app-topbar>
 
 <!-- 📦 Box: Dorfinfo -->
-<div class="village-box">
-  <h2>🏡 Dein Dorf</h2>
+<div class="card village-box">
   <app-loader *ngIf="isLoading"></app-loader>
   <div *ngIf="!isLoading">
     <div class="info-row">
@@ -52,7 +52,7 @@
 </div>
 
 <!-- 🆕 Mini-Statistik als eigene Card (gleiche Breite wie andere Cards) -->
-<div class="village-box" *ngIf="!isLoading && villagers.length">
+<div class="card village-box" *ngIf="!isLoading && villagers.length">
   <div class="mini-stats">
     <span>⚒️🏃‍♂️: {{ villagerCounts.goingToMine }}</span>
     <span>💤: {{ villagerCounts.resting }}</span>
@@ -63,7 +63,7 @@
 </div>
 
 <!-- 🖼️ Box: Canvas -->
-<div class="village-box canvas-box" style="position: relative">
+<div class="card village-box canvas-box" style="position: relative">
   <canvas
     #villageCanvas
     width="400"
@@ -83,7 +83,7 @@
 </div>
 
 <!-- 🛠️ Box: Buttons -->
-<div class="village-box" *ngIf="!isLoading">
+<div class="card village-box" *ngIf="!isLoading">
   <button
     class="btn"
     [disabled]="money < villageLevel * 100 || isLoading"

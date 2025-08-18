@@ -21,6 +21,7 @@ import { PackOpeningComponent } from './components/pack-opening/pack-opening.com
 import { LoaderComponent } from './components/loader/loader.component';
 import { RainComponent } from './components/rain/rain.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { TopbarComponent } from './components/topbar/topbar.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { UsersComponent } from './components/users/users.component';
 import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
@@ -44,6 +45,7 @@ import { SkillShopComponent } from './components/skill-shop/skill-shop.component
     LoaderComponent,
     RainComponent,
     SidebarComponent,
+    TopbarComponent,
     VillageComponent,
     ChatComponent,
     UsersComponent,

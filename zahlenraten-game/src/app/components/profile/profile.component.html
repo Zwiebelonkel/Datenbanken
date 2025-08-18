@@ -1,4 +1,5 @@
 <app-sidebar></app-sidebar>
+<app-topbar page="👤 Profil"></app-topbar>
 
 <div class="profile-container">
   <!-- Avatar + Name -->
@@ -29,29 +30,29 @@
     <h2 class="display-name">{{ username }}</h2>
     <!-- <div class="handle">{{ username }}</div> -->
   </div>
-<div *ngIf="isUploading" class="progress">
-  <div class="bar" [style.width.%]="uploadProgress"></div>
-  <div class="pct">{{ uploadProgress }}%</div>
-</div>
+  <div *ngIf="isUploading" class="progress">
+    <div class="bar" [style.width.%]="uploadProgress"></div>
+    <div class="pct">{{ uploadProgress }}%</div>
+  </div>
 
   <!-- Loader -->
   <app-loader *ngIf="isLoading"></app-loader>
 
   <!-- Statistiken -->
-  <div *ngIf="!isLoading" class="profile-card">
+  <div *ngIf="!isLoading" class="card profile-card">
     <h3>📊 Statistiken</h3>
-    
+
     <div class="stat-row">
       <span>⬆️ Level</span>
       <span>{{ level }}</span>
     </div>
-<div class="stat-row">
-  <span>✨ XP</span>
-  <span>{{ xp | number : "1.2-2" }} / {{ xpThreshold }}</span>
-</div>
-<div class="xp-progress">
-  <div class="xp-bar" [style.width.%]="xpPercent"></div>
-</div>
+    <div class="stat-row">
+      <span>✨ XP</span>
+      <span>{{ xp | number : "1.2-2" }} / {{ xpThreshold }}</span>
+    </div>
+    <div class="xp-progress">
+      <div class="xp-bar" [style.width.%]="xpPercent"></div>
+    </div>
     <div class="stat-row">
       <span>💠 Highscore</span>
       <span>{{ highscore }}</span>
@@ -75,7 +76,7 @@
   </div>
 
   <!-- Passwort ändern (nur eigenes Profil) -->
-  <div *ngIf="isOwnProfile && !isLoading" class="password-change-box">
+  <div *ngIf="isOwnProfile && !isLoading" class="card password-change-box">
     <h3>🔐 Passwort ändern</h3>
 
     <input

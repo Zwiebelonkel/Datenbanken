@@ -4,14 +4,15 @@ body {
   font-family: "Nunito", sans-serif;
 }
 
-.card{
+.card {
   background: #f9f9f9;
   max-width: 500px;
   border-radius: 12px;
   box-shadow: 0 4px 8px #0000001a;
   border: 1px solid #ddd;
+  cursor: pointer;
 }
 
-li{
+li {
   cursor: pointer;
 }

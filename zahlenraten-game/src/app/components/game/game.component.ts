@@ -706,6 +706,14 @@ this.levelsService.load().subscribe(users => {
     });
   }
 
+    onAvatarError(ev: Event) {
+    (ev.target as HTMLImageElement).src = 'assets/profile.png';
+  }
+
+  trackByUsername(i: number, item: any) {
+    return item?.username ?? i;
+  }
+
   getHeartSpeed(): string {
     const livesLeft = this.lives;
     if (livesLeft >= 4) return '1.5s'; // entspannt

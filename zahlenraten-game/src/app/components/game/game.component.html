@@ -122,8 +122,8 @@
   "
   class="card-combined-box"
 >
-  <label class="card combined-label">🎴 Karten wählen:</label>
-  <div class="card-combined-inline">
+  <label class="combined-label">🎴 Karten wählen:</label>
+  <div class="card card-combined-inline">
     <!-- Multiplikator-Karten -->
     <div class="symbol-label">🃏</div>
     <select [(ngModel)]="selectedCard" class="dropdown">
@@ -164,11 +164,11 @@
 <app-loader *ngIf="isLoading"></app-loader>
 
 <div
-  class="card leaderboard-wrapper"
+  class="leaderboard-wrapper"
   (touchstart)="onTouchStart($event)"
   (touchend)="onTouchEnd($event)"
 >
-  <div *ngIf="!isLoading" class="highscores-carousel">
+  <div *ngIf="!isLoading" class="card highscores-carousel">
     <h3>{{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
 
     <!-- SLIDER -->

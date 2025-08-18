@@ -8,6 +8,11 @@ import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
+type CardOutcome =
+  | { type: 'multiplier'; value: string; chance: number }
+  | { type: 'money'; value: number; chance: number }
+  | { type: 'xp'; value: number; chance: number };
+
 @Component({
   selector: 'app-card-shop',
   standalone: true,
@@ -15,12 +20,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss'],
 })
-
-type CardOutcome =
-  | { type: 'multiplier'; value: string; chance: number }
-  | { type: 'money'; value: number; chance: number }
-  | { type: 'xp'; value: number; chance: number };
-
   
 export class CardShopComponent implements OnInit {
   money: number = 0;

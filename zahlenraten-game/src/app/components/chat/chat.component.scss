@@ -7,49 +7,49 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &.collapsed {
-    /* Chat eingeklappt → weniger Platz */
-    max-height: 4rem;
+    /* Eingeklappt: nur Header + Button */
+    max-height: 7rem;
     overflow: hidden;
-    cursor: pointer;
   }
 }
 
-h3 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
+/* Header: Titel mittig */
 .chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: .5rem;
+  text-align: center;
+
+  h3 {
+    margin: 0 0 0.75rem 0;
+    font-weight: 800;
+  }
 }
 
+/* Breiter Toggle-Button unter dem Titel */
 .toggle-btn {
-  display: flex;
-  align-items: center;
-  gap: .3rem;
-  font-size: .85rem;
-  padding: .3rem .6rem;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  background: white;
+  display: block;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #4caf50;
+  color: #fff;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.06s ease;
 
   &:hover {
-    background: #f0f0f0;
+    background-color: #43a047;
   }
-
-  .chevron {
-    transition: transform 0.2s ease;
-  }
-  .chevron.up {
-    transform: rotate(180deg);
+  &:active {
+    transform: translateY(1px);
   }
 }
 
+/* Inhalt unterhalb des Toggles (nur sichtbar wenn expanded) */
+.chat-content {
+  margin-top: 1rem;
+}
+
+/* Nachrichtenliste */
 .messages {
   max-height: 300px;
   overflow-y: auto;
@@ -59,12 +59,13 @@ h3 {
   margin-bottom: 1rem;
 }
 
+/* Einzelne Nachricht */
 .message {
   transition: 0.25s;
   position: relative;
   padding: 0.75rem 1rem;
   border-radius: 6px;
-  background-color: white;
+  background-color: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   font-size: 0.95rem;
 
@@ -74,6 +75,7 @@ h3 {
   }
 }
 
+/* Farben / Ränder je nach Typ */
 .user-message {
   background-color: #d4f1f4;
   color: #2c3e50;
@@ -102,12 +104,14 @@ h3 {
   border-right: 4px solid #555; /* dunkelgrauer Rand */
 }
 
+/* Inhalt der Nachricht */
 .text {
   color: #333;
   word-break: break-word;
   display: block;
 }
 
+/* Zeitstempel unten rechts in der Nachricht */
 .timestamp {
   position: absolute;
   bottom: 0.2rem;
@@ -116,6 +120,7 @@ h3 {
   color: #999;
 }
 
+/* Formular unter der Liste */
 .chat-form {
   display: flex;
   gap: 0.5rem;
@@ -127,6 +132,7 @@ input {
   padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #ccc;
+  background: #fff;
 }
 
 button {
@@ -145,5 +151,15 @@ button {
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+  }
+}
+
+/* Kleinere Screens: etwas mehr Luft */
+@media (max-width: 520px) {
+  .chat-box {
+    margin: 0.75rem;
+  }
+  .messages {
+    max-height: 260px;
   }
 }

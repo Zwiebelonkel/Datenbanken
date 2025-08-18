@@ -437,35 +437,6 @@ body.dark-mode .highscores-carousel li:hover {
   animation: fadeInOut 3s ease-in-out;
 }
 
-.emoji-rain-container {
-  position: fixed;
-  top: -50px;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 9999;
-  overflow: hidden;
-}
-
-.emoji-drop {
-  position: absolute;
-  font-size: 2rem;
-  animation: emojiFall 3s linear forwards;
-  opacity: 0.9;
-}
-
-@keyframes emojiFall {
-  0% {
-    transform: translateY(-200%) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
 .symbol-label {
   font-size: 1.8rem;
 }

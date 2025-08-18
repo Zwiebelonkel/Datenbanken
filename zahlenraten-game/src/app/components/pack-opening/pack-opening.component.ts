@@ -8,15 +8,17 @@ import { ProfileService } from '../../services/profile.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { RainComponent } from '../rain/rain.component';
 
 @Component({
   selector: 'app-pack-opening',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, SidebarComponent],
+  imports: [CommonModule, LoaderComponent, SidebarComponent, RainComponent],
   templateUrl: './pack-opening.component.html',
   styleUrls: ['./pack-opening.component.scss'],
 })
 export class PackOpeningComponent implements OnInit {
+  @ViewChild('rain') rainComponent!: RainComponent;
   packName: string = '';
   result: string = '';
   displayResult: string = '';

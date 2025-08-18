@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
+import { AchievementService } from '../../services/achievement.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { RainComponent } from '../rain/rain.component';
 import { ViewChild } from '@angular/core'
@@ -90,7 +91,8 @@ chances: Record<string, CardOutcome[]> = {
     private moneyService: MoneyService,
     private authService: AuthService,
     private profileService: ProfileService,
-    private soundService: SoundsService
+    private soundService: SoundsService,
+    private achievementService: AchievementService
   ) {}
 
   ngOnInit() {
@@ -219,6 +221,22 @@ drawCard() {
     }
   }
 }
+
+    unlockAch(name: string) {
+    this.achievementService.unlockAchievement(name).subscribe({
+      next: (res) => {
+        if (res.unlocked) {
+          this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
+          this.rainComponent.emojiRain('🎖️');
+          this.addXp(20);
+        } else {
+          // optional: Info anzeigen, dass bereits freigeschaltet
+          // this.showAchievementMessage(`Schon freigeschaltet: ${res.name}`);
+        }
+      },
+      error: (err) => console.error('❌ Fehler beim Unlock:', err),
+    });
+  }
 
   showAchievementMessage(message: string) {
     this.achievementMessage = message;

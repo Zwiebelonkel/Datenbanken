@@ -46,6 +46,8 @@ export class AchievementService {
       'Dikator 👑': 'Verbessere dein Dorf auf Level 50',
       'Las Vegas 🎰': 'Versuche dein Glück',
       'Lone Wolf 🐺': 'Gewinne beim Glücksspiel',
+      'Joker 🃏': 'Ziehe die seltenste Karte im Spiel',
+
     };
     return descriptions[name] || 'Erfolg freigeschaltet';
   }

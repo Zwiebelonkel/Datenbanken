@@ -142,6 +142,13 @@ export class GameComponent implements OnInit {
       console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
     }
   }
+    avatar(url?: string | null, size = 32): string {
+    if (!url) return 'assets/profile.png';
+    return url.replace(
+      '/upload/',
+      `/upload/w_${size},h_${size},c_fill,g_auto,f_auto,q_auto/`
+    );
+  }
 
   loadCards() {
     this.cardsService.getCards().subscribe({

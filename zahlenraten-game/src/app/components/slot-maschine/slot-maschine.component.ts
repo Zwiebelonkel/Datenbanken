@@ -142,6 +142,7 @@ spin() {
                   this.addXp(this.winReward / 10);
                   this.rainComponent.emojiRain('💸');
                   this.unlockAch('Lone Wolf 🐺');
+                  this.chatService.sendMessage("Info", "${this.username} hat gerade den Jackpot geknackt und ${this.winReward} 💸 gewonnen!")
                   this.moneyService.updateMoney({
                     username: this.username,
                     amount: this.winReward,

@@ -33,6 +33,16 @@
   gap: 8px;
 }
 
+/* Header */
+.users-header {
+  text-align: center;
+
+  h3 {
+    margin: 0 0 0.75rem 0;
+    font-weight: 800;
+  }
+}
+
 .avatar {
   width: 32px;
   height: 32px;

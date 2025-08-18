@@ -1,0 +1,19 @@
+<footer class="site-footer" [class.fixed]="fixed">
+  <div class="footer-inner">
+    <div class="left">
+      <span class="brand">{{ appName }}</span>
+      <span class="sep" aria-hidden="true">•</span>
+      <span class="copy">© {{ year }}</span>
+    </div>
+
+    <nav class="links" aria-label="Rechtliches">
+      <a routerLink="/impressum">Impressum</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <a routerLink="/datenschutz">Datenschutz</a>
+      <span class="sep" aria-hidden="true">•</span>
+      <button type="button" class="linklike" (click)="openConsent()">
+        Cookie-Einstellungen
+      </button>
+    </nav>
+  </div>
+</footer>

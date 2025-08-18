@@ -1,0 +1,116 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9998;
+}
+
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, 92vw);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  z-index: 9999;
+  font-family: "Nunito Sans", system-ui, -apple-system, sans-serif;
+}
+
+.card {
+  border: 1px solid #e9e9e9;
+  border-radius: 12px;
+  padding: 8px;
+  margin: 12px 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+  border-bottom: 1px solid #eee;
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+.hint {
+  opacity: 0.7;
+  font-size: 0.92rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+button {
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+button.primary {
+  background: #4caf50;
+  color: #fff;
+  border-color: #43a046;
+}
+button.accent {
+  background: #2f7ae5;
+  color: #fff;
+  border-color: #286ed0;
+}
+button.ghost {
+  background: #fff;
+}
+
+.switch {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+}
+.switch input {
+  display: none;
+}
+.switch span {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  background: #ddd;
+  border-radius: 14px;
+  transition: 0.2s ease;
+}
+.switch span:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  transition: 0.2s ease;
+}
+.switch input:checked + span {
+  background: #4caf50;
+}
+.switch input:checked + span:after {
+  transform: translateX(22px);
+}
+
+.dark-mode .modal {
+  background: #161616;
+  color: #eee;
+  border: 1px solid #2a2a2a;
+}
+.dark-mode .card {
+  border-color: #2a2a2a;
+}

@@ -1,0 +1,61 @@
+<div
+  class="backdrop"
+  *ngIf="consent.modalOpen$ | async"
+  (click)="close()"
+></div>
+
+<div
+  class="modal"
+  *ngIf="consent.modalOpen$ | async"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="consent-title"
+>
+  <h2 id="consent-title">Cookie-Einstellungen</h2>
+  <p>
+    Wir verwenden notwendige Cookies sowie optionale Dienste für Werbung
+    (AdSense/AdMob) und Reichweitenmessung.
+  </p>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <strong>Notwendig</strong>
+        <div class="hint">Erforderlich für Grundfunktionen</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" checked disabled />
+        <span></span>
+      </label>
+    </div>
+
+    <div class="row">
+      <div>
+        <strong>Werbung</strong>
+        <div class="hint">AdSense/AdMob, personalisiert/kontextuell</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="ads" />
+        <span></span>
+      </label>
+    </div>
+
+    <div class="row">
+      <div>
+        <strong>Analytics</strong>
+        <div class="hint">z. B. Reichweitenmessung</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="analytics" />
+        <span></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="ghost" (click)="rejectNonEssential()">Nur notwendig</button>
+    <button class="ghost" (click)="close()">Abbrechen</button>
+    <button class="primary" (click)="save()">Speichern</button>
+    <button class="accent" (click)="acceptAll()">Alle akzeptieren</button>
+  </div>
+</div>

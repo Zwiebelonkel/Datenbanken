@@ -27,6 +27,13 @@ import { UsersComponent } from './components/users/users.component';
 import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
 import { ReelComponent } from './components/slot-maschine/reel/reel.component';
 import { SkillShopComponent } from './components/skill-shop/skill-shop.component';
+
+import { FooterComponent } from './components/footer/footer.component';
+import { DatenschutzComponent } from './components/datenschutz/datenschutz.component';
+import { ImpressumComponent } from './components/impressum/impressum.component';
+import { ConsentService } from './services/consent.service';
+import { ConsentDialogComponent } from './components/consent-dialog/consent-dialog.component';
+
 @NgModule({
   declarations: [
     RegisterComponent,
@@ -51,6 +58,11 @@ import { SkillShopComponent } from './components/skill-shop/skill-shop.component
     UsersComponent,
     SlotMaschineComponent,
     ReelComponent,
+    DatenschutzComponent,
+    ImpressumComponent,
+    FooterComponent,
+    ConsentDialogComponent,
+    ConsentService,
   ],
   imports: [
     BrowserModule,

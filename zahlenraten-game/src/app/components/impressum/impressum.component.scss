@@ -1,0 +1,40 @@
+.legal-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px;
+  font-family: "Nunito Sans", system-ui, -apple-system, sans-serif;
+}
+
+h1 {
+  font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+  margin-bottom: 20px;
+}
+
+.legal-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  margin-bottom: 18px;
+  border: 1px solid #eaeaea;
+}
+
+.address {
+  line-height: 1.4;
+  margin-bottom: 12px;
+  font-style: normal;
+}
+
+.contact a {
+  text-decoration: underline;
+}
+
+.dark-mode .legal-card {
+  background: #161616;
+  border-color: #2a2a2a;
+  color: #f5f5f5;
+}
+
+.dark-mode a {
+  color: #a5d6ff;
+}

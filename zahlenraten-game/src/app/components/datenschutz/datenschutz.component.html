@@ -1,0 +1,207 @@
+<div class="legal-container">
+  <h1>Datenschutzerklärung</h1>
+  <p class="meta">Stand: {{ today | date : "dd.MM.yyyy" }}</p>
+
+  <div class="legal-card">
+    <h2>1. Verantwortlicher</h2>
+    <address class="address">
+      <strong>{{ cfg.controllerName }}</strong
+      ><br />
+      {{ cfg.street }}<br />
+      {{ cfg.postalCode }} {{ cfg.city }}<br />
+      {{ cfg.country }}<br />
+      E-Mail: <a [href]="'mailto:' + cfg.email">{{ cfg.email }}</a>
+    </address>
+  </div>
+
+  <div class="legal-card">
+    <h2>2. Arten der verarbeiteten Daten</h2>
+    <ul>
+      <li>Stammdaten (z. B. Benutzername, Profilangaben)</li>
+      <li>Inhaltsdaten (z. B. Chat-Nachrichten, Profilbilder)</li>
+      <li>Nutzungsdaten (z. B. besuchte Seiten, Interaktionen)</li>
+      <li>Meta-/Kommunikationsdaten (z. B. IP-Adresse, Gerät, Browser)</li>
+      <li>Protokolldaten (Server-Logs)</li>
+    </ul>
+  </div>
+
+  <div class="legal-card">
+    <h2>3. Zwecke und Rechtsgrundlagen</h2>
+    <ul>
+      <li>
+        Bereitstellung der Website/App, Kontoführung, Sicherheit (Art. 6 Abs. 1
+        lit. b, f DSGVO)
+      </li>
+      <li>
+        Kommunikation und Community-Funktionen wie Chat (Art. 6 Abs. 1 lit. b
+        DSGVO)
+      </li>
+      <li>
+        Werbung/Monetarisierung, nur mit Einwilligung (Art. 6 Abs. 1 lit. a
+        DSGVO)
+      </li>
+      <li>Fehleranalyse, Missbrauchsvermeidung (Art. 6 Abs. 1 lit. f DSGVO)</li>
+    </ul>
+  </div>
+
+  <div
+    class="legal-card"
+    *ngIf="
+      cfg.usesFirebaseHosting ||
+      cfg.usesFirebaseAuth ||
+      cfg.usesFirestore ||
+      cfg.usesStorage ||
+      cfg.usesFunctions
+    "
+  >
+    <h2>4. Einsatz von Google Firebase</h2>
+    <p>
+      Wir verwenden Dienste von Google Firebase (Google Ireland Limited, Gordon
+      House, Barrow Street, Dublin 4, Irland). Eine Datenverarbeitung kann in
+      der EU und in Drittstaaten (z. B. USA) stattfinden. Google hat geeignete
+      Garantien implementiert (u. a. EU-Standardvertragsklauseln). Details:
+      <a
+        href="https://firebase.google.com/support/privacy"
+        target="_blank"
+        rel="noopener"
+        >firebase.google.com/support/privacy</a
+      >
+    </p>
+    <ul>
+      <li *ngIf="cfg.usesFirebaseHosting">
+        <strong>Firebase Hosting:</strong> Auslieferung der Web-Inhalte; dabei
+        fallen Zugriffsdaten/Logs an.
+      </li>
+      <li *ngIf="cfg.usesFirebaseAuth">
+        <strong>Firebase Authentication:</strong> Login/Registrierung,
+        Verwaltung von Benutzerkonten.
+      </li>
+      <li *ngIf="cfg.usesFirestore">
+        <strong>Cloud Firestore/Database:</strong> Speicherung von
+        Spiel-/Nutzungsdaten (z. B. Scores, Dorf, Karten).
+      </li>
+      <li *ngIf="cfg.usesStorage">
+        <strong>Cloud Storage:</strong> Speicherung von Medien (z. B.
+        Profilbilder).
+      </li>
+      <li *ngIf="cfg.usesFunctions">
+        <strong>Cloud Functions:</strong> serverseitige Logik/Automatisierung.
+      </li>
+    </ul>
+  </div>
+
+  <div class="legal-card" *ngIf="cfg.usesAdSense">
+    <h2>5. Google AdSense (Web)</h2>
+    <p>
+      Auf der Website nutzen wir Google AdSense zur Einblendung von Werbung.
+      Dabei werden Cookies und ähnliche Technologien verwendet, um Anzeigen
+      (auch personalisiert) auszuliefern und deren Leistung zu messen.
+      Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die
+      Sie über unser
+      {{ cfg.cmpName || "Consent-Banner" }} erteilen oder ablehnen können.
+    </p>
+    <p>
+      Weitere Infos:
+      <a
+        href="https://policies.google.com/technologies/ads"
+        target="_blank"
+        rel="noopener"
+        >policies.google.com/technologies/ads</a
+      >
+    </p>
+  </div>
+
+  <div class="legal-card" *ngIf="cfg.usesAdMob">
+    <h2>6. Google AdMob (Mobile App)</h2>
+    <p>
+      In der mobilen App verwenden wir Google AdMob für Werbeanzeigen. Es können
+      Geräte-IDs, App-Nutzungsdaten, Standort (falls freigegeben) und technische
+      Informationen verarbeitet werden. Rechtsgrundlage ist Ihre Einwilligung
+      (Art. 6 Abs. 1 lit. a DSGVO). Sie können diese jederzeit in den
+      App-Einstellungen bzw. über das Consent-Banner ändern.
+    </p>
+  </div>
+
+  <div class="legal-card" *ngIf="cfg.usesAnalytics">
+    <h2>7. Reichweitenmessung/Analytics</h2>
+    <p>
+      Wir nutzen Web-/App-Analyse zur Reichweitenmessung und Verbesserung des
+      Angebots. Die Verarbeitung erfolgt auf Grundlage Ihrer Einwilligung (Art.
+      6 Abs. 1 lit. a DSGVO). IP-Adressen werden gekürzt/anonmyisiert, sofern
+      technisch möglich.
+    </p>
+  </div>
+
+  <div class="legal-card">
+    <h2>8. Server-Logfiles</h2>
+    <p>
+      Beim Zugriff auf unsere Dienste werden Server-Logs gespeichert (z. B.
+      IP-Adresse, Datum/Uhrzeit, User-Agent). Die Verarbeitung dient der
+      Stabilität und Sicherheit (Art. 6 Abs. 1 lit. f DSGVO) und wird regelmäßig
+      gelöscht.
+    </p>
+  </div>
+
+  <div class="legal-card">
+    <h2>9. Empfänger / Auftragsverarbeitung</h2>
+    <p>
+      Wir setzen Dienstleister (u. a. Google) im Rahmen von
+      Auftragsverarbeitungsverträgen ein. Eine Übermittlung in Drittstaaten (z.
+      B. USA) ist möglich; dabei werden geeignete Garantien (z. B.
+      EU-Standardvertragsklauseln) verwendet.
+    </p>
+  </div>
+
+  <div class="legal-card">
+    <h2>10. Speicherdauer</h2>
+    <p>
+      Personenbezogene Daten werden gelöscht, sobald der Zweck entfällt und
+      keine gesetzlichen Aufbewahrungspflichten bestehen. Kontodaten löschen wir
+      auf Anfrage oder nach Inaktivität gemäß unseren internen Fristen.
+    </p>
+  </div>
+
+  <div class="legal-card">
+    <h2>11. Ihre Rechte</h2>
+    <ul>
+      <li>
+        Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit
+        (Art. 15–20 DSGVO)
+      </li>
+      <li>
+        Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. e
+        oder f DSGVO (Art. 21 DSGVO)
+      </li>
+      <li>
+        Widerruf erteilter Einwilligungen (Art. 7 Abs. 3 DSGVO) mit Wirkung für
+        die Zukunft
+      </li>
+      <li>
+        Beschwerde bei einer Aufsichtsbehörde, z. B. die Landesbeauftragte für
+        Datenschutz in Bremen
+      </li>
+    </ul>
+    <p>
+      Kontakt für Datenschutzanfragen:
+      <a [href]="'mailto:' + cfg.email">{{ cfg.email }}</a>
+    </p>
+  </div>
+
+  <div class="legal-card">
+    <h2>12. Minderjährige / Simuliertes Glücksspiel</h2>
+    <p>
+      Das Angebot enthält spielerische Elemente (z. B. Slots) ohne Echtgeld. Es
+      richtet sich nicht an Kinder. Bitte nutzen Sie die Dienste nur, wenn Sie
+      dem Mindestalter in Ihrem Land entsprechen.
+    </p>
+  </div>
+
+  <div class="legal-card">
+    <h2>13. Änderungen</h2>
+    <p>
+      Wir passen diese Datenschutzerklärung bei Änderungen der Rechtslage oder
+      unseres Angebots an. Es gilt die jeweils auf dieser Seite veröffentlichte
+      Fassung.
+    </p>
+  </div>
+</div>

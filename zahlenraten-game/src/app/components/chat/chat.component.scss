@@ -67,9 +67,27 @@ h3 {
 
 .info-message {
   color: #2c852f;
-  background-color: #bbeabd;
+  background: linear-gradient(
+    0deg,
+    #bbeabd 0%,
+    #4caf50 50%,
+    #bbeabd 100%
+  );
+  background-size: 100% 200%; /* doppelte Höhe, damit wir scrollen können */
+  background-position: 0% 100%; /* Start: ganz unten */
   border-left: 4px solid #4caf50;
   border-right: 4px solid #4caf50;
+
+  animation: gradient-move 3s linear infinite;
+}
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 100%; /* unten */
+  }
+  100% {
+    background-position: 0% 0%; /* oben */
+  }
 }
 
 .text {

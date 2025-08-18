@@ -99,6 +99,9 @@ chances: Record<string, CardOutcome[]> = {
   ngOnInit() {
     this.username = this.authService.getUsername() || '';
     this.loadMoney();
+        this.profileService.getUserStats(this.username).subscribe((p) => {
+      this.currentLevel = p.level ?? 0;
+    });
 
     this.route.queryParams.subscribe((params) => {
       this.packName = params['pack'] || 'Basic';

@@ -8,7 +8,6 @@ body.dark-mode {
 .game-container,
 .game-over,
 .highscores-carousel {
-  max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
   border-radius: 12px;
@@ -396,7 +395,6 @@ body.dark-mode {
   border-radius: 12px;
   box-shadow: 0 0 10px #e91e6355;
   margin-bottom: 1rem;
-  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -442,8 +440,7 @@ body.dark-mode {
 .highscores-carousel {
   text-align: center;
   margin-top: 2rem;
-  max-width: 500px;
-
+  
   h3 {
     margin-bottom: 1rem;
   }
@@ -584,7 +581,6 @@ body.dark-mode {
   border-radius: 12px;
   padding: 1rem 2rem;
   box-shadow: 0 2px 10px #00000011;
-  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
 

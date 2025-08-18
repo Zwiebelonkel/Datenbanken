@@ -141,9 +141,6 @@ export class GameComponent implements OnInit {
     } else {
       console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
     }
-this.levelsService.load().subscribe(users => {
-    this.levelUsers = users;
-  });
   }
 
   loadCards() {

@@ -6,7 +6,6 @@
   ☰
 </div>
 
-
 <div class="sidebar" [class.open]="sidebarOpen">
   <!-- Alle Buttons: aktiv oder deaktiviert -->
   <button *ngIf="isPageEnabled('home')" (click)="goHome()" [disabled]="!authService.isLoggedIn()">🏠 Home</button>

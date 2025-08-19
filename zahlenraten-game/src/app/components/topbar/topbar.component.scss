@@ -17,6 +17,14 @@
   color: #fff;
   border-radius: 0 0 10px 10px;
   box-sizing: border-box;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Safari */
+   -khtml-user-select: none;   /* Konqueror HTML */
+     -moz-user-select: none;   /* Alte Firefox-Versionen */
+      -ms-user-select: none;   /* IE/Edge */
+          user-select: none;   /* Moderne Browser */
+  
 }
 
 /* Dark Mode */

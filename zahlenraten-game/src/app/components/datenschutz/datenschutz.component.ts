@@ -1,6 +1,9 @@
 // src/app/pages/datenschutz/datenschutz.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SidebarComponent } from '../sidebar/sidebar.component'
+import { TopbarComponent } from '../topbar/topbar.component'
+
 
 interface PrivacyConfig {
   controllerName: string;
@@ -26,7 +29,7 @@ interface PrivacyConfig {
 @Component({
   selector: 'app-datenschutz',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SidebarComponent, TopbarComponent],
   templateUrl: './datenschutz.component.html',
   styleUrls: ['./datenschutz.component.scss'],
 })

@@ -9,8 +9,24 @@
   color: #fff;
   transition: transform 0.3s ease;
 
-    &.rotated {
+  /* iOS Tap-Highlight verhindern */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &.rotated {
     transform: rotate(90deg);
+  }
+
+  &:focus,
+  &:active,
+  &:focus-visible {
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
   }
 }
 

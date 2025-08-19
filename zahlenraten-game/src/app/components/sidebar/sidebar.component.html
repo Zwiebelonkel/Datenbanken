@@ -1,41 +1,95 @@
 <div
   class="sidebar-toggle"
-  *ngIf="authService.isLoggedIn()"
   (click)="toggleSidebar()"
 >
   ☰
 </div>
 
 <div class="sidebar" [class.open]="sidebarOpen">
-  <button *ngIf="isPageEnabled('home')" (click)="goHome()">🏠 Home</button>
-  <button *ngIf="isPageEnabled('achievements')" (click)="goToAchievements()">
+  <button
+    *ngIf="isPageEnabled('home')"
+    (click)="goHome()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🏠 Home
+  </button>
+
+  <button
+    *ngIf="isPageEnabled('achievements')"
+    (click)="goToAchievements()"
+    [disabled]="!authService.isLoggedIn()"
+  >
     🎖️ Erfolge
   </button>
-  <button *ngIf="isPageEnabled('profile')" (click)="goToProfile()">
+
+  <button
+    *ngIf="isPageEnabled('profile')"
+    (click)="goToProfile()"
+    [disabled]="!authService.isLoggedIn()"
+  >
     👤 Profil
   </button>
+
   <button
     *ngIf="authService.getRole()?.toLowerCase() === 'admin'"
     (click)="goToAdmin()"
+    [disabled]="!authService.isLoggedIn()"
   >
     🛠️ Admin
   </button>
-  <button *ngIf="isPageEnabled('slots')" (click)="goToSlots()">🎰 Slots</button>
-  <button *ngIf="isPageEnabled('village')" (click)="goToVillage()">
+
+  <button
+    *ngIf="isPageEnabled('slots')"
+    (click)="goToSlots()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🎰 Slots
+  </button>
+
+  <button
+    *ngIf="isPageEnabled('village')"
+    (click)="goToVillage()"
+    [disabled]="!authService.isLoggedIn()"
+  >
     🛖 Dorf
   </button>
-  <button *ngIf="isPageEnabled('tutorial')" (click)="howToPlay()">
+
+  <button
+    *ngIf="isPageEnabled('tutorial')"
+    (click)="howToPlay()"
+    [disabled]="!authService.isLoggedIn()"
+  >
     ❓ Tutorial
   </button>
+
   <button
     *ngIf="isPageEnabled('clicker')"
-    [disabled]="achAmount < 3"
     (click)="goToClicker()"
+    [disabled]="achAmount < 3 || !authService.isLoggedIn()"
   >
     💰 Clicker
   </button>
-  <button *ngIf="isPageEnabled('shop')" (click)="shop()">🃏 Karten</button>
-  <button *ngIf="isPageEnabled('skillShop')" (click)="skillShop()">⬆️ Skills</button>
 
-  <button (click)="logout()">🚪 Logout</button>
+  <button
+    *ngIf="isPageEnabled('shop')"
+    (click)="shop()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🃏 Karten
+  </button>
+
+  <button
+    *ngIf="isPageEnabled('skillShop')"
+    (click)="skillShop()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    ⬆️ Skills
+  </button>
+
+  <button
+    (click)="logout()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🚪 Logout
+  </button>
 </div>

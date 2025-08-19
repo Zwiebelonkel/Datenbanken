@@ -4,7 +4,8 @@
   z-index: 1000;
   margin: 0;
   padding: 1rem 1rem;
-  background: #ffffffcc;
+  background: #4caf50e6;
+  //background: #ffffffcc;
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: space-between;
@@ -12,7 +13,8 @@
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   font-size: 1rem;
-  color: #333;
+  //color: #333;
+  color: #fff;
   border-radius: 0 0 10px 10px;
   box-sizing: border-box;
 }

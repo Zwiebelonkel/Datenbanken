@@ -553,12 +553,12 @@ ul {
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
-  transition: 0.5s;
+  transition: 0.25s;
 }
 
 .avatar:hover {
-  transition: 0.5s;
-  scale: 1.5;
+  transition: 0.25s;
+  transform: rotate(90deg);
 }
 
 /* zentrale Größe */
@@ -590,11 +590,11 @@ ul {
 
 /* Krone leicht schräg über dem Avatar */
 .crown{
-  position: absolute;
-  top: calc(-0.35 * var(--lb-avatar));
-  left: calc(0.10 * var(--lb-avatar));
-  font-size: calc(var(--lb-avatar) * 0.8);
-  transform: rotate(-15deg);
+position: absolute;
+  top: calc(-.82 * var(--lb-avatar));
+  left: calc(.3 * var(--lb-avatar));
+  font-size: calc(var(--lb-avatar) * .8);
+  transform: rotate(25deg);
   filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
   pointer-events: none;
 }

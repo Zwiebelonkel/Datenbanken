@@ -6,6 +6,7 @@ body {
 }
 
 .card {
+  transition: 0.25s;
   background: #f9f9f9;
   max-width: 500px;
   border-radius: 12px;
@@ -23,6 +24,7 @@ body {
 }
 
 .card:hover {
+  transition: 0.25s;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 

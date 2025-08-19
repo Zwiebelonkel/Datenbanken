@@ -1,6 +1,8 @@
 // src/app/pages/impressum/impressum.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SidebarComponent } from '../sidebar/sidebar.component'
+import { TopbarComponent } from '../topbar/topbar.component'
 
 type Optional<T> = T | null;
 
@@ -20,7 +22,7 @@ interface LegalConfig {
 @Component({
   selector: 'app-impressum',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SidebarComponent, TopbarComponent],
   templateUrl: './impressum.component.html',
   styleUrls: ['./impressum.component.scss'],
 })

@@ -58,3 +58,32 @@ body.dark-mode .sidebar {
   background: #1f1f1fdd;
   color: white;
 }
+
+/* Overlay für Login-Zustand */
+.login-overlay {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+  border-radius: 0 10px 10px 0;
+}
+
+/* Login Button Styling (kann gerne angepasst werden) */
+.login-button {
+  background-color: #4caf50;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.login-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+

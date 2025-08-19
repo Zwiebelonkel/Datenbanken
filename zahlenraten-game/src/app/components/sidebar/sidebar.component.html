@@ -1,9 +1,11 @@
 <div
   class="sidebar-toggle"
   (click)="toggleSidebar()"
+  [class.rotated]="sidebarOpen"
 >
   ☰
 </div>
+
 
 <div class="sidebar" [class.open]="sidebarOpen">
   <!-- Alle Buttons: aktiv oder deaktiviert -->

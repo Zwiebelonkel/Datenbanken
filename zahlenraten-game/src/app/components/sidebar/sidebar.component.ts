@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
@@ -22,10 +22,12 @@ export class SidebarComponent implements OnInit {
     public authService: AuthService,
     private profileService: ProfileService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private eRef: ElementRef
   ) {}
 
   ngOnInit(): void {
+    document.addEventListener('click', this.onClickOutside.bind(this));
     this.http
       .get<{ pages: Record<string, boolean> }>(`${this.baseUrl}/pages`)
       .subscribe({
@@ -35,6 +37,19 @@ export class SidebarComponent implements OnInit {
           // Fallback: pageSettings bleibt leer => Buttons standardmäßig sichtbar
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    document.removeEventListener('click', this.onClickOutside.bind(this));
+  }
+
+    onClickOutside(event: MouseEvent) {
+    const clickedInside = this.eRef.nativeElement.contains(event.target);
+    const toggleClicked = (event.target as HTMLElement).closest('.sidebar-toggle');
+
+    if (!clickedInside && !toggleClicked && this.sidebarOpen) {
+      this.sidebarOpen = false;
+    }
   }
 
   isAdmin(): boolean {

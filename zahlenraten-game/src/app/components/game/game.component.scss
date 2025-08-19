@@ -560,3 +560,50 @@ ul {
   transition: 0.5s;
   scale: 1.5;
 }
+
+/* zentrale Größe */
+:root { --lb-avatar: 32px; }
+
+.highscores-carousel ul li {
+  position: relative;                 /* Anker für absolute Elemente */
+}
+
+.lb-left{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.avatar-wrap{
+  position: relative;
+  width: var(--lb-avatar);
+  height: var(--lb-avatar);
+  flex: 0 0 var(--lb-avatar);
+}
+
+.avatar{
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Krone leicht schräg über dem Avatar */
+.crown{
+  position: absolute;
+  top: calc(-0.35 * var(--lb-avatar));
+  left: calc(0.10 * var(--lb-avatar));
+  font-size: calc(var(--lb-avatar) * 0.8);
+  transform: rotate(-15deg);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
+  pointer-events: none;
+}
+
+/* etwas Luft oben, damit die Krone nicht anstößt */
+.highscores-carousel ul li:first-child{
+  padding-top: calc(0.8rem + 0.18 * var(--lb-avatar));
+}
+
+@media (max-width: 480px){
+  :root { --lb-avatar: 28px; }
+}

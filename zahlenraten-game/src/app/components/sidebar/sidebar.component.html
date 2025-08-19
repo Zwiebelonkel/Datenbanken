@@ -1,23 +1,19 @@
 <div class="sidebar" [class.open]="sidebarOpen">
-  <!-- Wenn eingeloggt: normale Buttons -->
-  <ng-container *ngIf="authService.isLoggedIn(); else loginView">
-    <button *ngIf="isPageEnabled('home')" (click)="goHome()">🏠 Home</button>
-    <button *ngIf="isPageEnabled('achievements')" (click)="goToAchievements()">🎖️ Erfolge</button>
-    <button *ngIf="isPageEnabled('profile')" (click)="goToProfile()">👤 Profil</button>
-    <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="goToAdmin()">🛠️ Admin</button>
-    <button *ngIf="isPageEnabled('slots')" (click)="goToSlots()">🎰 Slots</button>
-    <button *ngIf="isPageEnabled('village')" (click)="goToVillage()">🛖 Dorf</button>
-    <button *ngIf="isPageEnabled('tutorial')" (click)="howToPlay()">❓ Tutorial</button>
-    <button *ngIf="isPageEnabled('clicker')" (click)="goToClicker()" [disabled]="achAmount < 3">💰 Clicker</button>
-    <button *ngIf="isPageEnabled('shop')" (click)="shop()">🃏 Karten</button>
-    <button *ngIf="isPageEnabled('skillShop')" (click)="skillShop()">⬆️ Skills</button>
-    <button (click)="logout()">🚪 Logout</button>
-  </ng-container>
+  <!-- Alle Buttons: aktiv oder deaktiviert -->
+  <button *ngIf="isPageEnabled('home')" (click)="goHome()" [disabled]="!authService.isLoggedIn()">🏠 Home</button>
+  <button *ngIf="isPageEnabled('achievements')" (click)="goToAchievements()" [disabled]="!authService.isLoggedIn()">🎖️ Erfolge</button>
+  <button *ngIf="isPageEnabled('profile')" (click)="goToProfile()" [disabled]="!authService.isLoggedIn()">👤 Profil</button>
+  <button *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="goToAdmin()" [disabled]="!authService.isLoggedIn()">🛠️ Admin</button>
+  <button *ngIf="isPageEnabled('slots')" (click)="goToSlots()" [disabled]="!authService.isLoggedIn()">🎰 Slots</button>
+  <button *ngIf="isPageEnabled('village')" (click)="goToVillage()" [disabled]="!authService.isLoggedIn()">🛖 Dorf</button>
+  <button *ngIf="isPageEnabled('tutorial')" (click)="howToPlay()" [disabled]="!authService.isLoggedIn()">❓ Tutorial</button>
+  <button *ngIf="isPageEnabled('clicker')" (click)="goToClicker()" [disabled]="achAmount < 3 || !authService.isLoggedIn()">💰 Clicker</button>
+  <button *ngIf="isPageEnabled('shop')" (click)="shop()" [disabled]="!authService.isLoggedIn()">🃏 Karten</button>
+  <button *ngIf="isPageEnabled('skillShop')" (click)="skillShop()" [disabled]="!authService.isLoggedIn()">⬆️ Skills</button>
+  <button (click)="logout()" [disabled]="!authService.isLoggedIn()">🚪 Logout</button>
 
-  <!-- Wenn NICHT eingeloggt: Login View -->
-  <ng-template #loginView>
-    <div class="login-overlay">
-      <button class="login-button" (click)="goToLogin()">🔐 Login</button>
-    </div>
-  </ng-template>
+  <!-- Login Button nur anzeigen, wenn nicht eingeloggt -->
+  <div *ngIf="!authService.isLoggedIn()" class="login-overlay">
+    <button class="login-button" (click)="goToLogin()">🔐 Login</button>
+  </div>
 </div>

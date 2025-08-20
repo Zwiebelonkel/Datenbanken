@@ -48,6 +48,7 @@
       </ul>
 
       <button
+        class="btn"
         (click)="buyPack(pack)"
         [class.disabled]="money < pack.price"
         [disabled]="money < pack.price"

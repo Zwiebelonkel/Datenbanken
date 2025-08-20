@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
+//import { FirebaseService } from '../../services/firebase.service'
 
 @Component({
   selector: 'app-achievements',
@@ -19,6 +20,7 @@ export class AchievementsComponent implements OnInit {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit(): void {
+    firebaseService.logEvent(analytics, 'visit_achievements', { debug: true });
     const username = this.authService.getUsername();
     this.http
       .get<any[]>(

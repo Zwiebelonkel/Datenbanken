@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+@import 'variables';
 
 body {
   font-family: "Nunito", sans-serif;
@@ -10,7 +11,7 @@ body {
   max-width: 500px;
   border-radius: 12px;
   box-shadow: 0 4px 8px #0000001a;
-  border: 1px solid #ddd;
+  border: 1px solid $card-border;
   cursor: pointer;
 
     -webkit-touch-callout: none; /* iOS Safari */
@@ -29,9 +30,9 @@ li {
 //#4caf50
 //#43a047
 .btn{
-  background-color: #43a047;
+  background-color: $theme;
 }
 
   .btn:hover {
-   background: #4caf50;
+   background: $theme-hover;
   }

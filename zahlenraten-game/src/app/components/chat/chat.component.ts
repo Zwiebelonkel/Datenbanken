@@ -24,6 +24,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   newMessage = '';
   username = '';
   isExpanded = false;
+  isLoading = true;
 
   @ViewChild('messageContainer') messageContainer!: ElementRef;
 
@@ -34,7 +35,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.username = this.auth.getUsername() || 'Unbekannt';
-    // Optional: Zustand merken
     const saved = localStorage.getItem('globalChatExpanded');
     if (saved === '1') {
       this.isExpanded = true;
@@ -59,6 +59,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private openAndStart() {
+    this.isLoading = true;
     this.loadMessages(true);
     this.startPolling();
   }
@@ -93,6 +94,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService.getLatestMessages(20).subscribe({
       next: (data) => {
         this.messages = data;
+        this.isLoading = false;
         if (scrollToBottom) {
           setTimeout(() => this.scrollToBottom(), 0);
         }

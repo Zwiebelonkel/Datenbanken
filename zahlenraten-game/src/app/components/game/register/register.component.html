@@ -13,7 +13,7 @@
     placeholder="Passwort"
     (keydown.enter)="register()"
   />
-  <button (click)="register()" [disabled]="!username || !password">
+  <button class="btn" (click)="register()" [disabled]="!username || !password">
     Registrieren
   </button>
 

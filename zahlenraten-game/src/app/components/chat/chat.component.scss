@@ -37,14 +37,14 @@
   padding: 0.7rem 1rem;
   border: none;
   border-radius: 8px;
-  background-color: #4caf50;
+ // background-color: #4caf50;
   color: #fff;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.06s ease;
 
   &:hover {
-    background-color: #43a047;
+  //  background-color: #43a047;
   }
   &:active {
     transform: translateY(1px);

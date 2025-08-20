@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../services/auth.service';
 import { Subscription, interval, Subject, switchMap, takeUntil } from 'rxjs';
+import { LoaderComponent } from '../loader/loader.component';
 
 interface ChatMessage {
   username: string;
@@ -17,7 +18,7 @@ interface ChatMessage {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   messages: ChatMessage[] = [];

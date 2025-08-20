@@ -77,7 +77,7 @@
 </div>
 
 <!-- Spiel vorbei -->
-<div class="game-over" *ngIf="gameOver">
+<div class="card game-over" *ngIf="gameOver">
   <h2>🎯 Game Over!</h2>
   <p class="final-score">
     Dein Score: <strong>{{ score }}</strong>
@@ -173,7 +173,7 @@
           'translateX(-' + currentLeaderboardIndex * 100 + '%)'
         "
       >
-  <app-loader *ngIf="isLoading"></app-loader>
+  <app-loader *ngIf="!isLoading"></app-loader>
         <div
           class="leaderboard"
           *ngFor="let board of allLeaderboards; index as i"

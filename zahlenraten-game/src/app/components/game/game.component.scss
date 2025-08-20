@@ -69,7 +69,7 @@ body.dark-mode .highscores-carousel {
 
 .btn,
 .arrow-buttons {
-  background: #4caf50;
+ // background: #4caf50;
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -82,7 +82,7 @@ body.dark-mode .highscores-carousel {
 }
 
 .btn:hover {
-  background: #45a049;
+//  background: #45a049;
   transform: scale(1.1);
 }
 
@@ -331,7 +331,7 @@ body.dark-mode {
   }
 
   .btn {
-    background: #4caf50;
+    //background: #4caf50;
     color: white;
     border: none;
     padding: 0.6rem 1.2rem;
@@ -342,7 +342,7 @@ body.dark-mode {
   }
 
   .btn:hover {
-    background: #45a049;
+  //  background: #45a049;
   }
 }
 
@@ -513,7 +513,7 @@ body.dark-mode {
     }
 
     .btn {
-      background: #4caf50;
+    //  background: #4caf50;
       color: white;
       border: none;
       padding: 0.6rem 1.2rem;
@@ -523,7 +523,7 @@ body.dark-mode {
       transition: background 0.3s ease;
 
       &:hover {
-        background: #388e3c;
+      //  background: #388e3c;
       }
     }
   }

@@ -1,29 +1,41 @@
 <app-sidebar></app-sidebar>
 <app-topbar page="🎴 Karten Shop"></app-topbar>
+
 <div class="card card-shop">
   <app-loader *ngIf="isLoading"></app-loader>
-  <div class="money-display">
+
+  <div class="money-display" aria-live="polite">
     💼 Dein Geld: {{ money | number : "1.2-2" }} €
   </div>
 
-  <div *ngIf="!isLoading" class="packs">
+  <div *ngIf="!isLoading" class="packs" role="list">
     <div
       class="pack"
+      role="listitem"
       *ngFor="let pack of cardPacks"
       [class.disabled]="money < pack.price"
+      [attr.aria-disabled]="money < pack.price ? true : null"
+      [attr.data-variant]="pack.name | lowercase"
+      tabindex="0"
     >
+      <span class="ribbon" *ngIf="pack.name">
+        {{ pack.name }}
+      </span>
+
       <div class="image-wrapper">
         <img [src]="pack.image" [alt]="pack.name" />
       </div>
 
-      <h3>{{ pack.name }}</h3>
-      <p>💰 {{ pack.price }} €</p>
+      <h3 class="title">{{ pack.name }}</h3>
 
-      <!-- 📊 Zeige die Chancen für das Pack -->
+      <div class="meta">
+        <span class="price">💰 {{ pack.price }} €</span>
+      </div>
+
+      <!-- 📊 Chancen -->
       <ul class="chances" *ngIf="chances[pack.name]">
         <li *ngFor="let entry of chances[pack.name]">
           <span class="label">
-            <!-- Multiplier mit Herz bei negativem Wert -->
             <ng-container *ngIf="entry.type === 'multiplier'">
               <ng-container
                 *ngIf="entry.value.startsWith('-'); else normalText"
@@ -33,28 +45,36 @@
               <ng-template #normalText>{{ entry.value }}</ng-template>
             </ng-container>
 
-            <!-- Money mit Geld-Symbol -->
             <ng-container *ngIf="entry.type === 'money'">
               💰 {{ entry.value }}
             </ng-container>
 
-            <!-- XP mit Stern-Symbol -->
             <ng-container *ngIf="entry.type === 'xp'">
               ⭐️ {{ entry.value }}
             </ng-container>
           </span>
+
+          <span class="bar" aria-hidden="true">
+            <span class="fill" [style.width.%]="entry.chance"></span>
+          </span>
+
           <span class="percentage">{{ entry.chance }}%</span>
         </li>
       </ul>
 
       <button
-        class="btn"
+        type="button"
+        class="btn-buy"
         (click)="buyPack(pack)"
-        [class.disabled]="money < pack.price"
         [disabled]="money < pack.price"
       >
+        <span class="btn-icon">🛒</span>
         Kaufen
       </button>
+
+      <div class="disabled-mask" *ngIf="money < pack.price">
+        <span>Zu wenig Geld</span>
+      </div>
     </div>
   </div>
 

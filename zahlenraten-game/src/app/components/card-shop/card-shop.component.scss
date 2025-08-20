@@ -1,10 +1,33 @@
+/* ------- Theme Tokens (SCSS mit CSS-Var-Fallbacks) ------- */
+:root {
+  --shop-bg: #ffffff;
+  --shop-text: #1a1a1a;
+  --shop-muted: #6b7280;
+  --panel: rgba(255, 255, 255, 0.65);
+  --panel-border: rgba(0, 0, 0, 0.06);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --ring: rgba(124, 58, 237, 0.35);
+  --accent: #7c3aed; /* fallback, wird pro Pack-Variante überschrieben */
+}
+
+.dark-mode {
+  --shop-bg: #0f1115;
+  --shop-text: #e5e7eb;
+  --shop-muted: #9ca3af;
+  --panel: rgba(17, 24, 39, 0.6);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+  --ring: rgba(124, 58, 237, 0.45);
+}
+
+/* ------- Micro-Animation ------- */
 @keyframes shine {
   0% {
     transform: translateX(-100%) rotateZ(20deg);
     opacity: 0;
   }
   50% {
-    opacity: 0.6;
+    opacity: 0.55;
   }
   100% {
     transform: translateX(200%) rotateZ(20deg);
@@ -12,158 +35,290 @@
   }
 }
 
+/* ------- Layout ------- */
 .card-shop {
-  max-width: 90%;
+  max-width: min(1100px, 92%);
   margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: clamp(1rem, 2vw, 2rem);
+  background: var(--shop-bg);
+  color: var(--shop-text);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--panel-border);
   text-align: center;
-
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #333;
-  }
+  backdrop-filter: blur(6px);
 
   .money-display {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    color: #2d7d2d;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+    color: #22c55e;
+    background: linear-gradient(
+      180deg,
+      rgba(34, 197, 94, 0.12),
+      transparent 70%
+    );
+    border: 1px dashed rgba(34, 197, 94, 0.35);
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    display: inline-block;
   }
 
   .packs {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .pack {
-    width: 180px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    padding: 1rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      position: relative;
-      z-index: 1;
-    }
-
-    // Shine effect
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 60%;
-      height: 120%;
-      background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.4),
-        transparent
-      );
-      transform: rotateZ(20deg);
-      animation: shine 3.5s ease-in-out infinite;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    h3 {
-      margin-top: 0.6rem;
-      font-size: 1.2rem;
-      color: #333;
-    }
-
-    p {
-      font-size: 1rem;
-      margin: 0.3rem 0 0;
-      color: #666;
-    }
-
-    button {
-      margin-top: 0.6rem;
-      padding: 0.5rem 1.2rem;
-      border: none;
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.95rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-
-      &::before {
-        content: "";
-        font-size: 1.1rem;
-      }
-
-      &:hover:not(.disabled) {
-        transform: scale(1.07);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-      }
-
-      &.disabled {
-        background: #ccc;
-        color: #888;
-        cursor: not-allowed;
-
-        &::before {
-          content: "";
-        }
-      }
-    }
-
-    &:hover:not(.disabled) {
-      transform: scale(1.05) rotate(-1deg);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    &.disabled {
-      opacity: 0.4;
-      pointer-events: none;
-    }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(1rem, 2.5vw, 1.5rem);
   }
 
   .warning {
-    color: #e74c3c;
+    color: #ef4444;
     margin-top: 1rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 }
 
-.chances {
-  margin: 0.5rem 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.85rem;
+/* ------- Pack Card ------- */
+.pack {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  cursor: pointer;
+  outline: none;
 
-  li {
+  &:focus-visible {
+    box-shadow: 0 0 0 6px var(--ring);
+  }
+
+  &:hover:not(.disabled) {
+    transform: translateY(-4px) scale(1.02);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 70%;
+    height: 140%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.45),
+      transparent
+    );
+    transform: rotateZ(20deg);
+    animation: shine 3.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .ribbon {
+    position: absolute;
+    top: 0.75rem;
+    left: -0.5rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #fff;
+    border-radius: 0 8px 8px 0;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    user-select: none;
+  }
+
+  .image-wrapper {
+    aspect-ratio: 4/3;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--panel-border);
+    background: radial-gradient(
+      120% 100% at 50% 0%,
+      rgba(255, 255, 255, 0.35),
+      transparent
+    );
+    margin-bottom: 0.8rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: translateZ(0);
+      transition: transform 0.35s ease;
+    }
+  }
+
+  &:hover .image-wrapper img {
+    transform: scale(1.03);
+  }
+
+  .title {
+    margin: 0.25rem 0 0.35rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+
+  .meta {
     display: flex;
-    justify-content: space-between;
-    padding: 0.1rem 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+
+    .price {
+      font-weight: 700;
+      color: var(--shop-text);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), transparent 70%);
+      border: 1px solid var(--panel-border);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+    }
   }
 
-  .label {
-    font-weight: bold;
+  /* Chancenliste */
+  .chances {
+    margin: 0.5rem 0 0.75rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+    display: grid;
+    gap: 0.35rem;
+
+    li {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .label {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .bar {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      border: 1px solid var(--panel-border);
+    }
+
+    .fill {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.6),
+            rgba(255, 255, 255, 0)
+          )
+          padding-box,
+        var(--bar-gradient, linear-gradient(90deg, #7c3aed, #22c55e));
+      transition: width 0.35s ease;
+    }
+
+    .percentage {
+      color: var(--shop-muted);
+      font-weight: 700;
+    }
   }
 
-  .percentage {
-    color: #ccc;
+  .btn-buy {
+    margin-top: 0.4rem;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #fff;
+    background: var(--btn-gradient, linear-gradient(135deg, #7c3aed, #9333ea));
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .btn-icon {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(124, 58, 237, 0.3);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+    &:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
   }
+
+  /* Disabled overlay */
+  &.disabled {
+    opacity: 0.75;
+    .btn-buy {
+      pointer-events: none;
+    }
+    .disabled-mask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(1px);
+    }
+  }
+}
+
+/* ------- Variantenfarben (per data-variant) ------- */
+.pack[data-variant="basic"] {
+  --btn-gradient: linear-gradient(135deg, #3b82f6, #06b6d4);
+  .ribbon {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  }
+  .chances .fill {
+    --bar-gradient: linear-gradient(90deg, #3b82f6, #06b6d4);
+  }
+
+  border: 2px dashed #3b82f6;
+}
+
+.pack[data-variant="premium"] {
+  --btn-gradient: linear-gradient(135deg, #ef4444, #f59e0b);
+  .ribbon {
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+  }
+  .chances .fill {
+    --bar-gradient: linear-gradient(90deg, #ef4444, #f59e0b);
+  }
+  border: 2px dashed #ef4444;
+}
+
+.pack[data-variant="ultra"] {
+  --btn-gradient: linear-gradient(135deg, #22c55e, #06b6d4);
+  .ribbon {
+    background: linear-gradient(135deg, #22c55e, #06b6d4);
+  }
+  .chances .fill {
+    --bar-gradient: linear-gradient(90deg, #22c55e, #06b6d4);
+  }
+  border: 2px dashed #22c55e;
 }

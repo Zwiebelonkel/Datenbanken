@@ -58,9 +58,9 @@ export class CardShopComponent implements OnInit {
       { type: 'multiplier', value: '5x', chance: 20 },
       { type: 'multiplier', value: '10x', chance: 3 },
       { type: 'multiplier', value: '-1', chance: 15 },
-      { type: 'multiplier', value: '-2', chance: 1 },
-      { type: 'multiplier', value: '-3', chance: 0.5 },
-      { type: 'money', value: 250, chance: 20 }, // Erhöht
+      { type: 'multiplier', value: '-2', chance: 5 },
+      { type: 'multiplier', value: '-3', chance: 1.5 },
+      { type: 'money', value: 150, chance: 15 }, // Erhöht
       { type: 'xp', value: 100, chance: 15 }, // Erhöht
     ],
   };

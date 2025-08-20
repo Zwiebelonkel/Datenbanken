@@ -1,4 +1,4 @@
-@use 'variables' as *;
+@use "variables" as *;
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
 body {
@@ -14,12 +14,12 @@ body {
   border: 1px solid $card-border;
   cursor: pointer;
 
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
@@ -27,17 +27,15 @@ li {
   cursor: pointer;
 }
 
-//#4caf50
-//#43a047
-.btn{
+.btn {
   background-color: $theme;
   border-radius: 8px;
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
-  .btn:hover {
-   background: $theme-hover;
-  }
+.btn:hover {
+  background: $theme-hover;
+}
 
 .btn:disabled {
   background: #ccc;

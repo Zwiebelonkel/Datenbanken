@@ -363,17 +363,17 @@ export class GameComponent implements OnInit {
         scores.map((s) => ({
           username: s.username,
           value: `${s.score} Punkte`,
-          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png',
+          profileImageUrl: s.profileImageUrl ?? 'assets/profile.png',
         })),
         streaks.map((s) => ({
           username: s.username,
           value: `${s.consecutive_wins} 🔁`,
-          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png',
+          profileImageUrl: s.profileImageUrl ?? 'assets/profile.png',
         })), // ← geändert
         money.map((s) => ({
           username: s.username,
           value: `${s.money_per_round}€ 💰`,
-          profileImageUrl: s.profileImageUrl ?? 'assets/default-avatar.png',
+          profileImageUrl: s.profileImageUrl ?? 'assets/profile.png',
         })), // ← geändert
       ];
       this.setLeaderboard(0);

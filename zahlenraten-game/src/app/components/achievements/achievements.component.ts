@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { LoaderComponent } from '../loader/loader.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { FirebaseService } from '../../services/firebase.service'
 
@@ -10,7 +11,7 @@ import { FirebaseService } from '../../services/firebase.service'
   selector: 'app-achievements',
   templateUrl: './achievements.component.html',
   styleUrls: ['./achievements.component.scss'],
-  imports: [CommonModule, SidebarComponent, TopbarComponent],
+  imports: [CommonModule, SidebarComponent, TopbarComponent, LoaderComponent],
   standalone: true,
 })
 export class AchievementsComponent implements OnInit {

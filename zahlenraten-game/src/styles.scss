@@ -1,5 +1,5 @@
+@use 'variables' as *;
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
-@use 'variables';
 
 body {
   font-family: "Nunito", sans-serif;
@@ -7,11 +7,11 @@ body {
 }
 
 .card {
-  background: variables.$card-bg;
+  background: $card-bg;
   max-width: 500px;
-  border-radius: variables.$card-radius;
-  box-shadow: variables.$card-shadow;
-  border: 1px solid variables.$card-border;
+  border-radius: $card-radius;
+  box-shadow: $card-shadow;
+  border: 1px solid $card-border;
   cursor: pointer;
 
     -webkit-touch-callout: none; /* iOS Safari */
@@ -30,7 +30,7 @@ li {
 //#4caf50
 //#43a047
 .btn{
-  background-color: variables.$theme;
+  background-color: $theme;
   border-radius: 8px;
   margin: 0 .5rem;
 }

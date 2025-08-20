@@ -12,6 +12,7 @@ import { ConsentService } from '../../services/consent.service'; // <—
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
+  isVisible: boolean = false;
   @Input() fixed = true;
   @Input() appName = 'Outside Between';
   year = new Date().getFullYear();

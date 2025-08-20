@@ -13,7 +13,7 @@
     placeholder="Passwort"
     (keydown.enter)="login()"
   />
-  <button (click)="login()" [disabled]="!username || !password">
+  <button class="btn" (click)="login()" [disabled]="!username || !password">
     Einloggen
   </button>
 

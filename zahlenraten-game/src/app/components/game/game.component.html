@@ -153,7 +153,7 @@
   (touchstart)="onTouchStart($event)"
   (touchend)="onTouchEnd($event)"
 >
-  <div *ngIf="!isLoading" class="card highscores-carousel">
+  <div class="card highscores-carousel">
     <h3>{{ leaderboardTitles[currentLeaderboardIndex] }}</h3>
 
     <!-- SLIDER -->
@@ -173,7 +173,9 @@
           'translateX(-' + currentLeaderboardIndex * 100 + '%)'
         "
       >
+  <app-loader *ngIf="isLoading"></app-loader>
         <div
+          *ngIf="!isLoading"
           class="leaderboard"
           *ngFor="let board of allLeaderboards; index as i"
         >
@@ -219,6 +221,4 @@
 
 <app-users></app-users>
 
-<app-global-chat
-  *ngIf="authService.isLoggedIn() && !isLoading"
-></app-global-chat>
+<app-global-chat></app-global-chat>

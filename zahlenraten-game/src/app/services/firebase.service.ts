@@ -1,10 +1,12 @@
 // src/app/services/firebase.service.ts
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getAnalytics, logEvent } from 'firebase/analytics'; // logEvent importieren
+import { getAnalytics, logEvent, Analytics } from 'firebase/analytics';
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
+  private analytics: Analytics;
+
   constructor() {
     const firebaseConfig = {
       apiKey: "AIzaSyBIPS587UNOd2fVQ5X7ZlkDwtt6KLfvtJ0",
@@ -17,11 +19,14 @@ export class FirebaseService {
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    this.analytics = getAnalytics(app);
 
-    // 👉 Test-Event senden
-    logEvent(analytics, 'test_event', { debug: true });
+    // Optional: Testevent direkt beim Initialisieren senden
+  }
 
-    // Optional: zur Kontrolle in der Konsole loggen
+  public logEvent(eventName: string, eventParams?: Record<string, any>): void {
+    if (this.analytics) {
+      logEvent(this.analytics, eventName, eventParams);
+    }
   }
 }

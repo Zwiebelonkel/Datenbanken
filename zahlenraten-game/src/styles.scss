@@ -7,10 +7,10 @@ body {
 }
 
 .card {
-  background: #f9f9f9;
+  background: $card-bg;
   max-width: 500px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px #0000001a;
+  border-radius: $card-radius;
+  box-shadow: $card-shadow;
   border: 1px solid $card-border;
   cursor: pointer;
 

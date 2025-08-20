@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { FooterComponent } from './components/footer/footer.component';
 import { ConsentDialogComponent } from './components/consent-dialog/consent-dialog.component';
+import { FirebaseService } from './services/firebase.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import { ConsentDialogComponent } from './components/consent-dialog/consent-dial
 })
 export class AppComponent {
   title: any;
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private firebaseService: FirebaseService) {}
 
   logout() {
     this.auth.logout();

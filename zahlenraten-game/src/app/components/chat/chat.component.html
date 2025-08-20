@@ -14,6 +14,7 @@
 
   <!-- NICHT mit *ngIf ausblenden, damit die Transition läuft -->
   <div class="chat-content" [attr.aria-hidden]="!isExpanded">
+    <app-loader*ngIf="isLoading"></app-loader>
     <div class="messages" #messageContainer>
       <div
         class="message"

@@ -1,3 +1,5 @@
+@use '../../../variables' as *;
+
 .loader-container {
   display: flex;
   justify-content: center;
@@ -6,7 +8,7 @@
 
 .loader {
   border: 6px solid #ccc;
-  border-top: 6px solid #4caf50;
+  border-top: 6px solid $theme;
   border-radius: 50%;
   width: 40px;
   height: 40px;

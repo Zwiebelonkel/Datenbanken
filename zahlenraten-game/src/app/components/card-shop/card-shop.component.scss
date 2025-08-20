@@ -97,8 +97,6 @@
       margin-top: 0.6rem;
       padding: 0.5rem 1.2rem;
       border: none;
-      border-radius: 10px;
-      background: linear-gradient(145deg, #56ab2f, #a8e063);
       color: #fff;
       font-weight: 600;
       font-size: 0.95rem;
@@ -116,7 +114,6 @@
       }
 
       &:hover:not(.disabled) {
-        background: linear-gradient(145deg, #3c8e20, #7dcf46);
         transform: scale(1.07);
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
       }

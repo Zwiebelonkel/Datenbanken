@@ -1,4 +1,4 @@
-@use '../../../variables' as *;
+@use "../../../variables" as *;
 
 body.dark-mode {
   background-color: #121212;
@@ -78,11 +78,6 @@ body.dark-mode .highscores-carousel {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn:hover {
-//  background: #45a049;
-//  transform: scale(1.1); //marker
 }
 
 .btn:disabled {
@@ -384,6 +379,7 @@ body.dark-mode {
     margin: auto;
     border-radius: 10px;
     max-width: 100%;
+    border: 1px solid $card-border;
   }
 
   .slider {
@@ -512,7 +508,6 @@ body.dark-mode {
       font-size: 1rem;
       cursor: pointer;
       transition: background 0.3s ease;
-
     }
   }
 }
@@ -550,48 +545,53 @@ ul {
 }
 
 /* zentrale Größe */
-:root { --lb-avatar: 32px; }
-
-.highscores-carousel ul li {
-  position: relative;                 /* Anker für absolute Elemente */
+:root {
+  --lb-avatar: 32px;
 }
 
-.lb-left{
+.highscores-carousel ul li {
+  position: relative; /* Anker für absolute Elemente */
+}
+
+.lb-left {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
 }
 
-.avatar-wrap{
+.avatar-wrap {
   position: relative;
   width: var(--lb-avatar);
   height: var(--lb-avatar);
   flex: 0 0 var(--lb-avatar);
 }
 
-.avatar{
-  width: 100%; height: 100%;
+.avatar {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
 
 /* Krone leicht schräg über dem Avatar */
-.crown{
-position: absolute;
-  top: calc(-.82 * var(--lb-avatar));
-  left: calc(.3 * var(--lb-avatar));
-  font-size: calc(var(--lb-avatar) * .8);
+.crown {
+  position: absolute;
+  top: calc(-0.82 * var(--lb-avatar));
+  left: calc(0.3 * var(--lb-avatar));
+  font-size: calc(var(--lb-avatar) * 0.8);
   transform: rotate(25deg);
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
   pointer-events: none;
 }
 
 /* etwas Luft oben, damit die Krone nicht anstößt */
-.highscores-carousel ul li:first-child{
+.highscores-carousel ul li:first-child {
   padding-top: calc(0.8rem + 0.18 * var(--lb-avatar));
 }
 
-@media (max-width: 480px){
-  :root { --lb-avatar: 28px; }
+@media (max-width: 480px) {
+  :root {
+    --lb-avatar: 28px;
+  }
 }

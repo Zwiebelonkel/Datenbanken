@@ -1,8 +1,12 @@
 <div class="card highscores-carousel">
-    <div class="users-header">
+  <div class="users-header">
     <h3>👤 Spieler</h3>
   </div>
-  <button class="toggle-btn btn" (click)="toggleLevelList()">
+  <button
+    class="toggle-btn btn"
+    (click)="toggleLevelList()"
+    [class.open]="isLevelListOpen"
+  >
     <span *ngIf="!isLevelListOpen">⬇️ Alle Spieler anzeigen</span>
     <span *ngIf="isLevelListOpen">⬆️ Liste einklappen</span>
   </button>
@@ -10,7 +14,11 @@
   <app-loader *ngIf="loadingLevels"></app-loader>
 
   <!-- Animierbarer Container -->
-  <div class="level-list" [class.expanded]="isLevelListOpen" [attr.aria-hidden]="!isLevelListOpen">
+  <div
+    class="level-list"
+    [class.expanded]="isLevelListOpen"
+    [attr.aria-hidden]="!isLevelListOpen"
+  >
     <ul *ngIf="levelUsers?.length">
       <li
         *ngFor="let u of levelUsers; trackBy: trackByUsername"
@@ -18,14 +26,20 @@
         tabindex="0"
         role="button"
       >
-        <img class="avatar" [src]="avatar(u.profileImageUrl, 32)" width="32" height="32"
-          (error)="onAvatarError($event)" alt="" />
+        <img
+          class="avatar"
+          [src]="avatar(u.profileImageUrl, 32)"
+          width="32"
+          height="32"
+          (error)="onAvatarError($event)"
+          alt=""
+        />
         <span>{{ u.username }}</span>
         <strong>Lvl {{ u.level }} • {{ u.xpPercent }}%</strong>
       </li>
     </ul>
 
-    <p *ngIf="!loadingLevels && !levelUsers.length" style="color: gray;">
+    <p *ngIf="!loadingLevels && !levelUsers.length" style="color: gray">
       Keine Spieler gefunden…
     </p>
   </div>

@@ -23,6 +23,5 @@ export class FirebaseService {
     logEvent(analytics, 'test_event', { debug: true });
 
     // Optional: zur Kontrolle in der Konsole loggen
-    console.log('✅ Firebase & Analytics initialisiert, Test-Event gesendet');
   }
 }

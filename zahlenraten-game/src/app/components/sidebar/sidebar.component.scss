@@ -101,7 +101,7 @@ body.dark-mode .sidebar {
   border-radius: inherit;
 
   .login-button {
-    background-color: #4caf50;
+   // background-color: #4caf50;
     border: none;
     padding: 1rem 2rem;
     border-radius: 10px;
@@ -112,7 +112,7 @@ body.dark-mode .sidebar {
     transition: background 0.2s ease, transform 0.2s ease;
 
     &:hover {
-      background-color: #45a049;
+    //  background-color: #45a049;
       transform: scale(1.05);
     }
   }

@@ -38,3 +38,8 @@ li {
   .btn:hover {
    background: $theme-hover;
   }
+
+.btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

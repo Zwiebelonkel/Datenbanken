@@ -1,3 +1,5 @@
+@use '../../../variables' as *;
+
 /* ========== Profile Page ========== */
 .profile-container {
   max-width: 520px;
@@ -27,7 +29,7 @@
 /* runder Bildrahmen – separat, damit darunterliegender Text nicht abgeschnitten wird */
 .avatar-frame {
   cursor: pointer;
-  border: 2px solid #4caf50;
+  border: 2px solid $theme;
   transition: 0.5s;
   position: relative;
   width: 140px;
@@ -130,20 +132,13 @@
 
   button {
     margin-top: 1rem;
-    background-color: #4caf50;
     color: #fff;
     border: none;
     padding: 0.6rem 1.5rem;
-    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
     transition: background 0.2s, transform 0.2s;
-
-    &:hover {
-      background-color: #45a049;
-      transform: scale(1.06);
-    }
   }
 }
 
@@ -220,7 +215,7 @@
   .bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #6a5af9, #00d4ff);
+    background: linear-gradient(90deg, $theme, mix($theme, white, 90%));
     transition: width 0.15s ease;
   }
 

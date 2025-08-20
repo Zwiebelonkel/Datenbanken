@@ -1,3 +1,5 @@
+@use '../../../variables' as *;
+
 /* 🎮 Skill-Shop Styling */
 .skill-shop {
   max-width: 800px;
@@ -9,7 +11,7 @@
   .shop-title {
     font-size: 2rem;
     font-weight: 800;
-    color: #4caf50;
+    color: $theme;
     margin-bottom: 2rem;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
@@ -36,7 +38,7 @@
 
   .info-item {
     background: #fff;
-    border: 2px solid #4caf50;
+    border: 2px solid $theme;
     border-radius: 12px;
     padding: 1rem 1.5rem;
     min-width: 160px;
@@ -52,7 +54,7 @@
     .info-value {
       font-size: 1.3rem;
       font-weight: 800;
-      color: #4caf50;
+      color: $theme;
       margin-top: 5px;
     }
   }
@@ -73,7 +75,7 @@
 
   &:hover {
     transform: translateY(-5px);
-    border-color: #4caf50;
+    border-color: $theme;
   }
 
   .skill-header {
@@ -96,7 +98,7 @@
 
     .skill-price {
       font-size: 1rem;
-      color: #4caf50;
+      color: $theme;
       font-weight: 700;
 
       .currency {
@@ -121,7 +123,7 @@
   gap: 8px;
   padding: 0.6rem 1.4rem;
   font-size: 1rem;
-  background: linear-gradient(90deg, #4caf50, #43a047);
+  background: linear-gradient(90deg, $theme, #43a047);
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -136,7 +138,7 @@
   }
 
   &:hover {
-    background: linear-gradient(90deg, #43a047, #2e7d32);
+    background: linear-gradient(90deg, $theme, #2e7d32);
     transform: scale(1.05);
   }
 

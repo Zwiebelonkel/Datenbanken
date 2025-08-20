@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #3e8e41;
+  border-bottom: 1px solid darken($theme, 10%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(5px);
   font-size: 1rem;

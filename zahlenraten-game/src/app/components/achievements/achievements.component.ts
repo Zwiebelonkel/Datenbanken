@@ -20,7 +20,7 @@ export class AchievementsComponent implements OnInit {
   constructor(private http: HttpClient, private authService: AuthService, private firebase: FirebaseService) {}
 
   ngOnInit(): void {
-    firebase.logEvent(analytics, 'visit_achievements', { debug: true });
+    this.firebase.logEvent(analytics, 'visit_achievements', { debug: true });
     const username = this.authService.getUsername();
     this.http
       .get<any[]>(

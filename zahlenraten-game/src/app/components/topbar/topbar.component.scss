@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../../variables';
 
 .topbar {
   transition:0.25s;
@@ -7,7 +7,7 @@
   z-index: 1000;
   margin: 0;
   padding: 1rem 1rem;
-  background: mix($theme, white, 90%); // ergibt z. B. #4caf50e6
+  background: rgba($theme, 0.9);
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: space-between;

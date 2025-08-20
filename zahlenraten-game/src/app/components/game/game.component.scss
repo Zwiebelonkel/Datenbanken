@@ -1,3 +1,5 @@
+@use '../../../variables' as *;
+
 body.dark-mode {
   background-color: #121212;
   color: #f1f1f1;
@@ -351,7 +353,7 @@ body.dark-mode {
     appearance: none;
     height: 8px;
     border-radius: 5px;
-    background: #4caf50;
+    background: $theme;
     outline: none;
 
     &::-webkit-slider-thumb {
@@ -359,7 +361,7 @@ body.dark-mode {
       width: 20px;
       height: 20px;
       background: #fff;
-      border: 2px solid #4caf50;
+      border: 2px solid $theme;
       border-radius: 50%;
       cursor: pointer;
       transition: background 0.3s ease;
@@ -369,7 +371,7 @@ body.dark-mode {
       width: 20px;
       height: 20px;
       background: #fff;
-      border: 2px solid #4caf50;
+      border: 2px solid $theme;
       border-radius: 50%;
       cursor: pointer;
       transition: background 0.3s ease;

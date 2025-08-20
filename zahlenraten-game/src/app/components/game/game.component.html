@@ -150,6 +150,7 @@
 
 <div
   class="leaderboard-wrapper"
+  *ngIf="!isLoading"
   (touchstart)="onTouchStart($event)"
   (touchend)="onTouchEnd($event)"
 >
@@ -173,7 +174,6 @@
           'translateX(-' + currentLeaderboardIndex * 100 + '%)'
         "
       >
-  <app-loader *ngIf="!isLoading"></app-loader>
         <div
           class="leaderboard"
           *ngFor="let board of allLeaderboards; index as i"

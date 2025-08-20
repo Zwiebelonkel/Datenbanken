@@ -89,26 +89,28 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   loadMessages(scrollToBottom: boolean = false) {
-    // Achtung: nur laden, wenn expanded
-    if (!this.isExpanded) return;
+  if (!this.isExpanded) return;
 
-    this.chatService.getLatestMessages(20).subscribe({
-      next: (data) => {
-        this.messages = data;
-        this.isLoading = false;
-        if (scrollToBottom) {
-          setTimeout(() => this.scrollToBottom(), 0);
-        }
-      },
-      error: (err) => console.error('Fehler beim Laden der Chat-Nachrichten:', err),
-    });
-  }
+  this.chatService.getLatestMessages(20).subscribe({
+    next: (data) => {
+      this.messages = data;
+      if (scrollToBottom) {
+        // DOM nach Renderphase
+        setTimeout(() => this.scrollToBottom(), 0);
+        // alternativ:
+        // requestAnimationFrame(() => this.scrollToBottom());
+      }
+      this.isLoading = false;
+    },
+    error: (err) => console.error('Fehler beim Laden der Chat-Nachrichten:', err),
+  });
+}
 
-  scrollToBottom() {
-    if (!this.messageContainer) return;
-    const el = this.messageContainer.nativeElement as HTMLElement;
-    el.scrollTop = el.scrollHeight;
-  }
+scrollToBottom() {
+  if (!this.messageContainer) return;
+  const el = this.messageContainer.nativeElement as HTMLElement;
+  el.scrollTop = el.scrollHeight;
+}
 
   sendMessage() {
     if (!this.isExpanded) return; // nur senden, wenn offen

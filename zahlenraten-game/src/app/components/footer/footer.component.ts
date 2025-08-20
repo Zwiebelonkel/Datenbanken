@@ -2,7 +2,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ConsentService } from '../../services/consent.service'; // <—
+import { ConsentService } from '../../services/consent.service';
 
 @Component({
   selector: 'app-footer',
@@ -12,7 +12,7 @@ import { ConsentService } from '../../services/consent.service'; // <—
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-  isVisible: boolean = false;
+  @Input() showFooter: boolean = false;
   @Input() fixed = true;
   @Input() appName = 'Outside Between';
   year = new Date().getFullYear();
@@ -20,7 +20,6 @@ export class FooterComponent {
   constructor(private consent: ConsentService) {}
 
   openConsent() {
-    console.log('Footer: openConsent()'); // Debug
     this.consent.open();
   }
 }

@@ -1,4 +1,8 @@
 <router-outlet />
 <!-- MUSS drin sein -->
 <app-consent-dialog></app-consent-dialog>
-<app-footer *ngIf="isVisible" [fixed]="true" appName="Outside Between"></app-footer>
+<app-footer
+  [showFooter]="false"
+  [fixed]="true"
+  appName="Outside Between"
+></app-footer>

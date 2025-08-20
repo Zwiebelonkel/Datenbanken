@@ -1,4 +1,4 @@
-<footer class="site-footer" [class.fixed]="fixed">
+<footer *ngIf="showFooter" class="site-footer" [class.fixed]="fixed">
   <div class="footer-inner">
     <div class="left">
       <span class="brand">{{ appName }}</span>

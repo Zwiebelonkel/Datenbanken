@@ -7,11 +7,11 @@ body {
 }
 
 .card {
-  background: $card-bg;
+  background: variables.$card-bg;
   max-width: 500px;
-  border-radius: $card-radius;
-  box-shadow: $card-shadow;
-  border: 1px solid $card-border;
+  border-radius: variables.$card-radius;
+  box-shadow: variables.$card-shadow;
+  border: 1px solid variables.$card-border;
   cursor: pointer;
 
     -webkit-touch-callout: none; /* iOS Safari */
@@ -30,11 +30,11 @@ li {
 //#4caf50
 //#43a047
 .btn{
-  background-color: $theme;
+  background-color: variables.$theme;
   border-radius: 8px;
   margin: 0 .5rem;
 }
 
   .btn:hover {
-   background: $theme-hover;
+   background: variables.$theme-hover;
   }

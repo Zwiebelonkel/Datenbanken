@@ -12,6 +12,8 @@ import { LevelsService, LevelUser, LevelsResponse } from '../../services/levels.
   imports: [CommonModule, LoaderComponent],
 })
 export class UsersComponent {
+  Math = Math;
+  
   constructor(
     private router: Router,
     private levelsService: LevelsService

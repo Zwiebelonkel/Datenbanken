@@ -35,7 +35,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(private chatService: ChatService, private auth: AuthService) {}
 
   ngOnInit() {
-    this.username = this.auth.getUsername() || 'Unbekannt';
+    this.username = this.auth.getUsername() || 'Gast';
     const saved = localStorage.getItem('globalChatExpanded');
     if (saved === '1') {
       this.isExpanded = true;

@@ -1,12 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ChatService } from '../../services/chat.service';
-import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
-import { LoaderComponent } from '../loader/loader.component'; // Import LoaderComponentimport { LevelService } from ''
+import { LoaderComponent } from '../loader/loader.component';
 import { LevelsService, LevelUser } from '../../services/levels.service';
 
 @Component({
@@ -16,19 +13,43 @@ import { LevelsService, LevelUser } from '../../services/levels.service';
   standalone: true,
   imports: [CommonModule, LoaderComponent],
 })
-export class UsersComponent{
-
+export class UsersComponent {
   constructor(
     private router: Router,
     private http: HttpClient,
     private profileService: ProfileService,
     private levelsService: LevelsService
-  ){}
+  ) {}
 
   levelUsers: LevelUser[] = [];
   isLevelListOpen = false;
   loadingLevels = false;
   selectedUsername: string | null = null;
+
+  // 🔢 Pagination
+  page = 1;
+  pageSize = 10;
+
+  // Getter für berechnete Indizes
+  get startIndex(): number {
+    return (this.page - 1) * this.pageSize;
+  }
+  get endIndex(): number {
+    // 1-basiert zum Anzeigen; in slice nutzen wir 0-basiert
+    return Math.min(this.page * this.pageSize, this.levelUsers.length);
+  }
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.levelUsers.length / this.pageSize));
+  }
+
+  // Die aktuelle Seite
+  get paginatedUsers(): LevelUser[] {
+    return this.levelUsers.slice(this.startIndex, this.startIndex + this.pageSize);
+  }
+
+  ngOnInit() {
+    // bewusst leer: wir laden erst beim Aufklappen
+  }
 
   avatar(url?: string | null, size = 32): string {
     if (!url) return 'assets/profile.png';
@@ -38,9 +59,6 @@ export class UsersComponent{
     );
   }
 
-  ngOninit(){
-}
-
   onAvatarError(ev: Event) {
     (ev.target as HTMLImageElement).src = 'assets/profile.png';
   }
@@ -49,7 +67,7 @@ export class UsersComponent{
     return item?.username ?? i;
   }
 
-    goToProfile(username?: string | null) {
+  goToProfile(username?: string | null) {
     const u = username || this.selectedUsername;
     if (u) {
       this.router.navigate(['/profile', u]);
@@ -58,22 +76,34 @@ export class UsersComponent{
     }
   }
 
-toggleLevelList() {
-  this.isLevelListOpen = !this.isLevelListOpen;
+  toggleLevelList() {
+    this.isLevelListOpen = !this.isLevelListOpen;
 
-  // Erst laden, wenn geöffnet und Daten noch nicht da
-  if (this.isLevelListOpen && this.levelUsers.length === 0) {
-    this.loadingLevels = true;
-    this.levelsService.load().subscribe({
-      next: (users) => {
-        this.levelUsers = users;
-        this.loadingLevels = false;
-      },
-      error: (err) => {
-        console.error("❌ Fehler beim Laden der Level-Liste:", err);
-        this.loadingLevels = false;
-      }
-    });
+    if (this.isLevelListOpen && this.levelUsers.length === 0) {
+      this.loadingLevels = true;
+      this.levelsService.load().subscribe({
+        next: (users) => {
+          this.levelUsers = users ?? [];
+          this.loadingLevels = false;
+          // Reset auf Seite 1, falls vorher etwas anderes gesetzt war
+          this.page = 1;
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Laden der Level-Liste:', err);
+          this.loadingLevels = false;
+        },
+      });
+    }
   }
-}
+
+  // 🔁 Pagination-Steuerung
+  nextPage() {
+    if (this.page < this.totalPages) this.page++;
+  }
+  prevPage() {
+    if (this.page > 1) this.page--;
+  }
+  goToPage(p: number) {
+    this.page = Math.min(Math.max(1, p), this.totalPages);
+  }
 }

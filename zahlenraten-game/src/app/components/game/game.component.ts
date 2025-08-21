@@ -295,9 +295,10 @@ export class GameComponent implements OnInit {
     this.moneyService
       .updateMoney({ username, amount: this.baseMoneyAccum })
       .subscribe({
-        next: () =>
+        next: () => console.log(''),
         error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
       });
+
 
     // ⭐ XP direkt nach Spielende berechnen (lokal)
     const xpFromLocal = Math.floor(this.baseScoreAccum / 5);

@@ -452,7 +452,7 @@ export class GameComponent implements OnInit {
   }
 
   unlockAchievement(name: string) {
-    if(!authService.isLoggedIn()) return;
+    if(!this.authService.isLoggedIn()) return;
     this.http
       .post<{ unlocked: boolean; name: string }>(
         'https://outside-between.onrender.com/api/unlock',

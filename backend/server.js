@@ -443,7 +443,7 @@ app.get('/api/users/levels', async (req, res) => {
       args: [limit, offset],
     });
 
-    const users = rows.rows.map((u: any) => {
+    const users = rows.rows.map((u) => {
       const xp  = Number(u.xp) || 0;
       const thr = Math.max(1, Number(u.xpThreshold) || 100);
       return {

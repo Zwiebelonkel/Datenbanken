@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ProfileService } from '../../services/profile.service';
 import { LoaderComponent } from '../loader/loader.component';
-import { LevelsService, LevelUser } from '../../services/levels.service';
+import { LevelsService, LevelUser, LevelsResponse } from '../../services/levels.service';
 
 @Component({
   selector: 'app-users',
@@ -16,41 +14,28 @@ import { LevelsService, LevelUser } from '../../services/levels.service';
 export class UsersComponent {
   constructor(
     private router: Router,
-    private http: HttpClient,
-    private profileService: ProfileService,
     private levelsService: LevelsService
   ) {}
 
+  // Daten
   levelUsers: LevelUser[] = [];
   isLevelListOpen = false;
   loadingLevels = false;
   selectedUsername: string | null = null;
 
-  // 🔢 Pagination
+  // 🔢 Pagination (serverseitig)
   page = 1;
   pageSize = 10;
-
-  // Getter für berechnete Indizes
-  get startIndex(): number {
-    return (this.page - 1) * this.pageSize;
-  }
-  get endIndex(): number {
-    // 1-basiert zum Anzeigen; in slice nutzen wir 0-basiert
-    return Math.min(this.page * this.pageSize, this.levelUsers.length);
-  }
-  get totalPages(): number {
-    return Math.max(1, Math.ceil(this.levelUsers.length / this.pageSize));
-  }
-
-  // Die aktuelle Seite
-  get paginatedUsers(): LevelUser[] {
-    return this.levelUsers.slice(this.startIndex, this.startIndex + this.pageSize);
-  }
+  total = 0;
+  totalPages = 1;
+  hasPrev = false;
+  hasNext = false;
 
   ngOnInit() {
-    // bewusst leer: wir laden erst beim Aufklappen
+    // wir laden erst beim Aufklappen
   }
 
+  // --- UI Helfer ---
   avatar(url?: string | null, size = 32): string {
     if (!url) return 'assets/profile.png';
     return url.replace(
@@ -58,52 +43,62 @@ export class UsersComponent {
       `/upload/w_${size},h_${size},c_fill,g_auto,f_auto,q_auto/`
     );
   }
-
   onAvatarError(ev: Event) {
     (ev.target as HTMLImageElement).src = 'assets/profile.png';
   }
-
   trackByUsername(i: number, item: any) {
     return item?.username ?? i;
   }
-
   goToProfile(username?: string | null) {
     const u = username || this.selectedUsername;
-    if (u) {
-      this.router.navigate(['/profile', u]);
-    } else {
-      this.router.navigate(['/profile']);
-    }
+    this.router.navigate(u ? ['/profile', u] : ['/profile']);
   }
 
+  // --- Öffnen / Laden ---
   toggleLevelList() {
     this.isLevelListOpen = !this.isLevelListOpen;
 
     if (this.isLevelListOpen && this.levelUsers.length === 0) {
-      this.loadingLevels = true;
-      this.levelsService.load().subscribe({
-        next: (users) => {
-          this.levelUsers = users ?? [];
-          this.loadingLevels = false;
-          // Reset auf Seite 1, falls vorher etwas anderes gesetzt war
-          this.page = 1;
-        },
-        error: (err) => {
-          console.error('❌ Fehler beim Laden der Level-Liste:', err);
-          this.loadingLevels = false;
-        },
-      });
+      this.loadPage(1);
     }
   }
 
-  // 🔁 Pagination-Steuerung
+  // --- Page Loader ---
+  private setFromResponse(res: LevelsResponse) {
+    this.levelUsers = res.users ?? [];
+    this.page = res.page;
+    this.pageSize = res.limit;
+    this.total = res.total;
+    this.totalPages = Math.max(1, res.totalPages);
+    this.hasPrev = !!res.hasPrev;
+    this.hasNext = !!res.hasNext;
+  }
+
+  loadPage(p: number, force = false) {
+    this.loadingLevels = true;
+    this.levelsService.load(p, this.pageSize, force).subscribe({
+      next: (res) => {
+        this.setFromResponse(res);
+        this.loadingLevels = false;
+        // Optional: nächste Seite schon mal vorladen
+        this.levelsService.prefetchNext(res.page, res.limit, res.totalPages);
+      },
+      error: (err) => {
+        console.error('❌ Fehler beim Laden der Level-Liste:', err);
+        this.loadingLevels = false;
+      },
+    });
+  }
+
+  // --- Pagination-Buttons ---
   nextPage() {
-    if (this.page < this.totalPages) this.page++;
+    if (this.hasNext) this.loadPage(this.page + 1);
   }
   prevPage() {
-    if (this.page > 1) this.page--;
+    if (this.hasPrev) this.loadPage(this.page - 1);
   }
   goToPage(p: number) {
-    this.page = Math.min(Math.max(1, p), this.totalPages);
+    const target = Math.min(Math.max(1, p), this.totalPages);
+    this.loadPage(target);
   }
 }

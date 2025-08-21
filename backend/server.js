@@ -404,7 +404,6 @@ app.get('/api/users/levels', async (req, res) => {
     const total = Number(totalRows.rows[0]?.cnt ?? 0);
 
     if (total === 0) {
-      // leichte Cachebarkeit auch bei leerem Ergebnis
       res.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60');
       return res.json({
         users: [],
@@ -417,50 +416,64 @@ app.get('/api/users/levels', async (req, res) => {
       });
     }
 
-    // totalPages berechnen und page clampen, falls zu groß
+    // totalPages berechnen und page clampen
     const totalPages = Math.max(1, Math.ceil(total / limit));
     if (page > totalPages) page = totalPages;
 
     const offset = (page - 1) * limit;
 
-    // Daten selektieren — NOCASE statt LOWER() für bessere Index-Nutzung
+    // Daten selektieren — xpThreshold & xpPercent werden ohne DB-Spalte berechnet
     const rows = await db.execute({
       sql: `
         SELECT
-          username,
-          COALESCE(level, 1)           AS level,
-          COALESCE(xp, 0)              AS xp,
-          COALESCE(xp_threshold, 100)  AS xpThreshold,
-          COALESCE(total_score, 0)     AS total_score,
-          profile_image_url            AS profileImageUrl
-        FROM users
-        ORDER BY level DESC,
-                 xp DESC,
-                 total_score DESC,
-                 username COLLATE NOCASE ASC
+          u.username,
+          COALESCE(u.level, 1)   AS level,
+          COALESCE(u.xp, 0)      AS xp,
+          COALESCE(u.total_score, 0) AS total_score,
+          u.profile_image_url    AS profileImageUrl
+        FROM users u
+        ORDER BY
+          level DESC,
+          xp DESC,
+          total_score DESC,
+          username COLLATE NOCASE ASC
         LIMIT ? OFFSET ?
       `,
       args: [limit, offset],
     });
 
+    // Mapping + Berechnung wie an deiner anderen Stelle:
     const users = rows.rows.map((u) => {
+      const lvl = Number(u.level) || 1;
       const xp  = Number(u.xp) || 0;
-      const thr = Math.max(1, Number(u.xpThreshold) || 100);
+
+      // XP-Schwelle (gleich wie im Screenshot): 100 * 1.05^(level-1)
+      const thr = Math.round(100 * Math.pow(1.05, lvl - 1));
+
+      // Prozent 0..100, division by zero sicher
+      const xpPercent = Math.min(
+        100,
+        Math.max(
+          0,
+          Math.round(((thr ? xp / thr : 0) * 100))
+        )
+      );
+
       return {
         username: u.username,
-        level: Number(u.level) || 1,
+        level: lvl,
         xp,
         xpThreshold: thr,
-        xpPercent: Math.min(100, Math.floor((xp / thr) * 100)),
+        xpPercent,
         total_score: Number(u.total_score) || 0,
         profileImageUrl: u.profileImageUrl ?? null,
       };
     });
 
-    // leichte Kurzzeit-Caches für Listendaten
+    // kurze Cachebarkeit erlauben
     res.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60');
 
-    res.json({
+    return res.json({
       users,
       page,
       limit,
@@ -471,7 +484,7 @@ app.get('/api/users/levels', async (req, res) => {
     });
   } catch (err) {
     console.error('❌ /api/users/levels Fehler:', err);
-    res.status(500).json({ error: 'Fehler beim Laden der Level-Liste' });
+    return res.status(500).json({ error: 'Fehler beim Laden der Level-Liste' });
   }
 });
 

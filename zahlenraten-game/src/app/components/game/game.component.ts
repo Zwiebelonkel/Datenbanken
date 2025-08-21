@@ -141,7 +141,7 @@ export class GameComponent implements OnInit {
         this.monetaryMultiplier = p.monetaryMultiplier ?? 1;
       });
     } else {
-      console.log('⚠️ Gastmodus – loadCards und Profil-Call übersprungen');
+      console.log('⚠️ Gastmodus');
     }
   }
   avatar(url?: string | null, size = 32): string {
@@ -273,7 +273,6 @@ export class GameComponent implements OnInit {
 
   flashBackground(element: HTMLElement, color: string) {
     if (element) {
-      console.log('Flash: ' + color + ' on ' + element.className);
       element.style.backgroundColor = color;
       setTimeout(() => {
         element.style.backgroundColor = '';
@@ -297,7 +296,6 @@ export class GameComponent implements OnInit {
       .updateMoney({ username, amount: this.baseMoneyAccum })
       .subscribe({
         next: () =>
-          console.log('💰 Geld (Basis) gesendet – Server hat multipliziert'),
         error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
       });
 
@@ -327,11 +325,6 @@ export class GameComponent implements OnInit {
       .subscribe({
         next: (res) => {
           const finalScore = res?.score ?? 0;
-          console.log(
-            '✅ Score gespeichert (server-multipliziert):',
-            finalScore
-          );
-
           // 🏆 Highscore-Prüfung mit finalem Score
           this.scoreService.isHighscore(finalScore).subscribe({
             next: (hs) => {
@@ -470,17 +463,14 @@ export class GameComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          console.log('SERVER-ANTWORT:', res);
           if (res.unlocked) {
             this.showAchievementMessage(
               `🎉 Erfolg freigeschaltet: ${res.name}`
             );
-            console.log('✅ Achievement neu freigeschaltet:', res.name);
             this.rainComponent.emojiRain('🎖️');
             this.addXp(20);
             this.soundService.playSound('message.aac'); // Sound beim Freischalten des Achievements abspielen
           } else {
-            console.log('ℹ️ Achievement war bereits freigeschaltet:', res.name);
           }
         },
         error: (err) => console.error('Fehler beim Unlock:', err),
@@ -607,10 +597,8 @@ export class GameComponent implements OnInit {
     this.darkMode = !this.darkMode;
     const body = document.body;
     if (this.darkMode) {
-      console.log('Dark Mode aktiviert');
       body.classList.add('dark-mode');
     } else {
-      console.log('Dark Mode deaktiviert');
       body.classList.remove('dark-mode');
     }
   }

@@ -81,7 +81,6 @@
 .level-list.expanded {
   max-height: 1000px;
   opacity: 1;
-  padding-top: 1rem;
 
   /* Rand unten, der mit dem Button oben bündig wirkt */
   border: 1px solid #ddd;
@@ -92,6 +91,7 @@
 /* Pagination */
 .pagination {
   margin-top: 0.75rem;
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;

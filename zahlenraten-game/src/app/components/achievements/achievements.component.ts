@@ -17,7 +17,7 @@ export class AchievementsComponent implements OnInit {
   achievements: any[] = [];
   isLoading = true;
 
-  constructor(private http: HttpClient, private authService: AuthService, private firebase: FirebaseService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit(): void {
     const username = this.authService.getUsername();

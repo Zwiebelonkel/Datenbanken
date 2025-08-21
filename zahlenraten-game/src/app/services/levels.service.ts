@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable, shareReplay } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, shareReplay } from 'rxjs';
 
 export interface LevelUser {
   username: string;
@@ -12,27 +12,66 @@ export interface LevelUser {
   total_score?: number;
 }
 
+export interface LevelsResponse {
+  users: LevelUser[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasPrev: boolean;
+  hasNext: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class LevelsService {
-  private cache$?: Observable<LevelUser[]>;
+  private readonly baseUrl = 'https://outside-between.onrender.com/api/users/levels';
+
+  // Cache pro (page,limit)
+  private cache = new Map<string, Observable<LevelsResponse>>();
 
   constructor(private http: HttpClient) {}
 
-  /** Lädt die Liste einmal und cached sie bis zum nächsten echten Seiten-Reload */
-  load(): Observable<LevelUser[]> {
-    if (!this.cache$) {
-      this.cache$ = this.http
-        .get<{ users: LevelUser[] }>('https://outside-between.onrender.com/api/users/levels')
-        .pipe(
-          map(res => res.users ?? []),
-          shareReplay(1) // ⬅️ Memory-Cache bis App-Neustart / Reload
-        );
+  /** Lädt Seite `page` (Default 1) mit `limit` (Default 10) und cached das Ergebnis. */
+  load(page = 1, limit = 10, force = false): Observable<LevelsResponse> {
+    const key = this.key(page, limit);
+    if (!force && this.cache.has(key)) {
+      return this.cache.get(key)!;
     }
-    return this.cache$;
+
+    const params = new HttpParams().set('page', page).set('limit', limit);
+    const req$ = this.http
+      .get<LevelsResponse>(this.baseUrl, { params })
+      .pipe(shareReplay(1)); // Memory-Cache bis App-Reload
+
+    this.cache.set(key, req$);
+    return req$;
   }
 
-  /** Falls du manuell aktualisieren willst (Button o.ä.) */
-  refresh(): void {
-    this.cache$ = undefined;
+  /** Prefetch der nächsten Seite – nützlich nach erfolgreichem Laden von Seite N. */
+  prefetchNext(currentPage: number, limit = 10, totalPages?: number) {
+    const next = currentPage + 1;
+    if (totalPages && next > totalPages) return;
+    const key = this.key(next, limit);
+    if (!this.cache.has(key)) {
+      this.load(next, limit).subscribe({ next: () => {}, error: () => {} });
+    }
+  }
+
+  /** Einzelne Seite aus dem Cache entfernen oder alles leeren. */
+  refresh(page?: number, limit = 10): void {
+    if (page === undefined) {
+      this.cache.clear();
+    } else {
+      this.cache.delete(this.key(page, limit));
+    }
+  }
+
+  /** Prüfen, ob eine Seite bereits im Cache liegt. */
+  hasCached(page = 1, limit = 10): boolean {
+    return this.cache.has(this.key(page, limit));
+  }
+
+  private key(page: number, limit: number) {
+    return `${page}:${limit}`;
   }
 }

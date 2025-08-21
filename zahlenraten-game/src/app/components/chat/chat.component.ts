@@ -59,11 +59,17 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  private openAndStart() {
-    this.isLoading = true;
-    this.loadMessages(true);
-    this.startPolling();
-  }
+private openAndStart() {
+  this.isLoading = true;
+  this.loadMessages(); // kein Scroll hier
+  this.startPolling();
+
+  // ⏳ Warte, bis die Transition abgeschlossen ist
+  setTimeout(() => {
+    this.scrollToBottom();
+  }, 450); // etwas mehr als 400ms Transition
+}
+
 
   private startPolling() {
     this.stopPolling(); // safety
@@ -94,12 +100,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   this.chatService.getLatestMessages(20).subscribe({
     next: (data) => {
       this.messages = data;
-      if (scrollToBottom) {
-        // DOM nach Renderphase
-        setTimeout(() => this.scrollToBottom(), 0);
-        // alternativ:
-        // requestAnimationFrame(() => this.scrollToBottom());
-      }
       this.isLoading = false;
     },
     error: (err) => console.error('Fehler beim Laden der Chat-Nachrichten:', err),

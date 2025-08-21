@@ -387,34 +387,80 @@ app.put(
   }
 );
 
-// 🔝 Alle Spieler nach Level (absteigend) inkl. Profilbild
-app.get("/api/users/levels", async (_req, res) => {
+// 🔝 Alle Spieler nach Level (absteigend) inkl. Profilbild — serverseitig paginiert
+app.get('/api/users/levels', async (req, res) => {
   try {
+    // Query-Parameter parsen & begrenzen
+    const page  = Math.max(1, parseInt(String(req.query.page ?? '1'), 10) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit ?? '10'), 10) || 10));
+    const offset = (page - 1) * limit;
+
+    // Gesamtanzahl für Pagination
+    const totalRows = await db.execute({
+      sql: `SELECT COUNT(*) AS cnt FROM users`,
+      args: [],
+    });
+    const total = Number(totalRows.rows[0]?.cnt ?? 0);
+
+    // Früh raus, wenn leer
+    if (total === 0) {
+      return res.json({
+        users: [],
+        page,
+        limit,
+        total,
+        totalPages: 0,
+        hasPrev: false,
+        hasNext: false,
+      });
+    }
+
+    // Daten selektieren (achte auf xpThreshold!) + Ordering
     const rows = await db.execute({
       sql: `
         SELECT
           username,
-          COALESCE(level, 1)          AS level,
-          COALESCE(xp, 0)             AS xp,
-          COALESCE(total_score, 0)    AS total_score,
-          profile_image_url           AS profileImageUrl
+          COALESCE(level, 1)                 AS level,
+          COALESCE(xp, 0)                    AS xp,
+          COALESCE(xp_threshold, 100)        AS xpThreshold,   -- 👈 wichtig für xpPercent
+          COALESCE(total_score, 0)           AS total_score,
+          profile_image_url                  AS profileImageUrl
         FROM users
         ORDER BY level DESC, xp DESC, total_score DESC, LOWER(username) ASC
+        LIMIT ? OFFSET ?
       `,
-      args: [],
+      args: [limit, offset],
     });
 
-    const users = rows.rows.map((u) => {
-      const xp = Number(u.xp) || 0;
+    const users = rows.rows.map((u: any) => {
+      const xp  = Number(u.xp) || 0;
       const thr = Math.max(1, Number(u.xpThreshold) || 100);
       const xpPercent = Math.min(100, Math.floor((xp / thr) * 100));
-      return { ...u, xpPercent };
+      return {
+        username: u.username,
+        level: Number(u.level) || 1,
+        xp,
+        xpThreshold: thr,
+        xpPercent,
+        total_score: Number(u.total_score) || 0,
+        profileImageUrl: u.profileImageUrl ?? null,
+      };
     });
 
-    res.json({ users });
+    const totalPages = Math.ceil(total / limit);
+
+    res.json({
+      users,
+      page,
+      limit,
+      total,
+      totalPages,
+      hasPrev: page > 1,
+      hasNext: page < totalPages,
+    });
   } catch (err) {
-    console.error("❌ /api/users/levels Fehler:", err);
-    res.status(500).json({ error: "Fehler beim Laden der Level-Liste" });
+    console.error('❌ /api/users/levels Fehler:', err);
+    res.status(500).json({ error: 'Fehler beim Laden der Level-Liste' });
   }
 });
 

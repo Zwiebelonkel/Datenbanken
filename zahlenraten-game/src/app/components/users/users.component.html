@@ -2,6 +2,7 @@
   <div class="users-header">
     <h3>👤 Spieler</h3>
   </div>
+
   <button
     class="toggle-btn btn"
     (click)="toggleLevelList()"
@@ -11,7 +12,7 @@
     <span *ngIf="isLevelListOpen">⬆️ Liste einklappen</span>
   </button>
 
-  <app-loader *ngIf="loadingLevels"></app-loader>
+  <app-loader *ngIf="loadingLevels" aria-live="polite"></app-loader>
 
   <!-- Animierbarer Container -->
   <div
@@ -19,9 +20,10 @@
     [class.expanded]="isLevelListOpen"
     [attr.aria-hidden]="!isLevelListOpen"
   >
-    <ul *ngIf="levelUsers?.length">
+    <!-- Liste -->
+    <ul *ngIf="!loadingLevels && levelUsers?.length">
       <li
-        *ngFor="let u of levelUsers; trackBy: trackByUsername"
+        *ngFor="let u of paginatedUsers; trackBy: trackByUsername"
         (click)="goToProfile(u.username)"
         tabindex="0"
         role="button"
@@ -42,5 +44,25 @@
     <p *ngIf="!loadingLevels && !levelUsers.length" style="color: gray">
       Keine Spieler gefunden…
     </p>
+
+    <!-- Pagination -->
+    <div
+      class="pagination"
+      *ngIf="!loadingLevels && levelUsers.length > pageSize"
+      aria-label="Spieler-Seitensteuerung"
+    >
+      <button class="page-btn" (click)="prevPage()" [disabled]="page === 1">
+        ◀︎ Zurück
+      </button>
+
+      <span class="page-info">
+        Seite {{ page }} / {{ totalPages }} ·
+        {{ startIndex + 1 }}–{{ endIndex }} von {{ levelUsers.length }}
+      </span>
+
+      <button class="page-btn" (click)="nextPage()" [disabled]="page === totalPages">
+        Weiter ▶︎
+      </button>
+    </div>
   </div>
 </div>

@@ -23,7 +23,7 @@
     <!-- Liste -->
     <ul *ngIf="!loadingLevels && levelUsers?.length">
       <li
-        *ngFor="let u of paginatedUsers; trackBy: trackByUsername"
+        *ngFor="let u of levelUsers; trackBy: trackByUsername"
         (click)="goToProfile(u.username)"
         tabindex="0"
         role="button"
@@ -45,22 +45,23 @@
       Keine Spieler gefunden…
     </p>
 
-    <!-- Pagination -->
+    <!-- Pagination (Server) -->
     <div
       class="pagination"
-      *ngIf="!loadingLevels && levelUsers.length > pageSize"
+      *ngIf="!loadingLevels && total > pageSize"
       aria-label="Spieler-Seitensteuerung"
     >
-      <button class="page-btn" (click)="prevPage()" [disabled]="page === 1">
+      <button class="page-btn" (click)="prevPage()" [disabled]="!hasPrev">
         ◀︎ Zurück
       </button>
 
       <span class="page-info">
         Seite {{ page }} / {{ totalPages }} ·
-        {{ startIndex + 1 }}–{{ endIndex }} von {{ levelUsers.length }}
+        {{ (page - 1) * pageSize + 1 }}–{{ Math.min(page * pageSize, total) }}
+        von {{ total }}
       </span>
 
-      <button class="page-btn" (click)="nextPage()" [disabled]="page === totalPages">
+      <button class="page-btn" (click)="nextPage()" [disabled]="!hasNext">
         Weiter ▶︎
       </button>
     </div>

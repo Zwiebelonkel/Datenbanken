@@ -391,42 +391,53 @@ app.put(
 app.get('/api/users/levels', async (req, res) => {
   try {
     // Query-Parameter parsen & begrenzen
-    const page  = Math.max(1, parseInt(String(req.query.page ?? '1'), 10) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit ?? '10'), 10) || 10));
-    const offset = (page - 1) * limit;
+    const pageParam  = parseInt(String(req.query.page ?? '1'), 10);
+    const limitParam = parseInt(String(req.query.limit ?? '10'), 10);
+    let page  = Number.isFinite(pageParam)  ? Math.max(1, pageParam)  : 1;
+    const limit = Number.isFinite(limitParam) ? Math.min(100, Math.max(1, limitParam)) : 10;
 
-    // Gesamtanzahl für Pagination
+    // Gesamtanzahl
     const totalRows = await db.execute({
       sql: `SELECT COUNT(*) AS cnt FROM users`,
       args: [],
     });
     const total = Number(totalRows.rows[0]?.cnt ?? 0);
 
-    // Früh raus, wenn leer
     if (total === 0) {
+      // leichte Cachebarkeit auch bei leerem Ergebnis
+      res.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60');
       return res.json({
         users: [],
-        page,
+        page: 1,
         limit,
-        total,
+        total: 0,
         totalPages: 0,
         hasPrev: false,
         hasNext: false,
       });
     }
 
-    // Daten selektieren (achte auf xpThreshold!) + Ordering
+    // totalPages berechnen und page clampen, falls zu groß
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    if (page > totalPages) page = totalPages;
+
+    const offset = (page - 1) * limit;
+
+    // Daten selektieren — NOCASE statt LOWER() für bessere Index-Nutzung
     const rows = await db.execute({
       sql: `
         SELECT
           username,
-          COALESCE(level, 1)                 AS level,
-          COALESCE(xp, 0)                    AS xp,
-          COALESCE(xp_threshold, 100)        AS xpThreshold,   -- 👈 wichtig für xpPercent
-          COALESCE(total_score, 0)           AS total_score,
-          profile_image_url                  AS profileImageUrl
+          COALESCE(level, 1)           AS level,
+          COALESCE(xp, 0)              AS xp,
+          COALESCE(xp_threshold, 100)  AS xpThreshold,
+          COALESCE(total_score, 0)     AS total_score,
+          profile_image_url            AS profileImageUrl
         FROM users
-        ORDER BY level DESC, xp DESC, total_score DESC, LOWER(username) ASC
+        ORDER BY level DESC,
+                 xp DESC,
+                 total_score DESC,
+                 username COLLATE NOCASE ASC
         LIMIT ? OFFSET ?
       `,
       args: [limit, offset],
@@ -435,19 +446,19 @@ app.get('/api/users/levels', async (req, res) => {
     const users = rows.rows.map((u: any) => {
       const xp  = Number(u.xp) || 0;
       const thr = Math.max(1, Number(u.xpThreshold) || 100);
-      const xpPercent = Math.min(100, Math.floor((xp / thr) * 100));
       return {
         username: u.username,
         level: Number(u.level) || 1,
         xp,
         xpThreshold: thr,
-        xpPercent,
+        xpPercent: Math.min(100, Math.floor((xp / thr) * 100)),
         total_score: Number(u.total_score) || 0,
         profileImageUrl: u.profileImageUrl ?? null,
       };
     });
 
-    const totalPages = Math.ceil(total / limit);
+    // leichte Kurzzeit-Caches für Listendaten
+    res.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60');
 
     res.json({
       users,

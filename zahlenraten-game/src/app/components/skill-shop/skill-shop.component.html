@@ -1,6 +1,7 @@
 <app-sidebar></app-sidebar>
 <app-topbar page="⬆️ Skill-Shop"></app-topbar>
 <app-loader *ngIf="isLoading"></app-loader>
+
 <div *ngIf="!isLoading">
   <div class="skill-shop">
     <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
@@ -13,15 +14,19 @@
       </div>
       <div class="info-item">
         <span class="info-title">Score-Multiplikator:</span>
-        <span class="info-value"
-          >{{ player.scoreMultiplier | number : "1.0-2" }}x</span
-        >
+        <span class="info-value">
+          {{ player.scoreMultiplier | number : "1.0-2" }}x
+        </span>
       </div>
       <div class="info-item">
         <span class="info-title">Monetary-Multiplikator:</span>
-        <span class="info-value"
-          >{{ player.monetaryMultiplier | number : "1.0-2" }}x</span
-        >
+        <span class="info-value">
+          {{ player.monetaryMultiplier | number : "1.0-2" }}x
+        </span>
+      </div>
+      <div class="info-item">
+        <span class="info-title">Erforderlicher Sieg-Streak:</span>
+        <span class="info-value">{{ player.streakNeeded }}</span>
       </div>
     </div>
 
@@ -51,12 +56,14 @@
           (click)="upgrade(skill)"
           [disabled]="!canUpgrade(skill)"
         >
+          <!-- Emojis je nach Skill -->
           <span class="emoji" *ngIf="skill.name === 'Monetary Multiplier'"
             >💵</span
           >
           <span class="emoji" *ngIf="skill.name === 'Score Multiplier'"
             >💯</span
           >
+          <span class="emoji" *ngIf="skill.name === 'Streak needed'">🔥</span>
           {{ buttonLabel(skill) }}
         </button>
       </div>

@@ -19,9 +19,9 @@
 <!-- Spiel läuft -->
 <div class="card game-container" *ngIf="!gameOver">
   <app-streak-indicator
-  [consecutiveWins]="consecutiveWins"
-  (streakCompleted)="handleStreakCompleted()"
-></app-streak-indicator>
+    [consecutiveWins]="consecutiveWins"
+    (streakCompleted)="handleStreakCompleted()"
+  ></app-streak-indicator>
   <div class="hearts">
     <span
       *ngFor="let life of getLivesArray(); index as i"

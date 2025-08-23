@@ -41,6 +41,7 @@ export class SkillShopComponent implements OnInit {
     skillPoints: 0,
     scoreMultiplier: 1.0,
     monetaryMultiplier: 1.0,
+    streakNeeded: 15,
   };
 
   constructor(
@@ -129,6 +130,9 @@ export class SkillShopComponent implements OnInit {
         }
         if (typeof res?.monetaryMultiplier === 'number') {
           this.player.monetaryMultiplier = res.monetaryMultiplier;
+        }
+        if (typeof res?.streakNeeded === 'number') {
+          this.player.streakNeeded = res.streakNeeded;
         }
       },
       error: (err) => {

@@ -3,8 +3,8 @@ export interface Skill {
   name: string;
   description: string;
   price: number;
-  type: 'score' | 'money'; // Typ des Multiplikators: Score oder Monetary
-  level: number;            // Level des Multiplikators (1, 2, 3, ...)
+  type: 'score' | 'money' | 'streak'; // Typ des Multiplikators: Score oder Monetary
+  level: number; // Level des Multiplikators (1, 2, 3, ...)
   purchased: boolean;
 }
 
@@ -12,4 +12,5 @@ export interface Player {
   skillPoints: number;
   scoreMultiplier: number;
   monetaryMultiplier: number;
+  streakNeeded: number;
 }

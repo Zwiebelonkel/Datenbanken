@@ -17,6 +17,7 @@ export interface UserStats {
   skillPoints: number;
   scoreMultiplier: number;
   monetaryMultiplier: number;
+  streakNeeded: number;
 }
 
 export interface Skill {

@@ -25,6 +25,18 @@ const CATALOG = {
       });
     },
   },
+
+  "Streak needed": {
+    description: "-1 erforderlicher Sieg pro Level",
+    price: 5, // == base_price
+    max_level: 15,
+    apply: async (tx, username) => {
+      await tx.execute({
+        sql: `UPDATE users SET streak_needed = streak_needed -1 WHERE LOWER(username)=LOWER(?)`,
+        args: [username],
+      });
+    },
+  },
 };
 
 /* ===== Einmalige Migration (als Kommentar; manuell in Turso ausführen) =====
@@ -121,7 +133,9 @@ router.post("/:username/skills/upgrade", async (req, res) => {
     const u = await tx.execute({
       sql: `SELECT COALESCE(skill_points,0) AS sp,
                    COALESCE(score_multiplier,1.0) AS sm,
-                   COALESCE(monetary_multiplier,1.0) AS mm
+                   COALESCE(monetary_multiplier,1.0) AS mm,
+                   COALESCE(streak_needed,1.0) AS sn
+
             FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1`,
       args: [username],
     });
@@ -161,7 +175,9 @@ router.post("/:username/skills/upgrade", async (req, res) => {
     const back = await tx.execute({
       sql: `SELECT COALESCE(skill_points,0) AS skill_points,
                    COALESCE(score_multiplier,1.0) AS score_multiplier,
-                   COALESCE(monetary_multiplier,1.0) AS monetary_multiplier
+                   COALESCE(monetary_multiplier,1.0) AS monetary_multiplier,
+                   COALESCE(streak_needed,1.0) AS streak_needed
+
             FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1`,
       args: [username],
     });
@@ -182,6 +198,7 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       skillPoints: Number(back.rows[0].skill_points),
       scoreMultiplier: Number(back.rows[0].score_multiplier),
       monetaryMultiplier: Number(back.rows[0].monetary_multiplier),
+      streakNeeded: Number(back.rows[0].streak_needed),
     });
   } catch (error) {
     if (tx) {
@@ -190,13 +207,11 @@ router.post("/:username/skills/upgrade", async (req, res) => {
       } catch {}
     }
     console.error("❌ upgrade tx error:", error);
-    return res
-      .status(500)
-      .json({
-        message: "Datenbankfehler beim Upgrade",
-        detail: error?.message,
-        code: error?.code,
-      });
+    return res.status(500).json({
+      message: "Datenbankfehler beim Upgrade",
+      detail: error?.message,
+      code: error?.code,
+    });
   }
 });
 

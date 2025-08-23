@@ -28,10 +28,9 @@ async function getUserSkills(username) {
     return result.rows;
   } catch (error) {
     console.error("Fehler beim Abrufen der Skills:", error);
-    throw error;  // Fehler weiterwerfen, damit der Fehler im Aufrufer sichtbar ist
+    throw error; // Fehler weiterwerfen, damit der Fehler im Aufrufer sichtbar ist
   }
 }
-
 
 /** 🗄️ Multer-Storage direkt in Cloudinary (keine lokale Disk) */
 const storage = new CloudinaryStorage({
@@ -40,7 +39,15 @@ const storage = new CloudinaryStorage({
     folder: "profile-pictures",
     public_id: () => uuidv4(),
     allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
-    transformation: [{ width: 256, height: 256, crop: "fill", gravity: "auto", quality: "auto" }],
+    transformation: [
+      {
+        width: 256,
+        height: 256,
+        crop: "fill",
+        gravity: "auto",
+        quality: "auto",
+      },
+    ],
   },
 });
 const upload = multer({ storage }).single("profileImage");
@@ -51,11 +58,14 @@ router.post("/upload-profile-image", (req, res) => {
     if (err) return res.status(400).json({ message: err.message });
 
     const username = (req.body.username || "").trim();
-    if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
-    if (!req.file) return res.status(400).json({ message: "Kein Bild hochgeladen" });
+    if (!username)
+      return res.status(400).json({ message: "Kein Benutzername angegeben" });
+    if (!req.file)
+      return res.status(400).json({ message: "Kein Bild hochgeladen" });
 
     const profileImageUrl = req.file.secure_url || req.file.path;
-    if (!profileImageUrl) return res.status(500).json({ message: "Upload fehlgeschlagen" });
+    if (!profileImageUrl)
+      return res.status(500).json({ message: "Upload fehlgeschlagen" });
 
     try {
       const result = await db.execute({
@@ -71,7 +81,10 @@ router.post("/upload-profile-image", (req, res) => {
         return res.status(404).json({ message: "Benutzer nicht gefunden" });
       }
 
-      res.json({ message: "Profilbild erfolgreich hochgeladen", profileImageUrl });
+      res.json({
+        message: "Profilbild erfolgreich hochgeladen",
+        profileImageUrl,
+      });
     } catch (e) {
       console.error("❌ Fehler beim Speichern des Profilbildes:", e);
       res.status(500).json({ message: "Datenbankfehler" });
@@ -82,7 +95,8 @@ router.post("/upload-profile-image", (req, res) => {
 /** 📥 Profil-Daten abrufen */
 router.get("/:username", async (req, res) => {
   const username = (req.params.username || "").trim();
-  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
+  if (!username)
+    return res.status(400).json({ message: "Kein Benutzername angegeben" });
 
   try {
     const result = await db.execute({
@@ -103,7 +117,9 @@ router.get("/:username", async (req, res) => {
           u.profile_image_url AS profileImageUrl,  -- Profilbild-URL
           u.skill_points AS skillPoints,  -- Skill-Punkte
           u.score_multiplier AS scoreMultiplier,  -- Score-Multiplikator
-          u.monetary_multiplier AS monetaryMultiplier  -- Monetärer Multiplikator
+          u.monetary_multiplier AS monetaryMultiplier,  -- Monetärer Multiplikator
+          u.streak_needed AS streakNeeded  -- Streakneeded
+
         FROM users u
         WHERE LOWER(u.username) = LOWER(?)
         LIMIT 1
@@ -111,7 +127,8 @@ router.get("/:username", async (req, res) => {
       args: [username],
     });
 
-    if (result.rows.length === 0) return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    if (result.rows.length === 0)
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
 
     const userStats = result.rows[0];
 
@@ -120,7 +137,7 @@ router.get("/:username", async (req, res) => {
 
     res.json({
       ...userStats,
-      skills: userSkills,  // Füge Skills zu den Benutzer-Daten hinzu
+      skills: userSkills, // Füge Skills zu den Benutzer-Daten hinzu
     });
   } catch (e) {
     console.error("❌ Fehler beim Laden des Profils:", e);
@@ -129,15 +146,16 @@ router.get("/:username", async (req, res) => {
 });
 
 /** 📤 XP hinzufügen */
-router.post('/:username/add-xp', async (req, res) => {
-  const username = (req.params.username || '').trim();
+router.post("/:username/add-xp", async (req, res) => {
+  const username = (req.params.username || "").trim();
   let { xpToAdd } = req.body;
 
   // Eingaben prüfen/konvertieren
   xpToAdd = Number(xpToAdd);
-  if (!username) return res.status(400).json({ message: 'Kein Benutzername angegeben' });
+  if (!username)
+    return res.status(400).json({ message: "Kein Benutzername angegeben" });
   if (!Number.isFinite(xpToAdd) || xpToAdd <= 0) {
-    return res.status(400).json({ message: 'Ungültige XP-Anzahl' });
+    return res.status(400).json({ message: "Ungültige XP-Anzahl" });
   }
 
   try {
@@ -147,31 +165,32 @@ router.post('/:username/add-xp', async (req, res) => {
       args: [username],
     });
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
     }
 
     // Zahlen sicher machen + Defaults
     let level = Number(result.rows[0].level);
-    let xp    = Number(result.rows[0].xp);
+    let xp = Number(result.rows[0].xp);
     if (!Number.isFinite(level) || level < 1) level = 1;
-    if (!Number.isFinite(xp)    || xp   < 0)  xp    = 0;
+    if (!Number.isFinite(xp) || xp < 0) xp = 0;
 
     // Schwelle-Funktion
-    const xpForLevel = (lvl) => Math.round(100 * Math.pow(1.05, Math.max(1, lvl) - 1));
+    const xpForLevel = (lvl) =>
+      Math.round(100 * Math.pow(1.05, Math.max(1, lvl) - 1));
 
     // XP addieren + Level-Ups zählen
-    let gainedSkillPoints = 0;     // ⬅️ nur Zunahme, totaler Wert wird DB-seitig addiert
+    let gainedSkillPoints = 0; // ⬅️ nur Zunahme, totaler Wert wird DB-seitig addiert
     let leveledUp = false;
 
     xp += xpToAdd;
-    let xpThreshold = xpForLevel(level);  // aktuelle Schwelle für dieses Level
+    let xpThreshold = xpForLevel(level); // aktuelle Schwelle für dieses Level
 
     while (xp >= xpThreshold) {
       xp -= xpThreshold;
       level += 1;
       gainedSkillPoints += 1;
       leveledUp = true;
-      xpThreshold = xpForLevel(level);    // neue Schwelle für das neue Level
+      xpThreshold = xpForLevel(level); // neue Schwelle für das neue Level
     }
 
     // Update: Level/XP setzen, Skillpunkte erhöhen
@@ -194,7 +213,7 @@ router.post('/:username/add-xp', async (req, res) => {
     // });
 
     res.json({
-      message: `XP hinzugefügt${leveledUp ? ', Level erhöht!' : ''}`,
+      message: `XP hinzugefügt${leveledUp ? ", Level erhöht!" : ""}`,
       leveledUp,
       level,
       // skillPointsTotal: sp.rows[0]?.skill_points ?? undefined,
@@ -203,15 +222,16 @@ router.post('/:username/add-xp', async (req, res) => {
       xpThreshold, // Schwelle für das *aktuelle* Level (nächster Balken)
     });
   } catch (e) {
-    console.error('❌ add-xp Fehler:', e);
-    res.status(500).json({ message: 'Datenbankfehler' });
+    console.error("❌ add-xp Fehler:", e);
+    res.status(500).json({ message: "Datenbankfehler" });
   }
 });
 
 /** Optional: Alte Query-Variante für Kompatibilität */
 router.get("/", async (req, res) => {
   const username = (req.query.username || "").trim();
-  if (!username) return res.status(400).json({ message: "Kein Benutzername angegeben" });
+  if (!username)
+    return res.status(400).json({ message: "Kein Benutzername angegeben" });
 
   try {
     const result = await db.execute({
@@ -236,7 +256,8 @@ router.get("/", async (req, res) => {
       args: [username, username, username, username],
     });
 
-    if (result.rows.length === 0) return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    if (result.rows.length === 0)
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
     res.json(result.rows[0]);
   } catch (e) {
     console.error("❌ Fehler beim Laden des Profils:", e);

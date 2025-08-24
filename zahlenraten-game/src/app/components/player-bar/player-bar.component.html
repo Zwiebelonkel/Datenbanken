@@ -1,14 +1,14 @@
 <div class="player-sticky" *ngIf="isLoggedIn">
   <div class="ps-inner">
     <div class="ps-item">
-      💼 Wallet
+      💵 Geld
       <strong>{{ totalMoney | number : "1.0-0" }} €</strong>
     </div>
 
     <div class="ps-sep" aria-hidden="true">•</div>
 
     <div class="ps-item">
-      🧭 Level
+      ⬆️ Level
       <strong>{{ level }}</strong>
 
       <div class="xp-wrap" *ngIf="xpPercent !== null">

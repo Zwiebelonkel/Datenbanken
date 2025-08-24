@@ -6,6 +6,7 @@
 />
 <app-sidebar></app-sidebar>
 <app-topbar page=""></app-topbar>
+<app-player-bar [totalMoneyOverride]="profileMoney + money"></app-player-bar>
 <app-rain #rain></app-rain>
 
 <div
@@ -181,32 +182,39 @@
           <ul>
             <li *ngIf="board.length === 0">Keine Daten verfügbar…</li>
 
-<li
-  *ngFor="let entry of board; index as j; trackBy: trackByUsername"
-  (click)="goToProfile(entry.username)"
-  tabindex="0" role="button"
-  [ngClass]="{
-    'gold-bg shimmer-effect': j === 0,
-    'silver-bg shimmer-effect': j === 1,
-    'bronze-bg shimmer-effect': j === 2
-  }"
->
-  <div class="lb-left">
-    <div class="avatar-wrap">
-      <img
-        class="avatar"
-        [src]="avatar(entry.profileImageUrl, 32)"
-        width="32" height="32"
-        loading="lazy" decoding="async" fetchpriority="low"
-        (error)="onAvatarError($event)" alt=""
-      />
-      <span *ngIf="j === 0" class="crown" aria-hidden="true">👑</span>
-    </div>
-    <span class="name">{{ getMedal(j) }} {{ entry.username }}</span>
-  </div>
+            <li
+              *ngFor="let entry of board; index as j; trackBy: trackByUsername"
+              (click)="goToProfile(entry.username)"
+              tabindex="0"
+              role="button"
+              [ngClass]="{
+                'gold-bg shimmer-effect': j === 0,
+                'silver-bg shimmer-effect': j === 1,
+                'bronze-bg shimmer-effect': j === 2
+              }"
+            >
+              <div class="lb-left">
+                <div class="avatar-wrap">
+                  <img
+                    class="avatar"
+                    [src]="avatar(entry.profileImageUrl, 32)"
+                    width="32"
+                    height="32"
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                    (error)="onAvatarError($event)"
+                    alt=""
+                  />
+                  <span *ngIf="j === 0" class="crown" aria-hidden="true"
+                    >👑</span
+                  >
+                </div>
+                <span class="name">{{ getMedal(j) }} {{ entry.username }}</span>
+              </div>
 
-  <strong class="value">{{ entry.value }}</strong>
-</li>
+              <strong class="value">{{ entry.value }}</strong>
+            </li>
           </ul>
         </div>
       </div>

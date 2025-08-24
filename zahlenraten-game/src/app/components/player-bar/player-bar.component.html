@@ -1,0 +1,20 @@
+<div class="player-sticky" *ngIf="isLoggedIn">
+  <div class="ps-inner">
+    <div class="ps-item">
+      💼 Wallet
+      <strong>{{ totalMoney | number : "1.0-0" }} €</strong>
+    </div>
+
+    <div class="ps-sep" aria-hidden="true">•</div>
+
+    <div class="ps-item">
+      🧭 Level
+      <strong>{{ level }}</strong>
+
+      <div class="xp-wrap" *ngIf="xpPercent !== null">
+        <div class="xp-bar" [style.width.%]="xpPercent"></div>
+      </div>
+      <span class="xp-label" *ngIf="xpPercent !== null">{{ xpPercent }}%</span>
+    </div>
+  </div>
+</div>

@@ -66,8 +66,10 @@ button {
   }
 
   input {
+    color: var(--text);
+    background-color: var(--scale-bg);
     padding: 0.4rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--card-border);
     border-radius: 6px;
     width: 100px;
     text-align: center;

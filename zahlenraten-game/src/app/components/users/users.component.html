@@ -51,17 +51,18 @@
       *ngIf="!loadingLevels && total > pageSize"
       aria-label="Spieler-Seitensteuerung"
     >
-      <button class="page-btn" (click)="prevPage()" [disabled]="!hasPrev">
+      <button class="page-btn btn" (click)="prevPage()" [disabled]="!hasPrev">
         ◀︎ Zurück
       </button>
 
       <span class="page-info">
-        Seite {{ page }} / {{ totalPages }} ·
-        {{ (page - 1) * pageSize + 1 }}–{{ Math.min(page * pageSize, total) }}
+        Seite {{ page }} / {{ totalPages }} · {{ (page - 1) * pageSize + 1 }}–{{
+          Math.min(page * pageSize, total)
+        }}
         von {{ total }}
       </span>
 
-      <button class="page-btn" (click)="nextPage()" [disabled]="!hasNext">
+      <button class="page-btn btn" (click)="nextPage()" [disabled]="!hasNext">
         Weiter ▶︎
       </button>
     </div>

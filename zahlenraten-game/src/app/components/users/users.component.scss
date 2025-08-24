@@ -3,14 +3,11 @@
   padding: 2rem;
   text-align: center;
   transition: background 0.3s ease, color 0.3s ease;
-  border: 1px solid #ddd; // fix: 1p -> 1px
   border-radius: 8px;
 }
 
 .highscores-carousel li {
-  background: #fff;
   padding: 0.8rem;
-  border-bottom: 1px dashed #ccc;
   font-size: 1rem;
   display: flex;
   justify-content: space-between;
@@ -18,7 +15,6 @@
   transition: 0.2s ease;
 }
 .highscores-carousel li:hover {
-  background: #d8d8d8;
   transform: scale(1.02);
 }
 .highscores-carousel li span {
@@ -56,10 +52,10 @@
   padding: 0.7rem 1rem;
   border: none;
   border-radius: 8px;
-  color: #fff;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.06s ease, border-radius 0.2s ease;
+  transition: background 0.2s ease, transform 0.06s ease,
+    border-radius 0.2s ease;
 
   &:active {
     transform: translateY(1px);
@@ -83,8 +79,7 @@
   opacity: 1;
 
   /* Rand unten, der mit dem Button oben bündig wirkt */
-  border: 1px solid #ddd;
-  border-top: none;              // damit die Naht zwischen Button und Liste nicht doppelt ist
+  border-top: none; // damit die Naht zwischen Button und Liste nicht doppelt ist
   border-radius: 0 0 8px 8px;
 }
 
@@ -98,14 +93,11 @@
   justify-content: center;
 
   .page-btn {
-    border: 1px solid #ddd;
-    background: #fff;
     padding: 0.4rem 0.8rem;
     border-radius: 6px;
     cursor: pointer;
     transition: transform 0.06s ease, background 0.2s ease;
     &:hover:not(:disabled) {
-      background: #f3f3f3;
       transform: translateY(-1px);
     }
     &:disabled {

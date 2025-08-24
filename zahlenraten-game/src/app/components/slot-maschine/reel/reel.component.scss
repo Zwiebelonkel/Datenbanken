@@ -5,9 +5,9 @@
   font-size: 3rem;
   width: 80px;
   height: 80px;
-  background: white;
+  background: var(--scale-bg);
   border-radius: 12px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   margin: 0 5px;
   user-select: none;
   perspective: 1000px;
@@ -22,8 +22,12 @@
 }
 
 @keyframes reel-spin {
-  0%   { transform: rotateX(0deg); }
-  100% { transform: rotateX(1440deg); } // 4 volle Drehungen (360 * 4)
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(1440deg);
+  } // 4 volle Drehungen (360 * 4)
 }
 
 img {

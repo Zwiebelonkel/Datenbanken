@@ -1,7 +1,7 @@
 .achievement-container {
   margin: 2rem auto;
   padding: 2rem;
-  
+
   h2 {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -13,11 +13,12 @@
   }
 
   li {
+    background-color: #ffffff00;
     transition: 0.25s;
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--card-border);
     align-items: center;
 
     &.locked {

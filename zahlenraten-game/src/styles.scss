@@ -1,17 +1,82 @@
 @use "variables" as *;
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
+// Standardfarben (kann auf blau, grün, gelb, pink geändert werden)
+$theme: #4caf50; // Aktuell grün
+$theme-hover: #43a047; // Aktuell grün
+
+$card-bg: #f9f9f9;
+$card-radius: 12px;
+$card-shadow: 0 4px 8px #0000001a;
+$card-border: #ddd;
+
+// Dark Mode Farben
+@media (prefers-color-scheme: dark) {
+  $theme: #2b2b2b; // Dunkleres Theme
+  $theme-hover: #3b3b3b; // Dunkler Hover-Effekt
+
+  $card-bg: #333;
+  $list-bg: #333;
+  $card-border: #444;
+}
+
+// Fallback für die Light Mode Farben
+:root {
+  --background-color: #fff;
+  --text-color: #333;
+  --card-bg: #f9f9f9;
+  --card-border: #ddd;
+  --card-radius: 12px;
+  --card-shadow: 0 4px 8px #0000001a;
+  --theme: #4caf50;
+  --theme-hover: #43a047;
+  --btn-disabled: #ccc;
+  --scale-bg: #e0e0e0;
+  --input-bg: #c5c5c5;
+  --flash-success: rgb(177, 255, 168); // Light Mode
+  --flash-error: rgb(255, 168, 168); // Light Mode
+  --flash-alpha: 1; /* dezenter im Dark Mode */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #333;
+    --card-border: #444;
+    --theme: #2b2b2b;
+    --theme-hover: #3b3b3b;
+    --scale-bg: #484848;
+    --list-bg: #505050;
+    --list-hover: #505050;
+    --btn-disabled: #583a3a;
+    --scale-bg: #494949;
+    --input-bg: #585858;
+    --flash-success: rgb(80, 140, 80); // Dark Mode dezenter
+    --flash-error: rgb(140, 80, 80); // Dark Mode dezenter
+    --flash-alpha: 0.2; /* dezenter im Dark Mode */
+  }
+}
+
+.flash-success {
+  --_flash-color: var(--flash-success);
+}
+.flash-error {
+  --_flash-color: var(--flash-error);
+}
+
 body {
   font-family: "Nunito", sans-serif;
   margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .card {
-  background: $card-bg;
+  background: var(--card-bg);
   max-width: 500px;
-  border-radius: $card-radius;
-  box-shadow: $card-shadow;
-  border: 1px solid $card-border;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
   cursor: pointer;
 
   -webkit-touch-callout: none; /* iOS Safari */
@@ -19,25 +84,37 @@ body {
   -khtml-user-select: none; /* Konqueror HTML */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+  user-select: none; /* Non-prefixed version */
 }
 
 li {
+  background: var(--list-bg);
+  border-color: var(--card-border);
+}
+
+li:hover {
   cursor: pointer;
+  background: var(--list-hover);
 }
 
 .btn {
-  background-color: $theme;
+  background-color: var(--theme);
   border-radius: 8px;
   margin: 0 0.5rem;
 }
 
 .btn:hover {
-  background: $theme-hover;
+  background: var(--theme-hover);
 }
 
 .btn:disabled {
-  background: #ccc;
+  background: var(--btn-disabled) !important;
   cursor: not-allowed;
+}
+
+.dropdown {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border-radius: 6px;
+  border: none;
 }

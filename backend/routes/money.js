@@ -3,44 +3,43 @@ import db from "../db.js";
 
 const router = express.Router();
 
+// POST /api/money/update
 router.post("/update", async (req, res) => {
-  const { username, amount } = req.body;
-
-  if (!username || typeof amount !== "number") {
-    return res.status(400).json({ message: "Ungültige Eingaben für Geld" });
-  }
-
   try {
-    // 1. Multiplier aus der User-Tabelle holen
-    const userRes = await db.execute({
-      sql: "SELECT monetary_multiplier FROM users WHERE LOWER(username) = LOWER(?)",
+    const { username, amount } = req.body;
+    const base = Number(amount) || 0;
+
+    // Userdaten holen (inkl. multiplier)
+    const row = await db.execute({
+      sql: `SELECT COALESCE(monetary_multiplier,1) AS m, COALESCE(money,0) AS money
+            FROM users WHERE username = ?`,
       args: [username],
     });
 
-    if (userRes.rows.length === 0) {
-      return res.status(404).json({ message: "User nicht gefunden" });
+    if (!row.rows.length) {
+      return res.status(404).json({ error: "User not found" });
     }
 
-    const multiplier = userRes.rows[0].monetary_multiplier || 1;
+    const m = Number(row.rows[0].m) || 1;
+    const credited = Math.round(base * m);
 
-    // 2. Wenn amount negativ ist (Einsatz), keinen Multiplier anwenden
-    let finalAmount = amount;
-    
-    if (amount > 0) {
-      // Wenn Betrag positiv ist (also ein Gewinn), Multiplier anwenden
-      finalAmount = Math.floor(amount * multiplier);
-    }
-
-    // 3. Geld updaten: Betrag + Multiplier für Gewinn, sonst nur der Einsatzbetrag
+    // Addieren statt überschreiben!
     await db.execute({
-      sql: "UPDATE users SET money = money + ? WHERE LOWER(username) = LOWER(?)",
-      args: [finalAmount, username],
+      sql: `UPDATE users SET money = money + ? WHERE username = ?`,
+      args: [credited, username],
     });
 
-    res.json({ success: true, appliedAmount: finalAmount });
+    // neuen Kontostand holen
+    const after = await db.execute({
+      sql: `SELECT COALESCE(money,0) AS money FROM users WHERE username = ?`,
+      args: [username],
+    });
+    const newMoney = Number(after.rows[0].money) || 0;
+
+    res.json({ ok: true, credited, money: newMoney });
   } catch (err) {
-    console.error("❌ Fehler beim money Update:", err);
-    res.status(500).json({ message: "Money-Update fehlgeschlagen" });
+    console.error("❌ updateMoney error:", err);
+    res.status(500).json({ error: "Fehler beim Update" });
   }
 });
 

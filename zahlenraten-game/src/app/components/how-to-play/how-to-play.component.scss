@@ -20,7 +20,7 @@
     p,
     ul {
       font-size: 1rem;
-      color: #333;
+      color: var(--text-color);
       margin: 0.2rem 0;
     }
 
@@ -55,4 +55,8 @@
   50% {
     opacity: 0.4;
   }
+}
+
+li {
+  background-color: #ffffff00;
 }

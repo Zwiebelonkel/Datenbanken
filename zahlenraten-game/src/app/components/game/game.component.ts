@@ -18,6 +18,7 @@ import { firstValueFrom } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { RainComponent } from '../rain/rain.component';
 import { TopbarComponent } from '../topbar/topbar.component';
+import { PlayerBarComponent } from '../player-bar/player-bar.component';
 
 @Component({
   selector: 'app-game',
@@ -33,6 +34,7 @@ import { TopbarComponent } from '../topbar/topbar.component';
     ChatComponent,
     UsersComponent,
     RainComponent,
+    PlayerBarComponent,
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -69,6 +71,8 @@ export class GameComponent implements OnInit {
   username: string = '';
   scoreMultiplier = 1; // aus DB
   monetaryMultiplier = 1; // aus DB
+  profileMoney = 0;
+  xpPercent: number | null = null; // optional für die Leiste
 
   private baseScoreAccum = 0;
   private baseMoneyAccum = 0;
@@ -135,15 +139,26 @@ export class GameComponent implements OnInit {
     if (this.username) {
       // Nur wenn eingeloggt: Karten + Profil laden
       this.loadCards();
-      this.profileService.getUserStats(this.username).subscribe((p) => {
-        this.currentLevel = p.level ?? 0;
-        this.scoreMultiplier = p.scoreMultiplier ?? 1;
-        this.monetaryMultiplier = p.monetaryMultiplier ?? 1;
+      this.profileService.getUserStats(this.username).subscribe({
+        next: (p) => {
+          this.currentLevel = p.level ?? 0;
+          this.scoreMultiplier = p.scoreMultiplier ?? 1;
+          this.monetaryMultiplier = p.monetaryMultiplier ?? 1;
+
+          // ⬇️ NEU: Basisgeld + (optional) XP% übernehmen
+          this.profileMoney = p.money ?? 0;
+          this.xpPercent =
+            typeof p.xpPercent === 'number'
+              ? Math.max(0, Math.min(100, Math.floor(p.xpPercent)))
+              : null;
+        },
+        error: (err) => console.error('❌ getUserStats fehlgeschlagen', err),
       });
     } else {
       console.log('⚠️ Gastmodus');
     }
   }
+
   avatar(url?: string | null, size = 32): string {
     if (!url) return 'assets/profile.png';
     return url.replace(
@@ -233,7 +248,7 @@ export class GameComponent implements OnInit {
       this.score += shownPoints;
       this.money += shownCash;
 
-      this.flashBackground(resultElement, 'rgb(177, 255, 168)');
+      this.flashBackground(resultElement, 'success');
 
       if (this.consecutiveWins % 5 === 0) {
         const intensity = Math.min(10 + this.consecutiveWins * 2, 50);
@@ -246,16 +261,16 @@ export class GameComponent implements OnInit {
       this.lives--;
       this.consecutiveWins = 0;
       this.currentMultiplier = 1.0;
-      this.flashBackground(resultElement, 'rgb(255, 168, 168)');
+      this.flashBackground(resultElement, 'error');
       this.soundService.playSound('damage.aac', 0.1);
       setTimeout(() => this.newRound(), 500);
     } else {
-      this.gameOver = true;
+      // this.gameOver = true;
       this.soundService.playSound('end.aac', 0.2);
       this.consecutiveWins = 0;
       this.currentMultiplier = 1.0;
       this.lives = 0;
-      this.flashBackground(resultElement, 'rgb(255, 168, 168)');
+      this.flashBackground(resultElement, 'error');
       setTimeout(() => this.endGame(), 500);
     }
 
@@ -271,19 +286,34 @@ export class GameComponent implements OnInit {
     }, 500);
   }
 
-  flashBackground(element: HTMLElement, color: string) {
-    if (element) {
-      element.style.backgroundColor = color;
-      setTimeout(() => {
-        element.style.backgroundColor = '';
-      }, 500);
-    }
+  flashBackground(element: HTMLElement, type: 'success' | 'error') {
+    if (!element) return;
+
+    // richtige Variable ziehen
+    const varName = type === 'success' ? '--flash-success' : '--flash-error';
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue(varName)
+      .trim();
+
+    element.style.transition = 'background-color 0.3s ease';
+    element.style.backgroundColor = color;
+
+    setTimeout(() => {
+      element.style.backgroundColor = '';
+    }, 500);
   }
 
+  private endHandled = false; // ⬅️ Feld in der Klasse ergänzen
+
   endGame() {
+    // Einmal-Guard (unabhängig von gameOver)
+    if (this.endHandled) return;
+    this.endHandled = true;
+
     const username = this.authService.getUsername();
     if (!username) {
       console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+      this.gameStarted = false;
       this.gameOver = true;
       return;
     }
@@ -291,20 +321,40 @@ export class GameComponent implements OnInit {
     this.gameStarted = false;
     this.gameOver = true;
 
-    // 💾 Geld (nur Basis) – Backend multipliziert mit monetary_multiplier
-    this.moneyService
-      .updateMoney({ username, amount: this.baseMoneyAccum })
-      .subscribe({
-        next: () => console.log(''),
-        error: (err) => console.error('❌ Fehler beim Geld-Update:', err),
-      });
+    // Snapshot sichern
+    const baseToSend = this.baseMoneyAccum;
+    console.log('[endGame] username=', username, 'baseMoneyAccum=', baseToSend);
 
+    if (baseToSend > 0) {
+      this.moneyService
+        .updateMoney({ username, amount: baseToSend })
+        .subscribe({
+          next: (res: any) => {
+            // ✅ Server-Wahrheit übernehmen, falls vorhanden
+            if (res && typeof res.money === 'number') {
+              this.profileMoney = res.money;
+            } else {
+              // Fallback (falls Backend noch kein money zurückgibt)
+              const credited = Math.round(
+                baseToSend * (this.monetaryMultiplier ?? 1)
+              );
+              this.profileMoney += credited;
+            }
+            // Rundengewinn-Delta nullen, damit die Anzeige passt
+            this.money = 0;
+            // Runde-spezifische Accus optional zurücksetzen
+            this.baseMoneyAccum = 0;
+            this.baseScoreAccum = 0;
+          },
+          error: (err) => console.error('[endGame] updateMoney ERROR:', err),
+        });
+    } else {
+      console.log('[endGame] baseMoneyAccum ist 0 – kein updateMoney Call');
+    }
 
-    // ⭐ XP direkt nach Spielende berechnen (lokal)
+    // ⭐ XP lokal
     const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
     if (xpFromLocal > 0) this.addXp(xpFromLocal);
-
-    // ❌ Score wird hier NICHT gespeichert!
   }
 
   submitScore() {
@@ -393,6 +443,7 @@ export class GameComponent implements OnInit {
   }
 
   restart() {
+    this.endHandled = false;
     this.lives = 3;
     this.score = 0;
     this.money = 0;
@@ -452,7 +503,7 @@ export class GameComponent implements OnInit {
   }
 
   unlockAchievement(name: string) {
-    if(!this.authService.isLoggedIn()) return;
+    if (!this.authService.isLoggedIn()) return;
     this.http
       .post<{ unlocked: boolean; name: string }>(
         'https://outside-between.onrender.com/api/unlock',

@@ -37,7 +37,7 @@
   right: 0; /* bleibt 0 – wir schieben mit transform */
   width: 220px;
   height: calc(100% - 50px);
-  background: #f9f9f9;
+  // background: #f9f9f9;
   box-sizing: border-box;
   z-index: 1000;
   display: flex;
@@ -45,7 +45,7 @@
   gap: 1rem;
   padding: 1.5rem;
   border-radius: 0 10px 10px 0;
-  border: 1px solid #ddd;
+  // border: 1px solid ;
 
   /* GPU-freundlich: offscreen starten und per transform einblenden */
   transform: translateX(240px);
@@ -55,7 +55,7 @@
   /* schwere Effekte nur wenn offen */
   &.open {
     transform: translateX(0);
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(7px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
@@ -67,17 +67,18 @@
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;}
-
-    &:disabled {
-      background-color: #ccc !important;
-      color: #888 !important;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-      opacity: 0.9;
-    }
+    transition: transform 0.2s ease, opacity 0.2s ease;
   }
+
+  &:disabled {
+    background-color: #ccc !important;
+    color: #888 !important;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.9;
+  }
+}
 
 /* Dark Mode */
 body.dark-mode .sidebar {
@@ -85,7 +86,8 @@ body.dark-mode .sidebar {
   color: #fff;
   border-color: #2a2a2a;
 
-  .btn, button {
+  .btn,
+  button {
     background: var(--primary-dark, #4caf50);
   }
 }
@@ -121,7 +123,8 @@ body.dark-mode .sidebar {
 
 /* Optional: sanfter für Nutzer mit reduzierter Bewegung */
 @media (prefers-reduced-motion: reduce) {
-  .sidebar, .sidebar-toggle {
+  .sidebar,
+  .sidebar-toggle {
     transition: none;
   }
 }

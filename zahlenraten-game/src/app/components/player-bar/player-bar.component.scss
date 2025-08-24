@@ -76,7 +76,7 @@ body.dark-mode {
   .xp-wrap {
     background: #2c2c2c;
     .xp-bar {
-      background: linear-gradient(90deg, var(--theme, #4caf50), #7dffb2);
+      background: linear-gradient(90deg, $theme, #7dffb2);
     }
   }
 }

@@ -57,13 +57,9 @@
           [disabled]="!canUpgrade(skill)"
         >
           <!-- Emojis je nach Skill -->
-          <span class="emoji" *ngIf="skill.name === 'Monetary Multiplier'"
-            >💵</span
-          >
-          <span class="emoji" *ngIf="skill.name === 'Score Multiplier'"
-            >💯</span
-          >
-          <span class="emoji" *ngIf="skill.name === 'Streak needed'">🔥</span>
+          <span class="emoji" *ngIf="skill.name === 'Businessman 💸'">💵</span>
+          <span class="emoji" *ngIf="skill.name === 'Präzision 🎯'">💯</span>
+          <span class="emoji" *ngIf="skill.name === 'Ausdauer 💨'">🔥</span>
           {{ buttonLabel(skill) }}
         </button>
       </div>

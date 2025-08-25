@@ -29,7 +29,7 @@
     max-width: 380px;
     border: 2px solid #000;
     border-radius: 8px;
-    background-color: #ffffff;
+    background-color: var(--scale-bg);
   }
 }
 
@@ -50,7 +50,7 @@
   }
 
   &:not(:disabled):hover {
-    background-color: #27ae60;
+    background-color: var(--theme-hover);
   }
 }
 
@@ -63,7 +63,7 @@
 .popup-backdrop {
   position: fixed;
   inset: 0;
-  background: #ffffffcc; /* nur eine Hintergrundfarbe */
+  background: var(--card-bg); /* nur eine Hintergrundfarbe */
   z-index: 10;
   display: flex;
   align-items: center;
@@ -73,7 +73,7 @@
 }
 
 .popup {
-  background: white;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 12px;
   max-width: 90%;
@@ -84,13 +84,14 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow-x: hidden;
 }
 
 h3 {
   margin-top: 0;
   text-align: center;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 ul {
@@ -107,6 +108,7 @@ li {
   justify-content: flex-start;
   margin: 1rem 0;
   align-items: flex-start;
+  background-color: var(--card-bg);
 }
 
 button {
@@ -124,18 +126,20 @@ button:disabled {
 }
 
 button:not(:disabled):hover {
-  background-color: #2980b9;
+  background-color: var(--theme);
 }
 
 .close-btn {
+  color: white;
   margin-top: 1rem;
   background: #e74c3c;
+  margin: 0.5rem 0;
   width: 100%;
 }
 
 strong {
   font-size: 1rem;
-  color: #333;
+  color: var(--text-color);
   cursor: pointer;
 }
 
@@ -187,9 +191,9 @@ strong:hover {
   display: none;
   flex-direction: column;
   padding: 1rem;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   max-width: 250px;
   margin-top: 1rem;
@@ -198,7 +202,7 @@ strong:hover {
     text-align: center;
     font-size: 1.25rem;
     margin-bottom: 1rem;
-    color: #333;
+    color: var(--text-color);
   }
 
   .legend-item {
@@ -215,14 +219,14 @@ strong:hover {
 
     span {
       font-size: 14px;
-      color: #333;
+      color: var(--text-color);
       font-family: "Arial", sans-serif;
     }
   }
 }
 
 .villager-card {
-  border-bottom: 1px dashed #ccc;
+  border-bottom: 1px dashed var(--card-border);
   padding: 1rem 0;
 }
 
@@ -298,10 +302,12 @@ strong:hover {
 }
 
 .upgrade-buttons button {
-  width: 100%;
+  color: white;
+  width: 90%;
   min-height: 38px; /* feste Höhe → kein „Springen“ */
   white-space: nowrap; /* keine Zeilenumbrüche im Label */
   text-align: center;
+  font-size: 12px;
 }
 
 /* Auf schmalen Screens 1 Spalte */
@@ -328,7 +334,7 @@ strong:hover {
   justify-content: space-between;
   padding: 4px 8px;
   font-size: 0.85rem;
-  background: #f8f8f8;
+  background: var(--scale-bg);
   border-radius: 6px;
   margin: 5px 0;
 }

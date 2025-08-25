@@ -64,7 +64,7 @@ router.get("/collect", verifyToken, async (req, res) => {
     }
 
     // Hier den Offline-Multiplikator anwenden (z.B. 50% des Einkommens)
-    const offlineMultiplier = 0.5; // 50% des normalen Einkommens
+    const offlineMultiplier = 0.25;
     const totalIncome =
       minutesPassed *
       (village.base_income + villagersIncome) *

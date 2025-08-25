@@ -83,7 +83,7 @@ body {
   }
 
   .marker {
-    background-color: black;
+    background-color: var(--text-color);
     width: 2px;
     height: 10px;
     top: 1.1rem;

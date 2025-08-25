@@ -764,6 +764,11 @@ export class GameComponent implements OnInit {
     return item?.username ?? i;
   }
 
+  handleStreakCompleted() {
+  this.lives += 1;
+}
+
+
   getHeartSpeed(): string {
     const livesLeft = this.lives;
     if (livesLeft >= 4) return '1.5s'; // entspannt

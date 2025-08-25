@@ -3,7 +3,7 @@
 /* Sticky-Bar unter der Topbar */
 .player-sticky {
   position: sticky;
-  top: 50px;
+  top: 3.5rem;
   z-index: 900;
   background: var(--card-bg, #2f2f2f);
   backdrop-filter: blur(6px);

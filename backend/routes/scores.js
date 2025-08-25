@@ -3,6 +3,9 @@ import db from "../db.js";
 
 const router = express.Router();
 
+const isNum = (v: unknown): v is number =>
+  typeof v === "number" && Number.isFinite(v);
+
 /** 📝 Score einreichen */
 router.post("/submit", async (req, res) => {
   const {

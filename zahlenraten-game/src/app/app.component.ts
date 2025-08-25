@@ -9,17 +9,11 @@ import { FirebaseService } from './services/firebase.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterModule,
-    FooterComponent,
-    ConsentDialogComponent,
-    CommonModule,
-  ],
+  imports: [RouterModule, FooterComponent, ConsentDialogComponent, CommonModule],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  title: any;
-  isBootstrapping = true; // optional: um während Auto-Login kurz einen Loader anzuzeigen
+  isBootstrapping = true;
 
   constructor(
     private auth: AuthService,
@@ -27,14 +21,13 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Wenn kein gültiger Token vorhanden ist, automatisch als Gast einloggen
     this.auth.ensureAuth().subscribe({
-      next: () => (this.isBootstrapping = false),
+      next: (_ok: boolean) => (this.isBootstrapping = false),
       error: () => (this.isBootstrapping = false),
     });
   }
 
   logout() {
-    this.auth.logout(); // führt wieder direkt zum Gast-Login (siehe AuthService-Version von eben)
+    this.auth.logout();
   }
 }

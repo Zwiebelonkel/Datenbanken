@@ -345,8 +345,8 @@ export class GameComponent implements OnInit {
             // Rundengewinn-Delta nullen, damit die Anzeige passt
             this.money = 0;
             // Runde-spezifische Accus optional zurücksetzen
-            // this.baseMoneyAccum = 0;
-            // this.baseScoreAccum = 0;
+            this.baseMoneyAccum = 0;
+            this.baseScoreAccum = 0;
           },
           error: (err) => console.error('[endGame] updateMoney ERROR:', err),
         });
@@ -359,37 +359,51 @@ export class GameComponent implements OnInit {
     if (xpFromLocal > 0) this.addXp(xpFromLocal);
   }
 
+  // GameComponent
   submitScore() {
     this.soundService.playSound('hardPop.aac', 0.6);
 
     const username = this.authService.getUsername();
     if (!username) return;
 
-    // Snapshot vor dem Call (falls sich zwischendurch was ändert)
-    const baseScoreToSend = this.baseScoreAccum;
-    const moneyPerRoundToSend = this.baseMoneyAccum;
+    // Snapshots vor dem HTTP-Call sichern
+    const baseScoreToSend = this.baseScoreAccum; // unmultipliziert
+    const baseMoneyPRToSend = this.baseMoneyAccum; // unmultipliziert
+    const wins = this.highestStreak;
 
+    // ✅ nur Base-Felder senden (KEINE legacy-Keys)
     this.scoreService
       .submitScore({
         username,
         baseScore: baseScoreToSend,
-        consecutive_wins: this.highestStreak,
-        money_per_round: moneyPerRoundToSend,
+        baseMoneyPerRound: baseMoneyPRToSend,
+        consecutive_wins: wins,
       })
       .subscribe({
         next: (res) => {
           const finalScore = res?.score ?? 0;
 
-          // Jetzt ist submit durch -> Accus erst jetzt leeren
+          // Accus JETZT leeren (nach erfolgreichem Submit)
           this.baseScoreAccum = 0;
           this.baseMoneyAccum = 0;
 
-          // Highscore-Check etc.
-          this.scoreService.isHighscore(finalScore).subscribe(/* ... */);
+          // Optional: UI-Score/Preview resetten
+          // this.score = 0; this.money = 0;
+
+          this.scoreService.isHighscore(finalScore).subscribe({
+            next: (hs) => {
+              this.isHighscore = hs.isHighscore;
+              if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
+            },
+            error: (err) => console.error('❌ Highscore-Check:', err),
+          });
+
           this.loadLeaderboards();
           this.restart();
         },
-        error: (err) => console.error('❌ Fehler beim Score-Submit:', err),
+        error: (err) => {
+          console.error('❌ Fehler beim Score-Submit:', err);
+        },
       });
   }
 
@@ -431,6 +445,13 @@ export class GameComponent implements OnInit {
     const nextIndex =
       (this.currentLeaderboardIndex + 1) % this.leaderboardTitles.length;
     this.setLeaderboard(nextIndex);
+  }
+
+  get previewScore(): number {
+    return Math.round(this.baseScoreAccum * (this.scoreMultiplier ?? 1));
+  }
+  get previewMoney(): number {
+    return Math.round(this.baseMoneyAccum * (this.monetaryMultiplier ?? 1));
   }
 
   prevLeaderboard() {

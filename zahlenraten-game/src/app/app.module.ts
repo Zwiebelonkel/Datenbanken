@@ -28,6 +28,7 @@ import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.
 import { ReelComponent } from './components/slot-maschine/reel/reel.component';
 import { SkillShopComponent } from './components/skill-shop/skill-shop.component';
 import { PlayerBarComponent } from './components/player-bar/player-bar.component';
+import { StreakIndicator } from './components/streak-indicator/streak-indicator.component';
 
 import { FooterComponent } from './components/footer/footer.component';
 import { DatenschutzComponent } from './components/datenschutz/datenschutz.component';
@@ -60,6 +61,7 @@ import { ConsentDialogComponent } from './components/consent-dialog/consent-dial
     SlotMaschineComponent,
     ReelComponent,
     PlayerBarComponent,
+    StreakIndicatorComponent,
     DatenschutzComponent,
     ImpressumComponent,
     FooterComponent,

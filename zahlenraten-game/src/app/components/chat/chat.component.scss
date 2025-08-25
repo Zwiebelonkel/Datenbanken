@@ -82,12 +82,13 @@
 
 /* Verschiedene Typen */
 .user-message {
-  background-color: #d4f1f4;
+  background-color: color-mix(in srgb, #d4f1f4 60%, var(--list-bg) 40%);
   color: #2c3e50;
   border-left: 4px solid #3498db;
 }
+
 .admin-message {
-  background-color: #ffe5e5;
+  background-color: color-mix(in srgb, #ffe5e5 60%, var(--list-bg) 40%);
   border-left: 4px solid #e74c3c;
   border-right: 4px solid #e74c3c;
   .user {
@@ -96,7 +97,7 @@
   }
 }
 .info-message {
-  background-color: #e6f9e6;
+  background-color: color-mix(in srgb, #e6f9e6 60%, var(--list-bg) 40%);
   color: #2c852f;
   border-left: 4px solid #4caf50;
   border-right: 4px solid #4caf50;

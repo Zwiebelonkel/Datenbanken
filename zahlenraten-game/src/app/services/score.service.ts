@@ -26,15 +26,17 @@ export class ScoreService {
 
   constructor(private http: HttpClient) {}
 
-  submitScore(data: {
+  /**
+   * 📝 Score absenden – nur Basiswerte!
+   * Der Server multipliziert mit den gespeicherten Multiplikatoren.
+   */
+  submitScore(body: {
     username: string;
-    baseScore?: number;
-    baseMoneyPerRound?: number;
-    score?: number; // legacy
-    money_per_round?: number; // legacy
-    consecutive_wins?: number;
+    baseScore: number; // unmultipliziert
+    baseMoneyPerRound: number; // unmultipliziert
+    consecutive_wins: number;
   }): Observable<SubmitScoreResponse> {
-    return this.http.post<SubmitScoreResponse>(`${this.apiUrl}/submit`, data);
+    return this.http.post<SubmitScoreResponse>(`${this.apiUrl}/submit`, body);
   }
 
   getTopScores(): Observable<ScoreEntry[]> {

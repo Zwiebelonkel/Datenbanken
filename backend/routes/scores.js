@@ -17,6 +17,7 @@ router.post("/submit", async (req, res) => {
   if (!username) return res.status(400).json({ error: "Kein Benutzername" });
 
   try {
+    // Multis holen
     const u = await db.execute({
       sql: `SELECT 
               COALESCE(score_multiplier,1.0)    AS sm,
@@ -29,65 +30,42 @@ router.post("/submit", async (req, res) => {
     if (!u.rows.length)
       return res.status(404).json({ error: "User nicht gefunden" });
 
-    const sm = Number(u.rows[0].sm);
-    const mm = Number(u.rows[0].mm);
+    const sm = Number(u.rows[0].sm) || 1;
+    const mm = Number(u.rows[0].mm) || 1;
 
-    const baseScoreNum = Number(baseScore);
-    const baseMoneyPerRoundNum = Number(baseMoneyPerRound);
-    const legacyScoreNum = Number(score);
-    const legacyMoneyPRNum = Number(money_per_round);
-
-    const hasBaseScore = Number.isFinite(baseScoreNum);
-    const hasBaseMoneyPR = Number.isFinite(baseMoneyPerRoundNum);
-
+    // Finalwerte bestimmen (Base bevorzugt, sonst legacy)
     const finalScore = Math.round(
-      hasBaseScore
-        ? baseScoreNum * (Number.isFinite(sm) ? sm : 1)
-        : Number.isFinite(legacyScoreNum)
-        ? legacyScoreNum
-        : 0
+      Number.isFinite(Number(baseScore))
+        ? Number(baseScore) * sm
+        : Number(score) || 0
     );
 
     const finalMoneyPerRound = Math.round(
-      hasBaseMoneyPR
-        ? baseMoneyPerRoundNum * (Number.isFinite(mm) ? mm : 1)
-        : Number.isFinite(legacyMoneyPRNum)
-        ? legacyMoneyPRNum
-        : 0
+      Number.isFinite(Number(baseMoneyPerRound))
+        ? Number(baseMoneyPerRound) * mm
+        : Number(money_per_round) || 0
     );
 
     const wins = Number.isFinite(Number(consecutive_wins))
       ? Number(consecutive_wins)
       : 0;
+
     const dateIso = new Date().toISOString();
 
-    // Debug nur vorübergehend
-    console.log("[scores/submit] in:", {
-      username,
-      baseScore: baseScoreNum,
-      baseMoneyPerRound: baseMoneyPerRoundNum,
-      score: legacyScoreNum,
-      money_per_round: legacyMoneyPRNum,
-    });
-    console.log("[scores/submit] multipliers:", { sm, mm });
-    console.log("[scores/submit] out:", {
-      finalScore,
-      finalMoneyPerRound,
-      wins,
-    });
-
+    // Score speichern
     await db.execute(
       `INSERT INTO scores (username, score, created_at, consecutive_wins, money_per_round)
        VALUES (?, ?, ?, ?, ?)`,
       [username, finalScore, dateIso, wins, finalMoneyPerRound]
     );
 
+    // total_score erhöhen (mit finalScore)
     await db.execute({
       sql: `UPDATE users SET total_score = total_score + ? WHERE LOWER(username)=LOWER(?)`,
       args: [finalScore, username],
     });
 
-    return res.json({
+    res.json({
       success: true,
       score: finalScore,
       money_per_round: finalMoneyPerRound,
@@ -97,7 +75,7 @@ router.post("/submit", async (req, res) => {
     });
   } catch (err) {
     console.error("❌ /scores/submit Fehler:", err);
-    return res.status(500).json({ error: "Serverfehler beim Score-Submit" });
+    res.status(500).json({ error: "Serverfehler beim Score-Submit" });
   }
 });
 

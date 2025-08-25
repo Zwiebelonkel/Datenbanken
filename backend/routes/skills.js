@@ -27,7 +27,7 @@ const CATALOG = {
   },
 
   "Streak needed": {
-    description: "-1 erforderlicher Sieg pro Level",
+    description: "-1 erforderliche Streak zum erhalten eines neuen ♥️",
     price: 5, // == base_price
     max_level: 15,
     apply: async (tx, username) => {

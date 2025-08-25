@@ -43,7 +43,6 @@ export class StreakIndicatorComponent implements OnChanges, OnInit {
 
     this.profileService.getUserStats(this.username).subscribe({
       next: (userStats: UserStats) => {
-        console.log('UserStats geladen:', userStats);
         this.streakNeeded = userStats.streakNeeded ?? 15; // Default 15 falls undefined
       },
       error: (err) => {
@@ -81,7 +80,6 @@ export class StreakIndicatorComponent implements OnChanges, OnInit {
     }
     const progress = this.visibleProgress / this.streakNeeded;
     const offset = this.circleCircumference * (1 - progress);
-    console.log('progress:', progress, 'strokeDashOffset:', offset);
     return offset;
   }
 }

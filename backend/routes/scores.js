@@ -3,8 +3,8 @@ import db from "../db.js";
 
 const router = express.Router();
 
-const isNum = (v: unknown): v is number =>
-  typeof v === "number" && Number.isFinite(v);
+// Helper: valide Zahl?
+const isNum = (v) => typeof v === "number" && Number.isFinite(v);
 
 /** 📝 Score einreichen */
 router.post("/submit", async (req, res) => {
@@ -13,24 +13,29 @@ router.post("/submit", async (req, res) => {
     baseScore,             // Basis-Score (ohne Profil/Karten/Streak)
     score,                 // legacy (schon multipliziert)
     consecutive_wins,
-    baseMoneyPerRound,     // Basis MPR (ohne alle Multis)
-    money_per_round,       // legacy
+    baseMoneyPerRound,     // Basis MPR (ohne Streak/Karten; Profil-Multi wendet der Server an)
+    money_per_round,       // legacy (bereits multipliziert)
   } = req.body;
 
   if (!username) return res.status(400).json({ error: "Kein Benutzername" });
 
   try {
-    // Nur für SCORE brauchen wir den sm
+    // Multiplikatoren laden
     const u = await db.execute({
-      sql: `SELECT COALESCE(score_multiplier,1.0) AS sm
-            FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1`,
+      sql: `SELECT 
+              COALESCE(score_multiplier,1.0)    AS sm,
+              COALESCE(monetary_multiplier,1.0) AS mm
+            FROM users
+            WHERE LOWER(username)=LOWER(?)
+            LIMIT 1`,
       args: [username],
     });
     if (!u.rows.length) return res.status(404).json({ error: "User nicht gefunden" });
 
     const sm = Number(u.rows[0].sm) || 1;
+    const mm = Number(u.rows[0].mm) || 1;
 
-    // SCORE: baseScore bevorzugt, legacy fallback
+    // SCORE: baseScore bevorzugt (mit score_multiplier), sonst legacy score
     let finalScore = 0;
     if (isNum(baseScore)) {
       finalScore = Math.round(baseScore * sm);
@@ -38,24 +43,31 @@ router.post("/submit", async (req, res) => {
       finalScore = Math.round(score);
     }
 
-    // MPR (digitale Währung): IMMER Basis, keine Multiplikatoren
-    let mprBase = 0;
+    // MONEY PER ROUND: Basis * monetary_multiplier (auf 2 Nachkommastellen)
+    let finalMoneyPerRound = 0;
     if (isNum(baseMoneyPerRound)) {
-      mprBase = baseMoneyPerRound;
+      finalMoneyPerRound = Math.round(baseMoneyPerRound * mm * 100) / 100;
     } else if (isNum(money_per_round)) {
-      mprBase = money_per_round;
+      // legacy: schon multipliziert angeliefert
+      finalMoneyPerRound = Math.round(money_per_round * 100) / 100;
     }
-    // optional auf 2 Nachkommastellen „runden“, aber nicht auf Ganzzahl
-    mprBase = Math.round(mprBase * 100) / 100;
 
     const dateIso = new Date().toISOString();
 
+    // Score speichern
     await db.execute({
       sql: `INSERT INTO scores (username, score, created_at, consecutive_wins, money_per_round)
             VALUES (?, ?, ?, ?, ?)`,
-      args: [username, finalScore, dateIso, isNum(consecutive_wins) ? consecutive_wins : null, mprBase],
+      args: [
+        username,
+        finalScore,
+        dateIso,
+        isNum(consecutive_wins) ? consecutive_wins : null,
+        finalMoneyPerRound,
+      ],
     });
 
+    // total_score erhöhen (mit finalScore)
     await db.execute({
       sql: `UPDATE users SET total_score = total_score + ?
             WHERE LOWER(username)=LOWER(?)`,
@@ -65,9 +77,9 @@ router.post("/submit", async (req, res) => {
     res.json({
       success: true,
       score: finalScore,
-      money_per_round: mprBase,   // Basis!
+      money_per_round: finalMoneyPerRound,
       scoreMultiplier: sm,
-      monetaryMultiplier: 1,      // hier bewusst nicht genutzt
+      monetaryMultiplier: mm,
       savedAt: dateIso,
     });
   } catch (err) {
@@ -87,7 +99,7 @@ router.post("/updateTotalScore", async (req, res) => {
   try {
     let add = 0;
 
-    if (Number.isFinite(Number(baseScore))) {
+    if (isNum(baseScore)) {
       // score_multiplier holen & anwenden
       const u = await db.execute({
         sql: `SELECT COALESCE(score_multiplier,1.0) AS sm
@@ -98,10 +110,10 @@ router.post("/updateTotalScore", async (req, res) => {
         return res.status(404).json({ message: "User nicht gefunden" });
 
       const sm = Number(u.rows[0].sm) || 1;
-      add = Math.round(Number(baseScore) * sm);
-    } else if (Number.isFinite(Number(score))) {
+      add = Math.round(baseScore * sm);
+    } else if (isNum(score)) {
       // legacy: bereits multipliziert angeliefert
-      add = Number(score);
+      add = Math.round(score);
     } else {
       return res
         .status(400)

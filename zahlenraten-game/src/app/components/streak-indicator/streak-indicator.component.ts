@@ -10,6 +10,8 @@ export class StreakIndicatorComponent implements OnChanges {
   @Output() streakCompleted = new EventEmitter<void>();
 
   readonly maxWins: number = 15;
+  readonly circleRadius = 45;
+  readonly circleCircumference = 2 * Math.PI * this.circleRadius;
   private lastCompletedAt: number = -1;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -24,10 +26,9 @@ export class StreakIndicatorComponent implements OnChanges {
     return this.consecutiveWins % this.maxWins;
   }
 
-  get strokeDashOffset(): number {
-    const radius = 45;
-    const circumference = 2 * Math.PI * radius;
-    const progress = this.visibleProgress / this.maxWins;
-    return circumference * (1 - progress);
-  }
+get strokeDashOffset(): number {
+  const progress = this.visibleProgress / this.maxWins;
+  return this.circleCircumference * (1 - progress);
+}
+
 }

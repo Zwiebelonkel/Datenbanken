@@ -15,13 +15,13 @@
 >
   🃏 Aktiver Karten-Multiplikator: <strong>x{{ cardMultiplier }}</strong>
 </div>
-<app-streak-indicator
-  [consecutiveWins]="consecutiveWins"
-  (streakCompleted)="handleStreakCompleted()"
-></app-streak-indicator>
 
 <!-- Spiel läuft -->
 <div class="card game-container" *ngIf="!gameOver">
+  <app-streak-indicator
+  [consecutiveWins]="consecutiveWins"
+  (streakCompleted)="handleStreakCompleted()"
+></app-streak-indicator>
   <div class="hearts">
     <span
       *ngFor="let life of getLivesArray(); index as i"

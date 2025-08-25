@@ -768,6 +768,7 @@ export class GameComponent implements OnInit {
   }
 
   handleStreakCompleted() {
+    if(!this.gameStarted)return;
   this.lives += 1;
 }
 

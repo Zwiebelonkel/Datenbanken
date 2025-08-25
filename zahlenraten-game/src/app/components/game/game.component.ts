@@ -768,8 +768,10 @@ export class GameComponent implements OnInit {
   }
 
   handleStreakCompleted() {
+    console.log("handleStreak aufgerufen")
     if(!this.gameStarted)return;
   this.lives += 1;
+            console.log("leben erhöht")
 }
 
 

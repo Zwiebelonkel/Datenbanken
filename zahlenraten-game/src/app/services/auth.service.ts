@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -9,25 +10,19 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // Normales Login (bleibt wie gehabt)
   login(username: string, password: string) {
     return this.http
       .post<{ token: string }>(`${this.apiUrl}/login`, { username, password })
-      .pipe(
-        tap((res) => this.storeToken(res.token))
-      );
+      .pipe(tap((res) => this.storeToken(res.token)));
   }
 
-  // 🟢 Auto-Gast-Login
-  loginGuest() {
+  /** Immer boolean liefern */
+  loginGuest(): Observable<boolean> {
     return this.login('Gast', 'gast').pipe(
-      // Falls aus irgendeinem Grund der Gast-Login fehlschlägt,
-      // lassen wir die App trotzdem nicht auf /login hängen.
+      map(() => true),
       catchError((err) => {
         console.warn('Gast-Login fehlgeschlagen:', err);
-        // Minimaler Fallback: leeres "Gast"-Profil ohne Token (nur wenn du willst)
-        // localStorage.removeItem('token'); localStorage.removeItem('tokenExpiry');
-        return of(null);
+        return of(false);
       })
     );
   }
@@ -36,42 +31,33 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, { username, password });
   }
 
-  // ⛔️ Statt zur Login-Seite: direkt wieder als Gast einloggen
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiry');
 
+    // nach Logout direkt wieder Gast versuchen (ohne Route „/login“)
     this.loginGuest().subscribe({
-      next: () => {
-        // WICHTIG: Nicht auf /login, sondern auf Startseite oder aktuelle Seite
-        this.router.navigateByUrl('/');
-      },
-      error: () => {
-        this.router.navigateByUrl('/'); // Fallback
-      },
+      next: () => this.router.navigateByUrl('/'),
+      error: () => this.router.navigateByUrl('/'),
     });
   }
 
-  // Beim App-Start/Guard aufrufen: wenn nicht eingeloggt/Token abgelaufen -> Gast
-  ensureAuth() {
+  /** Immer Observable<boolean> zurückgeben */
+  ensureAuth(): Observable<boolean> {
     if (!this.isLoggedIn()) {
-      return this.loginGuest();
+      return this.loginGuest(); // -> boolean
     }
-    return of(true);
+    return of(true); // -> boolean
   }
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     const expiry = Number(localStorage.getItem('tokenExpiry'));
-
     if (!token || !expiry) return false;
-
     if (Date.now() > expiry) {
-      // Token ist abgelaufen -> NICHT zu /login, sondern direkt Gast-Login
       this.logout();
       return false;
     }
-
     return true;
   }
 
@@ -112,7 +98,7 @@ export class AuthService {
   private storeToken(token: string) {
     localStorage.setItem('token', token);
     const decoded = this.decodeToken(token);
-    const expiry = decoded.exp * 1000; // in ms
+    const expiry = decoded.exp * 1000;
     localStorage.setItem('tokenExpiry', expiry.toString());
   }
 

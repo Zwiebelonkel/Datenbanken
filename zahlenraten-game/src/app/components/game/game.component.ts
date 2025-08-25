@@ -309,75 +309,43 @@ export class GameComponent implements OnInit {
   private endHandled = false; // ⬅️ Feld in der Klasse ergänzen
 
   endGame() {
-    // Einmal-Guard (unabhängig von gameOver)
-    if (this.endHandled) return;
-    this.endHandled = true;
+  if (this.endHandled) return;
+  this.endHandled = true;
 
-    const username = this.authService.getUsername();
-    if (!username) {
-      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
-      this.gameStarted = false;
-      this.gameOver = true;
-      return;
-    }
-
+  const username = this.authService.getUsername();
+  if (!username) {
+    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
     this.gameStarted = false;
     this.gameOver = true;
-
-    // Snapshot sichern
-    const baseToSend = this.baseMoneyAccum;
-    console.log('[endGame] username=', username, 'baseMoneyAccum=', baseToSend);
-
-    if (baseToSend > 0) {
-      this.moneyService
-        .updateMoney({ username, amount: baseToSend })
-        .subscribe({
-          next: (res: any) => {
-            // ✅ Server-Wahrheit übernehmen, falls vorhanden
-            if (res && typeof res.money === 'number') {
-              this.profileMoney = res.money;
-            } else {
-              // Fallback (falls Backend noch kein money zurückgibt)
-              const credited = Math.round(
-                baseToSend * (this.monetaryMultiplier ?? 1)
-              );
-              this.profileMoney += credited;
-            }
-            // Rundengewinn-Delta nullen, damit die Anzeige passt
-            this.money = 0;
-            // Runde-spezifische Accus optional zurücksetzen
-            this.baseMoneyAccum = 0;
-            this.baseScoreAccum = 0;
-          },
-          error: (err) => console.error('[endGame] updateMoney ERROR:', err),
-        });
-    } else {
-      console.log('[endGame] baseMoneyAccum ist 0 – kein updateMoney Call');
-    }
-
-    // ⭐ XP lokal
-    const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
-    if (xpFromLocal > 0) this.addXp(xpFromLocal);
+    return;
   }
+
+  this.gameStarted = false;
+  this.gameOver = true;
+
+  // 👉 Hier Submit aufrufen
+  this.submitScore();
+
+  // XP lokal vergeben (vor Reset)
+  const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
+  if (xpFromLocal > 0) this.addXp(xpFromLocal);
+}
 
 submitScore() {
   this.soundService.playSound('hardPop.aac', 0.6);
 
   const username = this.authService.getUsername();
-  if (!username) {
-    console.warn('⚠️ Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
-    return;
-  }
+  if (!username) return;
 
-  // 🔒 Snapshots vor Reset oder Side-Effects
+  // Snapshots ziehen
   const snapBaseScore = Number(this.baseScoreAccum);
   const snapBaseMpr   = Number(this.baseMoneyAccum);
   const snapStreak    = Number(this.highestStreak);
 
   const payload = {
     username,
-    baseScore: snapBaseScore,          // wird mit score_multiplier multipliziert
-    baseMoneyPerRound: snapBaseMpr,    // wird mit monetary_multiplier multipliziert
+    baseScore: snapBaseScore,
+    baseMoneyPerRound: snapBaseMpr,
     consecutive_wins: snapStreak,
   };
 
@@ -389,25 +357,24 @@ submitScore() {
 
       const finalScore = res?.score ?? 0;
 
-      // 🏆 Highscore-Prüfung
+      // Highscore prüfen
       this.scoreService.isHighscore(finalScore).subscribe({
         next: (hs) => {
-          console.log('[isHighscore] Response:', hs);
           this.isHighscore = hs.isHighscore;
           if (hs.isHighscore) {
-            console.log('[isHighscore] Achievement freigeschaltet: Champion 🏆');
             this.unlockAchievement('Champion 🏆');
           }
         },
-        error: (err) => console.error('❌ Fehler bei Highscore-Prüfung:', err),
       });
 
       this.loadLeaderboards();
-      this.restart(); // hier werden Accumulatoren resettet
+
+      // 👉 erst jetzt resetten
+      this.baseScoreAccum = 0;
+      this.baseMoneyAccum = 0;
+      this.restart();
     },
-    error: (err) => {
-      console.error('❌ Fehler beim Score-Submit:', err);
-    },
+    error: (err) => console.error('❌ Fehler beim Score-Submit:', err),
   });
 }
 

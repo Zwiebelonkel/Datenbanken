@@ -21,7 +21,9 @@ router.post("/update", async (req, res) => {
     }
 
     const m = Number(row.rows[0].m) || 1;
-    const credited = Math.round(base * m);
+
+    // Multiplier nur bei positiver Betrag anwenden
+    const credited = base > 0 ? Math.round(base * m) : base;
 
     // Addieren statt überschreiben!
     await db.execute({
@@ -42,5 +44,6 @@ router.post("/update", async (req, res) => {
     res.status(500).json({ error: "Fehler beim Update" });
   }
 });
+
 
 export default router;

@@ -467,3 +467,16 @@ body {
     left: 125%;
   }
 }
+
+.game-container {
+  position: relative; // wichtig, damit position:absolute im Kind funktioniert
+}
+
+.streak-indicator {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10; // damit er über anderem Content liegt, falls nötig
+  width: 60px;
+  height: 60px;
+}

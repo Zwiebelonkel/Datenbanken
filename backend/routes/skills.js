@@ -3,7 +3,7 @@ import db from "../db.js";
 
 const router = express.Router();
 const CATALOG = {
-  "Score Multiplier": {
+  "Präzision 🎯": {
     description: "+10% Score pro Level",
     price: 1, // == base_price
     max_level: 20,
@@ -14,7 +14,7 @@ const CATALOG = {
       });
     },
   },
-  "Monetary Multiplier": {
+  "Businessman 💸": {
     description: "+10% Geld pro Level",
     price: 1, // == base_price
     max_level: 20,
@@ -26,7 +26,7 @@ const CATALOG = {
     },
   },
 
-  "Streak needed": {
+  "Ausdauer 💨": {
     description: "-1 erforderliche Streak zum erhalten eines neuen ♥️",
     price: 5, // == base_price
     max_level: 15,

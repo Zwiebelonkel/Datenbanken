@@ -1,0 +1,26 @@
+<!-- streak-indicator.component.html -->
+<div class="streak-container">
+  <svg class="progress-ring" width="120" height="120">
+    <circle
+      class="progress-ring__background"
+      stroke="#eee"
+      stroke-width="10"
+      fill="transparent"
+      r="45"
+      cx="60"
+      cy="60"
+    />
+    <circle
+      class="progress-ring__circle"
+      stroke="#00cc66"
+      stroke-width="10"
+      fill="transparent"
+      r="45"
+      cx="60"
+      cy="60"
+      [attr.stroke-dasharray]="2 * Math.PI * 45"
+      [attr.stroke-dashoffset]="strokeDashOffset"
+    />
+  </svg>
+  <div class="streak-text">{{ consecutiveWins }} / {{ maxWins }}</div>
+</div>

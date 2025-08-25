@@ -384,9 +384,10 @@ body {
   text-align: center;
   font-size: 1.3rem;
   font-weight: bold;
-  background-color: #fff2f8;
   color: #e91e63;
   box-shadow: 0 0 10px #e91e6355;
+  max-width: 500px;
+  border-radius: 100px;
 }
 
 #finalNumber {

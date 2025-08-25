@@ -15,6 +15,10 @@
 >
   🃏 Aktiver Karten-Multiplikator: <strong>x{{ cardMultiplier }}</strong>
 </div>
+<app-streak-indicator
+  [consecutiveWins]="currentStreak"
+  (streakCompleted)="handleStreakCompleted()"
+></app-streak-indicator>
 
 <!-- Spiel läuft -->
 <div class="card game-container" *ngIf="!gameOver">

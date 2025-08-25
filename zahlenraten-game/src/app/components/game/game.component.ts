@@ -19,6 +19,8 @@ import { HostListener } from '@angular/core';
 import { RainComponent } from '../rain/rain.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { PlayerBarComponent } from '../player-bar/player-bar.component';
+import { StreakIndicatorComponent } from '../streak-indicator/streak-indicator.component';
+
 
 @Component({
   selector: 'app-game',
@@ -35,6 +37,7 @@ import { PlayerBarComponent } from '../player-bar/player-bar.component';
     UsersComponent,
     RainComponent,
     PlayerBarComponent,
+    StreakIndicatorComponent
   ],
   encapsulation: ViewEncapsulation.None,
 })

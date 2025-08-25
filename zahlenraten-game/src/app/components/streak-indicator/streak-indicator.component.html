@@ -17,9 +17,10 @@
       r="45"
       cx="60"
       cy="60"
-      [attr.stroke-dasharray]="2 * Math.PI * 45"
+      [attr.stroke-dasharray]="circleCircumference"
       [attr.stroke-dashoffset]="strokeDashOffset"
     />
+
   </svg>
   <div class="streak-text">{{ visibleProgress }} / {{ maxWins }}</div>
 </div>

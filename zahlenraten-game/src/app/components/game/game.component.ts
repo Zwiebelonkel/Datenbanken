@@ -361,42 +361,54 @@ export class GameComponent implements OnInit {
   }
 
   submitScore() {
-    this.soundService.playSound('hardPop.aac', 0.6);
+  this.soundService.playSound('hardPop.aac', 0.6);
 
-    const username = this.authService.getUsername();
-    if (!username) {
-      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
-      return;
-    }
-
-    this.scoreService
-      .submitScore({
-        username,
-        baseScore: this.baseScoreAccum, // Basiswerte schicken
-        consecutive_wins: this.highestStreak,
-        money_per_round: this.baseMoneyAccum,
-      })
-      .subscribe({
-        next: (res) => {
-          const finalScore = res?.score ?? 0;
-          // 🏆 Highscore-Prüfung mit finalem Score
-          this.scoreService.isHighscore(finalScore).subscribe({
-            next: (hs) => {
-              this.isHighscore = hs.isHighscore;
-              if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
-            },
-            error: (err) =>
-              console.error('❌ Fehler bei Highscore-Prüfung:', err),
-          });
-
-          this.loadLeaderboards();
-          this.restart();
-        },
-        error: (err) => {
-          console.error('❌ Fehler beim Score-Submit:', err);
-        },
-      });
+  const username = this.authService.getUsername();
+  if (!username) {
+    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    return;
   }
+
+  // 📝 Payload vorbereiten
+  const payload = {
+    username,
+    baseScore: this.baseScoreAccum, // Basiswerte schicken
+    consecutive_wins: this.highestStreak,
+    baseMoneyPerRound: this.baseMoneyAccum, // ⚠️ lieber baseMoneyPerRound statt money_per_round
+  };
+
+  // 🔍 Logging vor Request
+  console.log('[submitScore] Payload:', payload);
+
+  this.scoreService.submitScore(payload).subscribe({
+    next: (res) => {
+      console.log('[submitScore] Server Response:', res);
+
+      const finalScore = res?.score ?? 0;
+      console.log('[submitScore] FinalScore:', finalScore);
+
+      // 🏆 Highscore-Prüfung
+      this.scoreService.isHighscore(finalScore).subscribe({
+        next: (hs) => {
+          console.log('[isHighscore] Response:', hs);
+          this.isHighscore = hs.isHighscore;
+          if (hs.isHighscore) {
+            console.log('[isHighscore] Achievement freigeschaltet: Champion 🏆');
+            this.unlockAchievement('Champion 🏆');
+          }
+        },
+        error: (err) =>
+          console.error('❌ Fehler bei Highscore-Prüfung:', err),
+      });
+
+      this.loadLeaderboards();
+      this.restart();
+    },
+    error: (err) => {
+      console.error('❌ Fehler beim Score-Submit:', err);
+    },
+  });
+}
 
   loadLeaderboards() {
     this.isLoading = true;

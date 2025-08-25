@@ -208,7 +208,7 @@ h2 {
 }
 
 .drawn-cards li {
-  background: #f5f5f5;
+  background: var(--card-bg);
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -9,7 +9,7 @@ export class StreakIndicatorComponent implements OnChanges {
   @Input() consecutiveWins: number = 0;
   @Output() streakCompleted = new EventEmitter<void>();
 
-  readonly maxWins: number = 5;
+  readonly maxWins: number = 15;
   readonly circleRadius = 18;
   readonly circleCircumference = 2 * Math.PI * this.circleRadius;
   private lastCompletedAt: number = -1;

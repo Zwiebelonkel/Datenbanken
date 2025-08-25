@@ -360,46 +360,54 @@ export class GameComponent implements OnInit {
     if (xpFromLocal > 0) this.addXp(xpFromLocal);
   }
 
-  submitScore() {
+submitScore() {
   this.soundService.playSound('hardPop.aac', 0.6);
 
   const username = this.authService.getUsername();
   if (!username) {
-    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    console.warn('⚠️ Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
     return;
   }
 
-  // 🔒 Werte snappen (Race/Reset verhindern)
+  // 🔒 Snapshots vor Reset oder Side-Effects
   const snapBaseScore = Number(this.baseScoreAccum);
   const snapBaseMpr   = Number(this.baseMoneyAccum);
   const snapStreak    = Number(this.highestStreak);
 
   const payload = {
     username,
-    baseScore: snapBaseScore,
-    baseMoneyPerRound: snapBaseMpr, // ✅ wichtig
+    baseScore: snapBaseScore,          // wird mit score_multiplier multipliziert
+    baseMoneyPerRound: snapBaseMpr,    // wird mit monetary_multiplier multipliziert
     consecutive_wins: snapStreak,
   };
+
   console.log('[submitScore] Payload:', payload);
 
   this.scoreService.submitScore(payload).subscribe({
     next: (res) => {
       console.log('[submitScore] Server Response:', res);
+
       const finalScore = res?.score ?? 0;
 
+      // 🏆 Highscore-Prüfung
       this.scoreService.isHighscore(finalScore).subscribe({
         next: (hs) => {
           console.log('[isHighscore] Response:', hs);
           this.isHighscore = hs.isHighscore;
-          if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
+          if (hs.isHighscore) {
+            console.log('[isHighscore] Achievement freigeschaltet: Champion 🏆');
+            this.unlockAchievement('Champion 🏆');
+          }
         },
         error: (err) => console.error('❌ Fehler bei Highscore-Prüfung:', err),
       });
 
       this.loadLeaderboards();
-      this.restart(); // Resets erst NACH dem Submit
+      this.restart(); // hier werden Accumulatoren resettet
     },
-    error: (err) => console.error('❌ Fehler beim Score-Submit:', err),
+    error: (err) => {
+      console.error('❌ Fehler beim Score-Submit:', err);
+    },
   });
 }
 

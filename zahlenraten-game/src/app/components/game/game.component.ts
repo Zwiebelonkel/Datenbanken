@@ -345,8 +345,8 @@ export class GameComponent implements OnInit {
             // Rundengewinn-Delta nullen, damit die Anzeige passt
             this.money = 0;
             // Runde-spezifische Accus optional zurücksetzen
-            this.baseMoneyAccum = 0;
-            this.baseScoreAccum = 0;
+            // this.baseMoneyAccum = 0;
+            // this.baseScoreAccum = 0;
           },
           error: (err) => console.error('[endGame] updateMoney ERROR:', err),
         });
@@ -363,37 +363,33 @@ export class GameComponent implements OnInit {
     this.soundService.playSound('hardPop.aac', 0.6);
 
     const username = this.authService.getUsername();
-    if (!username) {
-      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
-      return;
-    }
+    if (!username) return;
+
+    // Snapshot vor dem Call (falls sich zwischendurch was ändert)
+    const baseScoreToSend = this.baseScoreAccum;
+    const moneyPerRoundToSend = this.baseMoneyAccum;
 
     this.scoreService
       .submitScore({
         username,
-        baseScore: this.baseScoreAccum, // Basiswerte schicken
+        baseScore: baseScoreToSend,
         consecutive_wins: this.highestStreak,
-        money_per_round: this.baseMoneyAccum,
+        money_per_round: moneyPerRoundToSend,
       })
       .subscribe({
         next: (res) => {
           const finalScore = res?.score ?? 0;
-          // 🏆 Highscore-Prüfung mit finalem Score
-          this.scoreService.isHighscore(finalScore).subscribe({
-            next: (hs) => {
-              this.isHighscore = hs.isHighscore;
-              if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
-            },
-            error: (err) =>
-              console.error('❌ Fehler bei Highscore-Prüfung:', err),
-          });
 
+          // Jetzt ist submit durch -> Accus erst jetzt leeren
+          this.baseScoreAccum = 0;
+          this.baseMoneyAccum = 0;
+
+          // Highscore-Check etc.
+          this.scoreService.isHighscore(finalScore).subscribe(/* ... */);
           this.loadLeaderboards();
           this.restart();
         },
-        error: (err) => {
-          console.error('❌ Fehler beim Score-Submit:', err);
-        },
+        error: (err) => console.error('❌ Fehler beim Score-Submit:', err),
       });
   }
 

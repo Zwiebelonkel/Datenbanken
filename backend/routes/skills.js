@@ -29,7 +29,7 @@ const CATALOG = {
   "Ausdauer 💨": {
     description: "-1 erforderliche Streak zum erhalten eines neuen ♥️",
     price: 5, // == base_price
-    max_level: 15,
+    max_level: 10,
     apply: async (tx, username) => {
       await tx.execute({
         sql: `UPDATE users SET streak_needed = streak_needed -1 WHERE LOWER(username)=LOWER(?)`,

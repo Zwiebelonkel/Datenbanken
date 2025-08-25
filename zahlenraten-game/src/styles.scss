@@ -119,11 +119,11 @@ li:hover {
   border: none;
 }
 
-.input{
+input{
   outline: none !important;
 }
 
-.input:focus {
+input:focus {
     border:1px solid $theme;
     box-shadow: 0 0 10px #719ECE;
   }

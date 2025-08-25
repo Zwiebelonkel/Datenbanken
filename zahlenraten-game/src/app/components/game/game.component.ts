@@ -21,7 +21,6 @@ import { TopbarComponent } from '../topbar/topbar.component';
 import { PlayerBarComponent } from '../player-bar/player-bar.component';
 import { StreakIndicatorComponent } from '../streak-indicator/streak-indicator.component';
 
-
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -37,7 +36,7 @@ import { StreakIndicatorComponent } from '../streak-indicator/streak-indicator.c
     UsersComponent,
     RainComponent,
     PlayerBarComponent,
-    StreakIndicatorComponent
+    StreakIndicatorComponent,
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -309,74 +308,94 @@ export class GameComponent implements OnInit {
   private endHandled = false; // ⬅️ Feld in der Klasse ergänzen
 
   endGame() {
-  if (this.endHandled) return;
-  this.endHandled = true;
+    // Einmal-Guard (unabhängig von gameOver)
+    if (this.endHandled) return;
+    this.endHandled = true;
 
-  const username = this.authService.getUsername();
-  if (!username) {
-    console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+    const username = this.authService.getUsername();
+    if (!username) {
+      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+      this.gameStarted = false;
+      this.gameOver = true;
+      return;
+    }
+
     this.gameStarted = false;
     this.gameOver = true;
-    return;
+
+    // Snapshot sichern
+    const baseToSend = this.baseMoneyAccum;
+    console.log('[endGame] username=', username, 'baseMoneyAccum=', baseToSend);
+
+    if (baseToSend > 0) {
+      this.moneyService
+        .updateMoney({ username, amount: baseToSend })
+        .subscribe({
+          next: (res: any) => {
+            // ✅ Server-Wahrheit übernehmen, falls vorhanden
+            if (res && typeof res.money === 'number') {
+              this.profileMoney = res.money;
+            } else {
+              // Fallback (falls Backend noch kein money zurückgibt)
+              const credited = Math.round(
+                baseToSend * (this.monetaryMultiplier ?? 1)
+              );
+              this.profileMoney += credited;
+            }
+            // Rundengewinn-Delta nullen, damit die Anzeige passt
+            this.money = 0;
+            // Runde-spezifische Accus optional zurücksetzen
+            this.baseMoneyAccum = 0;
+            this.baseScoreAccum = 0;
+          },
+          error: (err) => console.error('[endGame] updateMoney ERROR:', err),
+        });
+    } else {
+      console.log('[endGame] baseMoneyAccum ist 0 – kein updateMoney Call');
+    }
+
+    // ⭐ XP lokal
+    const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
+    if (xpFromLocal > 0) this.addXp(xpFromLocal);
   }
 
-  this.gameStarted = false;
-  this.gameOver = true;
+  submitScore() {
+    this.soundService.playSound('hardPop.aac', 0.6);
 
-  // 👉 Hier Submit aufrufen
-  this.submitScore();
+    const username = this.authService.getUsername();
+    if (!username) {
+      console.warn('Kein Benutzer eingeloggt – Score wird nicht gespeichert.');
+      return;
+    }
 
-  // XP lokal vergeben (vor Reset)
-  const xpFromLocal = Math.floor(this.baseScoreAccum / 5);
-  if (xpFromLocal > 0) this.addXp(xpFromLocal);
-}
+    this.scoreService
+      .submitScore({
+        username,
+        baseScore: this.baseScoreAccum, // Basiswerte schicken
+        consecutive_wins: this.highestStreak,
+        money_per_round: this.baseMoneyAccum,
+      })
+      .subscribe({
+        next: (res) => {
+          const finalScore = res?.score ?? 0;
+          // 🏆 Highscore-Prüfung mit finalem Score
+          this.scoreService.isHighscore(finalScore).subscribe({
+            next: (hs) => {
+              this.isHighscore = hs.isHighscore;
+              if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
+            },
+            error: (err) =>
+              console.error('❌ Fehler bei Highscore-Prüfung:', err),
+          });
 
-submitScore() {
-  this.soundService.playSound('hardPop.aac', 0.6);
-
-  const username = this.authService.getUsername();
-  if (!username) return;
-
-  // Snapshots ziehen
-  const snapBaseScore = Number(this.baseScoreAccum);
-  const snapBaseMpr   = Number(this.baseMoneyAccum);
-  const snapStreak    = Number(this.highestStreak);
-
-  const payload = {
-    username,
-    baseScore: snapBaseScore,
-    baseMoneyPerRound: snapBaseMpr,
-    consecutive_wins: snapStreak,
-  };
-
-  console.log('[submitScore] Payload:', payload);
-
-  this.scoreService.submitScore(payload).subscribe({
-    next: (res) => {
-      console.log('[submitScore] Server Response:', res);
-
-      const finalScore = res?.score ?? 0;
-
-      // Highscore prüfen
-      this.scoreService.isHighscore(finalScore).subscribe({
-        next: (hs) => {
-          this.isHighscore = hs.isHighscore;
-          if (hs.isHighscore) {
-            this.unlockAchievement('Champion 🏆');
-          }
+          this.loadLeaderboards();
+          this.restart();
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Score-Submit:', err);
         },
       });
-
-      this.loadLeaderboards();
-
-      // 👉 erst jetzt resetten
-      this.baseScoreAccum = 0;
-      this.baseMoneyAccum = 0;
-      this.restart();
-    },
-    error: (err) => console.error('❌ Fehler beim Score-Submit:', err),
-  });
-}
+  }
 
   loadLeaderboards() {
     this.isLoading = true;
@@ -748,12 +767,11 @@ submitScore() {
   }
 
   handleStreakCompleted() {
-    console.log("handleStreak aufgerufen")
-    if(!this.gameStarted)return;
-  this.lives += 1;
-            console.log("leben erhöht")
-}
-
+    console.log('handleStreak aufgerufen');
+    if (!this.gameStarted) return;
+    this.lives += 1;
+    console.log('leben erhöht');
+  }
 
   getHeartSpeed(): string {
     const livesLeft = this.lives;

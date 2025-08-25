@@ -369,44 +369,37 @@ export class GameComponent implements OnInit {
     return;
   }
 
-  // 📝 Payload vorbereiten
+  // 🔒 Werte snappen (Race/Reset verhindern)
+  const snapBaseScore = Number(this.baseScoreAccum);
+  const snapBaseMpr   = Number(this.baseMoneyAccum);
+  const snapStreak    = Number(this.highestStreak);
+
   const payload = {
     username,
-    baseScore: this.baseScoreAccum, // Basiswerte schicken
-    consecutive_wins: this.highestStreak,
-    baseMoneyPerRound: this.baseMoneyAccum, // ⚠️ lieber baseMoneyPerRound statt money_per_round
+    baseScore: snapBaseScore,
+    baseMoneyPerRound: snapBaseMpr, // ✅ wichtig
+    consecutive_wins: snapStreak,
   };
-
-  // 🔍 Logging vor Request
   console.log('[submitScore] Payload:', payload);
 
   this.scoreService.submitScore(payload).subscribe({
     next: (res) => {
       console.log('[submitScore] Server Response:', res);
-
       const finalScore = res?.score ?? 0;
-      console.log('[submitScore] FinalScore:', finalScore);
 
-      // 🏆 Highscore-Prüfung
       this.scoreService.isHighscore(finalScore).subscribe({
         next: (hs) => {
           console.log('[isHighscore] Response:', hs);
           this.isHighscore = hs.isHighscore;
-          if (hs.isHighscore) {
-            console.log('[isHighscore] Achievement freigeschaltet: Champion 🏆');
-            this.unlockAchievement('Champion 🏆');
-          }
+          if (hs.isHighscore) this.unlockAchievement('Champion 🏆');
         },
-        error: (err) =>
-          console.error('❌ Fehler bei Highscore-Prüfung:', err),
+        error: (err) => console.error('❌ Fehler bei Highscore-Prüfung:', err),
       });
 
       this.loadLeaderboards();
-      this.restart();
+      this.restart(); // Resets erst NACH dem Submit
     },
-    error: (err) => {
-      console.error('❌ Fehler beim Score-Submit:', err);
-    },
+    error: (err) => console.error('❌ Fehler beim Score-Submit:', err),
   });
 }
 

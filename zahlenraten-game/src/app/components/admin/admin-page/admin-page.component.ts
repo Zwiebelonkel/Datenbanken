@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService, UserStats } from '../../../services/profile.service';
@@ -47,17 +47,13 @@ export class AdminPageComponent implements OnInit {
       return;
     }
 
-    // Seiten-Flags laden (Admin-Endpoint, benötigt Token)
-    const headers = this.buildAuthHeaders();
+    // Token wird automatisch durch Interceptor angehängt
     this.http
-      .get<{ pages: Record<string, boolean> }>(`${this.baseUrl}/admin/pages`, {
-        headers,
-      })
+      .get<{ pages: Record<string, boolean> }>(`${this.baseUrl}/admin/pages`)
       .subscribe({
         next: (data) => this.applyServerPages(data.pages),
         error: (err) => {
           console.error('Fehler beim Laden der Seiten-Flags:', err);
-          // Optional: Fallback – nichts tun => Defaults bleiben true
         },
       });
 
@@ -68,34 +64,22 @@ export class AdminPageComponent implements OnInit {
   togglePage(key: string, ev: Event) {
     const checked = (ev.target as HTMLInputElement).checked;
 
-    // Optimistisches UI-Update
     const old = this.availablePages.find((p) => p.key === key)?.enabled;
     this.setLocalEnabled(key, checked);
 
-    const headers = this.buildAuthHeaders();
+    // Token wird automatisch durch Interceptor angehängt
     this.http
       .put<{ pages: Record<string, boolean> }>(
         `${this.baseUrl}/admin/pages/${key}`,
-        { enabled: checked },
-        { headers }
+        { enabled: checked }
       )
       .subscribe({
         next: (res) => this.applyServerPages(res.pages),
         error: (err) => {
           console.error('Fehler beim Speichern der Seite:', err);
-          // Rollback bei Fehler
           this.setLocalEnabled(key, !!old);
         },
       });
-  }
-
-  private buildAuthHeaders(): HttpHeaders {
-    // Falls dein AuthService eine getToken() hat, nutze die:
-    const token =
-      (this.authService as any).getToken?.() ||
-      localStorage.getItem('token') ||
-      '';
-    return new HttpHeaders(token ? { Authorization: `Bearer ${token}` } : {});
   }
 
   private setLocalEnabled(key: string, enabled: boolean) {
@@ -114,7 +98,7 @@ export class AdminPageComponent implements OnInit {
   loadUsers() {
     this.http.get<any[]>(`${this.baseUrl}/users`).subscribe((data) => {
       const current = this.authService.getUsername();
-      this.users = data.filter((u) => u.username !== current); // Admin ausblenden
+      this.users = data.filter((u) => u.username !== current);
     });
   }
 
@@ -125,22 +109,18 @@ export class AdminPageComponent implements OnInit {
   }
 
   deleteUser(id: number) {
-    this.http
-      .delete(`${this.baseUrl}/users/${id}`)
-      .subscribe(
-        () => (this.users = this.users.filter((user) => user.id !== id))
-      );
+    this.http.delete(`${this.baseUrl}/users/${id}`).subscribe(() => {
+      this.users = this.users.filter((user) => user.id !== id);
+    });
   }
 
   showProfile(username: string) {
-    // Wenn derselbe Benutzer erneut angeklickt wird → schließen
     if (this.selectedUser === username) {
       this.selectedUser = null;
       this.selectedStats = null;
       return;
     }
 
-    // Sonst laden wir die neuen Stats
     this.profileService.getUserStats(username).subscribe({
       next: (stats) => {
         this.selectedStats = stats;

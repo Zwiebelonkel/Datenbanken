@@ -10,12 +10,15 @@ import { AuthService } from './services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    console.log('ININIT');
+  }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    console.log('AuthInterceptor wurde aufgerufen');
     const token = this.authService.getToken();
 
     if (token) {
@@ -27,4 +30,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(req);
   }
+}
+function SkipSelf(): (
+  target: typeof AuthInterceptor,
+  propertyKey: undefined,
+  parameterIndex: 0
+) => void {
+  throw new Error('Function not implemented.');
 }

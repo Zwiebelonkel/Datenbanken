@@ -11,10 +11,6 @@ export class DarkModeService {
   toggleDarkMode(): void {
     this.darkModeEnabled = !this.darkModeEnabled;
     document.body.classList.toggle('dark-mode', this.darkModeEnabled);
-    console.log(
-      'Dark Mode:',
-      this.darkModeEnabled ? 'aktiviert' : 'deaktiviert'
-    );
   }
 
   setDarkMode(enabled: boolean): void {

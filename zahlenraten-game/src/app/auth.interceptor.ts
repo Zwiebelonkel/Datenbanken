@@ -10,15 +10,12 @@ import { AuthService } from './services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {
-    console.log('ININIT');
-  }
+  constructor(private authService: AuthService) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('AuthInterceptor wurde aufgerufen');
     const token = this.authService.getToken();
 
     if (token) {

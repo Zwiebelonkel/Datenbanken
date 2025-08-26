@@ -72,10 +72,6 @@ export class StreakIndicatorComponent implements OnChanges, OnInit {
 
   get strokeDashOffset(): number {
     if (!this.streakNeeded || this.streakNeeded <= 0) {
-      console.log(
-        'streakNeeded nicht geladen oder ungültig:',
-        this.streakNeeded
-      );
       return this.circleCircumference;
     }
     const progress = this.visibleProgress / this.streakNeeded;

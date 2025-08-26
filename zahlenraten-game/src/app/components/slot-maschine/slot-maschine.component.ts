@@ -154,9 +154,7 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
                         message: `${this.username} hat gerade einen Jackpot geknackt und ${this.winReward} 💸 gewonnen! `,
                       })
                       .subscribe({
-                        next: () => {
-                          console.log('Nachricht erfolgreich gesendet!');
-                        },
+                        next: () => {},
                         error: (err) => {
                           console.error(
                             'Fehler beim Senden der Nachricht:',

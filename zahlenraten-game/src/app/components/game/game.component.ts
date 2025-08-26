@@ -325,7 +325,6 @@ export class GameComponent implements OnInit {
 
     // Snapshot sichern
     const baseToSend = this.baseMoneyAccum;
-    console.log('[endGame] username=', username, 'baseMoneyAccum=', baseToSend);
 
     if (baseToSend > 0) {
       this.moneyService
@@ -351,7 +350,6 @@ export class GameComponent implements OnInit {
           error: (err) => console.error('[endGame] updateMoney ERROR:', err),
         });
     } else {
-      console.log('[endGame] baseMoneyAccum ist 0 – kein updateMoney Call');
     }
 
     // ⭐ XP lokal
@@ -376,13 +374,6 @@ export class GameComponent implements OnInit {
     const baseMoneyPRToSend = this.baseMoneyAccum;
     const wins = this.highestStreak;
 
-    console.log('[submitScore] sending:', {
-      username,
-      baseScore: baseScoreToSend,
-      baseMoneyPerRound: baseMoneyPRToSend,
-      consecutive_wins: wins,
-    });
-
     this.scoreService
       .submitScore({
         username,
@@ -392,8 +383,6 @@ export class GameComponent implements OnInit {
       })
       .subscribe({
         next: (res) => {
-          console.log('[submitScore] response:', res);
-
           const finalScore = res?.score ?? 0;
 
           // Accus erst NACH erfolgreichem Submit zurücksetzen
@@ -795,10 +784,8 @@ export class GameComponent implements OnInit {
   }
 
   handleStreakCompleted() {
-    console.log('handleStreak aufgerufen');
     if (!this.gameStarted) return;
     this.lives += 1;
-    console.log('leben erhöht');
   }
 
   getHeartSpeed(): string {

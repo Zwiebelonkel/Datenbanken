@@ -21,7 +21,6 @@ export class ChatService {
 
   // Die letzten Nachrichten abrufen
   getLatestMessages(limit = 5): Observable<ChatMessage[]> {
-    console.log("getting messages");
     return this.http.get<ChatMessage[]>(`${this.apiUrl}/latest?limit=${limit}`);
   }
 }

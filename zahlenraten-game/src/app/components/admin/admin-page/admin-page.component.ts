@@ -43,8 +43,8 @@ export class AdminPageComponent implements OnInit {
   toolScore = { username: '' };
   adjust = {
     username: '',
-    moneyDelta: 0,
-    xpDelta: 0,
+    moneyDelta: null,
+    xpDelta: null,
     levelSet: null as number | null,
   };
   previewCount: number | null = null;

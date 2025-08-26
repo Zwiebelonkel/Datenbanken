@@ -245,7 +245,7 @@
     font-size: 0.95rem;
     color: #fff;
     background: var(--btn-gradient, linear-gradient(135deg, #7c3aed, #9333ea));
-    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.25);
+    // box-shadow: 0 10px 20px rgba(124, 58, 237, 0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
     display: inline-flex;
     align-items: center;
@@ -300,6 +300,7 @@
   }
 
   border: 2px dashed #3b82f6;
+  box-shadow: 0px 0px 10px #3b82f6;
 }
 
 .pack[data-variant="premium"] {
@@ -311,6 +312,7 @@
     --bar-gradient: linear-gradient(90deg, #ef4444, #f59e0b);
   }
   border: 2px dashed #ef4444;
+  box-shadow: 0px 0px 10px #ef4444;
 }
 
 .pack[data-variant="ultra"] {
@@ -322,4 +324,5 @@
     --bar-gradient: linear-gradient(90deg, #22c55e, #06b6d4);
   }
   border: 2px dashed #22c55e;
+  box-shadow: 0px 0px 10px #22c55e;
 }

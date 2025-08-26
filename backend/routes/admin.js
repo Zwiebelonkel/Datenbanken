@@ -5,11 +5,11 @@ import { requireAuth, requireAdmin } from "../auth.js";
 
 const router = express.Router();
 
-// Optional: nie löschen
+// NIE löschen:
 const PROTECTED_USERS = ["admin", "gast", "guest", "guest_public"];
 
 /* -----------------------
-   Seiten-Flags (wie in server.js)
+   Seiten-Flags (Admin)
 ------------------------ */
 router.get("/pages", requireAuth, requireAdmin, async (_req, res) => {
   try {

@@ -10,7 +10,7 @@ import cardsRoutes from "./routes/cards.js";
 import db from "./db.js";
 import villageRoutes from "./routes/village.js";
 import chatRoutes from "./routes/chat.js";
-import adminTools from "./routes/admin-tools.js";
+import adminTools from "./routes/admin.js";
 import { verifyToken, requireAuth, requireAdmin } from "./auth.js";
 
 const app = express();

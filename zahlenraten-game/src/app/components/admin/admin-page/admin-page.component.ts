@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { ProfileService, UserStats } from '../../../services/profile.service';
 import { Router } from '@angular/router';
@@ -12,7 +13,7 @@ import { TopbarComponent } from '../../topbar/topbar.component';
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, SidebarComponent, TopbarComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent, TopbarComponent],
 })
 export class AdminPageComponent implements OnInit {
   private baseUrl = 'https://outside-between.onrender.com/api';
@@ -33,6 +34,22 @@ export class AdminPageComponent implements OnInit {
     { key: 'tutorial', label: '❓ Tutorial', enabled: true },
   ];
 
+  // Tools UI State
+  tool = {
+    pattern: 'user_%',
+    field: 'username' as 'username',
+    inactiveDays: 0,
+  };
+  toolScore = { username: '' };
+  adjust = {
+    username: '',
+    moneyDelta: 0,
+    xpDelta: 0,
+    levelSet: null as number | null,
+  };
+  previewCount: number | null = null;
+  previewList: { username: string }[] = [];
+
   constructor(
     private http: HttpClient,
     public authService: AuthService,
@@ -47,27 +64,24 @@ export class AdminPageComponent implements OnInit {
       return;
     }
 
-    // Token wird automatisch durch Interceptor angehängt
     this.http
       .get<{ pages: Record<string, boolean> }>(`${this.baseUrl}/admin/pages`)
       .subscribe({
         next: (data) => this.applyServerPages(data.pages),
-        error: (err) => {
-          console.error('Fehler beim Laden der Seiten-Flags:', err);
-        },
+        error: (err) =>
+          console.error('Fehler beim Laden der Seiten-Flags:', err),
       });
 
     this.loadUsers();
     this.loadScores();
   }
 
+  // Seiten-Flags
   togglePage(key: string, ev: Event) {
     const checked = (ev.target as HTMLInputElement).checked;
-
     const old = this.availablePages.find((p) => p.key === key)?.enabled;
     this.setLocalEnabled(key, checked);
 
-    // Token wird automatisch durch Interceptor angehängt
     this.http
       .put<{ pages: Record<string, boolean> }>(
         `${this.baseUrl}/admin/pages/${key}`,
@@ -81,34 +95,32 @@ export class AdminPageComponent implements OnInit {
         },
       });
   }
-
   private setLocalEnabled(key: string, enabled: boolean) {
     const p = this.availablePages.find((x) => x.key === key);
     if (p) p.enabled = enabled;
   }
-
   private applyServerPages(pages: Record<string, boolean>) {
     this.availablePages.forEach((page) => {
-      if (pages[page.key] !== undefined) {
-        page.enabled = !!pages[page.key];
-      }
+      if (pages[page.key] !== undefined) page.enabled = !!pages[page.key];
     });
   }
 
+  // Daten
   loadUsers() {
     this.http.get<any[]>(`${this.baseUrl}/users`).subscribe((data) => {
       const current = this.authService.getUsername();
       this.users = data.filter((u) => u.username !== current);
     });
   }
-
   loadScores() {
     this.http
       .get<any[]>(`${this.baseUrl}/scores/all`)
       .subscribe((data) => (this.scores = data));
   }
 
+  // Aktionen
   deleteUser(id: number) {
+    if (!confirm('Diesen Benutzer und alle abhängigen Daten löschen?')) return;
     this.http.delete(`${this.baseUrl}/users/${id}`).subscribe(() => {
       this.users = this.users.filter((user) => user.id !== id);
     });
@@ -120,7 +132,6 @@ export class AdminPageComponent implements OnInit {
       this.selectedStats = null;
       return;
     }
-
     this.profileService.getUserStats(username).subscribe({
       next: (stats) => {
         this.selectedStats = stats;
@@ -131,8 +142,95 @@ export class AdminPageComponent implements OnInit {
   }
 
   deleteScore(id: number) {
+    if (!confirm('Diesen Score löschen?')) return;
     this.http
       .delete(`${this.baseUrl}/scores/${id}`)
       .subscribe(() => this.loadScores());
+  }
+
+  // --- Tools ---
+
+  previewDelete() {
+    this.previewCount = null;
+    this.previewList = [];
+    this.http
+      .post<{ count: number; sample: { username: string }[] }>(
+        `${this.baseUrl}/admin/tools/users/delete-preview`,
+        { pattern: this.tool.pattern, inactiveDays: this.tool.inactiveDays }
+      )
+      .subscribe({
+        next: (res) => {
+          this.previewCount = res.count;
+          this.previewList = res.sample ?? [];
+        },
+        error: (err) => console.error('Preview error:', err),
+      });
+  }
+
+  executeDelete() {
+    if (!this.previewCount) return;
+    if (!confirm(`Wirklich ${this.previewCount} Nutzer löschen?`)) return;
+    this.http
+      .post<{ deleted: number; remainingWithPattern: number }>(
+        `${this.baseUrl}/admin/tools/users/delete-exec`,
+        { pattern: this.tool.pattern, inactiveDays: this.tool.inactiveDays }
+      )
+      .subscribe({
+        next: (res) => {
+          alert(
+            `Gelöscht: ${res.deleted ?? 'n/a'} • Übrig mit Pattern: ${
+              res.remainingWithPattern
+            }`
+          );
+          this.previewCount = null;
+          this.previewList = [];
+          this.loadUsers();
+        },
+        error: (err) => console.error('Delete error:', err),
+      });
+  }
+
+  deleteScoresForUser() {
+    if (!this.toolScore.username) return;
+    if (!confirm(`Alle Scores von ${this.toolScore.username} löschen?`)) return;
+    this.http
+      .delete<{ deleted: number }>(
+        `${this.baseUrl}/admin/tools/scores/by-user/${encodeURIComponent(
+          this.toolScore.username
+        )}`
+      )
+      .subscribe({
+        next: (res) => {
+          alert(`Scores gelöscht: ${res.deleted ?? 'n/a'}`);
+          this.loadScores();
+        },
+        error: (err) => console.error(err),
+      });
+  }
+
+  adjustAccount() {
+    const body = {
+      username: this.adjust.username.trim(),
+      moneyDelta: Number(this.adjust.moneyDelta) || 0,
+      xpDelta: Number(this.adjust.xpDelta) || 0,
+      levelSet: this.adjust.levelSet,
+    };
+    if (!body.username) {
+      alert('Username fehlt');
+      return;
+    }
+    this.http
+      .post(`${this.baseUrl}/admin/tools/account/adjust`, body)
+      .subscribe({
+        next: () => alert('Aktualisiert'),
+        error: (err) => console.error(err),
+      });
+  }
+
+  exportUsers() {
+    window.open(`${this.baseUrl}/admin/tools/export/users.csv`, '_blank');
+  }
+  exportScores() {
+    window.open(`${this.baseUrl}/admin/tools/export/scores.csv`, '_blank');
   }
 }

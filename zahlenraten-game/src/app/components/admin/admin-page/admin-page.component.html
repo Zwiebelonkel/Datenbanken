@@ -1,9 +1,11 @@
 <app-sidebar></app-sidebar>
 <app-topbar page="🔧 Admin Panel"></app-topbar>
+
 <div class="card admin-layout">
   <!-- Linke Seite: Hauptinhalte -->
   <div class="admin-main">
     <div class="admin-container">
+      <!-- Benutzerverwaltung -->
       <section class="admin-section">
         <h2>👥 Benutzerverwaltung</h2>
         <ul class="admin-list">
@@ -21,6 +23,7 @@
         </ul>
       </section>
 
+      <!-- Seitenverwaltung -->
       <section class="admin-section">
         <h2>📄 Seitenverwaltung</h2>
         <ul class="admin-list">
@@ -35,6 +38,7 @@
         </ul>
       </section>
 
+      <!-- Highscores verwalten -->
       <section class="admin-section">
         <h2>🏆 Highscores verwalten</h2>
         <ul class="admin-list">
@@ -47,6 +51,109 @@
             </button>
           </li>
         </ul>
+      </section>
+
+      <!-- 🧰 Tools -->
+      <section class="admin-section">
+        <h2>🧰 Tools</h2>
+
+        <!-- A) Nutzer per Muster löschen -->
+        <div class="tool-box">
+          <h3>👥 Nutzer nach Muster löschen</h3>
+          <div class="row">
+            <label>Muster</label>
+            <input
+              type="text"
+              [(ngModel)]="tool.pattern"
+              placeholder="z.B. user_%"
+            />
+            <select [(ngModel)]="tool.field" disabled>
+              <option value="username">username</option>
+            </select>
+          </div>
+          <div class="row">
+            <label>Nur inaktive seit (Tage)</label>
+            <input
+              type="number"
+              [(ngModel)]="tool.inactiveDays"
+              min="0"
+              placeholder="0 = egal"
+            />
+          </div>
+          <div class="row">
+            <button class="inspect-btn" (click)="previewDelete()">
+              🔎 Vorschau
+            </button>
+            <button
+              class="delete-btn"
+              [disabled]="!previewCount"
+              (click)="executeDelete()"
+            >
+              ❌ Löschen <span *ngIf="previewCount">({{ previewCount }})</span>
+            </button>
+          </div>
+          <p *ngIf="previewCount !== null">
+            Treffer: <strong>{{ previewCount }}</strong>
+          </p>
+          <ul *ngIf="previewList?.length" class="mini-list">
+            <li *ngFor="let u of previewList">{{ u.username }}</li>
+          </ul>
+        </div>
+
+        <!-- B) Scores eines Nutzers löschen -->
+        <div class="tool-box">
+          <h3>🏆 Scores eines Nutzers löschen</h3>
+          <div class="row">
+            <input
+              type="text"
+              [(ngModel)]="toolScore.username"
+              placeholder="exakter Username"
+            />
+            <button class="delete-btn" (click)="deleteScoresForUser()">
+              ❌ Scores löschen
+            </button>
+          </div>
+        </div>
+
+        <!-- C) Konto anpassen -->
+        <div class="tool-box">
+          <h3>💰/⭐ Konto anpassen</h3>
+          <div class="row">
+            <input
+              type="text"
+              [(ngModel)]="adjust.username"
+              placeholder="Username"
+            />
+          </div>
+          <div class="row">
+            <label>Geld Δ</label>
+            <input
+              type="number"
+              [(ngModel)]="adjust.moneyDelta"
+              placeholder="z.B. 100 oder -50"
+            />
+            <label>XP Δ</label>
+            <input type="number" [(ngModel)]="adjust.xpDelta" />
+            <label>Level setzen</label>
+            <input type="number" [(ngModel)]="adjust.levelSet" />
+            <button class="inspect-btn" (click)="adjustAccount()">
+              ✅ Anwenden
+            </button>
+          </div>
+        </div>
+
+        <!-- D) Export -->
+        <div class="tool-box">
+          <h3>⬇️ Export</h3>
+          <div class="row">
+            <button class="inspect-btn" (click)="exportUsers()">
+              👥 Nutzer CSV
+            </button>
+            <button class="inspect-btn" (click)="exportScores()">
+              🏆 Scores CSV
+            </button>
+          </div>
+        </div>
       </section>
     </div>
   </div>

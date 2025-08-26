@@ -10,6 +10,7 @@ import cardsRoutes from "./routes/cards.js";
 import db from "./db.js";
 import villageRoutes from "./routes/village.js";
 import chatRoutes from "./routes/chat.js";
+import adminTools from "./routes/admin-tools.js";
 import { verifyToken, requireAuth, requireAdmin } from "./auth.js";
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/money", moneyRoutes);
 app.use("/api/cards", cardsRoutes);
 app.use("/api/village", villageRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/admin/tools", authMiddleware, adminTools);
 app.use("/uploads", express.static("uploads"));
 
 const ALL_ACHIEVEMENTS = [

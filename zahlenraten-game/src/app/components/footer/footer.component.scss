@@ -1,48 +1,53 @@
 .site-footer {
   width: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box; /* verhindert Überbreite inkl. Padding */
   background: var(--theme);
   backdrop-filter: blur(6px);
   border-top: 1px solid var(--card-border);
   color: var(--text-color);
   font-family: "Nunito Sans", system-ui, -apple-system, sans-serif;
+  overflow-x: clip; /* 1-px Artefakte am Rand abschneiden */
 
-  /* ❌ clip entfernt – kann sichtbaren Content abschneiden */
-  /* overflow-x: clip; */
-
-  /* iOS safe-areas: auch links/rechts berücksichtigen */
-  padding-bottom: max(0px, env(safe-area-inset-bottom));
-  padding-left:  max(0px, env(safe-area-inset-left));
-  padding-right: max(0px, env(safe-area-inset-right));
+  /* Sticky entfernen, damit Footer im Flexbox-Layout korrekt unten bleibt */
+  /* &.fixed {
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+  } */
 }
 
 /* volle Breite, aber ohne horizontales Überlaufen */
 .footer-inner {
-  box-sizing: border-box;
+  box-sizing: border-box; /* Padding in die Breite einrechnen */
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 6px clamp(12px, 2vw, 24px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
 
-  /* optional: zentral begrenzen, verhindert „an den Rand kleben“ */
-  max-width: 1100px;
+  font-size: clamp(12px, 0.95vw, 14px);
+  line-height: 1.2;
 }
 
-/* Blöcke dürfen schrumpfen, laufen aber nicht über */
+/* Blöcke links/rechts – dürfen schrumpfen, laufen aber nicht über */
 .left,
 .links {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0;
+  min-width: 0; /* wichtig: erlaubt flex-shrink */
 }
 
+.brand {
+  font-weight: 700;
+}
+
+/* Rechts: Links dürfen umbrechen statt x-Scroll zu erzeugen */
 .links {
   justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* statt nowrap -> kein Überlaufen */
 }
 
 .links a,
@@ -55,24 +60,43 @@
   padding: 0;
   font: inherit;
   line-height: 1.2;
-  white-space: nowrap;
+  white-space: nowrap; /* jedes Item bleibt kompakt, Wrap nur zwischen Items */
 }
 
-/* Trennerpunkte */
-.links > * + *::before {
-  content: "•";
-  opacity: 0.5;
-  margin-right: 8px;
+/* Trennerpunkte automatisch zwischen Items */
+// .links > * + *::before {
+//   content: "•";
+//   opacity: 0.5;
+//   margin-right: 4px;
+// }
+
+/* Fokus sichtbar */
+.links a:focus,
+.linklike:focus {
+  outline: 2px solid #4caf50;
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
-/* Dark mode */
+/* Dark Mode */
 .dark-mode .site-footer {
   background: #0f0f10cc;
   border-top-color: #2a2a2a;
   color: #eee;
 }
+.dark-mode .links a:focus,
+.dark-mode .linklike:focus {
+  outline-color: #8bc34a;
+}
 
-/* Mobile: zentral & kompakt */
+/* Safe-Area (iOS) */
+@supports (padding: max(0px)) {
+  .site-footer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Mobile: zentriert & sehr kompakt */
 @media (max-width: 640px) {
   .footer-inner {
     flex-direction: column;
@@ -80,18 +104,22 @@
     text-align: center;
     justify-content: center;
     padding: 4px 10px;
-    font-size: 10px;
+    font-size: 9px;
     gap: 6px;
   }
-  .links { justify-content: center; }
+  .links {
+    justify-content: center;
+  }
 }
 
-/* Ultra-klein: horizontal scrollen innerhalb der Links, nicht die Seite */
+/* Ultra-klein: horizontales Scrollen nur innerhalb der Links-Leiste statt der Seite */
 @media (max-width: 420px) {
   .links {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  .links::-webkit-scrollbar { display: none; }
+  .links::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -10,19 +10,17 @@ export function verifyToken(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // erwartet: { id, username, role, ... }
+    req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ message: "Ungültiger Token" });
   }
 }
 
-// Alias – nur der Lesbarkeit halber
 export function requireAuth(req, res, next) {
   return verifyToken(req, res, next);
 }
 
-// Admin-Check auf Basis von req.user.role
 export function requireAdmin(req, res, next) {
   if (!req.user) {
     return res.status(401).json({ error: "Nicht eingeloggt" });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
@@ -36,7 +36,7 @@ export class AdminPageComponent implements OnInit {
 
   // Tools UI State
   tool = {
-    pattern: 'user_%',
+    pattern: '',
     field: 'username' as 'username',
     inactiveDays: 0,
   };
@@ -209,16 +209,28 @@ export class AdminPageComponent implements OnInit {
   }
 
   adjustAccount() {
-    const body = {
-      username: this.adjust.username.trim(),
-      moneyDelta: Number(this.adjust.moneyDelta) || 0,
-      xpDelta: Number(this.adjust.xpDelta) || 0,
-      levelSet: this.adjust.levelSet,
+    const body: any = {
+      username: this.adjust.username?.trim(),
     };
     if (!body.username) {
       alert('Username fehlt');
       return;
     }
+
+    const addIfPresent = (
+      key: 'moneyDelta' | 'xpDelta' | 'levelSet',
+      raw: any
+    ) => {
+      if (raw !== null && raw !== undefined && raw !== '') {
+        const n = Number(raw);
+        if (Number.isFinite(n)) body[key] = n; // 0 ist erlaubt
+      }
+    };
+
+    addIfPresent('moneyDelta', this.adjust.moneyDelta);
+    addIfPresent('xpDelta', this.adjust.xpDelta);
+    addIfPresent('levelSet', this.adjust.levelSet);
+
     this.http
       .post(`${this.baseUrl}/admin/tools/account/adjust`, body)
       .subscribe({
@@ -227,10 +239,53 @@ export class AdminPageComponent implements OnInit {
       });
   }
 
-  exportUsers() {
-    window.open(`${this.baseUrl}/admin/tools/export/users.csv`, '_blank');
+  async exportScoresCsv() {
+    const token = this.authService.getToken(); // wo auch immer du ihn holst
+    const url = `${this.baseUrl}/admin/tools/export/scores.csv`;
+
+    this.http
+      .get(url, {
+        responseType: 'blob',
+        headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+      })
+      .subscribe({
+        next: (blob: Blob) => {
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          a.href = objectUrl;
+          a.download = 'scores.csv';
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+        },
+        error: (err) => {
+          console.error('Export fehlgeschlagen', err);
+          alert('Export fehlgeschlagen.');
+        },
+      });
   }
-  exportScores() {
-    window.open(`${this.baseUrl}/admin/tools/export/scores.csv`, '_blank');
+
+  async exportUsersCsv() {
+    const token = this.authService.getToken(); // wo auch immer du ihn holst
+    const url = `${this.baseUrl}/admin/tools/export/users.csv`;
+
+    this.http
+      .get(url, {
+        responseType: 'blob',
+        headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+      })
+      .subscribe({
+        next: (blob: Blob) => {
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          a.href = objectUrl;
+          a.download = 'users.csv';
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+        },
+        error: (err) => {
+          console.error('Export fehlgeschlagen', err);
+          alert('Export fehlgeschlagen.');
+        },
+      });
   }
 }

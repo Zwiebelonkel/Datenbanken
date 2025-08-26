@@ -195,38 +195,60 @@ router.post(
 /* -----------------------
    TOOLS: CSV-Export
 ------------------------ */
-router.get(
-  "/tools/export/users.csv",
+router.post(
+  "/tools/account/adjust",
   requireAuth,
   requireAdmin,
-  async (_req, res) => {
+  async (req, res) => {
+    const { username, moneyDelta, xpDelta, levelSet } = req.body || {};
+    if (!username) return res.status(400).json({ error: "username required" });
+
+    const changes = {};
+
     try {
-      const rows = await db.execute(`
-      SELECT id, username, level, xp, total_score, money, profile_image_url
-      FROM users
-      ORDER BY username COLLATE NOCASE ASC
-    `);
-      res.setHeader("Content-Type", "text/csv; charset=utf-8");
-      res.setHeader("Content-Disposition", 'attachment; filename="users.csv"');
-      res.write("id,username,level,xp,total_score,money,profile_image_url\n");
-      for (const r of rows.rows) {
-        const line = [
-          r.id,
-          r.username,
-          r.level,
-          r.xp,
-          r.total_score,
-          r.money,
-          r.profile_image_url ?? "",
-        ]
-          .map((v) => String(v).replace(/"/g, '""'))
-          .join(",");
-        res.write(line + "\n");
+      // moneyDelta nur anwenden, wenn vorhanden (leer/undefined ignorieren)
+      if (moneyDelta !== undefined && moneyDelta !== "") {
+        const m = Number(moneyDelta);
+        if (!Number.isFinite(m))
+          return res.status(400).json({ error: "moneyDelta invalid" });
+
+        await db.execute({
+          sql: `UPDATE users SET money = money + ? WHERE LOWER(username)=LOWER(?)`,
+          args: [m, username],
+        });
+        changes.moneyDelta = m;
       }
-      res.end();
+
+      // xpDelta nur anwenden, wenn vorhanden
+      if (xpDelta !== undefined && xpDelta !== "") {
+        const x = Number(xpDelta);
+        if (!Number.isFinite(x))
+          return res.status(400).json({ error: "xpDelta invalid" });
+
+        await db.execute({
+          sql: `UPDATE users SET xp = xp + ? WHERE LOWER(username)=LOWER(?)`,
+          args: [x, username],
+        });
+        changes.xpDelta = x;
+      }
+
+      // levelSet nur anwenden, wenn vorhanden
+      if (levelSet !== undefined && levelSet !== "") {
+        const lvl = Number(levelSet);
+        if (!Number.isFinite(lvl))
+          return res.status(400).json({ error: "levelSet invalid" });
+
+        await db.execute({
+          sql: `UPDATE users SET level = ? WHERE LOWER(username)=LOWER(?)`,
+          args: [lvl, username],
+        });
+        changes.levelSet = lvl;
+      }
+
+      return res.json({ success: true, changes });
     } catch (err) {
-      console.error("export/users.csv", err);
-      res.status(500).json({ error: "Export fehlgeschlagen" });
+      console.error("tools/account/adjust", err);
+      return res.status(500).json({ error: "Update fehlgeschlagen" });
     }
   }
 );

@@ -67,9 +67,9 @@
               [(ngModel)]="tool.pattern"
               placeholder="z.B. user_%"
             />
-            <select [(ngModel)]="tool.field" disabled>
+            <!-- <select [(ngModel)]="tool.field" disabled>
               <option value="username">username</option>
-            </select>
+            </select> -->
           </div>
           <div class="row">
             <label>Nur inaktive seit (Tage)</label>
@@ -133,9 +133,17 @@
               placeholder="z.B. 100 oder -50"
             />
             <label>XP Δ</label>
-            <input type="number" [(ngModel)]="adjust.xpDelta" />
+            <input
+              type="number"
+              [(ngModel)]="adjust.xpDelta"
+              placeholder="z.B. 100 oder -50"
+            />
             <label>Level setzen</label>
-            <input type="number" [(ngModel)]="adjust.levelSet" />
+            <input
+              type="number"
+              [(ngModel)]="adjust.levelSet"
+              placeholder="z.B. 100 oder 1"
+            />
             <button class="inspect-btn" (click)="adjustAccount()">
               ✅ Anwenden
             </button>
@@ -146,10 +154,10 @@
         <div class="tool-box">
           <h3>⬇️ Export</h3>
           <div class="row">
-            <button class="inspect-btn" (click)="exportUsers()">
+            <button class="inspect-btn" (click)="exportUsersCsv()">
               👥 Nutzer CSV
             </button>
-            <button class="inspect-btn" (click)="exportScores()">
+            <button class="inspect-btn" (click)="exportScoresCsv()">
               🏆 Scores CSV
             </button>
           </div>

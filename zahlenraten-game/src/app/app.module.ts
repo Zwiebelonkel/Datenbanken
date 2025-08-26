@@ -35,6 +35,7 @@ import { DatenschutzComponent } from './components/datenschutz/datenschutz.compo
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { ConsentService } from './services/consent.service';
 import { ConsentDialogComponent } from './components/consent-dialog/consent-dialog.component';
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { ConsentDialogComponent } from './components/consent-dialog/consent-dial
     FooterComponent,
     ConsentDialogComponent,
     ConsentService,
+    AuthInterceptor,
   ],
   imports: [
     BrowserModule,

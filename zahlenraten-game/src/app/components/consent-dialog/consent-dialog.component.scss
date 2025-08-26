@@ -20,7 +20,7 @@
 }
 
 .card {
-  border: 1px solid #e9e9e9;
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 8px;
   margin: 12px 0;
@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--card-border);
   &:last-child {
     border-bottom: 0;
   }

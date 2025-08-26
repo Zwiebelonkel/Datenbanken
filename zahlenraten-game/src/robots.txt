@@ -1,0 +1,12 @@
+# Allgemeine Regeln für alle Crawler
+User-agent: *
+
+# Erlaube alles
+Allow: /
+
+# Blockiere sensible/veraltete Pfade (falls vorhanden)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /assets/dev/
+

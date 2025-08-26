@@ -157,37 +157,47 @@ router.delete(
 /* -----------------------
    TOOLS: Konto anpassen (money/xp/level)
 ------------------------ */
-router.post(
-  "/tools/account/adjust",
+router.get(
+  "/tools/export/users.csv",
   requireAuth,
   requireAdmin,
-  async (req, res) => {
-    const {
-      username,
-      moneyDelta = 0,
-      xpDelta = 0,
-      levelSet = null,
-    } = req.body || {};
-    if (!username) return res.status(400).json({ error: "username required" });
+  async (_req, res) => {
     try {
-      await db.execute({
-        sql: `UPDATE users SET money = money + ? WHERE LOWER(username)=LOWER(?)`,
-        args: [Number(moneyDelta) || 0, username],
-      });
-      await db.execute({
-        sql: `UPDATE users SET xp = xp + ? WHERE LOWER(username)=LOWER(?)`,
-        args: [Number(xpDelta) || 0, username],
-      });
-      if (Number.isFinite(Number(levelSet))) {
-        await db.execute({
-          sql: `UPDATE users SET level = ? WHERE LOWER(username)=LOWER(?)`,
-          args: [Number(levelSet), username],
-        });
+      const rows = await db.execute(`
+        SELECT id, username, level, xp, total_score, money, profile_image_url
+        FROM users
+        ORDER BY username COLLATE NOCASE ASC
+      `);
+
+      res.setHeader("Content-Type", "text/csv; charset=utf-8");
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="users.csv"'
+      );
+
+      // Headerzeile
+      res.write("id,username,level,xp,total_score,money,profile_image_url\n");
+
+      // Datensätze
+      for (const r of rows.rows) {
+        const line = [
+          r.id,
+          r.username,
+          r.level,
+          r.xp,
+          r.total_score,
+          r.money,
+          r.profile_image_url ?? "",
+        ]
+          .map((v) => String(v).replace(/"/g, '""')) // Quotes escapen
+          .join(",");
+        res.write(line + "\n");
       }
-      res.json({ success: true });
+
+      res.end();
     } catch (err) {
-      console.error("tools/account/adjust", err);
-      res.status(500).json({ error: "Update fehlgeschlagen" });
+      console.error("export/users.csv", err);
+      res.status(500).json({ error: "Export fehlgeschlagen" });
     }
   }
 );

@@ -27,7 +27,7 @@ app.use("/api/money", moneyRoutes);
 app.use("/api/cards", cardsRoutes);
 app.use("/api/village", villageRoutes);
 app.use("/api/chat", chatRoutes);
-app.use("/api/admin/tools", adminRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/uploads", express.static("uploads"));
 
 const ALL_ACHIEVEMENTS = [

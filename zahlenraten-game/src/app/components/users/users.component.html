@@ -7,9 +7,38 @@
     class="toggle-btn btn"
     (click)="toggleLevelList()"
     [class.open]="isLevelListOpen"
+    [attr.aria-expanded]="isLevelListOpen"
+    type="button"
   >
-    <span *ngIf="!isLevelListOpen">⬇️ Alle Spieler anzeigen</span>
-    <span *ngIf="isLevelListOpen">⬆️ Liste einklappen</span>
+    <ng-container *ngIf="isLevelListOpen; else collapsed">
+      <!-- Pfeil nach oben (Einklappen) -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="#e3e3e3"
+        style="vertical-align: middle; margin-right: 0.5rem"
+      >
+        <path d="m296-345-56-56 240-240 240 240-56 56-184-183-184 183Z" />
+      </svg>
+      Liste einklappen
+    </ng-container>
+
+    <ng-template #collapsed>
+      <!-- Pfeil nach unten (Ausklappen) -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="#e3e3e3"
+        style="vertical-align: middle; margin-right: 0.5rem"
+      >
+        <path d="M480-345 240-585l56-56 184 183 184-183 56 56-240 240Z" />
+      </svg>
+      Alle Spieler anzeigen
+    </ng-template>
   </button>
 
   <app-loader *ngIf="loadingLevels" aria-live="polite"></app-loader>

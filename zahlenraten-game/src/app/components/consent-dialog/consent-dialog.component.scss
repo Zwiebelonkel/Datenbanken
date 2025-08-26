@@ -11,7 +11,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   width: min(560px, 92vw);
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   padding: 20px;

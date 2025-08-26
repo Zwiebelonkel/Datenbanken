@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -68,7 +69,6 @@ import { AuthInterceptor } from './auth.interceptor';
     FooterComponent,
     ConsentDialogComponent,
     ConsentService,
-    AuthInterceptor,
   ],
   imports: [
     BrowserModule,
@@ -77,7 +77,13 @@ import { AuthInterceptor } from './auth.interceptor';
     FormsModule,
     RouterModule.forRoot(routes),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

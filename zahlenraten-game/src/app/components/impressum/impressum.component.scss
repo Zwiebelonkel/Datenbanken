@@ -1,3 +1,5 @@
+@use "../../../variables" as *;
+
 .legal-container {
   max-width: 900px;
   margin: 40px auto;
@@ -11,12 +13,12 @@ h1 {
 }
 
 .legal-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   padding: 20px;
   margin-bottom: 18px;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--card-border);
 }
 
 .address {
@@ -27,6 +29,7 @@ h1 {
 
 .contact a {
   text-decoration: underline;
+  color: $theme;
 }
 
 .dark-mode .legal-card {

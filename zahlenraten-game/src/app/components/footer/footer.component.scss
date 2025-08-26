@@ -1,10 +1,10 @@
 .site-footer {
   width: 100%;
   box-sizing: border-box; /* verhindert Überbreite inkl. Padding */
-  background: #ffffffcc;
+  background: var(--theme);
   backdrop-filter: blur(6px);
-  border-top: 1px solid #eaeaea;
-  color: #333;
+  border-top: 1px solid var(--card-border);
+  color: var(--text-color);
   font-family: "Nunito Sans", system-ui, -apple-system, sans-serif;
   overflow-x: clip; /* 1-px Artefakte am Rand abschneiden */
 

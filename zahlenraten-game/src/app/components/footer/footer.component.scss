@@ -8,11 +8,12 @@
   font-family: "Nunito Sans", system-ui, -apple-system, sans-serif;
   overflow-x: clip; /* 1-px Artefakte am Rand abschneiden */
 
-  &.fixed {
+  /* Sticky entfernen, damit Footer im Flexbox-Layout korrekt unten bleibt */
+  /* &.fixed {
     position: sticky;
     bottom: 0;
     z-index: 50;
-  }
+  } */
 }
 
 /* volle Breite, aber ohne horizontales Überlaufen */
@@ -90,7 +91,7 @@
 
 /* Safe-Area (iOS) */
 @supports (padding: max(0px)) {
-  .site-footer.fixed {
+  .site-footer {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
@@ -103,7 +104,7 @@
     text-align: center;
     justify-content: center;
     padding: 4px 10px;
-    font-size: 12px;
+    font-size: 10px;
     gap: 6px;
   }
   .links {

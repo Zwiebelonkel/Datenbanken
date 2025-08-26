@@ -1,8 +1,15 @@
-<router-outlet />
-<!-- MUSS drin sein -->
-<app-consent-dialog></app-consent-dialog>
-<app-footer
-  [showFooter]="true"
-  [fixed]="true"
-  appName="Outside Between"
-></app-footer>
+<div class="app-container">
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer bleibt immer am unteren Rand -->
+  <app-footer
+    [showFooter]="true"
+    [fixed]="true"
+    appName="Outside Between"
+  ></app-footer>
+
+  <!-- Cookie Dialog immer über allem -->
+  <app-consent-dialog></app-consent-dialog>
+</div>

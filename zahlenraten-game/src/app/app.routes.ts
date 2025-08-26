@@ -14,6 +14,8 @@ import { VillageComponent } from './components/village/village.component';
 import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
 import { DatenschutzComponent } from './components/datenschutz/datenschutz.component';
+import { AboutComponent } from './components/about/about.component';
+import { ContactComponent } from './components/contact/contact.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -33,4 +35,6 @@ export const routes: Routes = [
   { path: 'slot-maschine', component: SlotMaschineComponent },
   { path: 'impressum', component: ImpressumComponent },
   { path: 'datenschutz', component: DatenschutzComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'contact', component: ContactComponent },
 ];

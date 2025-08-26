@@ -1,0 +1,35 @@
+@use "../../../variables" as *;
+
+.legal-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px;
+  font-family: "Nunito Sans", system-ui, -apple-system, sans-serif;
+}
+
+.legal-card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+  margin-bottom: 18px;
+  border: 1px solid var(--card-border);
+}
+
+.contact-info p {
+  margin: 0.6rem 0;
+}
+
+.dark-mode .legal-card {
+  background: #161616;
+  border-color: #2a2a2a;
+  color: #f5f5f5;
+}
+
+.dark-mode a {
+  color: #a5d6ff;
+}
+
+a {
+  color: $theme;
+}

@@ -20,13 +20,13 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/scores", scoresRoutes);
 app.use("/api/profile", profileRoutes);
-app.use('/api/skills', skillRoutes);
+app.use("/api/skills", skillRoutes);
 app.use("/api/profile", skillRoutes);
 app.use("/api/money", moneyRoutes);
 app.use("/api/cards", cardsRoutes);
 app.use("/api/village", villageRoutes);
 app.use("/api/chat", chatRoutes);
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 
 const ALL_ACHIEVEMENTS = [
   { name: "First Game 1️⃣", description: "Dein erstes Spiel!" },
@@ -53,11 +53,11 @@ const ALL_ACHIEVEMENTS = [
     description: "Du hast 20 mal richtig geraten ohne ein Leben zu verlieren",
   },
   { name: "Champion 🏆", description: "Sei auf dem Leaderboard" },
-  { name: "Gründer 🔰", description: "Verbessere dein Dorf"},
+  { name: "Gründer 🔰", description: "Verbessere dein Dorf" },
   { name: "Bürgermeister 🏠", description: "Verbessere dein Dorf auf Level 5" },
-  { name: "Kanzler 🗳️", description: "Verbessere dein Dorf auf Level 10"},
-  { name: "Präsident 🦅", description: "Verbessere dein Dorf auf Level 20"},
-  { name: "Diktator 👑", description: "Verbessere dein Dorf auf Level 50"},
+  { name: "Kanzler 🗳️", description: "Verbessere dein Dorf auf Level 10" },
+  { name: "Präsident 🦅", description: "Verbessere dein Dorf auf Level 20" },
+  { name: "Diktator 👑", description: "Verbessere dein Dorf auf Level 50" },
   { name: "Las Vegas 🎰", description: "Versuche dein Glück" },
   { name: "Lone Wolf 🐺", description: "Gewinne beim Glücksspiel" },
   { name: "Joker 🃏", description: "Ziehe die seltenste Karte im Spiel" },
@@ -144,12 +144,11 @@ app.get("/api/users", async (req, res) => {
 });
 
 // Benutzer + alle abhängigen Daten löschen (mit ON DELETE CASCADE)
-app.delete("/api/users/:id", async (req, res) => {
+// DELETE /api/users/:id nur für authentifizierte Admins erlauben
+app.delete("/api/users/:id", requireAuth, requireAdmin, async (req, res) => {
   const userId = req.params.id;
 
   try {
-    // Einfach nur den Benutzer löschen,
-    // alle abhängigen Einträge werden automatisch gelöscht
     await db.execute({
       sql: "DELETE FROM users WHERE id = ?",
       args: [userId],
@@ -173,7 +172,7 @@ app.get("/api/scores/all", async (req, res) => {
 });
 
 // Score löschen
-app.delete("/api/scores/:id", async (req, res) => {
+app.delete("/api/scores/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
     await db.execute({
       sql: "DELETE FROM scores WHERE id = ?",
@@ -388,13 +387,15 @@ app.put(
 );
 
 // 🔝 Alle Spieler nach Level (absteigend) inkl. Profilbild — serverseitig paginiert
-app.get('/api/users/levels', async (req, res) => {
+app.get("/api/users/levels", async (req, res) => {
   try {
     // Query-Parameter parsen & begrenzen
-    const pageParam  = parseInt(String(req.query.page ?? '1'), 10);
-    const limitParam = parseInt(String(req.query.limit ?? '10'), 10);
-    let page  = Number.isFinite(pageParam)  ? Math.max(1, pageParam)  : 1;
-    const limit = Number.isFinite(limitParam) ? Math.min(100, Math.max(1, limitParam)) : 10;
+    const pageParam = parseInt(String(req.query.page ?? "1"), 10);
+    const limitParam = parseInt(String(req.query.limit ?? "10"), 10);
+    let page = Number.isFinite(pageParam) ? Math.max(1, pageParam) : 1;
+    const limit = Number.isFinite(limitParam)
+      ? Math.min(100, Math.max(1, limitParam))
+      : 10;
 
     // Gesamtanzahl
     const totalRows = await db.execute({
@@ -404,7 +405,7 @@ app.get('/api/users/levels', async (req, res) => {
     const total = Number(totalRows.rows[0]?.cnt ?? 0);
 
     if (total === 0) {
-      res.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60');
+      res.set("Cache-Control", "public, max-age=15, stale-while-revalidate=60");
       return res.json({
         users: [],
         page: 1,
@@ -445,7 +446,7 @@ app.get('/api/users/levels', async (req, res) => {
     // Mapping + Berechnung wie an deiner anderen Stelle:
     const users = rows.rows.map((u) => {
       const lvl = Number(u.level) || 1;
-      const xp  = Number(u.xp) || 0;
+      const xp = Number(u.xp) || 0;
 
       // XP-Schwelle (gleich wie im Screenshot): 100 * 1.05^(level-1)
       const thr = Math.round(100 * Math.pow(1.05, lvl - 1));
@@ -453,10 +454,7 @@ app.get('/api/users/levels', async (req, res) => {
       // Prozent 0..100, division by zero sicher
       const xpPercent = Math.min(
         100,
-        Math.max(
-          0,
-          Math.round(((thr ? xp / thr : 0) * 100))
-        )
+        Math.max(0, Math.round((thr ? xp / thr : 0) * 100))
       );
 
       return {
@@ -471,7 +469,7 @@ app.get('/api/users/levels', async (req, res) => {
     });
 
     // kurze Cachebarkeit erlauben
-    res.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60');
+    res.set("Cache-Control", "public, max-age=15, stale-while-revalidate=60");
 
     return res.json({
       users,
@@ -483,8 +481,8 @@ app.get('/api/users/levels', async (req, res) => {
       hasNext: page < totalPages,
     });
   } catch (err) {
-    console.error('❌ /api/users/levels Fehler:', err);
-    return res.status(500).json({ error: 'Fehler beim Laden der Level-Liste' });
+    console.error("❌ /api/users/levels Fehler:", err);
+    return res.status(500).json({ error: "Fehler beim Laden der Level-Liste" });
   }
 });
 

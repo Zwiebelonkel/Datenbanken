@@ -4,16 +4,24 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { FooterComponent } from './components/footer/footer.component';
 import { ConsentDialogComponent } from './components/consent-dialog/consent-dialog.component';
+import { OfflineComponent } from './components/offline/offline.component';
 import { FirebaseService } from './services/firebase.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, FooterComponent, ConsentDialogComponent, CommonModule],
+  imports: [
+    RouterModule,
+    FooterComponent,
+    OfflineComponent,
+    ConsentDialogComponent,
+    CommonModule,
+  ],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
   isBootstrapping = true;
+  isOffline = true;
 
   constructor(
     private auth: AuthService,

@@ -1,15 +1,20 @@
 <div class="app-container">
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
+  <div *ngIf="!isOffline" class="main">
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
 
-  <!-- Footer bleibt immer am unteren Rand -->
-  <app-footer
-    [showFooter]="true"
-    [fixed]="true"
-    appName="Outside Between"
-  ></app-footer>
+    <!-- Footer bleibt immer am unteren Rand -->
+    <app-footer
+      [showFooter]="true"
+      [fixed]="true"
+      appName="Outside Between"
+    ></app-footer>
+  </div>
 
+  <div *ngIf="isOffline" class="offline">
+    <app-offline></app-offline>
+  </div>
   <!-- Cookie Dialog immer über allem -->
   <app-consent-dialog></app-consent-dialog>
 </div>

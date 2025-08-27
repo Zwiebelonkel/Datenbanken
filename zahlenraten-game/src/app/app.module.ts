@@ -37,6 +37,7 @@ import { ImpressumComponent } from './components/impressum/impressum.component';
 import { ConsentService } from './services/consent.service';
 import { ConsentDialogComponent } from './components/consent-dialog/consent-dialog.component';
 import { AuthInterceptor } from './auth.interceptor';
+import { OfflineComponent } from './components/offline/offline.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { AuthInterceptor } from './auth.interceptor';
     // StreakIndicatorComponent,
     DatenschutzComponent,
     ImpressumComponent,
+    OfflineComponent,
     FooterComponent,
     ConsentDialogComponent,
     ConsentService,

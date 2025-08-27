@@ -7,7 +7,6 @@
   <div class="money-display" aria-live="polite">
     💼 Dein Geld: {{ money | number : "1.2-2" }} €
   </div>
-
   <div *ngIf="!isLoading" class="packs" role="list">
     <div
       class="pack"
@@ -23,7 +22,12 @@
       </span>
 
       <div class="image-wrapper">
-        <img [src]="pack.image" [alt]="pack.name" />
+        <app-model-viewer
+          [src]="pack.model"
+          [poster]="pack.image"
+        ></app-model-viewer>
+
+        <!-- <div class="img"></div> -->
       </div>
 
       <h3 class="title">{{ pack.name }}</h3>

@@ -1,0 +1,13 @@
+<!-- In deiner Angular-Komponente (z. B. view.component.html) -->
+<model-viewer
+  *ngIf="showModel"
+  src=""
+  poster=""
+  camera-controls
+  auto-rotate
+  alt="3D Modell"
+  style="width: 100%; height: 500px"
+>
+</model-viewer>
+
+<button *ngIf="!showModel" (click)="showModel = true">Modell laden</button>

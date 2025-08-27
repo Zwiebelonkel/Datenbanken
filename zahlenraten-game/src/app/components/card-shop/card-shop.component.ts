@@ -8,6 +8,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { SoundsService } from '../../services/sound.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
+import { ModelViewerComponent } from '../view/view.component';
 
 type CardOutcome =
   | { type: 'multiplier'; value: string; chance: number }
@@ -17,7 +18,13 @@ type CardOutcome =
 @Component({
   selector: 'app-card-shop',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, SidebarComponent, TopbarComponent],
+  imports: [
+    CommonModule,
+    LoaderComponent,
+    SidebarComponent,
+    TopbarComponent,
+    ModelViewerComponent,
+  ],
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss'],
 })
@@ -28,9 +35,24 @@ export class CardShopComponent implements OnInit {
   message = '';
 
   cardPacks = [
-    { name: 'Basic', price: 40, image: 'assets/packs/basic.png' },
-    { name: 'Premium', price: 120, image: 'assets/packs/premium.png' },
-    { name: 'Ultra', price: 360, image: 'assets/packs/ultra.png' },
+    {
+      name: 'Basic',
+      price: 40,
+      image: 'assets/packs/basic.png',
+      model: 'assets/models/pack.glb',
+    },
+    {
+      name: 'Premium',
+      price: 120,
+      image: 'assets/packs/premium.png',
+      model: 'assets/models/pack2.glb',
+    },
+    {
+      name: 'Ultra',
+      price: 360,
+      image: 'assets/packs/ultra.png',
+      model: 'assets/models/pack3.glb',
+    },
     // Neues Pack speziell für Herz‑Karten
     // { name: 'Hearts', price: 200, image: 'assets/packs/hearts.png' }
   ];

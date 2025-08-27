@@ -1,27 +1,61 @@
-CREATE DATABASE IF NOT EXISTS highscores_db;
-USE highscores_db;
+PRAGMA foreign_keys = ON;
 
-CREATE TABLE IF NOT EXISTS users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  role VARCHAR(50) DEFAULT 'player'
+-- Tabelle: users
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  role TEXT DEFAULT 'user',
+  total_score INTEGER DEFAULT 0,
+  money INTEGER DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS scores (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) NOT NULL,
-  score INT NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
-);
-
-CREATE TABLE achievements (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  description TEXT,
-  unlocked BOOLEAN DEFAULT TRUE,
+-- Tabelle: village
+CREATE TABLE village (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  level INTEGER DEFAULT 1,
+  base_income REAL DEFAULT 1,
+  last_collected TEXT DEFAULT (CURRENT_TIMESTAMP),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Tabelle: villagers
+CREATE TABLE villagers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  village_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  level INTEGER DEFAULT 1,
+  income REAL DEFAULT 0.5,
+  FOREIGN KEY (village_id) REFERENCES village(id) ON DELETE CASCADE
+);
+
+-- Tabelle: achievements
+CREATE TABLE achievements (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  unlocked INTEGER DEFAULT 1,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Tabelle: cards
+CREATE TABLE cards (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  multiplier REAL NOT NULL,
+  amount INTEGER NOT NULL DEFAULT 0,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE (user_id, multiplier)
+);
+
+-- Tabelle: scores
+CREATE TABLE scores (
+  id INTEGER PRIMARY KEY,
+  username TEXT NOT NULL,
+  score INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  consecutive_wins INTEGER DEFAULT 0,
+  money_per_round REAL DEFAULT 0
+);

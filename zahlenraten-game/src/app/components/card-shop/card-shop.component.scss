@@ -21,19 +21,19 @@
 }
 
 /* ------- Micro-Animation ------- */
-@keyframes shine {
-  0% {
-    transform: translateX(-100%) rotateZ(20deg);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.55;
-  }
-  100% {
-    transform: translateX(200%) rotateZ(20deg);
-    opacity: 0;
-  }
-}
+// @keyframes shine {
+//   0% {
+//     transform: translateX(-100%) rotateZ(20deg);
+//     opacity: 0;
+//   }
+//   50% {
+//     opacity: 0.55;
+//   }
+//   100% {
+//     transform: translateX(200%) rotateZ(20deg);
+//     opacity: 0;
+//   }
+// }
 
 /* ------- Layout ------- */
 .card-shop {
@@ -113,9 +113,6 @@
       rgba(255, 255, 255, 0.45),
       transparent
     );
-    transform: rotateZ(20deg);
-    animation: shine 3.8s ease-in-out infinite;
-    pointer-events: none;
   }
 
   .ribbon {

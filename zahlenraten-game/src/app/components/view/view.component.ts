@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 
     <model-viewer
       *ngIf="showModel"
+      shadow-intensity="1"
       camera-orbit="-30deg 100deg 8m"
       [src]="src"
       [poster]="poster"

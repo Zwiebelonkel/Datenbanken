@@ -39,19 +39,19 @@ export class CardShopComponent implements OnInit {
       name: 'Basic',
       price: 40,
       image: 'assets/packs/basic.png',
-      model: 'assets/models/pack.glb',
+      model: 'assets/models/goodPack1.glb',
     },
     {
       name: 'Premium',
       price: 120,
       image: 'assets/packs/premium.png',
-      model: 'assets/models/pack2.glb',
+      model: 'assets/models/goodPack2.glb',
     },
     {
       name: 'Ultra',
       price: 360,
       image: 'assets/packs/ultra.png',
-      model: 'assets/models/pack3.glb',
+      model: 'assets/models/goodPack3.glb',
     },
     // Neues Pack speziell für Herz‑Karten
     // { name: 'Hearts', price: 200, image: 'assets/packs/hearts.png' }

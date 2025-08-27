@@ -16,6 +16,7 @@ import { ImpressumComponent } from './components/impressum/impressum.component';
 import { DatenschutzComponent } from './components/datenschutz/datenschutz.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { PackOpeningPageComponent } from './components/pack-opening.page/pack-opening.page';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -30,11 +31,19 @@ export const routes: Routes = [
   { path: 'clicker', component: ClickerComponent },
   { path: 'card-shop', component: CardShopComponent },
   { path: 'skill-shop', component: SkillShopComponent },
-  { path: 'pack-opening', component: PackOpeningComponent },
+  // { path: 'pack-opening', component: PackOpeningComponent },
   { path: 'village', component: VillageComponent },
   { path: 'slot-maschine', component: SlotMaschineComponent },
   { path: 'impressum', component: ImpressumComponent },
   { path: 'datenschutz', component: DatenschutzComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
+  // app.routes.ts
+  {
+    path: 'pack-opening',
+    loadComponent: () =>
+      import('./components/pack-opening.page/pack-opening.page').then(
+        (m) => m.PackOpeningPageComponent
+      ),
+  },
 ];

@@ -53,8 +53,6 @@ export class CardShopComponent implements OnInit {
       image: 'assets/packs/ultra.png',
       model: 'assets/models/goodPack3.glb',
     },
-    // Neues Pack speziell für Herz‑Karten
-    // { name: 'Hearts', price: 200, image: 'assets/packs/hearts.png' }
   ];
 
   chances: Record<string, CardOutcome[]> = {

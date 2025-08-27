@@ -319,6 +319,8 @@ export class GameComponent implements OnInit {
   endGame() {
     // Einmal-Guard (unabhängig von gameOver)
     if (this.endHandled) return;
+    this.setGlowIntensity(0);
+
     this.endHandled = true;
 
     const username = this.authService.getUsername();

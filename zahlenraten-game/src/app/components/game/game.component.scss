@@ -372,7 +372,9 @@ body {
 
 .multiplier-display {
   font-size: 1.2rem;
-  color: #ff5722;
+  color: #ffa286;
+  text-shadow: 0 -1px 4px #ff3d3d, 0 -2px 10px #ff0, 0 -10px 20px #ff8000,
+    0 -18px 40px #f00;
   font-weight: bold;
   margin-bottom: 1rem;
   animation: pulse 1s infinite alternate;

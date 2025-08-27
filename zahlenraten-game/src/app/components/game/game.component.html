@@ -17,7 +17,7 @@
 </div>
 
 <!-- Spiel läuft -->
-<div class="card game-container" *ngIf="!gameOver">
+<div class="card glow game-container" #gameContainer *ngIf="!gameOver">
   <app-streak-indicator
     [consecutiveWins]="consecutiveWins"
     (streakCompleted)="handleStreakCompleted()"

@@ -21,7 +21,7 @@ import { FirebaseService } from './services/firebase.service';
 })
 export class AppComponent implements OnInit {
   isBootstrapping = true;
-  isOffline = true;
+  isOffline = false;
 
   constructor(
     private auth: AuthService,

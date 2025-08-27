@@ -20,6 +20,7 @@ import { RainComponent } from '../rain/rain.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { PlayerBarComponent } from '../player-bar/player-bar.component';
 import { StreakIndicatorComponent } from '../streak-indicator/streak-indicator.component';
+import { ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-game',
@@ -41,6 +42,7 @@ import { StreakIndicatorComponent } from '../streak-indicator/streak-indicator.c
   encapsulation: ViewEncapsulation.None,
 })
 export class GameComponent implements OnInit {
+  @ViewChild('gameContainer') gameContainerRef!: ElementRef;
   @ViewChild('rain') rainComponent!: RainComponent;
   num1 = 0;
   num2 = 0;
@@ -102,6 +104,11 @@ export class GameComponent implements OnInit {
   currentMultiplier: number = 1.0;
   cardMultiplier: any = 1.0;
   showTest = false;
+
+  ngAfterViewInit() {
+    // Direkt beim Start die Anfangsintensität setzen
+    this.setGlowIntensity(0);
+  }
 
   shouldPlaceBelow(value: number): boolean {
     const threshold = 5;
@@ -219,6 +226,7 @@ export class GameComponent implements OnInit {
 
     if (answer === correct) {
       this.consecutiveWins++;
+      this.setGlowIntensity(this.consecutiveWins);
       if (this.consecutiveWins > this.highestStreak) {
         this.highestStreak = this.consecutiveWins;
       }
@@ -262,6 +270,7 @@ export class GameComponent implements OnInit {
     } else if (this.lives > 1) {
       this.lives--;
       this.consecutiveWins = 0;
+      this.setGlowIntensity(0);
       this.currentMultiplier = 1.0;
       this.flashBackground(resultElement, 'error');
       this.soundService.playSound('damage.aac', 0.1);
@@ -795,5 +804,28 @@ export class GameComponent implements OnInit {
     if (livesLeft === 2) return '0.9s';
     if (livesLeft === 1) return '0.6s'; // Panik
     return '1.5s';
+  }
+
+  setGlowIntensity(consecutiveWins: number) {
+    const maxWins = 15;
+    const intensity = Math.min(consecutiveWins / maxWins, 1).toFixed(2);
+    // const intensity = '0.5';
+    const intensityNum = parseFloat(intensity);
+
+    if (intensityNum > 0) {
+      this.gameContainerRef.nativeElement.classList.add('glow');
+      this.gameContainerRef.nativeElement.classList.remove('no-glow');
+    } else {
+      this.gameContainerRef.nativeElement.classList.remove('glow');
+      this.gameContainerRef.nativeElement.classList.add('no-glow');
+    }
+
+    if (this.gameContainerRef?.nativeElement) {
+      this.gameContainerRef.nativeElement.style.setProperty(
+        '--intensity',
+        intensity
+      );
+      console.log('Intensität: ' + intensity);
+    }
   }
 }

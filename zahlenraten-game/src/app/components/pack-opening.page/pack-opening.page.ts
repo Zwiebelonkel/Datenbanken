@@ -63,6 +63,9 @@ type CardOutcome =
       :host {
         display: block;
       }
+      li {
+        background: none;
+      }
       .wrap {
         position: relative;
         width: 100%;
@@ -167,6 +170,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   private camera!: THREE.PerspectiveCamera;
   private clock = new THREE.Clock();
   private rafId = 0;
+  private elapsedTime = 0;
 
   private mixer: THREE.AnimationMixer | null = null;
   private glbRoot: THREE.Object3D | null = null;
@@ -272,9 +276,9 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   private fileForPack(kind: PackKind): string {
     switch (kind) {
       case 'basic':
-        return 'assets/models/goodPack1.glb';
+        return 'assets/models/basic.glb';
       case 'premium':
-        return 'assets/models/goodPack2.glb';
+        return 'assets/models/premium.glb';
       case 'ultra':
         return 'assets/models/ultra.glb';
     }
@@ -403,7 +407,25 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   private animate = () => {
     this.rafId = requestAnimationFrame(this.animate);
     const dt = this.clock.getDelta();
+    this.elapsedTime += dt;
+
     this.mixer?.update(dt);
+
+    // Kamera im Orbit um den Mittelpunkt (0,1,0) mit Radius und konstanter Höhe
+    const radius = 10; // Abstand zur Mitte, passe an dein Modell an
+    const height = 2; // Kamera-Höhe
+    const speed = 0.6; // Drehgeschwindigkeit (Radians/Sekunde)
+    const angle = this.elapsedTime * speed;
+
+    this.camera.position.set(
+      Math.cos(angle) * radius,
+      height,
+      Math.sin(angle) * radius
+    );
+
+    // Kamera schaut immer auf den Mittelpunkt (z.B. Höhe 1)
+    this.camera.lookAt(0, 1, 0);
+
     this.renderer.render(this.scene, this.camera);
   };
 

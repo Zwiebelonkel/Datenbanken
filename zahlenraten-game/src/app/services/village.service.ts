@@ -15,6 +15,7 @@ export class VillageService {
   collectIncome(): Observable<{
     earned: number;
     minutesPassed: number;
+    totalIncome: number;
     villageLevel: number;
     villagers: {
       id: number;
@@ -29,6 +30,7 @@ export class VillageService {
     return this.http.get<{
       earned: number;
       minutesPassed: number;
+      totalIncome: number;
       villageLevel: number;
       villagers: {
         id: number;

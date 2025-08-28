@@ -1,6 +1,6 @@
 /* --- Admin Layout: zentriert & responsive --- */
 .admin-layout {
-  display: grid;
+  // display: grid;
   grid-template-columns: minmax(0, 1fr) 340px; /* Hauptspalte kann schrumpfen */
   gap: 1rem;
 

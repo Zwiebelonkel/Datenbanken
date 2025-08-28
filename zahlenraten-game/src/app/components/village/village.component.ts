@@ -129,10 +129,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.villageService.collectIncome().subscribe({
       next: (res) => {
         const OFFLINE_EARNINGS_FACTOR = 0.05;
-        res.earned = Math.floor((res.earned || 0) * OFFLINE_EARNINGS_FACTOR);
+        // res.earned = Math.floor((res.earned || 0) * OFFLINE_EARNINGS_FACTOR);
         this.earned = res.earned;
         this.minutesPassed = res.minutesPassed;
-        this.money += res.earned;
+        this.money += res.totalIncome;
 
         this.villageLevel = res.villageLevel || 1;
         this.incomePerMinute = res.villagers.reduce(

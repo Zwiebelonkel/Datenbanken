@@ -151,6 +151,25 @@ app.delete("/api/users/:id", requireAuth, requireAdmin, async (req, res) => {
   const userId = req.params.id;
 
   try {
+    // 1. Hole den Username des Users
+    const result = await db.execute({
+      sql: "SELECT username FROM users WHERE id = ?",
+      args: [userId],
+    });
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "User nicht gefunden" });
+    }
+
+    const username = result.rows[0].username;
+
+    // 2. Lösche alle Scores mit diesem Username
+    await db.execute({
+      sql: "DELETE FROM scores WHERE username = ?",
+      args: [username],
+    });
+
+    // 3. Lösche den User selbst
     await db.execute({
       sql: "DELETE FROM users WHERE id = ?",
       args: [userId],

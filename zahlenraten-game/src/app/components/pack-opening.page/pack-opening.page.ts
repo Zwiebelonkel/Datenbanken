@@ -252,7 +252,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
 
     this.scene.add(amb, hemi, key, rim);
 
-    this.scene.background = this.gradientTexture('#ffffffff', '#000000ff');
+    this.scene.background = this.gradientTexture('#333333ff', '#000000ff');
 
     this.loadPackModel(this.pack).then(() => this.animate());
     const pmrem = new THREE.PMREMGenerator(this.renderer);
@@ -412,8 +412,8 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     this.mixer?.update(dt);
 
     // Kamera im Orbit um den Mittelpunkt (0,1,0) mit Radius und konstanter Höhe
-    const radius = 10; // Abstand zur Mitte, passe an dein Modell an
-    const height = 2; // Kamera-Höhe
+    const radius = 9; // Abstand zur Mitte, passe an dein Modell an
+    const height = 0; // Kamera-Höhe
     const speed = 0.6; // Drehgeschwindigkeit (Radians/Sekunde)
     const angle = this.elapsedTime * speed;
 
@@ -423,8 +423,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       Math.sin(angle) * radius
     );
 
-    // Kamera schaut immer auf den Mittelpunkt (z.B. Höhe 1)
-    this.camera.lookAt(0, 1, 0);
+    this.camera.lookAt(0, 2, 0);
 
     this.renderer.render(this.scene, this.camera);
   };
@@ -438,18 +437,15 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     box.getSize(size);
     box.getCenter(center);
 
-    // Objekt zentrieren und auf Boden stellen
+    // Objekt zentrieren
     root.position.x -= center.x;
     root.position.z -= center.z;
     root.position.y -= box.min.y;
 
-    // FRONT exakt gerade (Yaw in Radians!)
-    // Falls dein GLB um 90° verdreht ist, teste 0 / ±90° / 180°
-    const FRONT_YAW_DEG = 90; // 0 = gerade; bei Bedarf auf 90/-90/180 ändern
+    const FRONT_YAW_DEG = 90;
     root.rotation.set(0, THREE.MathUtils.degToRad(FRONT_YAW_DEG), 0);
 
-    // Kamera sinnvoll platzieren: "fit to object" mit etwas Padding
-    const padding = 2.5; // mehr = weiter weg
+    const padding = 2.5;
     const fov = THREE.MathUtils.degToRad(this.camera.fov);
     const aspect =
       this.canvasRef.nativeElement.clientWidth /

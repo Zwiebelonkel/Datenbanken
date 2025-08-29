@@ -40,16 +40,19 @@ type CardOutcome =
         <div class="card">
           <div class="title">🎉 Du hast gezogen:</div>
 
-          <ul class="pulls">
-            <li
-              *ngFor="let r of results"
-              [class.mult]="r.type === 'multiplier'"
-              [class.money]="r.type === 'money'"
-              [class.xp]="r.type === 'xp'"
-            >
-              <span class="pill">{{ renderOutcome(r) }}</span>
-            </li>
-          </ul>
+          <div class="pulls cards">
+            <div class="flip-inner" *ngFor="let r of results">
+              <div class="flip-front" [ngClass]="pack.toLowerCase()">
+                <img src="assets/logo.png" class="logo center" />
+              </div>
+              <div class="flip-back" [ngClass]="pack.toLowerCase()">
+                <img src="assets/logo.png" class="emoji top-left" />
+                <img src="assets/logo.png" class="emoji bottom-right" />
+                <p class="multiplier-text">{{ renderOutcome(r) }}</p>
+                <div class="sparkles"></div>
+              </div>
+            </div>
+          </div>
 
           <div class="actions">
             <button class="btn" (click)="backToShop()">Zurück zum Shop</button>
@@ -122,19 +125,6 @@ type CardOutcome =
         grid-template-columns: repeat(5, 1fr);
         gap: 0.5rem;
       }
-      .pulls li {
-        display: flex;
-        justify-content: center;
-      }
-      .pill {
-        display: inline-block;
-        padding: 0.5rem 0.7rem;
-        font-weight: 900;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        white-space: nowrap;
-      }
       @media (max-width: 640px) {
         .pulls {
           grid-template-columns: repeat(2, 1fr);
@@ -144,6 +134,137 @@ type CardOutcome =
         .wrap {
           height: 460px;
         }
+      }
+      .flip-front,
+      .flip-back {
+        width: 100px;
+        height: 140px;
+        position: relative;
+        border-radius: 12px;
+        backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        padding: 0.5rem;
+      }
+
+      .multiplier-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        transform: rotate(-10deg);
+      }
+
+      .pulls.cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.5rem;
+        justify-items: center;
+      }
+
+      .flip-inner {
+        width: 100px;
+        height: 140px;
+        perspective: 1000px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+      }
+
+      .flip-inner:hover {
+        transform: rotateY(180deg);
+      }
+
+      .flip-front,
+      .flip-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+      }
+
+      .flip-back {
+        transform: rotateY(180deg);
+      }
+      .emoji {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        opacity: 0.9;
+        pointer-events: none;
+      }
+
+      .top-left {
+        top: 12px;
+        left: 12px;
+      }
+
+      .bottom-right {
+        bottom: 12px;
+        right: 12px;
+      }
+      .flip-front {
+        transform: rotateY(0deg);
+        background: linear-gradient(145deg, #ffd700, #ffeb3b);
+      }
+
+      .flip-back {
+        transform: rotateY(180deg);
+        background: linear-gradient(145deg, #ffd700, #ffeb3b);
+        position: relative;
+      }
+
+      .flip-front.basic {
+        background: linear-gradient(145deg, #ffd700, #ffeb3b);
+        box-shadow: inset 0 0 0 6px #b8860b;
+      }
+
+      .flip-front.premium {
+        background: linear-gradient(145deg, #7b1fa2, #ce93d8);
+        box-shadow: inset 0 0 0 6px #6a1b9a;
+      }
+
+      .flip-front.ultra {
+        background: linear-gradient(145deg, #00acc1, #80deea);
+        box-shadow: inset 0 0 0 6px #007c91;
+      }
+
+      .flip-back.basic {
+        background: linear-gradient(145deg, #ffd700, #ffeb3b);
+        box-shadow: inset 0 0 0 6px #b8860b;
+      }
+
+      .flip-back.premium {
+        background: linear-gradient(145deg, #7b1fa2, #ce93d8);
+        box-shadow: inset 0 0 0 6px #6a1b9a;
+      }
+
+      .flip-back.ultra {
+        background: linear-gradient(145deg, #00acc1, #80deea);
+        box-shadow: inset 0 0 0 6px #007c91;
+      }
+      .logo.center {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        opacity: 0.95;
       }
     `,
   ],

@@ -176,6 +176,8 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   private glbRoot: THREE.Object3D | null = null;
   private actions = new Map<string, THREE.AnimationAction>();
   private openAction?: THREE.AnimationAction;
+  private isInOpenView = false;
+  private camLerpTime = 0;
 
   private cardActions: THREE.AnimationAction[] = [];
   private playingActions = new Set<THREE.AnimationAction>(); // alles was gerade läuft
@@ -378,6 +380,9 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
             toPlay.push(a);
           }
         }
+
+        this.isInOpenView = true;
+        this.camLerpTime = 0;
       }
 
       for (const a of toPlay) {
@@ -411,19 +416,30 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
 
     this.mixer?.update(dt);
 
-    // Kamera im Orbit um den Mittelpunkt (0,1,0) mit Radius und konstanter Höhe
-    const radius = 9; // Abstand zur Mitte, passe an dein Modell an
-    const height = 0; // Kamera-Höhe
-    const speed = 0.6; // Drehgeschwindigkeit (Radians/Sekunde)
-    const angle = this.elapsedTime * speed;
+    if (!this.isInOpenView) {
+      // Standard-Idle Orbit
+      const radius = 9;
+      const height = 0;
+      const speed = 0.6;
+      const angle = this.elapsedTime * speed;
 
-    this.camera.position.set(
-      Math.cos(angle) * radius,
-      height,
-      Math.sin(angle) * radius
-    );
+      this.camera.position.set(
+        Math.cos(angle) * radius,
+        height,
+        Math.sin(angle) * radius
+      );
+      this.camera.lookAt(0, 2, 0);
+    } else {
+      // Kameraflug nach oben
+      this.camLerpTime = Math.min(this.camLerpTime + dt / 1.2, 1); // 1.2s Übergang
+      const start = new THREE.Vector3(10, 0, 0); // Start: Orbit (z. B. deine Idle-Pos)
+      const end = new THREE.Vector3(0, 12, 10); // Ziel: Hoch über dem Modell
+      const pos = new THREE.Vector3().lerpVectors(start, end, this.camLerpTime);
+      this.camera.position.copy(pos);
 
-    this.camera.lookAt(0, 2, 0);
+      // Immer nach unten auf die Karten schauen
+      this.camera.lookAt(0, 2, 0);
+    }
 
     this.renderer.render(this.scene, this.camera);
   };

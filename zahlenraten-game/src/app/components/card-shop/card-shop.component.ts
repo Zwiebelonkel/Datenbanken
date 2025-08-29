@@ -10,6 +10,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { ModelViewerComponent } from '../view/view.component';
 
+
 type CardOutcome =
   | { type: 'multiplier'; value: string; chance: number }
   | { type: 'money'; value: number; chance: number }

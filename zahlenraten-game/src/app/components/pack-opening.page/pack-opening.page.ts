@@ -41,7 +41,11 @@ type CardOutcome =
           <div class="title">🎉 Du hast gezogen:</div>
 
           <div class="pulls cards">
-            <div class="flip-inner" *ngFor="let r of results">
+            <div
+              class="flip-inner"
+              *ngFor="let r of results; let i = index"
+              [class.flipped]="flippedCards[i]"
+            >
               <div class="flip-front" [ngClass]="pack.toLowerCase()">
                 <img src="assets/logo.png" class="logo center" />
               </div>
@@ -82,7 +86,8 @@ type CardOutcome =
         display: block;
         background: transparent;
       }
-      .open-btn {
+      .open-btn,
+      .btn {
         position: absolute;
         left: 50%;
         bottom: 18px;
@@ -178,9 +183,9 @@ type CardOutcome =
         transition: transform 0.6s;
       }
 
-      .flip-inner:hover {
-        transform: rotateY(180deg);
-      }
+      // .flip-inner:hover {
+      //   transform: rotateY(180deg);
+      // }
 
       .flip-front,
       .flip-back {
@@ -206,6 +211,28 @@ type CardOutcome =
         height: 25px;
         opacity: 0.9;
         pointer-events: none;
+      }
+      .flip-inner {
+        perspective: 1000px;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+      }
+
+      .flip-inner.flipped {
+        transform: rotateY(180deg);
+      }
+
+      .flip-front,
+      .flip-back {
+        backface-visibility: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+      }
+
+      .flip-back {
+        transform: rotateY(180deg);
       }
 
       .top-left {
@@ -296,6 +323,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   isOpening = false;
   overlayShown = false; // gezeigt nach Clip-Ende (damit Button weg ist)
   revealed = false; // Overlay sichtbar
+  flippedCards: boolean[] = [];
 
   // Ergebnisse (5 Karten)
   results: CardOutcome[] = [];
@@ -463,7 +491,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
 
       // Wenn irgendeine laufende Action fertig ist, aus dem Set entfernen;
       // sobald keine mehr läuft -> Overlay einblenden
-      this.mixer.addEventListener('finished', (ev: any) => {
+      this.mixer.addEventListener('finished', async (ev: any) => {
         const a = ev?.action as THREE.AnimationAction | undefined;
         if (!a || !this.playingActions.has(a)) return;
         this.playingActions.delete(a);
@@ -471,11 +499,21 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
         if (this.playingActions.size === 0 && !this.overlayShown) {
           this.isOpening = false;
           this.overlayShown = true;
-          setTimeout(() => {
-            this.revealed = true;
-            this.sounds.playSound('message.aac', 0.8);
-            // -> hier z.B. Server-Gutschrift
-          }, 250);
+          this.revealed = true;
+
+          // Warte 250ms (wie vorher)
+          await new Promise((resolve) => setTimeout(resolve, 10));
+
+          // Karten nacheinander umdrehen
+          for (let i = 0; i < this.flippedCards.length; i++) {
+            this.flippedCards[i] = true;
+            console.log('flip', i);
+            await new Promise((resolve) => setTimeout(resolve, 200)); // 500ms Pause zwischen Karten
+          }
+
+          this.sounds.playSound('message.aac', 0.8);
+
+          // Hier kannst du dann die Server-Gutschrift starten
         }
       });
     }
@@ -488,6 +526,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     // 5 Ergebnisse sofort festziehen (werden erst nach den Clips angezeigt)
     if (this.results.length === 0) {
       this.results = this.drawMany(this.pack, 5);
+      this.flippedCards = Array(this.results.length).fill(false);
     }
 
     if (this.mixer && (this.openAction || this.cardActions.length)) {
@@ -702,6 +741,13 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     if (o.type === 'money') return `💰 ${o.value} €`;
     if (o.type === 'xp') return `⭐ +${o.value} XP`;
     return '—';
+  }
+
+  async flipCardsSequentially() {
+    for (let i = 0; i < this.flippedCards.length; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms Pause
+      this.flippedCards[i] = true;
+    }
   }
 
   backToShop() {

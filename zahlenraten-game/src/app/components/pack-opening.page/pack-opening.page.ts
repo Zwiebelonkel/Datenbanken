@@ -137,9 +137,9 @@ type CardOutcome =
       }
       .flip-front,
       .flip-back {
+        box-sizing: border-box;
         width: 100px;
         height: 140px;
-        position: relative;
         border-radius: 12px;
         backface-visibility: hidden;
         display: flex;
@@ -155,7 +155,7 @@ type CardOutcome =
       }
 
       .multiplier-text {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: bold;
         color: white;
         text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -198,11 +198,12 @@ type CardOutcome =
 
       .flip-back {
         transform: rotateY(180deg);
+        width: 100px;
       }
       .emoji {
         position: absolute;
-        width: 42px;
-        height: 42px;
+        width: 25px;
+        height: 25px;
         opacity: 0.9;
         pointer-events: none;
       }
@@ -222,37 +223,51 @@ type CardOutcome =
       }
 
       .flip-back {
+        width: 100px;
+
         transform: rotateY(180deg);
         background: linear-gradient(145deg, #ffd700, #ffeb3b);
         position: relative;
       }
 
       .flip-front.basic {
+        width: 100px;
+
         background: linear-gradient(145deg, #ffd700, #ffeb3b);
         box-shadow: inset 0 0 0 6px #b8860b;
       }
 
       .flip-front.premium {
+        width: 100px;
+
         background: linear-gradient(145deg, #7b1fa2, #ce93d8);
         box-shadow: inset 0 0 0 6px #6a1b9a;
       }
 
       .flip-front.ultra {
+        width: 100px;
+
         background: linear-gradient(145deg, #00acc1, #80deea);
         box-shadow: inset 0 0 0 6px #007c91;
       }
 
       .flip-back.basic {
+        width: 100px;
+
         background: linear-gradient(145deg, #ffd700, #ffeb3b);
         box-shadow: inset 0 0 0 6px #b8860b;
       }
 
       .flip-back.premium {
+        width: 100px;
+
         background: linear-gradient(145deg, #7b1fa2, #ce93d8);
         box-shadow: inset 0 0 0 6px #6a1b9a;
       }
 
       .flip-back.ultra {
+        width: 100px;
+
         background: linear-gradient(145deg, #00acc1, #80deea);
         box-shadow: inset 0 0 0 6px #007c91;
       }

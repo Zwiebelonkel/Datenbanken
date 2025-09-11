@@ -1,5 +1,4 @@
 name: Deploy to Firebase Hosting on merge
-
 on:
   push:
     branches: [ Angular-SSR-(NurFuerBots) ]
@@ -12,51 +11,31 @@ jobs:
         working-directory: zahlenraten-game
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: zahlenraten-game/package-lock.json
 
-      # 1) Chrome installieren (liefert CHROME_PATH Output)
+      - run: npm ci
+
       - name: Install Chrome
         id: chrome
         uses: browser-actions/setup-chrome@v1
 
-      # 2) ggf. fehlende Systemlibs (meist schon vorhanden, schadet aber nie)
-      - name: Install system deps for headless Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgbm1 libasound2 libnss3 libatk1.0-0 libatk-bridge2.0-0 \
-            libx11-xcb1 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
-            libgtk-3-0 fonts-liberation
+      - run: npx ng build --configuration production
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build (Angular prod)
-        run: npx ng build --configuration production
-
-      # 3) Scully: Timeout erhöhen + Browserpfad übergeben
-      - name: Scan routes (Scully)
-        env:
-          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
+      - env: { CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }} }
         run: npx scully --scanRoutes --project zahlenraten-game --configFile scully.zahlenraten-game.config.ts --serverTimeout=120000 --showGuessError
 
-      - name: Prerender (Scully)
-        env:
-          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
+      - env: { CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }} }
         run: npx scully --project zahlenraten-game --configFile scully.zahlenraten-game.config.ts --serverTimeout=120000
 
-      - name: Debug dist
-        run: |
+      - run: |
           echo "--- static indexes ---"
           find dist/static -maxdepth 3 -name index.html -print
 
-      - name: Deploy to Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OUTSIDE___BETWEEN }}

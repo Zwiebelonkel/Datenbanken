@@ -4,7 +4,7 @@ User-agent: *
 # Erlaube alles
 Allow: /
 
-# Blockiere sensible/veraltete Pfade (falls vorhanden)
+# Blockiere sensible/veraltete Pfad
 Disallow: /admin/
 Disallow: /api/
 Disallow: /private/

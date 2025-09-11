@@ -10,7 +10,7 @@ CREATE TABLE users (
   money INTEGER DEFAULT 0
 );
 
--- Tabelle: village
+-- Tabelle: village x
 CREATE TABLE village (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,

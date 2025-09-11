@@ -12,6 +12,7 @@ jobs:
       group: firebase-deploy-${{ github.ref }}
       cancel-in-progress: true
 
+    # Wir bauen im Subordner 'zahlenraten-game'
     defaults:
       run:
         working-directory: zahlenraten-game
@@ -19,6 +20,9 @@ jobs:
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
+
+      - name: ☕️ Kaffee-Hinweis
+        run: echo "hole dir einen kaffe, das wird lange dauern"
 
       - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
@@ -53,6 +57,7 @@ jobs:
           find dist/static -maxdepth 3 -name index.html -print
           test -f dist/static/index.html
 
+      # Ab hier wieder im Repo-Root deployen (firebase.json liegt im Root)
       - name: 🚀 Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -60,5 +65,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OUTSIDE___BETWEEN }}
           projectId: outside---between
           channelId: live
-          entryPoint: zahlenraten-game
+          entryPoint: .                  # <— WICHTIG: firebase.json im Root verwenden
           firebaseToolsVersion: latest

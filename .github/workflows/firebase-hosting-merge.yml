@@ -21,7 +21,7 @@ jobs:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ☕️ Kaffee-Hinweis
+      - name: ☕️ Hol dir einen Kaffee, das wird lange dauern :(
         run: echo "hole dir einen kaffe, das wird lange dauern"
 
       - name: ⚙️ Setup Node.js

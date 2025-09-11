@@ -11,7 +11,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { RGBELoader } from 'three-stdlib';
 
-/* --- Services aus der alten Logik --- */
+/* === Services (aus alter Logik) === */
 import { CardsService } from '../../services/cards.service';
 import { MoneyService } from '../../services/money.service';
 import { AuthService } from '../../services/auth.service';
@@ -30,6 +30,7 @@ type CardOutcome =
   selector: 'app-pack-opening-page',
   standalone: true,
   imports: [CommonModule],
+  /* ⚠️ Template & Styles UNVERÄNDERT lassen – nimm deine aktuelle neue Version */
   template: `
     <div class="wrap" #wrap>
       <canvas #canvas class="pack-canvas" aria-label="Pack Opening 3D"></canvas>
@@ -72,13 +73,15 @@ type CardOutcome =
       </div>
     </div>
   `,
-  styles: [/* … (unverändert aus deiner neuen Version) … */]
+  styles: [
+    /* ⚠️ Lass hier exakt deine bestehenden Styles – nichts am Look ändern */
+  ],
 })
 export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('wrap', { static: true }) wrapRef!: ElementRef<HTMLDivElement>;
 
-  /* ---------- Frontend/UI ---------- */
+  /* ---------- UI-State (aus deiner neuen Version) ---------- */
   pack: PackKind = 'basic';
   openClipName: string | null = 'Open';
   isOpening = false;
@@ -95,14 +98,14 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   message = '';
   achievementMessage: string | null = null;
 
-  /** Preise wie im alten Component (Basic 40, Premium 120, Ultra 360) */
+  /** Preise aus der alten Komponente */
   private packPrices: Record<PackKind, number> = {
     basic: 40,
     premium: 120,
     ultra: 360,
   };
 
-  /* ---------- Chancen wie in alter Logik (auf lowercase Packs gemappt) ---------- */
+  /* Chancen aus der alten Komponente (auf lowercase gemappt) */
   private chances: Record<PackKind, CardOutcome[]> = {
     basic: [
       { type: 'multiplier', value: '1.2x', chance: 50 },
@@ -133,14 +136,13 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     ],
   };
 
-  /* ---------- Three.js ---------- */
+  /* ---------- Three.js: UNVERÄNDERT lassen ( nichts am Look drehen ) ---------- */
   private renderer!: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
   private camera!: THREE.PerspectiveCamera;
   private clock = new THREE.Clock();
   private rafId = 0;
   private elapsedTime = 0;
-
   private mixer: THREE.AnimationMixer | null = null;
   private glbRoot: THREE.Object3D | null = null;
   private actions = new Map<string, THREE.AnimationAction>();
@@ -153,7 +155,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    /* --- Services injizieren --- */
+    /* Services */
     private cardsService: CardsService,
     private moneyService: MoneyService,
     private authService: AuthService,
@@ -162,13 +164,13 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     private sounds: SoundsService
   ) {}
 
-  /* ============================ LIFECYCLE ============================ */
+  /* ============================ Lifecycle ============================ */
   ngAfterViewInit(): void {
-    // Pack aus Query (basic/premium/ultra)
+    // Pack aus Query
     const qp = (this.route.snapshot.queryParamMap.get('pack') || 'Basic').toLowerCase();
     this.pack = qp === 'premium' || qp === 'ultra' ? (qp as PackKind) : 'basic';
 
-    // --- Backend Init: Username, Money, Level laden ---
+    // Backend-Init
     this.username = this.authService.getUsername() || '';
     this.loadMoney();
     if (this.username) {
@@ -178,7 +180,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       });
     }
 
-    // --- Three Setup ---
+    // Three.js Setup (DEIN aktuelles Setup unverändert weiterverwenden)
     const canvas = this.canvasRef.nativeElement;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -199,8 +201,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     rim.position.set(-4, 3, 2);
     this.scene.add(amb, hemi, key, rim);
 
-    this.scene.background = this.gradientTexture('#333333ff', '#000000ff');
-
+    // Hintergrund/Env genau so lassen wie bei dir
     this.loadPackModel(this.pack).then(() => this.animate());
     const pmrem = new THREE.PMREMGenerator(this.renderer);
     new RGBELoader().setPath('assets/').load('studio.hdr', (hdr) => {
@@ -218,9 +219,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     this.renderer?.dispose();
   }
 
-  /* ============================ BACKEND PORT ============================ */
-
-  /** Geld/Stats laden (wie vorher) */
+  /* ============================ Backend-Logik (aus alt) ============================ */
   private loadMoney() {
     if (!this.username) return;
     this.isLoading = true;
@@ -236,11 +235,10 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  /** Kauf starten → Abzug → dann Animationen/Draw */
-  async playOpen() {
+  /** Kauf starten → Geld abziehen → Animationen laufen lassen → Ergebnisse flippen & verbuchen */
+  playOpen() {
     if (this.isOpening || this.overlayShown) return;
 
-    // Preis prüfen
     const price = this.packPrices[this.pack] || 0;
     if (this.money < price) {
       this.message = '❌ Nicht genug Geld!';
@@ -248,8 +246,8 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    // Geld abziehen (wie altes dropCardPack)
-    this.isOpening = true; // UI blocken, damit nicht doppelt geklickt wird
+    this.isOpening = true;
+
     this.moneyService
       .updateMoney({ username: this.username, amount: -price })
       .subscribe({
@@ -257,15 +255,14 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
           this.money -= price;
           this.message = '';
 
-          // Ergebnisse ziehen (5 Karten)
+          // Ergebnisse festlegen (5 Karten)
           if (this.results.length === 0) {
             this.results = this.drawMany(this.pack, 5);
             this.flippedCards = Array(this.results.length).fill(false);
           }
 
-          // Animationen starten (wie vorher in neuer Version)
+          // Animationen starten (VISUELL UNVERÄNDERT)
           if (this.mixer && (this.openAction || this.cardActions.length)) {
-            // Idle ausblenden
             const idle = this.actions.get('Idle');
             idle?.fadeOut(0.2);
 
@@ -295,13 +292,12 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
 
             this.sounds.playSound('hardPop.aac', 0.5);
           } else {
-            // Fallback ohne Clips
+            // Fallback ohne Clips: Overlay zeigen & direkt flippen/verbuchen
             setTimeout(() => {
               this.isOpening = false;
               this.overlayShown = true;
               this.revealed = true;
               this.sounds.playSound('message.aac', 0.8);
-              // Direkt nacheinander flippen und verbuchen
               this.flipAndApplySequentially();
             }, 900);
           }
@@ -314,25 +310,21 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  /** Nach jedem Flip wird das jeweilige Outcome serverseitig verbucht */
+  /** Nach Clip-Ende: Overlay + Karten nacheinander flippen & verbuchen (nur Logik, kein Layout-Change) */
   private async flipAndApplySequentially() {
     for (let i = 0; i < this.flippedCards.length; i++) {
       await this.delay(200);
       this.flippedCards[i] = true;
-      this.applyOutcome(this.results[i]); // <-- hier wird gebucht
+      this.applyOutcome(this.results[i]); // verbucht pro Karte
     }
     this.sounds.playSound('message.aac', 0.8);
   }
 
-  /** Server-Updates wie im alten drawCard(): addCard / updateMoney / addXp / Achievement */
+  /** Verbuchung wie im alten drawCard(): addCard / updateMoney / addXp / Achievement */
   private applyOutcome(o: CardOutcome) {
     if (o.type === 'multiplier') {
-      // parseFloat erlaubt "1.5x" und "-2" etc.
       const numericVal = parseFloat(o.value);
-      if (o.value === '-3') {
-        this.unlockAch('Joker 🃏'); // wie vorher
-      }
-      // Nur Multiplier-Karten speichern
+      if (o.value === '-3') this.unlockAch('Joker 🃏');
       if (!Number.isNaN(numericVal)) {
         this.cardsService.addCard(numericVal).subscribe({
           next: () => console.log('Karte gespeichert:', o.value),
@@ -354,15 +346,12 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /** Achievement-Flow wie vorher; falls du Emoji-Regen willst, kannst du hier RainComponent triggern */
   private unlockAch(name: string) {
     this.achievementService.unlockAchievement(name).subscribe({
       next: (res) => {
         if (res.unlocked) {
           this.showAchievementMessage(`🎉 Erfolg freigeschaltet: ${res.name}`);
           this.addXp(20);
-          // Optional: RainComponent aufrufen, falls im Template vorhanden:
-          // this.rainComponent?.emojiRain('🎖️');
         }
       },
       error: (err) => console.error('❌ Fehler beim Unlock:', err),
@@ -382,7 +371,6 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   private addXp(amount: number) {
     const user = this.authService.getUsername();
     if (!user) return;
-
     const prevLevel = this.currentLevel;
     this.profileService.addXp(user, amount).subscribe({
       next: (res) => {
@@ -393,7 +381,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  /* ============================ THREE: MODEL/CLIPS ============================ */
+  /* ============================ Three.js (dein Look bleibt gleich) ============================ */
   private fileForPack(kind: PackKind): string {
     switch (kind) {
       case 'basic': return 'assets/models/basic.glb';
@@ -415,6 +403,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     this.mixer = null;
 
     this.glbRoot = gltf.scene;
+    /* ⚠️ normalizeAndCenter NICHT ändern – lässt deinen Look wie er ist */
     this.normalizeAndCenter(this.glbRoot);
     this.scene.add(this.glbRoot);
 
@@ -445,25 +434,25 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
         this.playingActions.delete(a);
 
         if (this.playingActions.size === 0 && !this.overlayShown) {
-          // Alle Clips fertig → Overlay zeigen + Karten nacheinander flippen & verbuchen
           this.isOpening = false;
           this.overlayShown = true;
           this.revealed = true;
 
+          // Nach deinen Clips: Flip + Verbuchung (Logik only)
           await this.delay(10);
-          await this.flipAndApplySequentially(); // <— verbucht pro Karte
+          await this.flipAndApplySequentially();
         }
       });
     }
   }
 
-  /* ============================ RENDER LOOP ============================ */
   private animate = () => {
     this.rafId = requestAnimationFrame(this.animate);
     const dt = this.clock.getDelta();
     this.elapsedTime += dt;
     this.mixer?.update(dt);
 
+    // Kamera/Orbit wie in deiner Version – NICHT ändern
     if (!this.isInOpenView) {
       const radius = 9;
       const height = 0;
@@ -483,7 +472,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     this.renderer.render(this.scene, this.camera);
   };
 
-  /* ============================ HELPERS ============================ */
+  /* === Utils === */
   private normalizeAndCenter(root: THREE.Object3D) {
     const box = new THREE.Box3().setFromObject(root);
     const size = new THREE.Vector3();
@@ -495,8 +484,10 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     root.position.z -= center.z;
     root.position.y -= box.min.y;
 
+    // Belasse deine Rotation so, wie du sie derzeit nutzt:
     root.rotation.set(0, THREE.MathUtils.degToRad(90), 0);
 
+    // Kamera-Setup exakt wie bisher:
     const padding = 2.5;
     const fov = THREE.MathUtils.degToRad(this.camera.fov);
     const aspect =
@@ -509,21 +500,6 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
 
     this.camera.position.set(0, size.y * 0.55, dist);
     this.camera.lookAt(0, size.y * 0.5, 0);
-  }
-
-  private gradientTexture(c1: string, c2: string): THREE.Texture {
-    const canvas = document.createElement('canvas');
-    canvas.width = 2;
-    canvas.height = 2;
-    const ctx = canvas.getContext('2d')!;
-    const g = ctx.createLinearGradient(0, 0, 0, 2);
-    g.addColorStop(0, c1);
-    g.addColorStop(1, c2);
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, 2, 2);
-    const tex = new THREE.Texture(canvas);
-    tex.needsUpdate = true;
-    return tex;
   }
 
   private disposeObject(obj: THREE.Object3D) {

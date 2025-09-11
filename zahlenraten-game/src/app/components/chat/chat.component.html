@@ -58,7 +58,9 @@
           <span class="user"
             ><b>{{ msg.username }}</b></span
           >
-          <span class="text">{{ msg.message }}</span>
+          <span class="text" (click)="copyToClipboard(msg.message)">{{
+            msg.message
+          }}</span>
           <span class="timestamp">{{ msg.created_at | date : "HH:mm" }}</span>
         </div>
       </div>

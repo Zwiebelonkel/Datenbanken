@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -59,17 +65,16 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-private openAndStart() {
-  this.isLoading = true;
-  this.loadMessages(); // kein Scroll hier
-  this.startPolling();
+  private openAndStart() {
+    this.isLoading = true;
+    this.loadMessages(); // kein Scroll hier
+    this.startPolling();
 
-  // ⏳ Warte, bis die Transition abgeschlossen ist
-  setTimeout(() => {
-    this.scrollToBottom();
-  }, 450); // etwas mehr als 400ms Transition
-}
-
+    // ⏳ Warte, bis die Transition abgeschlossen ist
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 450); // etwas mehr als 400ms Transition
+  }
 
   private startPolling() {
     this.stopPolling(); // safety
@@ -95,22 +100,23 @@ private openAndStart() {
   }
 
   loadMessages(scrollToBottom: boolean = false) {
-  if (!this.isExpanded) return;
+    if (!this.isExpanded) return;
 
-  this.chatService.getLatestMessages(20).subscribe({
-    next: (data) => {
-      this.messages = data;
-      this.isLoading = false;
-    },
-    error: (err) => console.error('Fehler beim Laden der Chat-Nachrichten:', err),
-  });
-}
+    this.chatService.getLatestMessages(20).subscribe({
+      next: (data) => {
+        this.messages = data;
+        this.isLoading = false;
+      },
+      error: (err) =>
+        console.error('Fehler beim Laden der Chat-Nachrichten:', err),
+    });
+  }
 
-scrollToBottom() {
-  if (!this.messageContainer) return;
-  const el = this.messageContainer.nativeElement as HTMLElement;
-  el.scrollTop = el.scrollHeight;
-}
+  scrollToBottom() {
+    if (!this.messageContainer) return;
+    const el = this.messageContainer.nativeElement as HTMLElement;
+    el.scrollTop = el.scrollHeight;
+  }
 
   sendMessage() {
     if (!this.isExpanded) return; // nur senden, wenn offen
@@ -127,10 +133,12 @@ scrollToBottom() {
     this.scrollToBottom();
     this.newMessage = '';
 
-    this.chatService.sendMessage({ username: this.username, message: text }).subscribe({
-      next: () => this.loadMessages(), // echte Liste nachziehen
-      error: (err) => console.error('Senden fehlgeschlagen:', err),
-    });
+    this.chatService
+      .sendMessage({ username: this.username, message: text })
+      .subscribe({
+        next: () => this.loadMessages(), // echte Liste nachziehen
+        error: (err) => console.error('Senden fehlgeschlagen:', err),
+      });
   }
 
   trackByMsg(index: number, msg: ChatMessage) {
@@ -140,4 +148,18 @@ scrollToBottom() {
 
   // Optional: Profil besuchen (später implementieren)
   visitProfile(username: string) {}
+
+  copyToClipboard(text: string) {
+    if (!text) return;
+
+    navigator.clipboard.writeText(text).then(
+      () => {
+        console.log('Text kopiert:', text);
+        // Optional: kurze visuelle Rückmeldung
+      },
+      (err) => {
+        console.error('Kopieren fehlgeschlagen:', err);
+      }
+    );
+  }
 }

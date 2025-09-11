@@ -1,4 +1,6 @@
-name: Deploy to Firebase Hosting on merge
+# .github/workflows/firebase-hosting-merge.yml
+name: 🚀 Deploy to Firebase Hosting on merge
+
 on:
   push:
     branches: [ Angular-SSR-(NurFuerBots) ]
@@ -6,39 +8,57 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: firebase-deploy-${{ github.ref }}
+      cancel-in-progress: true
+
     defaults:
       run:
         working-directory: zahlenraten-game
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: zahlenraten-game/package-lock.json
 
-      - run: npm ci
+      - name: 📥 Install Dependencies
+        run: npm ci
 
-      - name: Install Chrome
+      - name: 🌐 Install Chrome
         id: chrome
         uses: browser-actions/setup-chrome@v1
 
-      - run: npx ng build --configuration production
+      - name: 🛠️ Build Angular (Prod)
+        run: npx ng build --configuration production
 
-      - env: { CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }} }
+      - name: 🔎 Scan Routes (Scully)
+        env:
+          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: npx scully --scanRoutes --project zahlenraten-game --configFile scully.zahlenraten-game.config.ts --serverTimeout=120000 --showGuessError
 
-      - env: { CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }} }
+      - name: 🧱 Prerender with Scully
+        env:
+          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: npx scully --project zahlenraten-game --configFile scully.zahlenraten-game.config.ts --serverTimeout=120000
 
-      - run: |
-          echo "--- static indexes ---"
+      - name: 🔍 Verify static output
+        run: |
+          echo "--- dist/static content ---"
           find dist/static -maxdepth 3 -name index.html -print
+          test -f dist/static/index.html
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: 🚀 Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OUTSIDE___BETWEEN }}
           projectId: outside---between
           channelId: live
           entryPoint: zahlenraten-game
+          firebaseToolsVersion: latest

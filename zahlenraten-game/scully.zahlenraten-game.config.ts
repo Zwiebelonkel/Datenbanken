@@ -1,12 +1,22 @@
+// zahlenraten-game/scully.zahlenraten-game.config.ts
 import { ScullyConfig } from '@scullyio/scully';
 import '@scullyio/scully-plugin-puppeteer'; // wichtig: Plugin aktivieren
 
 export const config: ScullyConfig = {
   projectRoot: './src',
-  projectName: 'zahlenraten-game',
-  outDir: './dist/static',
-  distFolder: './dist/zahlenraten-game/browser', // HIER liegt deine App!
+  projectName: 'zahlenraten-game',                     // muss exakt zu angular.json passen
+  distFolder: './dist/zahlenraten-game/browser',       // Angular build output
+  outDir: './dist/static',                             // Scully prerender output
   defaultRouteRenderer: 'scully-plugin-puppeteer',
+
+  puppeteerLaunchOptions: {
+    // in CI wird über env CHROMIUM_PATH gesetzt
+    executablePath:
+      process.env.CHROMIUM_PATH || process.env.PUPPETEER_EXECUTABLE_PATH,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true,
+  },
+
   routes: {
     '/': { type: 'default' },
     '/login': { type: 'default' },
@@ -27,6 +37,7 @@ export const config: ScullyConfig = {
     '/about': { type: 'default' },
     '/contact': { type: 'default' },
 
+    // Beispiel: dynamische Profile
     '/profile/:username': {
       type: 'json',
       username: ['Luca', 'Gast', 'admin'],

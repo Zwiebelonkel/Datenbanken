@@ -1,0 +1,11 @@
+identifier: mcf9f5902b6df8rb
+appPort: 1864
+staticPort: 1668
+reloadPort: 2667
+hostName: localhost
+projectName: zahlenraten-game
+homeFolder: D:\CardCore\zahlenraten-game
+distFolder: ./dist/zahlenraten-game/browser
+outDir: D:\CardCore\zahlenraten-game\dist\static
+handle404: ''
+allowErrorCollect: false

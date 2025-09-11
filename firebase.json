@@ -1,8 +1,9 @@
 {
   "hosting": {
-    "public": "dist/static",
+    "public": "zahlenraten-game/dist/static",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
-    "trailingSlash": false
+    "trailingSlash": false,
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
   }
 }

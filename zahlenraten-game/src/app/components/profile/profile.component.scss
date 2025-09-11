@@ -1,4 +1,5 @@
 @use "../../../variables" as *;
+@use "sass:color";
 
 /* ========== Profile Page ========== */
 .profile-container {
@@ -218,7 +219,11 @@
   .bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, $theme, mix($theme, white, 90%));
+    background: linear-gradient(
+      90deg,
+      $theme,
+      color.mix($theme, white, $weight: 90%)
+    );
     transition: width 0.15s ease;
   }
 
@@ -258,7 +263,11 @@
   .xp-bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, $theme, mix($theme, white, 90%));
+    background: linear-gradient(
+      90deg,
+      $theme,
+      color.mix($theme, white, $weight: 90%)
+    );
     transition: width 0.3s ease;
   }
 }

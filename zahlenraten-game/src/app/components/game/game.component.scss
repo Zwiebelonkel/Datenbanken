@@ -472,7 +472,7 @@ body {
 }
 
 .game-container {
-  position: relative; // wichtig, damit position:absolute im Kind funktioniert
+  position: relative;
 }
 
 @keyframes fireGlow {
@@ -505,7 +505,6 @@ body {
   animation: fireGlow 2s infinite ease-in-out;
   -webkit-animation: fireGlow 2s infinite ease-in-out;
 
-  // Optional: sanfter Übergang bei Änderung
   transition: box-shadow 0.3s ease-in-out;
 }
 
@@ -517,7 +516,7 @@ body {
   position: absolute;
   top: 10px;
   left: 10px;
-  z-index: 10; // damit er über anderem Content liegt, falls nötig
+  z-index: 10;
   width: 60px;
   height: 60px;
 }

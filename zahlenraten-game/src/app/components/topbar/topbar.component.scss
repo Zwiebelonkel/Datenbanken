@@ -1,7 +1,8 @@
-@use '../../../variables';
+@use "../../../variables";
+@use "sass:color";
 
 .topbar {
-  transition:0.25s;
+  transition: 0.25s;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -11,7 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid darken(variables.$theme, 10%);
+  border-bottom: 1px solid color.adjust(variables.$theme, $lightness: -10%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(5px);
   font-size: 1rem;
@@ -21,18 +22,16 @@
   box-sizing: border-box;
 
   -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Safari */
-   -khtml-user-select: none;   /* Konqueror HTML */
-     -moz-user-select: none;   /* Alte Firefox-Versionen */
-      -ms-user-select: none;   /* IE/Edge */
-          user-select: none;   /* Moderne Browser */
-  
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Alte Firefox-Versionen */
+  -ms-user-select: none; /* IE/Edge */
+  user-select: none; /* Moderne Browser */
 }
 
-.topbar:hover{
-  transition:0.25s;
+.topbar:hover {
+  transition: 0.25s;
   backdrop-filter: blur(3px);
-
 }
 
 /* Dark Mode */

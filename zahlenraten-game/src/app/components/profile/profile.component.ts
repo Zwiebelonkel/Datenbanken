@@ -135,6 +135,11 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/history', username]);
   }
 
+  goToSkills() {
+    if (!this.isOwnProfile) return;
+    this.router.navigate(['/skill-shop']);
+  }
+
   // Passwort ändern (nur eigenes Profil sinnvoll)
   changePassword() {
     if (this.newPassword !== this.repeatPassword) {

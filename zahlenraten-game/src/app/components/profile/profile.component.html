@@ -42,11 +42,11 @@
   <div *ngIf="!isLoading" class="card profile-card">
     <h3>📊 Statistiken</h3>
 
-    <div class="stat-row">
+    <div class="stat-row" (click)="goToSkills()">
       <span>⬆️ Level</span>
       <span>{{ level }}</span>
     </div>
-    <div class="stat-row">
+    <div class="stat-row" (click)="goToSkills()">
       <span>✨ XP</span>
       <span>{{ xp | number : "1.2-2" }} / {{ xpThreshold }}</span>
     </div>
@@ -57,11 +57,11 @@
       <span>💠 Highscore</span>
       <span>{{ highscore }}</span>
     </div>
-    <div class="stat-row">
+    <div class="stat-row" (click)="goToHistory(username)">
       <span>🏆 Punkte</span>
       <span>{{ totalScore }}</span>
     </div>
-    <div class="stat-row">
+    <div class="stat-row" (click)="goToHistory(username)">
       <span>🎮 Partien</span>
       <span>{{ totalGames }}</span>
     </div>

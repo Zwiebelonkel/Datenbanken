@@ -1,0 +1,75 @@
+@use "../../../variables" as *;
+@use "sass:color";
+
+/* ========== Score History Page ========== */
+.profile-container {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 12px;
+  font-family: "Nunito", sans-serif;
+  color: var(--text-color);
+}
+
+/* ========== Score Card ========== */
+.profile-card {
+  margin: 0 auto 2rem;
+  max-width: 880px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, rgba(0, 0, 0, 0.08));
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  padding: 1.6rem 1.8rem;
+
+  h3 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-color);
+    text-align: left;
+  }
+
+  /* Chart.js Canvas */
+  canvas {
+    display: block;
+    width: 100% !important;
+    height: 420px !important;
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+}
+
+/* ========== Fehleranzeige ========== */
+.error-msg {
+  text-align: center;
+  color: #dc3545;
+  font-weight: 700;
+  margin: 1rem auto;
+}
+
+/* ========== Responsive Anpassungen ========== */
+@media (max-width: 900px) {
+  .profile-card canvas {
+    height: 360px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-card {
+    padding: 1.2rem 1rem;
+  }
+
+  .profile-card canvas {
+    height: 300px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .profile-container {
+    margin: 1.25rem auto;
+  }
+
+  .profile-card canvas {
+    height: 240px !important;
+  }
+}

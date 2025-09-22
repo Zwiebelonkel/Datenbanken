@@ -4,12 +4,22 @@ import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
 import { ScoreService } from '../../services/score.service';
+import { LoaderComponent } from '../loader/loader.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { TopbarComponent } from '../topbar/topbar.component';
 
 @Component({
   selector: 'app-user-score-history',
   standalone: true,
-  imports: [CommonModule, NgChartsModule],
+  imports: [
+    CommonModule,
+    NgChartsModule,
+    LoaderComponent,
+    SidebarComponent,
+    TopbarComponent,
+  ],
   templateUrl: './user-score-history.component.html',
+  styleUrls: ['./user-score-history.component.scss'],
 })
 export class UserScoreHistoryComponent implements OnInit {
   username: string = '';
@@ -22,8 +32,8 @@ export class UserScoreHistoryComponent implements OnInit {
       label: 'Scoreverlauf',
       fill: false,
       tension: 0.3,
-      borderColor: '#42A5F5',
-      backgroundColor: 'rgba(66,165,245,0.2)',
+      borderColor: '#42f5a1ff',
+      backgroundColor: 'rgba(26, 245, 161, 0.2)',
     },
   ];
 

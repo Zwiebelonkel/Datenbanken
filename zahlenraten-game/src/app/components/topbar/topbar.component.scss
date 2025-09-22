@@ -84,3 +84,24 @@ body.dark-mode .topbar {
   background-color: #3367d6;
   transform: scale(1.05);
 }
+
+.back-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-right: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(-3px);
+  }
+}

@@ -36,4 +36,8 @@ export const config: ScullyConfig = {
   /** Nur für dynamische/parametrisierte Routen Plugins angeben */ routes: {
     '/profile/:username': { type: 'json', username: ['Luca', 'Gast', 'admin'] },
   },
+  sitemap: {
+    filename: 'sitemap.xml', // Standardname, kann auch anders heißen
+    urlPrefix: 'https://outside---between.web.app', // Wichtig für absolute URLs
+  },
 };

@@ -44,7 +44,10 @@ export class UserScoreHistoryComponent implements OnInit {
   lineChartOptions: ChartOptions<'line'> = this.buildChartOptions();
   lineChartType: ChartType = 'line';
 
-  constructor(private scoreService: ScoreService, private route: ActivatedRoute) {}
+  constructor(
+    private scoreService: ScoreService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -105,14 +108,23 @@ export class UserScoreHistoryComponent implements OnInit {
     const oneDay = 24 * 60 * 60 * 1000;
     if (span <= 2 * oneDay) {
       // < 2 Tage → nur Uhrzeit
-      return new Date(ts).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+      return new Date(ts).toLocaleTimeString('de-DE', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
     }
     if (span <= 180 * oneDay) {
       // < 6 Monate → Tag.Monat
-      return new Date(ts).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+      return new Date(ts).toLocaleDateString('de-DE', {
+        day: '2-digit',
+        month: '2-digit',
+      });
     }
     // sonst Monat.Jahr
-    return new Date(ts).toLocaleDateString('de-DE', { month: '2-digit', year: '2-digit' });
+    return new Date(ts).toLocaleDateString('de-DE', {
+      month: '2-digit',
+      year: '2-digit',
+    });
   }
 
   /** Dünnt sichtbare Labels aus (visuell, Daten bleiben komplett) */
@@ -120,7 +132,9 @@ export class UserScoreHistoryComponent implements OnInit {
     const n = this.lineChartLabels.length;
     if (n <= maxVisible) return;
     const step = Math.ceil(n / maxVisible);
-    this.lineChartLabels = this.lineChartLabels.map((l, i) => (i % step === 0 ? l : ''));
+    this.lineChartLabels = this.lineChartLabels.map((l, i) =>
+      i % step === 0 ? l : ''
+    );
   }
 
   /** Optionen abhängig von der Viewport-Breite */

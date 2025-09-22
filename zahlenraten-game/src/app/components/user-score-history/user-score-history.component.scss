@@ -3,7 +3,7 @@
 
 /* ========== Score History Page ========== */
 .profile-container {
-  max-width: 960px;
+  max-width: 75%;
   margin: 2rem auto;
   padding: 0 12px;
   font-family: "Nunito", sans-serif;
@@ -32,8 +32,8 @@
   /* Chart.js Canvas — füllt die Karte, Höhe wird per Breakpoints abgestuft */
   canvas {
     display: block;
-    width: 100% !important;     /* überschreibt Inline-Width von Chart.js */
-    height: 420px !important;    /* Basis-Höhe; wird unten responsiv reduziert */
+    width: 100% !important; /* überschreibt Inline-Width von Chart.js */
+    height: 420px !important; /* Basis-Höhe; wird unten responsiv reduziert */
     max-width: 100%;
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -56,37 +56,59 @@ body.dark-mode {
     border-color: var(--card-border, #2a2a2a);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 
-    h3 { color: var(--text-color, #eaeaea); }
+    h3 {
+      color: var(--text-color, #eaeaea);
+    }
   }
 }
 
 /* ========== Responsive Anpassungen ========== */
 /* Groß bis mittel */
 @media (max-width: 1024px) {
-  .profile-container { max-width: 920px; }
-  .profile-card       { max-width: 840px; }
+  .profile-container {
+    max-width: 920px;
+  }
+  .profile-card {
+    max-width: 840px;
+  }
 }
 
 /* Mittel */
 @media (max-width: 900px) {
-  .profile-card canvas { height: 360px !important; }
+  .profile-card canvas {
+    height: 360px !important;
+  }
 }
 
 /* Tablet / große Phones */
 @media (max-width: 640px) {
-  .profile-container { padding: 0 10px; }
-  .profile-card      { padding: 1.2rem 1rem; }
-  .profile-card h3   { font-size: 1.15rem; }
-  .profile-card canvas { height: 300px !important; }
+  .profile-container {
+    padding: 0 10px;
+  }
+  .profile-card {
+    padding: 1.2rem 1rem;
+  }
+  .profile-card h3 {
+    font-size: 1.15rem;
+  }
+  .profile-card canvas {
+    height: 300px !important;
+  }
 }
 
 /* Kleine Phones */
 @media (max-width: 420px) {
-  .profile-container { margin: 1.25rem auto; }
-  .profile-card canvas { height: 260px !important; }
+  .profile-container {
+    margin: 1.25rem auto;
+  }
+  .profile-card canvas {
+    height: 260px !important;
+  }
 }
 
 /* Sehr kleine Phones / schmale Geräte */
 @media (max-width: 360px) {
-  .profile-card canvas { height: 230px !important; }
+  .profile-card canvas {
+    height: 230px !important;
+  }
 }

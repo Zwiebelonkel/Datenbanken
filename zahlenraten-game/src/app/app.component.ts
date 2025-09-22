@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  ViewContainerRef,
-  ComponentRef,
-  inject,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
@@ -17,15 +10,18 @@ import { FirebaseService } from './services/firebase.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, FooterComponent, OfflineComponent, CommonModule],
+  imports: [
+    RouterModule,
+    FooterComponent,
+    OfflineComponent,
+    ConsentDialogComponent,
+    CommonModule,
+  ],
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   isBootstrapping = true;
   isOffline = false;
-
-  private vcr = inject(ViewContainerRef);
-  private consentDialogRef: ComponentRef<ConsentDialogComponent> | null = null;
 
   constructor(
     private auth: AuthService,
@@ -37,18 +33,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       next: (_ok: boolean) => (this.isBootstrapping = false),
       error: () => (this.isBootstrapping = false),
     });
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.showConsentDialog();
-    }, 100);
-  }
-
-  showConsentDialog() {
-    if (!localStorage.getItem('cookieConsent')) {
-      this.consentDialogRef = this.vcr.createComponent(ConsentDialogComponent);
-    }
   }
 
   logout() {

@@ -53,9 +53,10 @@ body.dark-mode .topbar {
 
 /* Links, wenn Willkommenstitel */
 .page-title.left-align {
+  justify-self: start; /* Wichtig: Positioniert das Grid-Item links */
   text-align: left;
   margin-right: auto;
-  font-size: 1.25rem; /* etwas kleiner wirkt harmonisch linksbündig */
+  font-size: 1rem;
 }
 
 /* Back-Button links */

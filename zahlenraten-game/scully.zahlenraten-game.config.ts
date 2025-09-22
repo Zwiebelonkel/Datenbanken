@@ -20,6 +20,7 @@ export const config: ScullyConfig = {
     '/admin',
     '/achievements',
     '/profile',
+    '/history',
     '/how-to-play',
     '/clicker',
     '/card-shop',

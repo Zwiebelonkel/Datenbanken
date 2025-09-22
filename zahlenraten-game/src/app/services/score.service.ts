@@ -51,6 +51,10 @@ export class ScoreService {
     return this.http.get<ScoreEntry[]>(`${this.apiUrl}/topMoneyPerRound`);
   }
 
+  getUserScoreHistory(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`scores/user/${encodeURIComponent(username)}`);
+  }
+
   isHighscore(score: number): Observable<{ isHighscore: boolean }> {
     return this.http.post<{ isHighscore: boolean }>(
       `${this.apiUrl}/isHighscore`,

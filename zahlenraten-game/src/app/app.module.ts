@@ -23,12 +23,14 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { RainComponent } from './components/rain/rain.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
+import { UserScoreHistoryComponent } from './components/user-score-history/user-score-history.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { UsersComponent } from './components/users/users.component';
 import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.component';
 import { ReelComponent } from './components/slot-maschine/reel/reel.component';
 import { SkillShopComponent } from './components/skill-shop/skill-shop.component';
 import { PlayerBarComponent } from './components/player-bar/player-bar.component';
+
 // import { StreakIndicator } from './components/streak-indicator/streak-indicator.component';
 
 import { FooterComponent } from './components/footer/footer.component';
@@ -64,6 +66,7 @@ import { OfflineComponent } from './components/offline/offline.component';
     SlotMaschineComponent,
     ReelComponent,
     PlayerBarComponent,
+    UserScoreHistoryComponent,
     // StreakIndicatorComponent,
     DatenschutzComponent,
     ImpressumComponent,

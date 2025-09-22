@@ -16,6 +16,7 @@ import { ImpressumComponent } from './components/impressum/impressum.component';
 import { DatenschutzComponent } from './components/datenschutz/datenschutz.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { UserScoreHistoryComponent } from './components/user-score-history/user-score-history.component';
 import { PackOpeningPageComponent } from './components/pack-opening.page/pack-opening.page';
 
 export const routes: Routes = [
@@ -31,6 +32,8 @@ export const routes: Routes = [
   { path: 'clicker', component: ClickerComponent },
   { path: 'card-shop', component: CardShopComponent },
   { path: 'skill-shop', component: SkillShopComponent },
+  { path: 'history', component: UserScoreHistoryComponent },
+  { path: 'history/:username', component: UserScoreHistoryComponent },
   // { path: 'pack-opening', component: PackOpeningComponent },
   { path: 'village', component: VillageComponent },
   { path: 'slot-maschine', component: SlotMaschineComponent },

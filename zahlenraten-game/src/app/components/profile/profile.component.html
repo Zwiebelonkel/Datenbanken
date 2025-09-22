@@ -53,7 +53,7 @@
     <div class="xp-progress">
       <div class="xp-bar" [style.width.%]="xpPercent"></div>
     </div>
-    <div class="stat-row">
+    <div class="stat-row" (click)="goToHistory(username)">
       <span>💠 Highscore</span>
       <span>{{ highscore }}</span>
     </div>
@@ -65,7 +65,7 @@
       <span>🎮 Partien</span>
       <span>{{ totalGames }}</span>
     </div>
-    <div class="stat-row">
+    <div class="stat-row" (click)="viewAchievements()">
       <span>😊 Erfolge</span>
       <span>{{ unlockedAchievements }}</span>
     </div>

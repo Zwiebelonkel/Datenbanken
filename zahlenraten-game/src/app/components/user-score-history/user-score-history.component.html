@@ -1,0 +1,13 @@
+<div *ngIf="loading">Lade Daten...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<div *ngIf="!loading && !error">
+  <canvas
+    baseChart
+    [datasets]="lineChartData"
+    [labels]="lineChartLabels"
+    [options]="lineChartOptions"
+    [type]="lineChartType"
+  >
+  </canvas>
+</div>

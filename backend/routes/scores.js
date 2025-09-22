@@ -241,6 +241,30 @@ router.get("/topStreaks", async (_req, res) => {
   }
 });
 
+// Verlauf aller Score-Einträge eines Spielers
+app.get("/scores/user/:username", async (req, res) => {
+  const username = req.params.username;
+
+  try {
+    const result = await db.execute({
+      sql: `
+        SELECT id, score, created_at
+        FROM scores
+        WHERE LOWER(username) = LOWER(?)
+        ORDER BY created_at ASC
+      `,
+      args: [username],
+    });
+
+    return res.json(result.rows);
+  } catch (err) {
+    console.error("❌ Fehler beim Laden des Score-Verlaufs:", err);
+    return res
+      .status(500)
+      .json({ error: "Fehler beim Abrufen des Score-Verlaufs" });
+  }
+});
+
 /** 🔹 Meistes Geld pro Runde (Top 10) inkl. Avatar – je Spieler nur ein Eintrag (bester Wert) */
 router.get("/topMoneyPerRound", async (_req, res) => {
   try {

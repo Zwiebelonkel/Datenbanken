@@ -9,6 +9,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -48,6 +49,7 @@ export class ProfileComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     public authService: AuthService,
+    private router: Router,
     private http: HttpClient,
     private route: ActivatedRoute
   ) {}
@@ -122,6 +124,15 @@ export class ProfileComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  viewAchievements() {
+    if (!this.isOwnProfile) return;
+    this.router.navigate(['/achievements']);
+  }
+
+  goToHistory(username: string) {
+    this.router.navigate(['/history', username]);
   }
 
   // Passwort ändern (nur eigenes Profil sinnvoll)

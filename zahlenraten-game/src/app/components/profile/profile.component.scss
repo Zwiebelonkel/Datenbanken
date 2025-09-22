@@ -109,10 +109,18 @@
 }
 
 .stat-row {
+  transition: 0.25s;
   display: flex;
   justify-content: space-between;
   margin: 0.5rem 0;
   font-size: 1.1rem;
+
+  &:hover {
+    transition: 0.25s;
+    background: var(--scale-bg);
+    border-radius: 8px;
+    padding: 4px 8px;
+  }
 }
 
 /* ===== Passwort-Form ===== */

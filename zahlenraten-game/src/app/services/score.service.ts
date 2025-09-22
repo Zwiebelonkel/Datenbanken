@@ -52,7 +52,9 @@ export class ScoreService {
   }
 
   getUserScoreHistory(username: string): Observable<any[]> {
-    return this.http.get<any[]>(`scores/user/${encodeURIComponent(username)}`);
+    return this.http.get<ScoreEntry[]>(
+      `${this.apiUrl}history/user/${encodeURIComponent(username)}`
+    );
   }
 
   isHighscore(score: number): Observable<{ isHighscore: boolean }> {

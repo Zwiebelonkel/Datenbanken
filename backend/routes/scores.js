@@ -242,7 +242,7 @@ router.get("/topStreaks", async (_req, res) => {
 });
 
 // Verlauf aller Score-Einträge eines Spielers
-router.get("/scores/user/:username", async (req, res) => {
+router.get("/history/user/:username", async (req, res) => {
   const username = req.params.username;
 
   try {

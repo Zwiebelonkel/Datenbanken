@@ -9,24 +9,24 @@
   margin: 0;
   padding: 1rem 1rem;
   background: rgba(variables.$theme, 0.9);
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* back | title | spacer */
   align-items: center;
+  gap: 12px;
   border-bottom: 1px solid color.adjust(variables.$theme, $lightness: -10%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(5px);
   font-size: 1rem;
-  //color: #333;
   color: #fff;
   border-radius: 0 0 10px 10px;
   box-sizing: border-box;
 
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Alte Firefox-Versionen */
-  -ms-user-select: none; /* IE/Edge */
-  user-select: none; /* Moderne Browser */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .topbar:hover {
@@ -43,7 +43,6 @@ body.dark-mode .topbar {
 
 /* Titel standardmäßig zentriert */
 .page-title {
-  flex: 1;
   text-align: center;
   font-weight: 600;
   font-size: 1.5rem;
@@ -52,44 +51,18 @@ body.dark-mode .topbar {
   text-overflow: ellipsis;
 }
 
-/* Wenn Fallback aktiv → linksbündig */
+/* Links, wenn Willkommenstitel */
 .page-title.left-align {
   text-align: left;
-  margin-right: auto; /* schiebt alles andere nach rechts */
-  font-size: 1rem;
+  margin-right: auto;
+  font-size: 1.25rem; /* etwas kleiner wirkt harmonisch linksbündig */
 }
 
-/* Buttons rechts */
-.topbar-buttons {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.topbar-buttons button {
-  background-color: #4285f4;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
-}
-.topbar-buttons button:hover {
-  background-color: #3367d6;
-  transform: scale(1.05);
-}
-
+/* Back-Button links */
 .back-button {
   background: transparent;
   border: none;
   padding: 0;
-  margin-right: 12px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -103,5 +76,38 @@ body.dark-mode .topbar {
 
   &:hover svg {
     transform: translateX(-3px);
+  }
+}
+
+/* Rechter Spacer hält die mittige Ausrichtung stabil */
+.topbar-spacer {
+  width: 24px; /* gleiche Breite wie das Icon links */
+  height: 24px;
+}
+
+/* Optional: Buttons rechts (falls später gebraucht) */
+.topbar-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  button {
+    background-color: #4285f4;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #3367d6;
+      transform: scale(1.05);
+    }
   }
 }

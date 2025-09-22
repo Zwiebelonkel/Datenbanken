@@ -42,7 +42,7 @@ export class UserScoreHistoryComponent implements OnInit {
   lineChartLabels: string[] = [];
 
   lineChartOptions: ChartOptions<'line'> = this.buildChartOptions();
-  lineChartType: ChartType = 'line';
+  lineChartType: 'line' = 'line';
 
   constructor(
     private scoreService: ScoreService,

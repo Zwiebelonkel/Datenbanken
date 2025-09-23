@@ -40,7 +40,7 @@ export class UserScoreHistoryComponent implements OnInit {
   private secondUserData: { times: number[]; scores: number[] } | null = null;
 
   secondUsername: string | null = null;
-  private allScoreTimes: number[] = []; // für kombinierte Labels
+  private allScoreTimes: number[] = []; // Stores combined, sorted, unique timestamps for the chart's x-axis
 
   tutorialTitle = 'Wie funktioniert das?';
   tutorialDescription =
@@ -80,39 +80,62 @@ export class UserScoreHistoryComponent implements OnInit {
       }
       this.username = user;
       this.loadScoreHistory();
-      this.loadOtherUsers(); // 🔄
+      this.loadOtherUsers();
     });
 
     window.addEventListener('resize', this.onResize);
   }
 
-  private interpolateScores(
-    times: number[],
-    scores: number[],
-    allTimes: number[]
-  ): number[] {
-    const result: number[] = [];
-    for (const t of allTimes) {
-      const exactIndex = times.indexOf(t);
-      if (exactIndex !== -1) {
-        // exakter Wert vorhanden
-        result.push(scores[exactIndex]);
-      } else {
-        // Interpolieren: Finde Zeitpunkte davor und danach
-        const beforeIndex = times.filter((time) => time < t).pop();
-        const afterIndex = times.find((time) => time > t);
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.onResize);
+  }
 
-        if (beforeIndex !== undefined && afterIndex !== undefined) {
-          const beforeScore = scores[times.indexOf(beforeIndex)];
-          const afterScore = scores[times.indexOf(afterIndex)];
-          // Lineare Interpolation
-          const factor = (t - beforeIndex) / (afterIndex - beforeIndex);
+  /**
+   * Efficiently interpolates scores onto a new set of timestamps.
+   * If a point in `allTimes` is outside the range of `sourceTimes`, it will be `null`.
+   */
+  private interpolateScores(
+    sourceTimes: number[],
+    sourceScores: number[],
+    allTimes: number[]
+  ): (number | null)[] {
+    if (sourceTimes.length === 0) {
+      return allTimes.map(() => null);
+    }
+
+    const result: (number | null)[] = [];
+    let sourceIndex = 0;
+
+    for (const t of allTimes) {
+      // Find the position of t relative to the sourceTimes
+      while (sourceIndex < sourceTimes.length && sourceTimes[sourceIndex] < t) {
+        sourceIndex++;
+      }
+
+      if (sourceIndex === 0) {
+        // t is before the first source time
+        result.push(sourceTimes[0] === t ? sourceScores[0] : null);
+      } else if (sourceIndex >= sourceTimes.length) {
+        // t is after the last source time
+        const lastIndex = sourceTimes.length - 1;
+        result.push(
+          sourceTimes[lastIndex] === t ? sourceScores[lastIndex] : null
+        );
+      } else {
+        const afterTime = sourceTimes[sourceIndex];
+        const beforeTime = sourceTimes[sourceIndex - 1];
+
+        if (afterTime === t) {
+          // Exact match
+          result.push(sourceScores[sourceIndex]);
+        } else {
+          // Interpolate between beforeTime and afterTime
+          const afterScore = sourceScores[sourceIndex];
+          const beforeScore = sourceScores[sourceIndex - 1];
+          const factor = (t - beforeTime) / (afterTime - beforeTime);
           const interpolated =
             beforeScore + factor * (afterScore - beforeScore);
           result.push(interpolated);
-        } else {
-          // Kein Interpolationspunkt möglich, setze null oder 0
-          result.push(0);
         }
       }
     }
@@ -120,12 +143,11 @@ export class UserScoreHistoryComponent implements OnInit {
   }
 
   private loadOtherUsers() {
-    // Lade alle Benutzer auf einmal – z. B. die ersten 100
     this.levelsService.load(1, 100).subscribe({
       next: (res) => {
         this.otherUsers = (res.users ?? [])
           .map((u) => u.username)
-          .filter((u) => u !== this.username); // aktiven Benutzer ausschließen
+          .filter((u) => u !== this.username);
       },
       error: (err) => {
         console.error('Fehler beim Laden der Benutzerliste:', err);
@@ -136,10 +158,6 @@ export class UserScoreHistoryComponent implements OnInit {
   private onResize = () => {
     this.lineChartOptions = this.buildChartOptions();
   };
-
-  ngOnDestroy(): void {
-    window.removeEventListener('resize', this.onResize);
-  }
 
   private loadScoreHistory() {
     this.loading = true;
@@ -152,12 +170,11 @@ export class UserScoreHistoryComponent implements OnInit {
           scores: data.map((d) => d.score),
         };
 
-        this.secondUserData = null; // Zurücksetzen für sauberen Vergleich
-        this.updateChart(); // Nur erster Nutzer
+        this.secondUserData = null; // Reset for a clean comparison
+        this.updateChart(); // Update with just the first user
 
         this.loading = false;
 
-        // Falls zweiter Nutzer schon ausgewählt ist → direkt laden
         if (this.secondUsername) {
           this.loadSecondUser();
         }
@@ -172,7 +189,7 @@ export class UserScoreHistoryComponent implements OnInit {
 
   loadSecondUser() {
     if (!this.secondUsername) {
-      this.secondUserData = null; // Entfernt Vergleich
+      this.secondUserData = null;
       this.updateChart();
       return;
     }
@@ -184,7 +201,7 @@ export class UserScoreHistoryComponent implements OnInit {
           scores: data.map((d) => d.score),
         };
 
-        this.updateChart(); // aktualisiert beide Datenreihen
+        this.updateChart(); // Refresh with both datasets
       },
       error: (err) => {
         console.error(err);
@@ -193,72 +210,53 @@ export class UserScoreHistoryComponent implements OnInit {
     });
   }
 
-  private updateLabelsAndOptions() {
-    if (this.allScoreTimes.length === 0) return;
-
-    const span =
-      (Math.max(...this.allScoreTimes) || 0) -
-      (Math.min(...this.allScoreTimes) || 0);
-
-    this.lineChartLabels = this.allScoreTimes.map((t) =>
-      this.formatTick(t, span)
-    );
-
-    this.thinOutLabels(6);
-    this.lineChartOptions = this.buildChartOptions();
-  }
-
-  /** Kompakte Tick-Formatierung je nach Zeitspannweite */
+  /** Compact tick formatting based on the time span */
   private formatTick(ts: number, span: number): string {
     const oneDay = 24 * 60 * 60 * 1000;
     if (span <= 2 * oneDay) {
-      // < 2 Tage → nur Uhrzeit
+      // < 2 days -> time only
       return new Date(ts).toLocaleTimeString('de-DE', {
         hour: '2-digit',
         minute: '2-digit',
       });
     }
     if (span <= 180 * oneDay) {
-      // < 6 Monate → Tag.Monat
+      // < 6 months -> day.month
       return new Date(ts).toLocaleDateString('de-DE', {
         day: '2-digit',
         month: '2-digit',
       });
     }
-    // sonst Monat.Jahr
+    // else -> month.year
     return new Date(ts).toLocaleDateString('de-DE', {
       month: '2-digit',
       year: '2-digit',
     });
   }
 
+  /** Formats a timestamp for the tooltip title. */
+  private formatTooltipTitle(ts: number): string {
+    return new Date(ts).toLocaleString('de-DE', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+  }
+
   private updateChart() {
     if (!this.mainUserData) return;
 
-    // Alle Zeitpunkte zusammenführen und sortieren + deduplizieren
+    // Combine, sort, and deduplicate all timestamps
     let allTimes = [...this.mainUserData.times];
     if (this.secondUserData) {
-      allTimes = [...allTimes, ...this.secondUserData.times];
+      allTimes.push(...this.secondUserData.times);
     }
-    allTimes = Array.from(new Set(allTimes)).sort((a, b) => a - b);
+    this.allScoreTimes = Array.from(new Set(allTimes)).sort((a, b) => a - b);
 
-    // Hilfsfunktion: Score für Zeit t finden oder null
-    const mapScores = (
-      times: number[],
-      scores: number[],
-      allTimes: number[]
-    ) => {
-      return allTimes.map((t) => {
-        const index = times.indexOf(t);
-        return index !== -1 ? scores[index] : null;
-      });
-    };
-
-    // Scores der Nutzer auf gemeinsame Zeitachse abbilden
+    // Interpolate scores for both users onto the common time axis
     const mainScores = this.interpolateScores(
       this.mainUserData.times,
       this.mainUserData.scores,
-      allTimes
+      this.allScoreTimes
     );
 
     const datasets: ChartDataset<'line'>[] = [
@@ -275,11 +273,11 @@ export class UserScoreHistoryComponent implements OnInit {
       },
     ];
 
-    if (this.secondUserData) {
-      const secondScores = mapScores(
+    if (this.secondUserData && this.secondUsername) {
+      const secondScores = this.interpolateScores(
         this.secondUserData.times,
         this.secondUserData.scores,
-        allTimes
+        this.allScoreTimes
       );
       datasets.push({
         data: secondScores,
@@ -296,15 +294,20 @@ export class UserScoreHistoryComponent implements OnInit {
 
     this.lineChartData = datasets;
 
-    // Labels als formatiertes Datum zu allTimes
-    const span = Math.max(...allTimes) - Math.min(...allTimes);
-    this.lineChartLabels = allTimes.map((t) => this.formatTick(t, span));
+    // Create formatted date labels from all timestamps
+    const span =
+      this.allScoreTimes.length > 1
+        ? Math.max(...this.allScoreTimes) - Math.min(...this.allScoreTimes)
+        : 0;
+    this.lineChartLabels = this.allScoreTimes.map((t) =>
+      this.formatTick(t, span)
+    );
     this.thinOutLabels(6);
 
     this.lineChartOptions = this.buildChartOptions();
   }
 
-  /** Dünnt sichtbare Labels aus (visuell, Daten bleiben komplett) */
+  /** Visually thins out labels, but keeps all data points. */
   private thinOutLabels(maxVisible: number) {
     const n = this.lineChartLabels.length;
     if (n <= maxVisible) return;
@@ -314,20 +317,19 @@ export class UserScoreHistoryComponent implements OnInit {
     );
   }
 
-  /** Optionen abhängig von der Viewport-Breite */
+  /** Build chart options based on viewport width. */
   private buildChartOptions(): ChartOptions<'line'> {
     const w = window.innerWidth || 1024;
-    // Weniger Ticks auf kleineren Screens
     const maxTicks = w < 380 ? 4 : w < 640 ? 5 : 8;
 
     return {
       responsive: true,
-      maintainAspectRatio: false, // CSS-Höhe aus SCSS soll gelten
+      maintainAspectRatio: false, // Let CSS height from SCSS apply
       interaction: { mode: 'nearest', intersect: false },
       layout: { padding: { top: 8, right: 4, bottom: 0, left: 0 } },
       elements: {
         point: { radius: 2 },
-        line: { borderWidth: 2, spanGaps: true },
+        line: { borderWidth: 2, spanGaps: true }, // spanGaps will connect lines over `null` data points
       },
       scales: {
         x: {
@@ -343,7 +345,7 @@ export class UserScoreHistoryComponent implements OnInit {
         y: {
           beginAtZero: true,
           ticks: {
-            precision: 0, // Ganzzahlen, falls Score ganzzahlig
+            precision: 0, // Integers, if score is an integer
             padding: 6,
             maxTicksLimit: 6,
           },
@@ -358,17 +360,20 @@ export class UserScoreHistoryComponent implements OnInit {
         },
         tooltip: {
           callbacks: {
-            // kompakter Tooltip mit vollem Datum+Zeit
+            // Compact tooltip with full date+time from original timestamp
             title: (items) => {
-              const idx = items?.[0]?.dataIndex ?? 0;
-              return this.lineChartLabels[idx] || '';
+              const idx = items?.[0]?.dataIndex;
+              if (idx !== undefined && this.allScoreTimes[idx]) {
+                return this.formatTooltipTitle(this.allScoreTimes[idx]);
+              }
+              return '';
             },
           },
         },
         decimation: {
           enabled: true,
           algorithm: 'lttb',
-          samples: 60, // drosselt für sehr viele Punkte
+          samples: 60, // Throttles for very large datasets
         },
       },
     };

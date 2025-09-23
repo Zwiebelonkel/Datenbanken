@@ -17,6 +17,7 @@ import { AuthService } from '../../services/auth.service';
 import { MoneyService } from '../../services/money.service';
 import { AchievementService } from '../../services/achievement.service';
 import { RainComponent } from '../rain/rain.component';
+import { TutorialComponent } from '../tutorial/tutorial.component';
 
 interface Villager {
   id: number;
@@ -61,6 +62,7 @@ interface VillagerAnim extends Villager {
     TopbarComponent,
     FormsModule,
     RainComponent,
+    TutorialComponent,
   ],
 })
 export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -82,6 +84,10 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
   tooltip = { visible: false, x: 0, y: 0, text: '' };
   username: string = '';
   currentLevel = 0;
+
+  tutorialTitle = 'Wie funktioniert das?';
+  tutorialDescription =
+    'Hier kannst du dein Dorf verwalten und verbessern um passiv Einkommen zu generieren. Auch wenn du offline bist, werden deine Dorfbewohner für dich arbeiteten. Du musst nur ab und zu vorbeischauen um das verdiente Geld einzusammeln und Upgrades zu kaufen.';
 
   upgradeAmount: number = 5; // Sichtbar im Input
   defaultUpgradeAmount: number = 10; // Tatsächlich verwendet beim Klick

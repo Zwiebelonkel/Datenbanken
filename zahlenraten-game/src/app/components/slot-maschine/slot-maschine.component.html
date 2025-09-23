@@ -19,7 +19,11 @@
     <app-reel *ngFor="let reel of reels; let i = index" #reelComp></app-reel>
   </div>
 
-  <button class="btn" (click)="spin()" [disabled]="currentMoney < spinCost || isSpinning">
+  <button
+    class="btn"
+    (click)="spin()"
+    [disabled]="currentMoney < spinCost || isSpinning"
+  >
     Spin
   </button>
 
@@ -53,3 +57,8 @@
 <div class="toast" *ngIf="achievementMessage">
   {{ achievementMessage }}
 </div>
+
+<app-tutorial
+  [title]="tutorialTitle"
+  [description]="tutorialDescription"
+></app-tutorial>

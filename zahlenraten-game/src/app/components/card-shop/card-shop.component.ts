@@ -9,6 +9,7 @@ import { SoundsService } from '../../services/sound.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { ModelViewerComponent } from '../view/view.component';
+import { TutorialComponent } from '../tutorial/tutorial.component';
 
 type CardOutcome =
   | { type: 'multiplier'; value: string; chance: number }
@@ -24,6 +25,7 @@ type CardOutcome =
     SidebarComponent,
     TopbarComponent,
     ModelViewerComponent,
+    TutorialComponent,
   ],
   templateUrl: './card-shop.component.html',
   styleUrls: ['./card-shop.component.scss'],
@@ -33,6 +35,9 @@ export class CardShopComponent implements OnInit {
   username: string = '';
   isLoading = false;
   message = '';
+  tutorialTitle = 'Wie funktioniert das?';
+  tutorialDescription =
+    'Im Card-Shop kannst du verschiedene Kartenpakete kaufen. Jedes Kartenpaket enthält 5 Karten, die du vor dem Spiel einsetzen kannst. Jedes Kartenpaket hat unterschiedliche Chancen auf verschiedene Belohnungen. Nach dem Kauf, wirst du zu einer speziellen Seite weitergeleitet, auf der du dein Kartenpaket öffnen und deine Belohnungen sehen kannst. Viel Glück!';
 
   cardPacks = [
     {

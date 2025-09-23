@@ -169,14 +169,14 @@
 
           <div class="upgrade-buttons">
             <button
-              class ="btn"
+              class="btn"
               (click)="upgradeVillager(v, 1)"
               [disabled]="money < getUpgradeCost(v.level)"
             >
               ⬆️ +1 Stufe ({{ getUpgradeCost(v.level) }} 💵)
             </button>
             <button
-              class ="btn"
+              class="btn"
               (click)="upgradeVillager(v, upgradeAmount)"
               [disabled]="money < getTotalUpgradeCost(v.level, upgradeAmount)"
             >
@@ -189,14 +189,14 @@
 
           <div class="upgrade-buttons">
             <button
-              class ="btn"
+              class="btn"
               (click)="upgradeSpeed(v, 1)"
               [disabled]="money < getUpgradeCost(v.speed)"
             >
               🚀 +0.5 Speed ({{ getUpgradeCost(v.speed) }} 💵)
             </button>
             <button
-              class ="btn"
+              class="btn"
               (click)="upgradeSpeed(v, upgradeAmount)"
               [disabled]="money < getTotalUpgradeCost(v.speed, upgradeAmount)"
             >
@@ -209,14 +209,14 @@
 
           <div class="upgrade-buttons">
             <button
-              class ="btn"
+              class="btn"
               (click)="upgradeStamina(v, 1)"
               [disabled]="money < getUpgradeCost(v.stamina)"
             >
               💪 +0.5 Ausdauer ({{ getUpgradeCost(v.stamina) }} 💵)
             </button>
             <button
-              class ="btn"
+              class="btn"
               (click)="upgradeStamina(v, upgradeAmount)"
               [disabled]="money < getTotalUpgradeCost(v.stamina, upgradeAmount)"
             >
@@ -239,5 +239,10 @@
 <div class="toast" *ngIf="achievementMessage">
   {{ achievementMessage }}
 </div>
+
+<app-tutorial
+  [title]="tutorialTitle"
+  [description]="tutorialDescription"
+></app-tutorial>
 
 <app-rain #rain></app-rain>

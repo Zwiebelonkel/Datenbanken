@@ -18,6 +18,7 @@ import { ChatService } from '../../services/chat.service';
 import { ReelComponent } from './reel/reel.component';
 import { FormsModule } from '@angular/forms';
 import { RainComponent } from '../rain/rain.component';
+import { TutorialComponent } from '../tutorial/tutorial.component';
 
 type SymbolData = { type: 'emoji' | 'image'; value: string };
 
@@ -34,6 +35,7 @@ type SymbolData = { type: 'emoji' | 'image'; value: string };
     SidebarComponent,
     TopbarComponent,
     ReelComponent,
+    TutorialComponent,
   ],
 })
 export class SlotMaschineComponent implements OnInit, AfterViewInit {
@@ -59,6 +61,9 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
   gotLasVegas: boolean = false;
   achievementMessage: string | null = null;
   currentLevel = 0;
+  tutorialTitle = 'Wie funktioniert das?';
+  tutorialDescription =
+    'Hier kannst du dein Glück herrausfordern und eine beliebige Menge an Geld setzten. Falls alle Symbole übereinstimmen, gewinnst du das 15-fache deines Einsatzes!';
 
   get spinCost() {
     return this.betAmount;

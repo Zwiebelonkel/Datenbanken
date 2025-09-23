@@ -1,0 +1,36 @@
+<app-sidebar></app-sidebar>
+<app-topbar page="Scorevergleich"></app-topbar>
+
+<div class="compare-container">
+  <app-loader *ngIf="loading"></app-loader>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <div class="user-select-container">
+    <div class="user-select-row">
+      <label for="user1">Benutzer 1:</label>
+      <select id="user1" [(ngModel)]="firstUsername" (change)="onUser1Change()">
+        <option *ngFor="let user of allUsers" [ngValue]="user">{{ user }}</option>
+      </select>
+    </div>
+    <div class="user-select-row">
+      <label for="user2">Benutzer 2:</label>
+      <select id="user2" [(ngModel)]="secondUsername" (change)="onUser2Change()">
+        <option *ngFor="let user of availableForSecondSelection" [ngValue]="user">
+          {{ user }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !error" class="card compare-card">
+    <h3>Scorevergleich</h3>
+
+    <canvas
+      baseChart
+      [datasets]="lineChartData"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [type]="lineChartType"
+    ></canvas>
+  </div>
+</div>

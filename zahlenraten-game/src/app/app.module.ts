@@ -30,6 +30,7 @@ import { SlotMaschineComponent } from './components/slot-maschine/slot-maschine.
 import { ReelComponent } from './components/slot-maschine/reel/reel.component';
 import { SkillShopComponent } from './components/skill-shop/skill-shop.component';
 import { PlayerBarComponent } from './components/player-bar/player-bar.component';
+import { TutorialComponent } from './components/tutorial/tutorial.component';
 
 // import { StreakIndicator } from './components/streak-indicator/streak-indicator.component';
 
@@ -67,6 +68,7 @@ import { OfflineComponent } from './components/offline/offline.component';
     ReelComponent,
     PlayerBarComponent,
     UserScoreHistoryComponent,
+    TutorialComponent,
     // StreakIndicatorComponent,
     DatenschutzComponent,
     ImpressumComponent,

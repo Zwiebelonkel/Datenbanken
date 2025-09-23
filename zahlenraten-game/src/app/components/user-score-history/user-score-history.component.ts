@@ -7,6 +7,7 @@ import { ScoreService } from '../../services/score.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
+import { TutorialComponent } from '../tutorial/tutorial.component';
 
 @Component({
   selector: 'app-user-score-history',
@@ -17,6 +18,7 @@ import { TopbarComponent } from '../topbar/topbar.component';
     LoaderComponent,
     SidebarComponent,
     TopbarComponent,
+    TutorialComponent,
   ],
   templateUrl: './user-score-history.component.html',
   styleUrls: ['./user-score-history.component.scss'],
@@ -25,6 +27,10 @@ export class UserScoreHistoryComponent implements OnInit {
   username = '';
   loading = true;
   error: string | null = null;
+
+  tutorialTitle = 'Wie funktioniert das?';
+  tutorialDescription =
+    'Hier siehst du den Verlauf deiner erzielten Scores in den vergangenen Spielen. So kannst du deine Fortschritte und Verbesserungen im Spiel verfolgen und dir Statistiken zu deinen Leistungen ansehen.';
 
   lineChartData: ChartDataset<'line'>[] = [
     {

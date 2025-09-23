@@ -21,6 +21,7 @@ import { TopbarComponent } from '../topbar/topbar.component';
 import { PlayerBarComponent } from '../player-bar/player-bar.component';
 import { StreakIndicatorComponent } from '../streak-indicator/streak-indicator.component';
 import { ElementRef, AfterViewInit } from '@angular/core';
+import { TutorialComponent } from '../tutorial/tutorial.component';
 
 @Component({
   selector: 'app-game',
@@ -38,6 +39,7 @@ import { ElementRef, AfterViewInit } from '@angular/core';
     RainComponent,
     PlayerBarComponent,
     StreakIndicatorComponent,
+    TutorialComponent,
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -77,6 +79,11 @@ export class GameComponent implements OnInit {
   monetaryMultiplier = 1; // aus DB
   profileMoney = 0;
   xpPercent: number | null = null; // optional für die Leiste
+
+  tutorialTitle = 'Wie funktioniert das?';
+
+  tutorialDescription =
+    'In diesem Spiel musst du einschätzen, ob eine zufällig generierte Zahl zwischen zwei anderen Zahlen liegt oder nicht. Du startest mit 3 Leben und sammelst Punkte sowie In-Game-Währung basierend auf deinen richtigen Antworten. Je mehr richtige Antworten du hintereinander gibst, desto höher wird dein Multiplikator, was dir mehr Punkte und Geld einbringt. Wenn du falsch liegst, verlierst du ein Leben. Das Spiel endet, wenn du keine Leben mehr hast. Viel Glück!';
 
   private baseScoreAccum = 0;
   private baseMoneyAccum = 0;

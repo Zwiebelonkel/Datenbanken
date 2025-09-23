@@ -1,0 +1,14 @@
+<div class="tutorial">
+  <header class="tutorial-header">
+    <h2 class="tutorial-title">{{ title }}</h2>
+  </header>
+  <p class="tutorial-description">
+    {{ description }}
+  </p>
+  <ul class="tutorial-skills">
+    <li *ngFor="let skill of skills">
+      <strong>{{ skill.name }} {{ skill.emoji }}</strong>
+      {{ skill.description }}
+    </li>
+  </ul>
+</div>

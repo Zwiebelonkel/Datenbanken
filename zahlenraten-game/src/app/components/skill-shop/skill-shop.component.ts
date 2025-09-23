@@ -9,11 +9,18 @@ import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { LoaderComponent } from '../loader/loader.component';
+import { TutorialComponent } from '../tutorial/tutorial.component';
 
 @Component({
   selector: 'app-skill-shop',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, LoaderComponent, TopbarComponent],
+  imports: [
+    CommonModule,
+    SidebarComponent,
+    LoaderComponent,
+    TopbarComponent,
+    TutorialComponent,
+  ],
   templateUrl: './skill-shop.component.html',
   styleUrls: ['./skill-shop.component.scss'],
 })
@@ -21,6 +28,34 @@ export class SkillShopComponent implements OnInit {
   username = '';
   isLoading = false;
   errorMsg: string | null = null;
+
+  // app.component.ts
+
+  skillsData = [
+    {
+      name: 'Der "Präzision"-Skill',
+      emoji: '🎯',
+      description:
+        'erhöht deinen Score-Multiplikator, was bedeutet, dass du mehr Punkte pro Spiel erhältst.',
+    },
+    {
+      name: 'Der "Businessman"-Skill',
+      emoji: '💸',
+      description:
+        'erhöht deinen dauerhaften Geld-Multiplikator, was bedeutet, dass du mehr In-Game-Währung pro Spiel oder Abhebung verdienst.',
+    },
+    {
+      name: 'Der "Ausdauer"-Skill',
+      emoji: '💨',
+      description:
+        'senkt die erforderte Sieg-Streak, die du benötigst, um ein Leben zurück zu erhalten.',
+    },
+  ];
+
+  tutorialTitle = 'Wie funktioniert das?';
+
+  tutorialDescription =
+    'Wenn du im Spiel ein Level aufsteigst, erhältst du einen Skillpunkt. Mit diesen Skillpunkten kannst du dir dann hier im Shop dauerhafte Vorteile für die zukünftigen Spiele kaufen. Der erforderte XP (Erfahrungspunkte)-Betrag für einen Level-Up steigt mit jedem Level an.';
 
   skills: Skill[] = [];
 

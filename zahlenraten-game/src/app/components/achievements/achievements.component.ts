@@ -5,17 +5,28 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { TopbarComponent } from '../topbar/topbar.component';
+import { TutorialComponent } from '../tutorial/tutorial.component';
 
 @Component({
   selector: 'app-achievements',
   templateUrl: './achievements.component.html',
   styleUrls: ['./achievements.component.scss'],
-  imports: [CommonModule, SidebarComponent, TopbarComponent, LoaderComponent],
+  imports: [
+    CommonModule,
+    SidebarComponent,
+    TopbarComponent,
+    LoaderComponent,
+    TutorialComponent,
+  ],
   standalone: true,
 })
 export class AchievementsComponent implements OnInit {
   achievements: any[] = [];
   isLoading = true;
+
+  tutorialTitle = 'Wie funktioniert das?';
+  tutorialDescription =
+    'Hier befinden sich alle Meilensteine, die du im Spiel erreichen kannst. Das Freischalten von Erfolgen gibt ausserdem einen Bonus von 20XP!';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

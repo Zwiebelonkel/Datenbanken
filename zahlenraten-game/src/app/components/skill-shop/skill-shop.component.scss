@@ -65,7 +65,8 @@
   margin-bottom: 20px;
 }
 
-.skill-card {
+.skill-card,
+.tutorial {
   background: var(--background-color);
   border-radius: 15px;
   padding: 1.5rem;
@@ -78,13 +79,15 @@
     border-color: $theme;
   }
 
-  .skill-header {
+  .skill-header,
+  .tutorial-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
 
-    .skill-name {
+    .skill-name,
+    .tutorial-title {
       font-size: 1.2rem;
       font-weight: 700;
       color: var(--text-color);
@@ -108,7 +111,8 @@
     }
   }
 
-  .skill-description {
+  .skill-description,
+  .tutorial-description {
     font-size: 0.95rem;
     color: #555;
     margin-bottom: 1.2rem;
@@ -160,6 +164,23 @@
   50% {
     transform: translateY(-4px);
   }
+}
+
+.tutorial {
+  text-align: left;
+  margin-top: 5rem;
+  border: 2px dashed $theme;
+
+  .tutorial-header {
+    .tutorial-title {
+      color: $theme;
+    }
+  }
+}
+
+li {
+  background: none;
+  color: #555;
 }
 
 /* ===== Responsiv ===== */

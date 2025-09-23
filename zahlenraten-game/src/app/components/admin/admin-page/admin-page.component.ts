@@ -32,6 +32,7 @@ export class AdminPageComponent implements OnInit {
     { key: 'shop', label: '🃏 Karten', enabled: true },
     { key: 'skillShop', label: '⬆️ Skills', enabled: true },
     { key: 'tutorial', label: '❓ Tutorial', enabled: true },
+    { key: 'compare', label: '📊 Scorevergleich', enabled: true },
   ];
 
   // Tools UI State

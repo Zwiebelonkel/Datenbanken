@@ -21,6 +21,7 @@ export const config: ScullyConfig = {
     '/achievements',
     '/profile',
     '/history',
+    '/compare',
     '/how-to-play',
     '/clicker',
     '/card-shop',

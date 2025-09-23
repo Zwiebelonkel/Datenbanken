@@ -33,6 +33,16 @@
                 "input": "src",
                 "glob": "google5b39869c31092c48.html",
                 "output": "."
+              },
+              {
+                "input": "src",
+                "glob": "robots.txt",
+                "output": "."
+              },
+              {
+                "input": "src",
+                "glob": "ads.txt",
+                "output": "."
               }
             ],
             "styles": ["src/styles.scss"],

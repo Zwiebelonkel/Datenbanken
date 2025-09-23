@@ -10,3 +10,4 @@ Disallow: /api/
 Disallow: /private/
 Disallow: /assets/dev/
 
+Sitemap: https://outside---between.web.app/assets/sitemap.xml

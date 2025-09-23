@@ -37,7 +37,6 @@ export class StreakIndicatorComponent implements OnChanges, OnInit {
   ngOnInit() {
     this.username = this.authService.getUsername() ?? '';
     if (!this.username) {
-      console.error('Kein Benutzername gefunden, streakNeeded nicht geladen');
       return;
     }
 

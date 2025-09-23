@@ -18,6 +18,7 @@ import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { UserScoreHistoryComponent } from './components/user-score-history/user-score-history.component';
 import { PackOpeningPageComponent } from './components/pack-opening.page/pack-opening.page';
+import { CompareScoresComponent } from './components/compare-scores/compare-scores.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'skill-shop', component: SkillShopComponent },
   { path: 'history', component: UserScoreHistoryComponent },
   { path: 'history/:username', component: UserScoreHistoryComponent },
+  { path: 'compare', component: CompareScoresComponent },
   // { path: 'pack-opening', component: PackOpeningComponent },
   { path: 'village', component: VillageComponent },
   { path: 'slot-maschine', component: SlotMaschineComponent },

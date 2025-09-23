@@ -105,6 +105,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   goToSlots()        { this.router.navigate(['/slot-maschine']);this.sidebarOpen = false; }
   goToLogin()        { this.router.navigate(['/login']); }
   goHome()           { this.router.navigate(['/']); }
+  goToCompare()      { this.router.navigate(['/compare']);      this.sidebarOpen = false; }
+
 
   toggleDarkMode() {
     document.body.classList.toggle('dark-mode');

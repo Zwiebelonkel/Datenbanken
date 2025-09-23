@@ -6,6 +6,16 @@
   <app-loader *ngIf="loading"></app-loader>
   <div *ngIf="error" class="error-msg">{{ error }}</div>
 
+  <div class="user-select-row">
+    <label for="user2">Vergleichen mit:</label>
+    <select id="user2" [(ngModel)]="secondUsername" (change)="loadSecondUser()">
+      <option [ngValue]="null">– Kein zweiter Benutzer –</option>
+      <option *ngFor="let user of otherUsers" [ngValue]="user">
+        {{ user }}
+      </option>
+    </select>
+  </div>
+
   <div *ngIf="!loading && !error" class="card profile-card">
     <h3>📈 Scoreverlauf von {{ username }}</h3>
 

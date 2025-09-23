@@ -112,3 +112,22 @@ body.dark-mode {
     height: 230px !important;
   }
 }
+.user-select-row {
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  label {
+    font-weight: bold;
+  }
+
+  select {
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--card-border, #ccc);
+    background: var(--card-bg, #fff);
+    color: var(--text-color);
+    font-size: 1rem;
+  }
+}

@@ -1,18 +1,18 @@
 import express from "express";
 import db from "../db.js";
-import { requireAuth, requireAdmin } from "../auth.js";
 
 const router = express.Router();
 
-// ADMIN ONLY: Karte einem Benutzer hinzufügen oder erhöhen
-router.post("/", requireAuth, requireAdmin, async (req, res) => {
+// Karte hinzufügen oder erhöhen
+router.post("/", async (req, res) => {
   const { username, multiplier, amount } = req.body;
 
-  if (!username || typeof multiplier !== "number" || !Number.isInteger(amount) || amount <= 0) {
-    return res.status(400).json({ message: "Fehlende oder ungültige Felder (username, multiplier, amount)" });
+  if (!username || typeof multiplier !== "number") {
+    return res.status(400).json({ message: "Fehlende oder ungültige Felder" });
   }
 
   try {
+    // 1. User-ID ermitteln
     const userResult = await db.execute({
       sql: "SELECT id FROM users WHERE LOWER(username) = LOWER(?)",
       args: [username],
@@ -21,8 +21,10 @@ router.post("/", requireAuth, requireAdmin, async (req, res) => {
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: "Benutzer nicht gefunden" });
     }
+
     const userId = userResult.rows[0].id;
 
+    // 2. Einfügen oder erhöhen (upsert)
     await db.execute({
       sql: `
         INSERT INTO cards (user_id, multiplier, amount)
@@ -30,23 +32,40 @@ router.post("/", requireAuth, requireAdmin, async (req, res) => {
         ON CONFLICT(user_id, multiplier)
         DO UPDATE SET amount = amount + excluded.amount
       `,
-      args: [userId, multiplier, amount],
+      args: [userId, multiplier, amount || 1],
     });
 
-    res.json({ success: true, message: `Karte ${multiplier}x an ${username} gegeben.` });
+    res.json({ success: true });
   } catch (err) {
     console.error("❌ Fehler beim Karten-Speichern:", err);
     res.status(500).json({ message: "Fehler beim Speichern der Karte" });
   }
 });
 
-// EIGENE Karten als authentifizierter Benutzer abrufen
-router.get("/", requireAuth, async (req, res) => {
-  const userId = req.user.id; // ID aus dem Token verwenden
+// Alle Karten für einen Benutzer abrufen
+router.get("/", async (req, res) => {
+  const { username } = req.query;
+
+  if (!username) {
+    return res.status(400).json({ message: "Username fehlt" });
+  }
 
   try {
+    // User-ID abrufen
+    const userResult = await db.execute({
+      sql: "SELECT id FROM users WHERE LOWER(username) = LOWER(?)",
+      args: [username],
+    });
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    }
+
+    const userId = userResult.rows[0].id;
+
+    // Karten für diesen User laden
     const cardsResult = await db.execute({
-      sql: "SELECT multiplier, amount FROM cards WHERE user_id = ? AND amount > 0",
+      sql: "SELECT multiplier, amount FROM cards WHERE user_id = ?",
       args: [userId],
     });
 
@@ -57,37 +76,38 @@ router.get("/", requireAuth, async (req, res) => {
   }
 });
 
-// EIGENE Karte verbrauchen (1 abziehen)
-router.put("/use", requireAuth, async (req, res) => {
-  const { multiplier } = req.body;
-  const userId = req.user.id; // ID aus dem Token verwenden
+// Karte verbrauchen (1 abziehen)
+router.put("/use", async (req, res) => {
+  const { username, multiplier } = req.body;
 
-  if (typeof multiplier !== "number") {
-    return res.status(400).json({ message: "Ungültiger 'multiplier'" });
+  if (!username || typeof multiplier !== "number") {
+    return res.status(400).json({ message: "Fehlende oder ungültige Felder" });
   }
 
   try {
-    // Sicherstellen, dass der User die Karte besitzt
-    const cardCheck = await db.execute({
-        sql: "SELECT amount FROM cards WHERE user_id = ? AND multiplier = ?",
-        args: [userId, multiplier]
+    // User-ID holen
+    const userResult = await db.execute({
+      sql: "SELECT id FROM users WHERE LOWER(username) = LOWER(?)",
+      args: [username],
     });
 
-    if (cardCheck.rows.length === 0 || cardCheck.rows[0].amount <= 0) {
-        return res.status(400).json({ message: "Karte nicht im Besitz oder keine Exemplare mehr" });
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
     }
 
-    // Karte um 1 verringern
-    const updateResult = await db.execute({
-      sql: "UPDATE cards SET amount = amount - 1 WHERE user_id = ? AND multiplier = ?",
+    const userId = userResult.rows[0].id;
+
+    // Karte um 1 verringern (falls vorhanden)
+    await db.execute({
+      sql: `
+        UPDATE cards
+        SET amount = amount - 1
+        WHERE user_id = ? AND multiplier = ? AND amount > 0
+      `,
       args: [userId, multiplier],
     });
 
-    if (updateResult.rowsAffected === 0) {
-        return res.status(404).json({ message: "Konnte die Karte nicht verwenden"});
-    }
-
-    res.json({ success: true, message: `Karte ${multiplier}x verwendet.` });
+    res.json({ success: true });
   } catch (err) {
     console.error("❌ Fehler beim Verwenden der Karte:", err);
     res.status(500).json({ message: "Fehler beim Verwenden der Karte" });

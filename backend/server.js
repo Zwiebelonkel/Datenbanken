@@ -242,10 +242,12 @@ app.get("/api/achievements", async (req, res) => {
   }
 });
 
-// Achievement freischalten
-app.post("/api/unlock", async (req, res) => {
-  const { userId, name, description } = req.body;
-  if (!userId || !name || !description) {
+// Achievement freischalten (SECURED)
+app.post("/api/unlock", requireAuth, async (req, res) => {
+  const { name, description } = req.body;
+  const userId = req.user.id; // USE ID FROM TOKEN
+
+  if (!name || !description) {
     return res.status(400).json({ message: "Fehlende Daten" });
   }
 
@@ -272,30 +274,31 @@ app.post("/api/unlock", async (req, res) => {
   }
 });
 
-// Passwort ändern
-app.patch("/api/users/password", async (req, res) => {
-  const { username, currentPassword, newPassword } = req.body;
+// Passwort ändern (SECURED)
+app.patch("/api/users/password", requireAuth, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user.id; // USE ID FROM TOKEN
 
   try {
     const result = await db.execute({
-      sql: "SELECT * FROM users WHERE username = ?",
-      args: [username],
+      sql: "SELECT * FROM users WHERE id = ?",
+      args: [userId],
     });
 
     if (result.rows.length === 0) {
-      return res.status(400).json({ message: "Benutzer nicht gefunden" });
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
     }
 
     const user = result.rows[0];
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      return res.status(403).json({ message: "Falsches Passwort" });
+      return res.status(401).json({ message: "Falsches aktuelles Passwort" });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await db.execute({
-      sql: "UPDATE users SET password = ? WHERE username = ?",
-      args: [hashedPassword, username],
+      sql: "UPDATE users SET password = ? WHERE id = ?",
+      args: [hashedPassword, userId],
     });
 
     res.json({ message: "Passwort erfolgreich geändert" });
@@ -303,6 +306,7 @@ app.patch("/api/users/password", async (req, res) => {
     res.status(500).json({ message: "Fehler beim Ändern des Passworts" });
   }
 });
+
 
 // Automatisches Einkommen (passiv)
 app.get("/api/collect", verifyToken, async (req, res) => {

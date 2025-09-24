@@ -1,48 +1,83 @@
 import express from "express";
 import db from "../db.js";
+import { requireAuth, requireAdmin } from "../auth.js";
 
 const router = express.Router();
 
-// POST /api/money/update
-router.post("/update", async (req, res) => {
-  try {
-    const { username, amount } = req.body;
-    const base = Number(amount) || 0;
+// POST /api/money/update (SECURED)
+// Allows a user to add or remove a specific amount from their own balance.
+// The amount is a raw value; multipliers are NOT applied here.
+router.post("/update", requireAuth, async (req, res) => {
+  const { amount } = req.body;
+  const userId = req.user.id; // USE ID FROM TOKEN
 
-    // Userdaten holen (inkl. multiplier)
-    const row = await db.execute({
-      sql: `SELECT COALESCE(monetary_multiplier,1) AS m, COALESCE(money,0) AS money
-            FROM users WHERE username = ?`,
-      args: [username],
+  const amountToAdd = Number(amount);
+  if (!Number.isFinite(amountToAdd)) {
+    return res.status(400).json({ error: "Invalid amount specified." });
+  }
+
+  try {
+    // Update the money for the authenticated user.
+    await db.execute({
+      sql: `UPDATE users SET money = money + ? WHERE id = ?`,
+      args: [amountToAdd, userId],
     });
 
-    if (!row.rows.length) {
-      return res.status(404).json({ error: "User not found" });
+    // Fetch the new balance to return to the client.
+    const result = await db.execute({
+      sql: `SELECT money FROM users WHERE id = ?`,
+      args: [userId],
+    });
+    const newMoney = result.rows[0]?.money ?? 0;
+
+    res.json({ 
+      success: true, 
+      credited: amountToAdd, 
+      newBalance: newMoney 
+    });
+
+  } catch (err) {
+    console.error("❌ /money/update error:", err);
+    res.status(500).json({ error: "Server error while updating money." });
+  }
+});
+
+// POST /api/money/setMultiplier (SECURED - ADMIN ONLY)
+// Allows an administrator to set the score and money multipliers for a specific user.
+router.post("/setMultiplier", requireAuth, requireAdmin, async (req, res) => {
+    const { username, score_multiplier, monetary_multiplier } = req.body;
+
+    if (!username) {
+        return res.status(400).json({ error: "Username is required." });
     }
 
-    const m = Number(row.rows[0].m) || 1;
+    // Validate multipliers
+    const sm = Number(score_multiplier) || 1.0;
+    const mm = Number(monetary_multiplier) || 1.0;
 
-    // Multiplier nur bei positiver Betrag anwenden
-    const credited = base > 0 ? Math.round(base * m) : base;
+    if (!Number.isFinite(sm) || !Number.isFinite(mm) || sm < 0 || mm < 0) {
+        return res.status(400).json({ error: "Invalid multiplier values." });
+    }
 
-    // Addieren statt überschreiben!
-    await db.execute({
-      sql: `UPDATE users SET money = money + ? WHERE username = ?`,
-      args: [credited, username],
-    });
+    try {
+        const result = await db.execute({
+            sql: "UPDATE users SET score_multiplier = ?, monetary_multiplier = ? WHERE username = ?",
+            args: [sm, mm, username]
+        });
 
-    // neuen Kontostand holen
-    const after = await db.execute({
-      sql: `SELECT COALESCE(money,0) AS money FROM users WHERE username = ?`,
-      args: [username],
-    });
-    const newMoney = Number(after.rows[0].money) || 0;
+        if (result.rowsAffected === 0) {
+            return res.status(404).json({ error: `User '${username}' not found.` });
+        }
 
-    res.json({ ok: true, credited, money: newMoney });
-  } catch (err) {
-    console.error("❌ updateMoney error:", err);
-    res.status(500).json({ error: "Fehler beim Update" });
-  }
+        res.json({ 
+            success: true, 
+            message: `Multipliers for ${username} updated successfully.` 
+        });
+
+    } catch(err) {
+        console.error("❌ /money/setMultiplier error:", err);
+        res.status(500).json({ error: "Server error while setting multipliers." });
+    }
 });
 
 

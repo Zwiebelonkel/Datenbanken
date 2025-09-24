@@ -1,4 +1,3 @@
-
 {
     "name": "zahlenraten-root",
     "version": "1.0.0",
@@ -10,6 +9,7 @@
         "concurrently": "^8.0.1"
     },
     "dependencies": {
+        "@google/generative-ai": "^0.11.3",
         "@libsql/client": "^0.15.9",
         "bcrypt": "^6.0.0",
         "bcryptjs": "^3.0.2",

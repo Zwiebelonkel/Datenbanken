@@ -1,25 +1,42 @@
-
-<div class="private-chat-container">
-  <div class="user-list">
-    <h3>Users</h3>
-    <ul>
-      <li *ngFor="let user of users" (click)="selectUser(user)">
-        {{ user.username }}
-      </li>
-    </ul>
-  </div>
-  <div class="chat-area">
-    <div *ngIf="selectedUser" class="chat-header">
-      <h3>{{ selectedUser.username }}</h3>
+<app-sidebar></app-sidebar>
+<app-topbar></app-topbar>
+<main>
+  <div class="card chat-box">
+    <div class="chat-header">
+      <h3>{{ selectedUser ? 'Private Chat with ' + selectedUser.username : 'Select a User to Chat' }}</h3>
     </div>
-    <div class="messages">
-      <div *ngFor="let message of messages" class="message">
-        <strong>{{ message.sender }}:</strong> {{ message.message }}
+  
+    <div class="chat-content">
+      <div class="user-list">
+        <h3>Users</h3>
+        <ul>
+          <li *ngFor="let user of users" (click)="selectUser(user)">
+            {{ user.username }}
+          </li>
+        </ul>
+      </div>
+      <div class="chat-area">
+        <app-loader *ngIf="isLoading"></app-loader>
+        <div class="messages" #messageContainer>
+          <div class="message" *ngFor="let msg of messages; trackBy: trackByMsg" [ngClass]="{
+              'user-message': msg.sender === username,
+              'other-message': msg.sender !== username
+            }">
+            <div class="message-content" (click)="copyToClipboard(msg.message)">
+              <span class="user"><b>{{ msg.sender }}</b></span>
+              <span class="text">{{ msg.message }}</span>
+              <span class="timestamp">{{ msg.created_at | date : "HH:mm" }}</span>
+            </div>
+          </div>
+        </div>
+  
+        <form (ngSubmit)="sendMessage()" class="chat-form" *ngIf="selectedUser">
+          <input [(ngModel)]="newMessage" name="message" placeholder="Nachricht schreiben..." />
+          <button class="send-btn" [disabled]="newMessage.trim() === ''" type="submit">
+            📤 Senden
+          </button>
+        </form>
       </div>
     </div>
-    <div class="message-input">
-      <input [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Type a message...">
-      <button (click)="sendMessage()">Send</button>
-    </div>
   </div>
-</div>
+</main>

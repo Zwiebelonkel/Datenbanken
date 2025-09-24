@@ -1,42 +1,130 @@
+.chat-box {
+  padding: 2rem;
+  margin: 1rem auto;
+}
 
-.private-chat-container {
+.chat-header {
+  text-align: center;
+
+  h3 {
+    margin: 0 0 0.75rem 0;
+    font-weight: 800;
+  }
+}
+
+.chat-content {
   display: flex;
-  height: 100%;
 }
 
 .user-list {
   width: 200px;
   border-right: 1px solid #ccc;
   padding: 10px;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #eee;
+      }
+    }
+  }
 }
 
 .chat-area {
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.chat-header {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+  padding: 0 1rem;
 }
 
 .messages {
-  flex: 1;
-  padding: 10px;
+  max-height: 300px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border-top: 1px solid var(--card-border);
+  border-bottom: 1px solid var(--card-border);
 }
 
-.message-input {
-  padding: 10px;
-  border-top: 1px solid #ccc;
+.message {
+  transition: 0.25s;
+  position: relative;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background-color: var(--list-bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+
+  &:hover {
+    scale: 0.975;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+  }
 }
 
-.message-input input {
-  width: 100%;
-  padding: 5px;
+.user-message {
+  background-color: var(--list-bg); // Fallback für ale Browser
+  background-color: color-mix(in srgb, #d4f1f4 40%, var(--list-bg) 60%);
+  color: #2c3e50;
+  border-left: 4px solid #3498db;
 }
 
-.message-input button {
-  margin-top: 5px;
+.other-message {
+  border-right: 4px solid #555;
+}
+
+.text {
+  color: var(--text-color);
+  word-break: break-word;
+  display: block;
+}
+
+.timestamp {
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.5rem;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: var(--input-bg);
+  margin: 0.5rem;
+  color: var(--text-color);
+}
+
+.send-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--theme);
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: var(--theme-hover);
+  }
+  &:disabled {
+    background-color: var(--btn-disabled);
+    cursor: not-allowed;
+  }
 }

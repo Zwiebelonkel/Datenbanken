@@ -29,6 +29,10 @@
 <changefreq>daily</changefreq>
 </url>
 <url>
+<loc>https://outside---between.web.app/compare</loc>
+<changefreq>daily</changefreq>
+</url>
+<url>
 <loc>https://outside---between.web.app/how-to-play</loc>
 <changefreq>daily</changefreq>
 </url>
@@ -70,6 +74,10 @@
 </url>
 <url>
 <loc>https://outside---between.web.app/contact</loc>
+<changefreq>daily</changefreq>
+</url>
+<url>
+<loc>https://outside---between.web.app/private-chat</loc>
 <changefreq>daily</changefreq>
 </url>
 </urlset>

@@ -9,7 +9,7 @@ router.get('/:user1/:user2', async (req, res) => {
   const { user1, user2 } = req.params;
   try {
     const result = await db.execute({
-        sql: 'SELECT * FROM messages WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) ORDER BY timestamp ASC',
+        sql: 'SELECT id, sender, receiver, message, timestamp as created_at FROM messages WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) ORDER BY timestamp ASC',
         args: [user1, user2, user2, user1]
     });
     res.json(result.rows);
@@ -25,11 +25,12 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   try {
+    const now = new Date().toISOString();
     await db.execute({
-        sql: 'INSERT INTO messages (sender, receiver, message) VALUES (?, ?, ?)',
-        args: [sender, receiver, message]
+        sql: 'INSERT INTO messages (sender, receiver, message, timestamp) VALUES (?, ?, ?, ?)',
+        args: [sender, receiver, message, now]
     });
-    res.status(201).json({ message: 'Message sent' });
+    res.status(201).json({ message: 'Message sent', created_at: now });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

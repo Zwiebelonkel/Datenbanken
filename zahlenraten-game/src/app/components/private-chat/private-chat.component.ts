@@ -23,6 +23,7 @@ export class PrivateChatComponent implements OnInit {
   newMessage: string = '';
   username: string | null = null;
   isLoading: boolean = false;
+  public showChat = false;
 
   constructor(private privateChatService: PrivateChatService, private authService: AuthService) { }
 
@@ -37,6 +38,7 @@ export class PrivateChatComponent implements OnInit {
 
   selectUser(user: any) {
     this.selectedUser = user;
+    this.showChat = true;
     this.messages = [];
     if (this.username) {
         this.isLoading = true;
@@ -45,6 +47,11 @@ export class PrivateChatComponent implements OnInit {
           this.isLoading = false;
         });
     }
+  }
+
+  backToUserList() {
+    this.showChat = false;
+    this.selectedUser = null;
   }
 
   sendMessage() {

@@ -1,4 +1,3 @@
-
 <div
   class="sidebar-toggle"
   (click)="toggleSidebar()"
@@ -7,22 +6,107 @@
   ☰
 </div>
 
-
 <div class="sidebar" [class.open]="sidebarOpen">
   <!-- Alle Buttons: aktiv oder deaktiviert -->
-  <button class="btn" *ngIf="isPageEnabled('home')" (click)="goHome()" [disabled]="!authService.isLoggedIn()">🏠 Home</button>
-  <button class="btn" *ngIf="isPageEnabled('profile')" (click)="goToProfile()" [disabled]="!authService.isLoggedIn()">👤 Profil</button>
-  <button class="btn" *ngIf="authService.getRole()?.toLowerCase() === 'admin'" (click)="goToAdmin()" [disabled]="!authService.isLoggedIn()">🛠️ Admin</button>
-  <button class="btn" *ngIf="isPageEnabled('slots')" (click)="goToSlots()" [disabled]="!authService.isLoggedIn()">🎰 Slots</button>
-  <button class="btn" *ngIf="isPageEnabled('village')" (click)="goToVillage()" [disabled]="!authService.isLoggedIn()">🛖 Dorf</button>
-  <button class="btn" *ngIf="isPageEnabled('clicker')" (click)="goToClicker()" [disabled]="achAmount < 3 || !authService.isLoggedIn()">💰 Clicker</button>
-  <button class="btn" *ngIf="isPageEnabled('shop')" (click)="shop()" [disabled]="!authService.isLoggedIn()">🃏 Karten</button>
-  <button class="btn" *ngIf="isPageEnabled('achievements')" (click)="goToAchievements()" [disabled]="!authService.isLoggedIn()">🎖️ Erfolge</button>
-  <button class="btn" *ngIf="isPageEnabled('compare')" (click)="goToCompare()" [disabled]="!authService.isLoggedIn()">📊 Scorevergleich</button>
-  <button class="btn" *ngIf="isPageEnabled('skillShop')" (click)="skillShop()" [disabled]="!authService.isLoggedIn()">⬆️ Skills</button>
-  <button class="btn" *ngIf="isPageEnabled('tutorial')" (click)="howToPlay()" [disabled]="!authService.isLoggedIn()">❓ Tutorial</button>
-  <button class="btn" (click)="goToPrivateChat()" [disabled]="!authService.isLoggedIn()">💬 Private Chat</button>
-  <button class="btn" (click)="logout()" [disabled]="!authService.isLoggedIn()">🚪 Logout</button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('home')"
+    (click)="goHome()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🏠 Home
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('profile')"
+    (click)="goToProfile()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    👤 Profil
+  </button>
+  <button
+    class="btn"
+    *ngIf="authService.getRole()?.toLowerCase() === 'admin'"
+    (click)="goToAdmin()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🛠️ Admin
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('slots')"
+    (click)="goToSlots()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🎰 Slots
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('village')"
+    (click)="goToVillage()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🛖 Dorf
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('clicker')"
+    (click)="goToClicker()"
+    [disabled]="achAmount < 3 || !authService.isLoggedIn()"
+  >
+    💰 Clicker
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('shop')"
+    (click)="shop()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🃏 Karten
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('achievements')"
+    (click)="goToAchievements()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    🎖️ Erfolge
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('compare')"
+    (click)="goToCompare()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    📊 Scorevergleich
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('skillShop')"
+    (click)="skillShop()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    ⬆️ Skills
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('tutorial')"
+    (click)="howToPlay()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    ❓ Tutorial
+  </button>
+  <button
+    class="btn"
+    *ngIf="isPageEnabled('private')"
+    (click)="goToPrivateChat()"
+    [disabled]="!authService.isLoggedIn()"
+  >
+    💬 Private Chat
+  </button>
+  <button class="btn" (click)="logout()" [disabled]="!authService.isLoggedIn()">
+    🚪 Logout
+  </button>
 
   <!-- Login Button nur anzeigen, wenn nicht eingeloggt -->
   <div *ngIf="!authService.isLoggedIn()" class="login-overlay">

@@ -11,17 +11,22 @@
         <div class="user-list">
           <app-loader *ngIf="isLoading && users.length === 0"></app-loader>
           <ul>
-            <li *ngFor="let user of users" (click)="selectUser(user)">
-              {{ user.username }}
+            <li *ngFor="let user of users" (click)="selectUser(user)" class="user-list-item">
+              <img [src]="avatar(user.profileImageUrl)" (error)="onAvatarError($event)" alt="Avatar" class="avatar">
+              <span>{{ user.username }}</span>
             </li>
           </ul>
         </div>
       </div>
 
       <div class="chat-area-container">
-        <div class="chat-header">
+        <div class="chat-header" *ngIf="selectedUser">
           <button class="back-button" (click)="backToUserList()">←</button>
-          <h3>{{ selectedUser ? 'Chat with ' + selectedUser.username : 'Select a User' }}</h3>
+          <img [src]="avatar(selectedUser.profileImageUrl)" (error)="onAvatarError($event)" alt="Avatar" class="avatar">
+          <h3>{{ selectedUser.username }}</h3>
+        </div>
+        <div class="chat-header" *ngIf="!selectedUser">
+          <h3>Select a User</h3>
         </div>
   
         <div class="chat-area">
@@ -31,6 +36,7 @@
                 'user-message': msg.sender === username,
                 'other-message': msg.sender !== username
               }">
+              <img [src]="getAvatar(msg.sender)" (error)="onAvatarError($event)" alt="Avatar" class="avatar message-avatar">
               <div class="message-content" (click)="copyToClipboard(msg.message)">
                 <span class="user"><b>{{ msg.sender }}</b></span>
                 <span class="text">{{ msg.message }}</span>

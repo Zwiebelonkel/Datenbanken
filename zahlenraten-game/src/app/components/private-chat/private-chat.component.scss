@@ -19,6 +19,16 @@
   height: 70vh; // Set a default height
 }
 
+// Avatar styles
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
 // Containers for user list and chat area
 .user-list-container,
 .chat-area-container {
@@ -50,8 +60,10 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    li {
-      padding: 1rem;
+    .user-list-item {
+      display: flex;
+      align-items: center;
+      padding: 0.8rem 1rem;
       cursor: pointer;
       font-weight: 500;
       transition: background-color 0.2s ease;
@@ -86,7 +98,6 @@
     margin: 0;
     font-size: 1.1rem;
     font-weight: 700;
-    text-align: center;
     flex-grow: 1;
   }
 }
@@ -104,14 +115,23 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem; // Increased gap for avatars
 }
 
 .message {
   display: flex;
-  max-width: 75%;
+  max-width: 80%;
+  align-items: flex-end; // Align avatar with bottom of message bubble
+  gap: 0.5rem;
+
+  .message-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
   &.user-message {
     align-self: flex-end;
+    flex-direction: row-reverse; // Reverse order for user's own messages
     .message-content {
       background-color: var(--theme);
       color: #fff;
@@ -132,7 +152,7 @@
   padding: 0.6rem 1rem;
   cursor: pointer;
   .user {
-    display: none; // Let's hide this for a cleaner look
+    display: none; // Hide sender name since we have avatar
   }
   .timestamp {
     font-size: 0.75rem;
@@ -195,7 +215,13 @@ app-loader {
 }
 
 
-
+// --- Mobile Responsive Styles ---
+@media (max-width: 768px) {
+   .chat-header h3 {
+     padding: 0 1rem; 
+     text-align: left;
+  }
+}
 
 // Dark Mode adjustments
 body.dark-mode {
@@ -203,10 +229,10 @@ body.dark-mode {
     background-color: #3a3a3a;
     color: #f1f1f1;
   }
-  .user-list li:hover {
+  .user-list-item:hover {
     background-color: #2a2a2a;
   }
-  .user-list li.active {
+  .user-list-item.active {
     background-color: var(--theme-dark-accent-light, #3c4a63);
     color: var(--theme-dark);
   }

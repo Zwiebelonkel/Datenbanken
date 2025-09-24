@@ -3,7 +3,7 @@ name: 🚀 Deploy to Firebase Hosting on merge
 
 on:
   push:
-    branches: [ KI ]
+    branches: [ graphs ]
 
 jobs:
   build_and_deploy:

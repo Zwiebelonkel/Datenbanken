@@ -1,3 +1,4 @@
+
 import {
   Component,
   OnInit,
@@ -106,6 +107,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   goToLogin()        { this.router.navigate(['/login']); }
   goHome()           { this.router.navigate(['/']); }
   goToCompare()      { this.router.navigate(['/compare']);      this.sidebarOpen = false; }
+  goToPrivateChat()  { this.router.navigate(['/private-chat']); this.sidebarOpen = false; }
+
 
 
   toggleDarkMode() {

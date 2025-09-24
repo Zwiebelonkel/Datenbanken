@@ -59,3 +59,12 @@ CREATE TABLE scores (
   consecutive_wins INTEGER DEFAULT 0,
   money_per_round REAL DEFAULT 0
 );
+
+-- Tabelle: messages
+CREATE TABLE messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sender TEXT NOT NULL,
+    receiver TEXT NOT NULL,
+    message TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);

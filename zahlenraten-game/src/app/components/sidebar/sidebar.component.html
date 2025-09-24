@@ -1,3 +1,4 @@
+
 <div
   class="sidebar-toggle"
   (click)="toggleSidebar()"
@@ -20,6 +21,7 @@
   <button class="btn" *ngIf="isPageEnabled('compare')" (click)="goToCompare()" [disabled]="!authService.isLoggedIn()">📊 Scorevergleich</button>
   <button class="btn" *ngIf="isPageEnabled('skillShop')" (click)="skillShop()" [disabled]="!authService.isLoggedIn()">⬆️ Skills</button>
   <button class="btn" *ngIf="isPageEnabled('tutorial')" (click)="howToPlay()" [disabled]="!authService.isLoggedIn()">❓ Tutorial</button>
+  <button class="btn" (click)="goToPrivateChat()" [disabled]="!authService.isLoggedIn()">💬 Private Chat</button>
   <button class="btn" (click)="logout()" [disabled]="!authService.isLoggedIn()">🚪 Logout</button>
 
   <!-- Login Button nur anzeigen, wenn nicht eingeloggt -->

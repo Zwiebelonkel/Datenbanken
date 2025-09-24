@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
@@ -31,6 +32,8 @@ import { ReelComponent } from './components/slot-maschine/reel/reel.component';
 import { SkillShopComponent } from './components/skill-shop/skill-shop.component';
 import { PlayerBarComponent } from './components/player-bar/player-bar.component';
 import { TutorialComponent } from './components/tutorial/tutorial.component';
+import { PrivateChatComponent } from './components/private-chat/private-chat.component';
+
 
 // import { StreakIndicator } from './components/streak-indicator/streak-indicator.component';
 
@@ -69,6 +72,7 @@ import { OfflineComponent } from './components/offline/offline.component';
     PlayerBarComponent,
     UserScoreHistoryComponent,
     TutorialComponent,
+    PrivateChatComponent,
     // StreakIndicatorComponent,
     DatenschutzComponent,
     ImpressumComponent,

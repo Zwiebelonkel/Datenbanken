@@ -1,5 +1,7 @@
+
 import express from "express";
 import cors from "cors";
+import http from "http";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import scoresRoutes from "./routes/scores.js";
@@ -11,9 +13,14 @@ import db from "./db.js";
 import villageRoutes from "./routes/village.js";
 import chatRoutes from "./routes/chat.js";
 import adminRoutes from "./routes/admin.js";
+import messagesRoutes from "./routes/messages.js";
+import setupWebsockets from "./websockets.js";
 import { verifyToken, requireAuth, requireAdmin } from "./auth.js";
 
 const app = express();
+const server = http.createServer(app);
+const io = setupWebsockets(server);
+
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret";
 
@@ -28,6 +35,7 @@ app.use("/api/cards", cardsRoutes);
 app.use("/api/village", villageRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/messages", messagesRoutes);
 app.use("/uploads", express.static("uploads"));
 
 const ALL_ACHIEVEMENTS = [
@@ -82,7 +90,8 @@ app.post("/api/register", async (req, res) => {
 
     // 2. Dorf anlegen
     const villageResult = await db.execute({
-      sql: "INSERT INTO village (user_id) VALUES (?)",
+      sql: "INSERT INTO village (user_id) VALUES (?)"
+      ,
       args: [userId],
     });
 
@@ -508,6 +517,6 @@ app.get("/api/users/levels", async (req, res) => {
 });
 
 // Server starten
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`✅ Server läuft auf: ${PORT}. Jetzt nurnoch Eier schaukeln.🥚`);
 });

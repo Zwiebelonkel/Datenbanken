@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 import { GameComponent } from './components/game/game.component';
 import { LoginComponent } from './components/game/login/login.component';
@@ -19,6 +20,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { UserScoreHistoryComponent } from './components/user-score-history/user-score-history.component';
 import { PackOpeningPageComponent } from './components/pack-opening.page/pack-opening.page';
 import { CompareScoresComponent } from './components/compare-scores/compare-scores.component';
+import { PrivateChatComponent } from './components/private-chat/private-chat.component';
 
 export const routes: Routes = [
   { path: '', component: GameComponent },
@@ -36,6 +38,7 @@ export const routes: Routes = [
   { path: 'history', component: UserScoreHistoryComponent },
   { path: 'history/:username', component: UserScoreHistoryComponent },
   { path: 'compare', component: CompareScoresComponent },
+  { path: 'private-chat', component: PrivateChatComponent },
   // { path: 'pack-opening', component: PackOpeningComponent },
   { path: 'village', component: VillageComponent },
   { path: 'slot-maschine', component: SlotMaschineComponent },

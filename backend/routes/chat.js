@@ -1,5 +1,12 @@
+
 import express from "express";
 import db from "../db.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// Initialize the Gemini API
+// IMPORTANT: Make sure to set the GEMINI_API_KEY environment variable
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 const router = express.Router();
 
@@ -17,6 +24,29 @@ router.post("/send", async (req, res) => {
       sql: "INSERT INTO chat_messages (username, message, created_at) VALUES (?, ?, ?)",
       args: [username, message, now],
     });
+
+    if (message.includes("@ki")) {
+      try {
+        const prompt = message.replace("@ki", "").trim();
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = await response.text();
+        const kiNow = new Date().toISOString();
+
+        await db.execute({
+          sql: "INSERT INTO chat_messages (username, message, created_at) VALUES (?, ?, ?)",
+          args: ["KI", text, kiNow],
+        });
+
+      } catch (error) {
+        console.error(error);
+        const kiNow = new Date().toISOString();
+        await db.execute({
+            sql: "INSERT INTO chat_messages (username, message, created_at) VALUES (?, ?, ?)",
+            args: ["KI", "Sorry, I am having trouble thinking right now.", kiNow],
+        });
+      }
+    }
 
     res.status(201).json({ message: "Gespeichert" });
   } catch (err) {

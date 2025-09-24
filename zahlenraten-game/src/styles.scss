@@ -78,6 +78,7 @@ body {
   box-shadow: var(--card-shadow);
   border: 1px solid var(--card-border);
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */

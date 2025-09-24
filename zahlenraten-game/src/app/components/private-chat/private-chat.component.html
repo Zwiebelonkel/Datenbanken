@@ -15,6 +15,7 @@
             <li *ngFor="let user of users" (click)="selectUser(user)" class="user-list-item">
               <img [src]="avatar(user.profileImageUrl)" (error)="onAvatarError($event)" alt="Avatar" class="avatar">
               <span>{{ user.username }}</span>
+              <span class="unread-marker" *ngIf="unreadMessages[user.username]"></span>
             </li>
           </ul>
         </div>

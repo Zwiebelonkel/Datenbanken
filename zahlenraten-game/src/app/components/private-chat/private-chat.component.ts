@@ -26,6 +26,7 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
   isLoading: boolean = false;
   public showChat = false;
   private profilePictureCache = new Map<string, string | null>();
+  public unreadMessages: { [username: string]: boolean } = {};
 
   constructor(
     private privateChatService: PrivateChatService, 
@@ -36,10 +37,12 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.username = this.authService.getUsername();
     this.isLoading = true;
-    // Load all users to build the cache, then filter for display.
     this.levelsService.load(1, 1000).subscribe(response => {
       response.users.forEach(user => {
         this.profilePictureCache.set(user.username, user.profileImageUrl ?? null);
+        if (this.username) {
+          this.checkForUnreadMessages(user.username);
+        }
       });
       this.users = response.users.filter((u) => u.username !== this.username);
       this.isLoading = false;
@@ -48,6 +51,31 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     this.scrollToBottom();
+  }
+
+  checkForUnreadMessages(otherUser: string) {
+    if (!this.username) return;
+    this.privateChatService.getMessages(this.username, otherUser).subscribe(messages => {
+      if (messages && messages.length > 0) {
+        const lastMessage = messages[messages.length - 1];
+        const lastReadTimestamp = this.getLastReadTimestamp(otherUser);
+        if (!lastReadTimestamp || new Date(lastMessage.created_at) > new Date(lastReadTimestamp)) {
+          this.unreadMessages[otherUser] = true;
+        }
+      }
+    });
+  }
+
+  getLastReadTimestamp(username: string): string | null {
+    if(!this.username) return null;
+    return localStorage.getItem(`lastRead_${this.username}_${username}`);
+  }
+
+  setLastReadTimestamp(username: string) {
+    if(this.username) {
+      localStorage.setItem(`lastRead_${this.username}_${username}`, new Date().toISOString());
+      this.unreadMessages[username] = false;
+    }
   }
 
   avatar(url?: string | null, size = 40): string {
@@ -82,6 +110,7 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
         this.privateChatService.getMessages(this.username, this.selectedUser.username).subscribe(messages => {
           this.messages = messages || [];
           this.isLoading = false;
+          this.setLastReadTimestamp(user.username);
           setTimeout(() => this.scrollToBottom(), 0);
         });
     }

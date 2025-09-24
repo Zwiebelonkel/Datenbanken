@@ -246,3 +246,11 @@ body.dark-mode {
     }
   }
 }
+
+.unread-marker {
+  width: 10px;
+  height: 10px;
+  background-color: var(--theme);
+  border-radius: 50%;
+  margin-left: auto;
+}

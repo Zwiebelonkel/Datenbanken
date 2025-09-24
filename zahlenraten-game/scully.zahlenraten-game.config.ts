@@ -33,6 +33,7 @@ export const config: ScullyConfig = {
     '/datenschutz',
     '/about',
     '/contact',
+    '/private-chat',
   ],
   /** Nur für dynamische/parametrisierte Routen Plugins angeben */ routes: {
     '/profile/:username': { type: 'json', username: ['Luca', 'Gast', 'admin'] },

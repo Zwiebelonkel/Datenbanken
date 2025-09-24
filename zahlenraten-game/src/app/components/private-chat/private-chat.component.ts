@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PrivateChatService } from '../../services/private-chat.service';
@@ -15,7 +15,7 @@ import { LevelsService, LevelUser } from '../../services/levels.service';
   standalone: true,
   imports: [CommonModule, FormsModule, LoaderComponent, TopbarComponent, SidebarComponent]
 })
-export class PrivateChatComponent implements OnInit, AfterViewChecked {
+export class PrivateChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
 
   users: LevelUser[] = [];
@@ -27,6 +27,7 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
   public showChat = false;
   private profilePictureCache = new Map<string, string | null>();
   public unreadMessages: { [username: string]: boolean } = {};
+  private pollingInterval: any;
 
   constructor(
     private privateChatService: PrivateChatService, 
@@ -40,27 +41,64 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
     this.levelsService.load(1, 1000).subscribe(response => {
       response.users.forEach(user => {
         this.profilePictureCache.set(user.username, user.profileImageUrl ?? null);
+      });
+      this.users = response.users.filter((u) => u.username !== this.username);
+      this.users.forEach(user => {
         if (this.username) {
           this.checkForUnreadMessages(user.username);
         }
       });
-      this.users = response.users.filter((u) => u.username !== this.username);
       this.isLoading = false;
+      this.startPolling();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.stopPolling();
   }
 
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
 
+  startPolling(): void {
+    this.pollingInterval = setInterval(() => {
+      if (this.showChat && this.selectedUser && this.username) {
+        this.privateChatService.getMessages(this.username, this.selectedUser.username).subscribe(messages => {
+          if (messages && messages.length > this.messages.length) {
+            this.messages = messages;
+            setTimeout(() => this.scrollToBottom(), 0);
+          }
+        });
+      } else {
+        this.users.forEach(user => {
+          if (this.username) {
+            this.checkForUnreadMessages(user.username);
+          }
+        });
+      }
+    }, 3000); // Poll every 3 seconds
+  }
+
+  stopPolling(): void {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+    }
+  }
+
   checkForUnreadMessages(otherUser: string) {
-    if (!this.username) return;
+    if (!this.username || (this.selectedUser && this.selectedUser.username === otherUser)) {
+        if(otherUser) this.unreadMessages[otherUser] = false;
+        return;
+    }
     this.privateChatService.getMessages(this.username, otherUser).subscribe(messages => {
       if (messages && messages.length > 0) {
         const lastMessage = messages[messages.length - 1];
         const lastReadTimestamp = this.getLastReadTimestamp(otherUser);
         if (!lastReadTimestamp || new Date(lastMessage.created_at) > new Date(lastReadTimestamp)) {
           this.unreadMessages[otherUser] = true;
+        } else {
+          this.unreadMessages[otherUser] = false;
         }
       }
     });
@@ -119,6 +157,11 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
   backToUserList() {
     this.showChat = false;
     this.selectedUser = null;
+    this.users.forEach(user => {
+      if (this.username) {
+        this.checkForUnreadMessages(user.username);
+      }
+    });
   }
 
   sendMessage() {
@@ -137,6 +180,7 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked {
         this.privateChatService.sendMessage(message).subscribe(() => {
           this.messages.push(message);
           this.newMessage = '';
+          if(this.selectedUser) this.setLastReadTimestamp(this.selectedUser.username)
           setTimeout(() => this.scrollToBottom(), 0);
         });
     }

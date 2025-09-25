@@ -41,6 +41,11 @@
               },
               {
                 "input": "src",
+                "glob": "sw.js",
+                "output": "."
+              },
+              {
+                "input": "src",
                 "glob": "ads.txt",
                 "output": "."
               }

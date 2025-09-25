@@ -211,7 +211,24 @@ app-loader {
 
 // Back button for mobile
 .back-button {
-  display: none; // Hidden on desktop
+  display: none; // Hidden on desktop by default
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(-3px);
+  }
 }
 
 
@@ -246,10 +263,6 @@ app-loader {
    .back-button {
     display: block;
     margin-right: 1rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
   }
 }
 

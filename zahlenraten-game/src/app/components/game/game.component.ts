@@ -82,8 +82,15 @@ export class GameComponent implements OnInit {
 
   tutorialTitle = 'Wie funktioniert das?';
 
-  tutorialDescription =
-    'In diesem Spiel musst du einschätzen, ob eine zufällig generierte Zahl zwischen zwei anderen Zahlen liegt oder nicht. Du startest mit 3 Leben und sammelst Punkte sowie In-Game-Währung basierend auf deinen richtigen Antworten. Je mehr richtige Antworten du hintereinander gibst, desto höher wird dein Multiplikator, was dir mehr Punkte und Geld einbringt. Wenn du falsch liegst, verlierst du ein Leben. Das Spiel endet, wenn du keine Leben mehr hast. Viel Glück!';
+  tutorialDescription = `
+In „Outside Between“ testest du dein Glück und dein Gespür für Zahlen! Das Ziel des Spiels ist einfach: Du musst vorhersagen, ob eine zufällig generierte Zahl zwischen zwei anderen Zahlen liegt oder außerhalb davon.
+
+Du startest mit 3 Leben und sammelst Punkte sowie In-Game-Währung, wenn du richtig liegst. Für jede richtige Antwort wächst dein Multiplikator, der dir mehr Punkte und Geld bringt. Verlierst du, verlierst du ein Leben. Das Spiel endet, wenn alle Leben aufgebraucht sind.
+
+Neben dem Spiel gibt es spannende Community-Features: Speichere deine Highscores, vergleiche dich mit anderen Spielern auf der Rangliste, chatte mit Freunden und sammle besondere Karten, die dir Vorteile verschaffen.
+
+Das Spiel ist einfach zu verstehen, macht aber durch taktische Entscheidungen und verschiedene Karteneinsätze richtig Spaß – perfekt für alle, die Casual-Games mit sozialer Komponente lieben. Viel Glück!
+`;
 
   private baseScoreAccum = 0;
   private baseMoneyAccum = 0;

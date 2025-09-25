@@ -11,6 +11,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { SoundsService } from '../../services/sound.service';
 import { RGBELoader } from 'three-stdlib';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 /* === LOGIK: Services aus der alten Komponente === */
 import { CardsService } from '../../services/cards.service';
@@ -199,8 +201,18 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     private moneyService: MoneyService,
     private authService: AuthService,
     private profileService: ProfileService,
-    private achievementService: AchievementService
-  ) {}
+    private achievementService: AchievementService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+
+    this.titleService.setTitle('PackOpening - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Auf dieser Seite kann der Spieler sein gekauftes Kartenpack öffnen und seine Karten speichern.' },
+      { property: 'og:title', content: 'PackOpening - CardCore' },
+      { property: 'og:description', content: 'Auf dieser Seite kann der Spieler sein gekauftes Kartenpack öffnen und seine Karten speichern.' },
+    ]);
+  }
 
   // ---------- lifecycle ----------
   ngAfterViewInit(): void {

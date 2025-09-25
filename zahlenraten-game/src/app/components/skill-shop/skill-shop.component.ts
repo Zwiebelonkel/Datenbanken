@@ -10,6 +10,8 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { TutorialComponent } from '../tutorial/tutorial.component';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-skill-shop',
@@ -81,8 +83,17 @@ export class SkillShopComponent implements OnInit {
 
   constructor(
     private profileService: ProfileService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('SkillShop - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Verbessere dein Profil dauerhaft indem du mit Skillpunkten durch levelUp Skills verbesserst.' },
+      { property: 'og:title', content: 'SkillShop - CardCore' },
+      { property: 'og:description', content: 'Verbessere dein Profil dauerhaft indem du mit Skillpunkten durch levelUp Skills verbesserst.' },
+    ]);
+  }
 
   ngOnInit(): void {
     this.username = this.authService.getUsername() ?? '';

@@ -10,6 +10,8 @@ import { TopbarComponent } from '../topbar/topbar.component';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-profile',
@@ -51,8 +53,18 @@ export class ProfileComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private http: HttpClient,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+
+    this.titleService.setTitle('Profil - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Hier siehst du dein persönliches Profil, kannst Statistiken sehen und schauen wie sich dein Score entwickelt.' },
+      { property: 'og:title', content: 'Profil - CardCore' },
+      { property: 'og:description', content: 'Hier siehst du dein persönliches Profil, kannst Statistiken sehen und schauen wie sich dein Score entwickelt.' },
+    ]);
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {

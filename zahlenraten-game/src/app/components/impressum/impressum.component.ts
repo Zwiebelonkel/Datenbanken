@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component'
 import { TopbarComponent } from '../topbar/topbar.component'
+import { Title, Meta } from '@angular/platform-browser';
+
 
 type Optional<T> = T | null;
 
@@ -27,6 +29,14 @@ interface LegalConfig {
   styleUrls: ['./impressum.component.scss'],
 })
 export class ImpressumComponent {
+  constructor(private titleService: Title, private metaService: Meta) {
+    this.titleService.setTitle('Impressum - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Impressum von CardCore' },
+      { property: 'og:title', content: 'Impressum - CardCore' },
+      { property: 'og:description', content: 'Impressum von CardCore' },
+    ]);
+  }
   // TODO: mit deinen echten Daten befüllen
   legal: LegalConfig = {
     companyOrName: 'Jan-Luca Müller', // Firma ODER Vor- & Nachname

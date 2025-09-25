@@ -18,6 +18,8 @@ import { MoneyService } from '../../services/money.service';
 import { AchievementService } from '../../services/achievement.service';
 import { RainComponent } from '../rain/rain.component';
 import { TutorialComponent } from '../tutorial/tutorial.component';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 interface Villager {
   id: number;
@@ -115,8 +117,17 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     private profileService: ProfileService,
     private auth: AuthService,
     private moneyService: MoneyService,
-    private achievementService: AchievementService
-  ) {}
+    private achievementService: AchievementService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('Village - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Baue dein eigenes Dorf auf und verbessere es um passiv Einkommen zu generieren.' },
+      { property: 'og:title', content: 'Village - CardCore' },
+      { property: 'og:description', content: 'Baue dein eigenes Dorf auf und verbessere es um passiv Einkommen zu generieren.' },
+    ]);
+  }
 
   ngOnInit() {
     const username = this.auth.getUsername();

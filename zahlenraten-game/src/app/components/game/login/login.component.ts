@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router'; // <--- HINZUFÜGEN
 import { LoaderComponent } from '../../loader/loader.component';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   standalone: true,
@@ -19,7 +21,13 @@ export class LoginComponent {
   error = false;
   isLoading = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router,     private titleService: Title,
+    private metaService: Meta) {
+      this.titleService.setTitle('Login - CardCore');
+      this.metaService.addTags([
+        { property: 'og:title', content: 'Login - CardCore' },
+      ]);
+    }
 
   login() {
     this.isLoading = true;

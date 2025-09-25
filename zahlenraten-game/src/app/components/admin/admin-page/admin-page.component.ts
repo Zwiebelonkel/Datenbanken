@@ -7,6 +7,8 @@ import { ProfileService, UserStats } from '../../../services/profile.service';
 import { Router } from '@angular/router';
 import { SidebarComponent } from '../../sidebar/sidebar.component';
 import { TopbarComponent } from '../../topbar/topbar.component';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-admin-page',
@@ -56,8 +58,19 @@ export class AdminPageComponent implements OnInit {
     private http: HttpClient,
     public authService: AuthService,
     private router: Router,
-    private profileService: ProfileService
-  ) {}
+    private profileService: ProfileService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+
+    this.titleService.setTitle('AdminPanel - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Nur für Admins: Hier können Spieler und Scores verwaltet werden.' },
+      { property: 'og:title', content: 'AdminPanel - CardCore' },
+      { property: 'og:description', content: 'Nur für Admins: Hier können Spieler und Scores verwaltet werden.' },
+    ]);
+
+  }
 
   ngOnInit(): void {
     const role = this.authService.getRole()?.toLowerCase();

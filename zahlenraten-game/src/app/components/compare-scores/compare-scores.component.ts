@@ -8,6 +8,8 @@ import { LevelsService } from '../../services/levels.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TopbarComponent } from '../topbar/topbar.component';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-compare-scores',
@@ -44,8 +46,16 @@ export class CompareScoresComponent implements OnInit, OnDestroy {
 
   constructor(
     private scoreService: ScoreService,
-    private levelsService: LevelsService
-  ) {}
+    private levelsService: LevelsService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {    this.titleService.setTitle('Spieler-Vergleich - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Vergleiche deine Punktzahlen mit anderen Spielern und sieh, wer die Nase vorn hat.' },
+      { property: 'og:title', content: 'Spieler-Vergleich - CardCore' },
+      { property: 'og:description', content: 'Vergleiche deine Punktzahlen mit anderen Spielern und sieh, wer die Nase vorn hat.' },
+      { property: 'og:image', content: 'https://zahlenraten.jascha.ai/assets/logo.png' }
+    ]);}
 
   ngOnInit(): void {
     this.loadAllUsers();

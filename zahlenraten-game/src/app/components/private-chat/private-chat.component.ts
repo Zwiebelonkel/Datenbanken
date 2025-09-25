@@ -7,6 +7,8 @@ import { LoaderComponent } from '../loader/loader.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { LevelsService, LevelUser } from '../../services/levels.service';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-private-chat',
@@ -32,8 +34,17 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked, OnDestroy
   constructor(
     private privateChatService: PrivateChatService, 
     private authService: AuthService,
-    private levelsService: LevelsService
-  ) { }
+    private levelsService: LevelsService,
+    private titleService: Title,
+    private metaService: Meta
+  ) { 
+    this.titleService.setTitle('PrivatChat - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Schreibe hier privat mit anderen Spielern von CardCore.' },
+      { property: 'og:title', content: 'PrivatChat - CardCore' },
+      { property: 'og:description', content: 'Schreibe hier privat mit anderen Spielern von CardCore.' },
+    ]);
+  }
 
   ngOnInit(): void {
     this.username = this.authService.getUsername();

@@ -10,6 +10,8 @@ import { TopbarComponent } from '../topbar/topbar.component';
 import { TutorialComponent } from '../tutorial/tutorial.component';
 import { FormsModule } from '@angular/forms';
 import { LevelsService, LevelUser } from '../../services/levels.service';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-user-score-history',
@@ -67,8 +69,17 @@ export class UserScoreHistoryComponent implements OnInit {
   constructor(
     private scoreService: ScoreService,
     private route: ActivatedRoute,
-    private levelsService: LevelsService
-  ) {}
+    private levelsService: LevelsService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('Entwicklung - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Verfolge deine Scoreentwicklung und vergleiche diese mit der anderer Spieler.' },
+      { property: 'og:title', content: 'Entwicklung - CardCore' },
+      { property: 'og:description', content: 'Verfolge deine Scoreentwicklung und vergleiche diese mit der anderer Spieler.' },
+    ]);
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {

@@ -6,6 +6,8 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { TutorialComponent } from '../tutorial/tutorial.component';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-achievements',
@@ -28,7 +30,14 @@ export class AchievementsComponent implements OnInit {
   tutorialDescription =
     'Hier befinden sich alle Meilensteine, die du im Spiel erreichen kannst. Das Freischalten von Erfolgen gibt ausserdem einen Bonus von 20XP!';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService,    private titleService: Title,
+    private metaService: Meta
+) {    this.titleService.setTitle('Erfolge - CardCore');
+  this.metaService.addTags([
+    { name: 'description', content: 'Siehe hier nach, welche Erfolge du bereits freigeschaltet hast.' },
+    { property: 'og:title', content: 'Erfolge - CardCore' },
+    { property: 'og:description', content: 'Siehe hier nach, welche Erfolge du bereits freigeschaltet hast.' },
+  ]);}
 
   ngOnInit(): void {
     const username = this.authService.getUsername();

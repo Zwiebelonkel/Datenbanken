@@ -20,6 +20,8 @@ import { FormsModule } from '@angular/forms';
 import { RainComponent } from '../rain/rain.component';
 import { TutorialComponent } from '../tutorial/tutorial.component';
 import { CardsService } from '../../services/cards.service';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 type SymbolData = { type: 'emoji' | 'image'; value: string };
 
@@ -95,8 +97,17 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
     private moneyService: MoneyService,
     private chatService: ChatService,
     private achievementService: AchievementService,
-    private cardsService: CardsService
-  ) {}
+    private cardsService: CardsService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('Slots - CardCore');
+    this.metaService.addTags([
+      { name: 'description', content: 'Versuche dein Glück und setzte eine beliebige Menge an In-Game Währung um den Jackpot zu knacken.' },
+      { property: 'og:title', content: 'Slots - CardCore' },
+      { property: 'og:description', content: 'Versuche dein Glück und setzte eine beliebige Menge an In-Game Währung um den Jackpot zu knacken.' },
+    ]);
+  }
 
   ngOnInit() {
     this.username = this.authService.getUsername() ?? '';

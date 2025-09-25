@@ -8,108 +8,120 @@
 
 <div class="sidebar" [class.open]="sidebarOpen">
   <!-- Alle Buttons: aktiv oder deaktiviert -->
-  <button
+  <a
     class="btn"
     *ngIf="isPageEnabled('home')"
-    (click)="goHome()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     🏠 Home
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('profile')"
-    (click)="goToProfile()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/profile"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     👤 Profil
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="authService.getRole()?.toLowerCase() === 'admin'"
-    (click)="goToAdmin()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/admin"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     🛠️ Admin
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('slots')"
-    (click)="goToSlots()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/slot-maschine"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     🎰 Slots
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('village')"
-    (click)="goToVillage()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/village"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     🛖 Dorf
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('clicker')"
-    (click)="goToClicker()"
-    [disabled]="achAmount < 3 || !authService.isLoggedIn()"
+    routerLink="/clicker"
+    [class.disabled]="achAmount < 3 || !authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     💰 Clicker
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('shop')"
-    (click)="shop()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/card-shop"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     🃏 Karten
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('achievements')"
-    (click)="goToAchievements()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/achievements"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     🎖️ Erfolge
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('compare')"
-    (click)="goToCompare()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/compare"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     📊 Scorevergleich
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('skillShop')"
-    (click)="skillShop()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/skill-shop"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     ⬆️ Skills
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('tutorial')"
-    (click)="howToPlay()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/how-to-play"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     ❓ Tutorial
-  </button>
-  <button
+  </a>
+  <a
     class="btn"
     *ngIf="isPageEnabled('private')"
-    (click)="goToPrivateChat()"
-    [disabled]="!authService.isLoggedIn()"
+    routerLink="/private-chat"
+    [class.disabled]="!authService.isLoggedIn()"
+    (click)="sidebarOpen = false"
   >
     💬 Private Chat
-  </button>
+  </a>
   <button class="btn" (click)="logout()" [disabled]="!authService.isLoggedIn()">
     🚪 Logout
   </button>
 
   <!-- Login Button nur anzeigen, wenn nicht eingeloggt -->
   <div *ngIf="!authService.isLoggedIn()" class="login-overlay">
-    <button class="btn login-button" (click)="goToLogin()">🔐 Login</button>
+    <a class="btn login-button" routerLink="/login" (click)="sidebarOpen = false">🔐 Login</a>
   </div>
 </div>

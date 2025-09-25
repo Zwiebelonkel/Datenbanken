@@ -1,4 +1,3 @@
-
 import {
   Component,
   OnInit,
@@ -7,7 +6,7 @@ import {
   HostListener,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router'; // Import RouterModule
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
@@ -17,7 +16,7 @@ import { ProfileService } from '../../services/profile.service';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule], // Add RouterModule here
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -93,23 +92,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarOpen = !this.sidebarOpen;
     if (this.sidebarOpen && this.isLoggedIn) this.loadAch();
   }
-
-  // Navigation
-  goToAchievements() { this.router.navigate(['/achievements']); this.sidebarOpen = false; }
-  goToProfile()      { this.router.navigate(['/profile']);      this.sidebarOpen = false; }
-  howToPlay()        { this.router.navigate(['/how-to-play']);  this.sidebarOpen = false; }
-  goToClicker()      { this.router.navigate(['/clicker']);      this.sidebarOpen = false; }
-  goToVillage()      { this.router.navigate(['/village']);      this.sidebarOpen = false; }
-  shop()             { this.router.navigate(['/card-shop']);    this.sidebarOpen = false; }
-  skillShop()        { this.router.navigate(['/skill-shop']);   this.sidebarOpen = false; }
-  goToAdmin()        { this.router.navigate(['/admin']);        this.sidebarOpen = false; }
-  goToSlots()        { this.router.navigate(['/slot-maschine']);this.sidebarOpen = false; }
-  goToLogin()        { this.router.navigate(['/login']); }
-  goHome()           { this.router.navigate(['/']); }
-  goToCompare()      { this.router.navigate(['/compare']);      this.sidebarOpen = false; }
-  goToPrivateChat()  { this.router.navigate(['/private-chat']); this.sidebarOpen = false; }
-
-
 
   toggleDarkMode() {
     document.body.classList.toggle('dark-mode');

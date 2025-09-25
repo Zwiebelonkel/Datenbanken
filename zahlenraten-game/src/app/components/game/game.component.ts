@@ -22,6 +22,8 @@ import { PlayerBarComponent } from '../player-bar/player-bar.component';
 import { StreakIndicatorComponent } from '../streak-indicator/streak-indicator.component';
 import { ElementRef, AfterViewInit } from '@angular/core';
 import { TutorialComponent } from '../tutorial/tutorial.component';
+import { Title, Meta } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-game',
@@ -148,8 +150,17 @@ Das Spiel ist einfach zu verstehen, macht aber durch taktische Entscheidungen un
     private moneyService: MoneyService,
     private profileService: ProfileService,
     private cardsService: CardsService,
-    private soundService: SoundsService
-  ) {}
+    private soundService: SoundsService,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('Startseite - CardCore - WebGame');
+    this.metaService.addTags([
+      { name: 'description', content: 'Outside Between ist ein fesselndes Zahlen-Game für deinen Browser. Errate, ob die nächste Zahl zwischen oder außerhalb der vorherigen liegt!' },
+      { property: 'og:title', content: 'Startseite - CardCore - WebGame' },
+      { property: 'og:description', content: 'Outside Between ist ein fesselndes Zahlen-Game für deinen Browser. Errate, ob die nächste Zahl zwischen oder außerhalb der vorherigen liegt!' },
+    ]);
+  }
 
   ngOnInit() {
     // 🔹 Immer ausführbar

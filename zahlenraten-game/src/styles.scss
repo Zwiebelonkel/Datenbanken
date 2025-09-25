@@ -151,3 +151,18 @@ h1{
   font-size: 0.1rem;
   margin: 0;
 }
+
+.ads-banner {
+  background-color: red;
+  position: fixed;
+  top: 100px;
+  left: 0;
+  z-index: 9999;
+  width: 160px;
+  height: 100px;
+}
+
+.ads-banner iframe {
+  max-width: 160px !important;
+  height: auto !important;
+}

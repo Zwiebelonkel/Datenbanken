@@ -3,29 +3,42 @@
 <app-rain #rain></app-rain>
 <div class="card slot-container">
   <div class="slot-header"></div>
-  <div *ngIf="!isLoading" class="slot-status">
-    <span>💰 Geld: {{ currentMoney | number : "1.2-2" }}</span>
-    <span>🎲 Einsatz: {{ spinCost }} 💰</span>
-    <span>🏆 Gewinn: {{ winReward }} 💸</span>
-  </div>
+
   <app-loader *ngIf="isLoading"></app-loader>
 
-  <div class="slot-bet">
-    <label for="bet">Einsatz wählen:</label>
-    <input type="number" id="bet" [(ngModel)]="betAmount" min="1" step="1" />
-  </div>
+  <div *ngIf="!isLoading" class="slot-content">
+    <div class="slot-status">
+      <span>💰 Geld: {{ currentMoney | number : "1.2-2" }}</span>
+      <span>🎲 Einsatz: {{ spinCost }} 💰</span>
+      <span>🏆 Gewinn: {{ winReward }} 💸</span>
+    </div>
 
-  <div class="slot-reels">
-    <app-reel *ngFor="let reel of reels; let i = index" #reelComp></app-reel>
-  </div>
+    <div class="slot-bet">
+      <label for="bet">Einsatz wählen:</label>
+      <input type="number" id="bet" [(ngModel)]="betAmount" min="1" step="1" />
+    </div>
 
-  <button
-    class="btn"
-    (click)="spin()"
-    [disabled]="currentMoney < spinCost || isSpinning"
-  >
-    Spin
-  </button>
+    <div class="slot-reels">
+ <app-reel *ngFor="let reel of jokerActive ? [0, 1] : reels; let i = index" #reelComp></app-reel>
+    </div>
+
+    <button
+      class="btn"
+      (click)="spin()"
+      [disabled]="currentMoney < spinCost || isSpinning"
+    >
+      Spin
+    </button>
+
+    <button
+      *ngIf="hasJokerCard && !jokerActive"
+      class="btn joker-btn"
+      (click)="useJoker()"
+ [disabled]="currentMoney < spinCost || isSpinning || jokerActive"
+    >
+ Use Joker
+    </button>
+  </div>
 
   <div *ngIf="results.length" class="slot-result">
     Ergebnis:
@@ -43,7 +56,6 @@
       <span *ngIf="!last"> | </span>
     </ng-container>
   </div>
-
   <div
     *ngIf="message"
     [class.win]="isWinner"

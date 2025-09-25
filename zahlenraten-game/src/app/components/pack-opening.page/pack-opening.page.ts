@@ -24,8 +24,9 @@ type PackKind = 'basic' | 'premium' | 'ultra';
 type CardOutcome =
   | { type: 'multiplier'; value: string; chance: number }
   | { type: 'money'; value: number; chance: number }
-  | { type: 'xp'; value: number; chance: number };
-
+  | { type: 'xp'; value: number; chance: number }
+ | { type: 'joker'; value: string; chance: number };
+ 
 @Component({
   selector: 'app-pack-opening-page',
   standalone: true,
@@ -148,6 +149,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       { type: 'multiplier', value: '-1', chance: 5 },
       { type: 'money', value: 50, chance: 15 },
       { type: 'xp', value: 25, chance: 10 },
+      { type: 'joker', value: '100', chance: 5 },
     ],
     premium: [
       { type: 'multiplier', value: '1.5x', chance: 35 },
@@ -157,6 +159,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       { type: 'multiplier', value: '-2', chance: 5 },
       { type: 'money', value: 100, chance: 15 },
       { type: 'xp', value: 50, chance: 10 },
+      { type: 'joker', value: '100', chance: 7 },
     ],
     ultra: [
       { type: 'multiplier', value: '2x', chance: 25 },
@@ -166,7 +169,8 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       { type: 'multiplier', value: '-2', chance: 5 },
       { type: 'multiplier', value: '-3', chance: 1.5 },
       { type: 'money', value: 150, chance: 15 },
-      { type: 'xp', value: 100, chance: 15 },
+      { type: 'xp', value: 100, chance: 15 }, // Corrected value
+      { type: 'joker', value: '100', chance: 10 },
     ],
   };
 
@@ -530,6 +534,9 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   }
 
   renderOutcome(o: CardOutcome): string {
+ if (o.type === 'joker') {
+ return '🃏';
+    }
     if (o.type === 'multiplier') {
       if (o.value.startsWith('-')) {
         const hearts = Math.abs(parseInt(o.value, 10)) || 1;
@@ -571,6 +578,45 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
   }
 
   private applyOutcome(o: CardOutcome) {
+    switch (o.type) {
+ case 'multiplier':
+ const numericVal = parseFloat(o.value);
+ if (o.value === '-3') this.unlockAch('Joker 🃏');
+ if (!Number.isNaN(numericVal)) {
+ this.cardsService.addCard(numericVal).subscribe({
+ next: () => console.log('Karte gespeichert:', o.value),
+ error: (err) => console.error('❌ Fehler beim Speichern der Karte:', err),
+          });
+        }
+ break;
+ case 'joker':
+ this.cardsService.addCard(100).subscribe({
+ next: () => console.log('Karte gespeichert: Joker 🃏'),
+ error: (err) =>
+ console.error('❌ Fehler beim Speichern der Joker-Karte:', err),
+        });
+ this.unlockAch('Joker 🃏');
+ break;
+ case 'money':
+ this.moneyService
+          .updateMoney({ username: this.username, amount: o.value })
+          .subscribe({
+ next: () => {
+ this.money += o.value;
+ console.log(`💰 +${o.value} Geld gutgeschrieben`);
+            },
+ error: (err) => console.error('❌ Fehler beim Hinzufügen von Geld:', err),
+          });
+ break;
+ case 'xp':
+ this.addXp(o.value);
+ break;
+ default:
+ console.warn('Unbekannter Kartentyp:', o);
+ break;
+    }
+
+    /* === ALT (ersetzt durch switch) ===
     if (o.type === 'multiplier') {
       const numericVal = parseFloat(o.value);
       if (o.value === '-3') this.unlockAch('Joker 🃏');
@@ -580,6 +626,12 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
           error: (err) => console.error('❌ Fehler beim Speichern der Karte:', err),
         });
       }
+    } else if (o.type === 'joker') {
+      this.cardsService.addCard(100).subscribe({ // Changed 0 to 100 for joker value
+        next: () => console.log('Karte gespeichert: Joker 🃏'), // Added descriptive log
+        error: (err) => console.error('❌ Fehler beim Speichern der Joker-Karte:', err),
+      });
+      this.unlockAch('Joker 🃏');
     } else if (o.type === 'money') {
       this.moneyService
         .updateMoney({ username: this.username, amount: o.value })
@@ -593,7 +645,9 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     } else if (o.type === 'xp') {
       this.addXp(o.value);
     }
+    */
   }
+  
 
   private unlockAch(name: string) {
     this.achievementService.unlockAchievement(name).subscribe({

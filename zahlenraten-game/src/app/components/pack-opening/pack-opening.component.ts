@@ -16,7 +16,9 @@ import { ViewChild } from '@angular/core';
 type CardOutcome =
   | { type: 'multiplier'; value: string; chance: number }
   | { type: 'money'; value: number; chance: number }
-  | { type: 'xp'; value: number; chance: number };
+  | { type: 'xp'; value: number; chance: number }
+  | { type: 'joker'; value: string; chance: number };
+
 
 @Component({
   selector: 'app-pack-opening',
@@ -63,6 +65,7 @@ export class PackOpeningComponent implements OnInit {
       { type: 'multiplier', value: '-1', chance: 5 },
       { type: 'money', value: 50, chance: 15 }, // Erhöht
       { type: 'xp', value: 25, chance: 10 }, // Erhöht
+      { type: 'joker', value: 'slot', chance: 5 }, // Added the -4 card here
     ],
     Premium: [
       { type: 'multiplier', value: '1.5x', chance: 35 },
@@ -72,6 +75,7 @@ export class PackOpeningComponent implements OnInit {
       { type: 'multiplier', value: '-2', chance: 5 },
       { type: 'money', value: 100, chance: 15 }, // Erhöht
       { type: 'xp', value: 50, chance: 10 }, // Erhöht
+      { type: 'joker', value: 'slot', chance: 7 }, // Added the -4 card here
     ],
     Ultra: [
       { type: 'multiplier', value: '2x', chance: 25 },
@@ -82,8 +86,10 @@ export class PackOpeningComponent implements OnInit {
       { type: 'multiplier', value: '-3', chance: 1.5 },
       { type: 'money', value: 150, chance: 15 }, // Erhöht
       { type: 'xp', value: 100, chance: 15 }, // Erhöht
+      { type: 'joker', value: 'slot', chance: 100 }, // Added the -4 card here
     ],
   };
+
 
   packPrices: Record<string, number> = {
     Basic: 40,
@@ -224,6 +230,8 @@ export class PackOpeningComponent implements OnInit {
         } else if (entry.type === 'xp') {
           this.displayResult = `${entry.value}⭐️`;
           this.addXp(entry.value);
+        } else if (entry.type === 'joker') {
+          this.displayResult = '🃏'; // Display joker emoji for joker type
         }
         this.drawnCards.push(this.displayResult);
         this.cardsRemaining--;

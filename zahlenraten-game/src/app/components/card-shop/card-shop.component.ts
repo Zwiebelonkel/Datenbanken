@@ -12,9 +12,10 @@ import { ModelViewerComponent } from '../view/view.component';
 import { TutorialComponent } from '../tutorial/tutorial.component';
 
 type CardOutcome =
-  | { type: 'multiplier'; value: string; chance: number }
   | { type: 'money'; value: number; chance: number }
-  | { type: 'xp'; value: number; chance: number };
+  | { type: 'xp'; value: number; chance: number }
+  | { type: 'multiplier'; value: string; chance: number }
+  | { type: 'joker'; value: 'slot' | '-1' | '-2' | '-3' | '-4'; chance: number };
 
 @Component({
   selector: 'app-card-shop',
@@ -68,6 +69,7 @@ export class CardShopComponent implements OnInit {
       { type: 'multiplier', value: '-1', chance: 5 },
       { type: 'money', value: 50, chance: 15 }, // Erhöht
       { type: 'xp', value: 25, chance: 10 }, // Erhöht
+      { type: 'joker', value: 'slot', chance: 5 }, // Added the -4 card here
     ],
     Premium: [
       { type: 'multiplier', value: '1.5x', chance: 35 },
@@ -77,6 +79,7 @@ export class CardShopComponent implements OnInit {
       { type: 'multiplier', value: '-2', chance: 5 },
       { type: 'money', value: 100, chance: 15 }, // Erhöht
       { type: 'xp', value: 50, chance: 10 }, // Erhöht
+      { type: 'joker', value: 'slot', chance: 7 }, // Added the -4 card here
     ],
     Ultra: [
       { type: 'multiplier', value: '2x', chance: 25 },
@@ -87,6 +90,7 @@ export class CardShopComponent implements OnInit {
       { type: 'multiplier', value: '-3', chance: 1.5 },
       { type: 'money', value: 150, chance: 15 }, // Erhöht
       { type: 'xp', value: 100, chance: 15 }, // Erhöht
+      { type: 'joker', value: 'slot', chance: 10 }, // Added the -4 card here
     ],
   };
 

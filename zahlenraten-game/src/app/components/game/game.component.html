@@ -208,7 +208,7 @@
                     decoding="async"
                     fetchpriority="low"
                     (error)="onAvatarError($event)"
-                    alt=""
+                    alt="{{entry.username}}'s avatar"
                   />
                   <span *ngIf="j === 0" class="crown" aria-hidden="true"
                     >👑</span

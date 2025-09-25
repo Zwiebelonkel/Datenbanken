@@ -3,8 +3,7 @@
   <button
     *ngIf="authService.isLoggedIn() && showBackButton"
     class="back-button"
-    (click)="goBack()
-    "
+    (click)="goBack()"
     aria-label="Zurück"
   >
     <svg
@@ -19,14 +18,14 @@
   </button>
 
   <!-- Titel: links bei Willkommen, sonst zentriert -->
-  <div class="page-title" [class.left-align]="isWelcomeTitle">
+  <h1 class="page-title" [class.left-align]="isWelcomeTitle">
     <ng-container *ngIf="authService.isLoggedIn(); else guest">
       {{ page }}
     </ng-container>
     <ng-template #guest>
       <strong>🃏 CardCore ♦️</strong>
     </ng-template>
-  </div>
+  </h1>
 
   <!-- Platzhalter rechts, damit Centering stabil bleibt -->
   <div class="topbar-spacer" aria-hidden="true"></div>

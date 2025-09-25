@@ -65,7 +65,7 @@ export class PackOpeningComponent implements OnInit {
       { type: 'multiplier', value: '-1', chance: 5 },
       { type: 'money', value: 50, chance: 15 }, // Erhöht
       { type: 'xp', value: 25, chance: 10 }, // Erhöht
-      { type: 'joker', value: 'slot', chance: 5 }, // Added the -4 card here
+      { type: 'joker', value: 'slot', chance: 5 },
     ],
     Premium: [
       { type: 'multiplier', value: '1.5x', chance: 35 },
@@ -75,7 +75,7 @@ export class PackOpeningComponent implements OnInit {
       { type: 'multiplier', value: '-2', chance: 5 },
       { type: 'money', value: 100, chance: 15 }, // Erhöht
       { type: 'xp', value: 50, chance: 10 }, // Erhöht
-      { type: 'joker', value: 'slot', chance: 7 }, // Added the -4 card here
+      { type: 'joker', value: 'slot', chance: 7 },
     ],
     Ultra: [
       { type: 'multiplier', value: '2x', chance: 25 },
@@ -86,7 +86,7 @@ export class PackOpeningComponent implements OnInit {
       { type: 'multiplier', value: '-3', chance: 1.5 },
       { type: 'money', value: 150, chance: 15 }, // Erhöht
       { type: 'xp', value: 100, chance: 15 }, // Erhöht
-      { type: 'joker', value: 'slot', chance: 100 }, // Added the -4 card here
+      { type: 'joker', value: 'slot', chance: 10 },
     ],
   };
 

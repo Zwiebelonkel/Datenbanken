@@ -149,7 +149,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       { type: 'multiplier', value: '-1', chance: 5 },
       { type: 'money', value: 50, chance: 15 },
       { type: 'xp', value: 25, chance: 10 },
-      { type: 'joker', value: '100', chance: 5 },
+//      { type: 'joker', value: 'slot', chance: 5 },
     ],
     premium: [
       { type: 'multiplier', value: '1.5x', chance: 35 },
@@ -159,7 +159,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       { type: 'multiplier', value: '-2', chance: 5 },
       { type: 'money', value: 100, chance: 15 },
       { type: 'xp', value: 50, chance: 10 },
-      { type: 'joker', value: '100', chance: 7 },
+//      { type: 'joker', value: 'slot', chance: 7 },
     ],
     ultra: [
       { type: 'multiplier', value: '2x', chance: 25 },
@@ -170,7 +170,7 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
       { type: 'multiplier', value: '-3', chance: 1.5 },
       { type: 'money', value: 150, chance: 15 },
       { type: 'xp', value: 100, chance: 15 }, // Corrected value
-      { type: 'joker', value: '100', chance: 10 },
+//      { type: 'joker', value: 'slot', chance: 10 },
     ],
   };
 

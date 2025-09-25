@@ -23,7 +23,17 @@
 
       <div class="chat-area-container">
         <div class="chat-header" *ngIf="selectedUser">
-          <button class="back-button" (click)="backToUserList()">←</button>
+          <button class="back-button" (click)="backToUserList()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="white"
+            >
+              <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+          </button>
           <img [src]="avatar(selectedUser.profileImageUrl)" (error)="onAvatarError($event)" alt="Avatar" class="avatar">
           <h3>{{ selectedUser.username }}</h3>
         </div>

@@ -46,6 +46,11 @@
               },
               {
                 "input": "src",
+                "glob": "sitemap.xml",
+                "output": "."
+              },
+              {
+                "input": "src",
                 "glob": "ads.txt",
                 "output": "."
               }

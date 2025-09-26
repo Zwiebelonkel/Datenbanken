@@ -72,16 +72,22 @@ export class UserScoreHistoryComponent implements OnInit {
     private levelsService: LevelsService,
     private titleService: Title,
     private metaService: Meta
-  ) {
+  ) {}
+
+  setSeoTags(): void {
     this.titleService.setTitle('Entwicklung - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Verfolge deine Scoreentwicklung und vergleiche diese mit der anderer Spieler.' },
-      { property: 'og:title', content: 'Entwicklung - CardCore' },
-      { property: 'og:description', content: 'Verfolge deine Scoreentwicklung und vergleiche diese mit der anderer Spieler.' },
-    ]);
+  
+    this.metaService.updateTag({ name: 'description', content: 'Verfolge deine Scoreentwicklung und vergleiche diese mit der anderer Spieler.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Entwicklung - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Verfolge deine Scoreentwicklung und vergleiche diese mit der anderer Spieler.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Vergleich, CardCore, Graphen, History'});
   }
 
   ngOnInit(): void {
+    this.setSeoTags()
     this.route.paramMap.subscribe((params) => {
       const user = params.get('username');
       if (!user) {

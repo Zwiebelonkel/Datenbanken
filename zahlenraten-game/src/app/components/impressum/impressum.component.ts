@@ -29,14 +29,8 @@ interface LegalConfig {
   styleUrls: ['./impressum.component.scss'],
 })
 export class ImpressumComponent {
-  constructor(private titleService: Title, private metaService: Meta) {
-    this.titleService.setTitle('Impressum - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Impressum von CardCore' },
-      { property: 'og:title', content: 'Impressum - CardCore' },
-      { property: 'og:description', content: 'Impressum von CardCore' },
-    ]);
-  }
+  constructor(private titleService: Title, private metaService: Meta) {}
+  
   // TODO: mit deinen echten Daten befüllen
   legal: LegalConfig = {
     companyOrName: 'Jan-Luca Müller', // Firma ODER Vor- & Nachname
@@ -50,4 +44,20 @@ export class ImpressumComponent {
     handelsregister: null, // 'Amtsgericht Bremen, HRB 12345'
     contentResponsible: 'Jan-Luca Müller',
   };
+
+  ngOnInit(): void {
+    this.setSeoTags();
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('Impressum - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Impressum von CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Impressum - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Impressum von CardCore' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Impressum, CardCore, Legal'});
+  }
 }

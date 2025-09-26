@@ -67,6 +67,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setSeoTags()
     this.route.paramMap.subscribe((params) => {
       const paramUser = params.get('username');
       const selfUser = this.authService.getUsername() || '';
@@ -81,6 +82,18 @@ export class ProfileComponent implements OnInit {
       }
       this.loadUserStats(this.username);
     });
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('Profil - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Hier siehst du dein persönliches Profil, kannst Statistiken sehen und schauen wie sich dein Score entwickelt.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Profil - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Hier siehst du dein persönliches Profil, kannst Statistiken sehen und schauen wie sich dein Score entwickelt.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Profil, CardCore, Statistik, Sozial'});
   }
 
   addXp(amount: number) {

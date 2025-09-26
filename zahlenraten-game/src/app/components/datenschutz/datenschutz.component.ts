@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component'
 import { TopbarComponent } from '../topbar/topbar.component'
+import { Title, Meta } from '@angular/platform-browser';
 
 
 interface PrivacyConfig {
@@ -34,6 +35,24 @@ interface PrivacyConfig {
   styleUrls: ['./datenschutz.component.scss'],
 })
 export class DatenschutzComponent {
+
+  constructor(private titleService: Title, private metaService: Meta){}
+
+  ngOnInit(): void {
+    this.setSeoTags();
+  }
+  setSeoTags(): void {
+    this.titleService.setTitle('Datenschutz - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Datenschutzrichtlinie von CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Datenschutz - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Datenschutzrichtlinie von CardCore' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Datenschutz, CardCore, Legal'});
+  }
+
   // TODO: mit deinen echten Daten/Flags befüllen
   cfg: PrivacyConfig = {
     controllerName: 'Jan-Luca Müller',

@@ -21,12 +21,21 @@ export class LoginComponent {
   error = false;
   isLoading = false;
 
-  constructor(private http: HttpClient, private router: Router,     private titleService: Title,
-    private metaService: Meta) {
+  constructor(private http: HttpClient, private router: Router, private titleService: Title, private metaService: Meta) {}
+
+    ngOnInit(): void {
+      this.setSeoTags();
+    }
+    setSeoTags(): void {
       this.titleService.setTitle('Login - CardCore');
-      this.metaService.addTags([
-        { property: 'og:title', content: 'Login - CardCore' },
-      ]);
+    
+      this.metaService.updateTag({ name: 'description', content: 'Loginseite von CardCore' });
+    
+      this.metaService.updateTag({ property: 'og:title', content: 'Login - CardCore' });
+    
+      this.metaService.updateTag({ property: 'og:description', content: 'Loginseite von CardCore' });
+    
+      this.metaService.updateTag({ name: 'keywords', content: 'Login, CardCore, Account'});
     }
 
   login() {

@@ -129,7 +129,20 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     ]);
   }
 
+  setSeoTags(): void {
+    this.titleService.setTitle('Village - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Baue dein eigenes Dorf auf und verbessere es um passiv Einkommen zu generieren.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Village - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Baue dein eigenes Dorf auf und verbessere es um passiv Einkommen zu generieren.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Dorf, CardCore, Aufbau, Spiel'});
+  }
+
   ngOnInit() {
+    this.setSeoTags()
     const username = this.auth.getUsername();
     if (!username) return;
 

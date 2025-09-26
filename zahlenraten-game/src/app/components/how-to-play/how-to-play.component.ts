@@ -13,12 +13,21 @@ import { Title, Meta } from '@angular/platform-browser';
 export class HowToPlayComponent {
 
   constructor(    private titleService: Title,
-    private metaService: Meta){
+    private metaService: Meta){}
+
+    ngOnInit(): void {
+      this.setSeoTags();
+    }
+
+    setSeoTags(): void {
       this.titleService.setTitle('HowToPlay - CardCore');
-      this.metaService.addTags([
-        { name: 'description', content: 'Hier siehst du wie das gesamte Spiel funktioniert.' },
-        { property: 'og:title', content: 'HowToPlay - CardCore' },
-        { property: 'og:description', content: 'ier siehst du wie das gesamte Spiel funktioniert.' },
-      ]);
+    
+      this.metaService.updateTag({ name: 'description', content: 'Hier siehst du wie das gesamte Spiel funktioniert.' });
+    
+      this.metaService.updateTag({ property: 'og:title', content: 'HowToPlay - CardCore' });
+    
+      this.metaService.updateTag({ property: 'og:description', content: 'Hier siehst du wie das gesamte Spiel funktioniert.' });
+    
+      this.metaService.updateTag({ name: 'keywords', content: 'Tutorial, CardCore, Erklärung, Spielleitung'});
     }
 }

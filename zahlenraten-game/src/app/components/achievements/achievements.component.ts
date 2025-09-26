@@ -32,14 +32,10 @@ export class AchievementsComponent implements OnInit {
 
   constructor(private http: HttpClient, private authService: AuthService,    private titleService: Title,
     private metaService: Meta
-) {    this.titleService.setTitle('Erfolge - CardCore');
-  this.metaService.addTags([
-    { name: 'description', content: 'Siehe hier nach, welche Erfolge du bereits freigeschaltet hast.' },
-    { property: 'og:title', content: 'Erfolge - CardCore' },
-    { property: 'og:description', content: 'Siehe hier nach, welche Erfolge du bereits freigeschaltet hast.' },
-  ]);}
+) {}
 
   ngOnInit(): void {
+    this.setSeoTags()
     const username = this.authService.getUsername();
     this.http
       .get<any[]>(
@@ -55,4 +51,17 @@ export class AchievementsComponent implements OnInit {
         }
       );
   }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('Erfolge - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Siehe hier nach, welche Erfolge du bereits freigeschaltet hast.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Erfolge - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Siehe hier nach, welche Erfolge du bereits freigeschaltet hast.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Erfolg, CardCore, Game, Fortschritt' });
+  }
+
 }

@@ -14,12 +14,23 @@ import { Title, Meta } from '@angular/platform-browser';
 })
 export class AboutComponent {
 
-constructor(    private titleService: Title,
-  private metaService: Meta){
-    this.titleService.setTitle('About - CardCore');
-    this.metaService.addTags([
-      { property: 'og:title', content: 'About - CardCore' },
-    ]);
+constructor(private titleService: Title, private metaService: Meta){}
+
+  ngOnInit(): void {
+    this.setSeoTags();
   }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('About - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Informationen über den CardCore-Entwickler' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'About - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Informationen über den CardCore-Entwickler' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'About, CardCore, Developer, Angular' });
+  }
+  
 
 }

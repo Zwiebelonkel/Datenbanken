@@ -104,18 +104,24 @@ export class CardShopComponent implements OnInit {
     private soundService: SoundsService,
     private titleService: Title,
     private metaService: Meta
-  ) {
-    this.titleService.setTitle('CardShop - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Kaufe hier Kartenpacks um im Spiel besser zu sein und deine Punktzahl zu steigern' },
-      { property: 'og:title', content: 'CardShop - CardCore' },
-      { property: 'og:description', content: 'Kaufe hier Kartenpacks um im Spiel besser zu sein und deine Punktzahl zu steigern' },
-    ]);
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.setSeoTags()
     this.username = this.authService.getUsername() || '';
     this.loadMoney();
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('CardShop - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Kaufe hier Kartenpacks um im Spiel besser zu sein und deine Punktzahl zu steigern' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'CardShop - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Kaufe hier Kartenpacks um im Spiel besser zu sein und deine Punktzahl zu steigern.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Karten, Laden, Shop, CardCore'});
   }
 
   loadMoney() {

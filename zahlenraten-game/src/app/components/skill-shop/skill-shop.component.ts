@@ -87,21 +87,28 @@ export class SkillShopComponent implements OnInit {
     private titleService: Title,
     private metaService: Meta
   ) {
-    this.titleService.setTitle('SkillShop - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Verbessere dein Profil dauerhaft indem du mit Skillpunkten durch levelUp Skills verbesserst.' },
-      { property: 'og:title', content: 'SkillShop - CardCore' },
-      { property: 'og:description', content: 'Verbessere dein Profil dauerhaft indem du mit Skillpunkten durch levelUp Skills verbesserst.' },
-    ]);
   }
 
   ngOnInit(): void {
+    this.setSeoTags()
     this.username = this.authService.getUsername() ?? '';
     if (!this.username) {
       this.errorMsg = 'Bitte einloggen, um den Skill-Shop zu benutzen.';
       return;
     }
     this.loadData();
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('SkillShop - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Verbessere dein Profil dauerhaft indem du mit Skillpunkten durch levelUp Skills verbesserst.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'SkillShop - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Verbessere dein Profil dauerhaft indem du mit Skillpunkten durch levelUp Skills verbesserst.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Skills, CardCore, Upgrades, Stark'});
   }
 
   private loadData() {

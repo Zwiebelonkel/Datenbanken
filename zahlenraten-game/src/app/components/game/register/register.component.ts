@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from '../../loader/loader.component';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   standalone: true,
@@ -21,7 +22,23 @@ export class RegisterComponent {
   success = false;
   isLoading = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private titleService: Title,
+    private metaService: Meta) {}
+
+  ngOnInit(): void {
+    this.setSeoTags();
+  }
+  setSeoTags(): void {
+    this.titleService.setTitle('Registrieren - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Registrierungsseite von CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Registrieren - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Registrierungsseite von CardCore' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Registrieren, CardCore, Account'});
+  }
 
   register() {
     this.isLoading = true;

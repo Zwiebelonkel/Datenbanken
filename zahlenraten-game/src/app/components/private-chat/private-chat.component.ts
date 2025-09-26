@@ -37,16 +37,10 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked, OnDestroy
     private levelsService: LevelsService,
     private titleService: Title,
     private metaService: Meta
-  ) { 
-    this.titleService.setTitle('PrivatChat - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Schreibe hier privat mit anderen Spielern von CardCore.' },
-      { property: 'og:title', content: 'PrivatChat - CardCore' },
-      { property: 'og:description', content: 'Schreibe hier privat mit anderen Spielern von CardCore.' },
-    ]);
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.setSeoTags();
     this.username = this.authService.getUsername();
     this.isLoading = true;
     this.levelsService.load(1, 1000).subscribe(response => {
@@ -62,6 +56,18 @@ export class PrivateChatComponent implements OnInit, AfterViewChecked, OnDestroy
       this.isLoading = false;
       this.startPolling();
     });
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('PrivatChat - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Schreibe hier privat mit anderen Spielern von CardCore.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'PrivatChat - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Schreibe hier privat mit anderen Spielern von CardCore.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Chat, CardCore, Messanger, Sozial'});
   }
 
   ngOnDestroy(): void {

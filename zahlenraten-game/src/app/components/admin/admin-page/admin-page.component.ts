@@ -61,18 +61,10 @@ export class AdminPageComponent implements OnInit {
     private profileService: ProfileService,
     private titleService: Title,
     private metaService: Meta
-  ) {
-
-    this.titleService.setTitle('AdminPanel - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Nur für Admins: Hier können Spieler und Scores verwaltet werden.' },
-      { property: 'og:title', content: 'AdminPanel - CardCore' },
-      { property: 'og:description', content: 'Nur für Admins: Hier können Spieler und Scores verwaltet werden.' },
-    ]);
-
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.setSeoTags()
     const role = this.authService.getRole()?.toLowerCase();
     if (role !== 'admin') {
       this.router.navigate(['/']);
@@ -89,6 +81,18 @@ export class AdminPageComponent implements OnInit {
 
     this.loadUsers();
     this.loadScores();
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('AdminPanel - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Nur für Admins: Hier können Spieler und Scores verwaltet werden.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'AdminPanel - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Nur für Admins: Hier können Spieler und Scores verwaltet werden.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Admin, Management, CardCore' });
   }
 
   // Seiten-Flags

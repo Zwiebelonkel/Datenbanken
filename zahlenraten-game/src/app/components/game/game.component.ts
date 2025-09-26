@@ -153,16 +153,10 @@ Das Spiel ist einfach zu verstehen, macht aber durch taktische Entscheidungen un
     private soundService: SoundsService,
     private titleService: Title,
     private metaService: Meta
-  ) {
-    this.titleService.setTitle('Startseite - CardCore - WebGame');
-    this.metaService.addTags([
-      { name: 'description', content: 'Outside Between ist ein fesselndes Zahlen-Game für deinen Browser. Errate, ob die nächste Zahl zwischen oder außerhalb der vorherigen liegt!' },
-      { property: 'og:title', content: 'Startseite - CardCore - WebGame' },
-      { property: 'og:description', content: 'Outside Between ist ein fesselndes Zahlen-Game für deinen Browser. Errate, ob die nächste Zahl zwischen oder außerhalb der vorherigen liegt!' },
-    ]);
-  }
+  ) {}
 
   ngOnInit() {
+    this.setSeoTags()
     // 🔹 Immer ausführbar
     this.newRound();
     this.loadLeaderboards();
@@ -191,6 +185,18 @@ Das Spiel ist einfach zu verstehen, macht aber durch taktische Entscheidungen un
     } else {
       console.log('⚠️ Gastmodus');
     }
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('CardCore - MainPage - Outside Between');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Outside Between / CardCore ist ein fesselndes Zahlen-Game für deinen Browser. Errate, ob die nächste Zahl zwischen oder außerhalb der vorherigen liegt!' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'CardCore - MainPage - Outside Between' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Outside Between / CardCore ist ein fesselndes Zahlen-Game für deinen Browser. Errate, ob die nächste Zahl zwischen oder außerhalb der vorherigen liegt!' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Karten, CardCore, WebGame, Glück, Sozial, Hauptseite'});
   }
 
   avatar(url?: string | null, size = 32): string {

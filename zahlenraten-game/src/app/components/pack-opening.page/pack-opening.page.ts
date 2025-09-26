@@ -204,17 +204,26 @@ export class PackOpeningPageComponent implements AfterViewInit, OnDestroy {
     private achievementService: AchievementService,
     private titleService: Title,
     private metaService: Meta
-  ) {
+  ) {}
 
+  setSeoTags(): void {
     this.titleService.setTitle('PackOpening - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Auf dieser Seite kann der Spieler sein gekauftes Kartenpack öffnen und seine Karten speichern.' },
-      { property: 'og:title', content: 'PackOpening - CardCore' },
-      { property: 'og:description', content: 'Auf dieser Seite kann der Spieler sein gekauftes Kartenpack öffnen und seine Karten speichern.' },
-    ]);
+  
+    this.metaService.updateTag({ name: 'description', content: 'Auf dieser Seite kann der Spieler sein gekauftes Kartenpack öffnen und seine Karten speichern.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'PackOpening - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Auf dieser Seite kann der Spieler sein gekauftes Kartenpack öffnen und seine Karten speichern.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Opening, CardCore, Glück, Pack'});
   }
 
   // ---------- lifecycle ----------
+
+ngOnInit(): void {
+  this.setSeoTags();
+}
+
   ngAfterViewInit(): void {
     const qp = (this.route.snapshot.queryParamMap.get('pack') || 'Basic').toLowerCase();
     this.pack = qp === 'premium' || qp === 'ultra' ? (qp as PackKind) : 'basic';

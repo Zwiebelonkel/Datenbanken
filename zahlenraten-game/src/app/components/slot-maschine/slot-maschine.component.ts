@@ -101,15 +101,22 @@ export class SlotMaschineComponent implements OnInit, AfterViewInit {
     private titleService: Title,
     private metaService: Meta
   ) {
+  }
+
+  setSeoTags(): void {
     this.titleService.setTitle('Slots - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Versuche dein Glück und setzte eine beliebige Menge an In-Game Währung um den Jackpot zu knacken.' },
-      { property: 'og:title', content: 'Slots - CardCore' },
-      { property: 'og:description', content: 'Versuche dein Glück und setzte eine beliebige Menge an In-Game Währung um den Jackpot zu knacken.' },
-    ]);
+  
+    this.metaService.updateTag({ name: 'description', content: 'Versuche dein Glück und setzte eine beliebige Menge an In-Game Währung um den Jackpot zu knacken.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Slots - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Versuche dein Glück und setzte eine beliebige Menge an In-Game Währung um den Jackpot zu knacken.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Casino, CardCore, Geld, Verdienst'});
   }
 
   ngOnInit() {
+    this.setSeoTags()
     this.username = this.authService.getUsername() ?? '';
     this.loadMoney();
     this.profileService.getUserStats(this.username).subscribe((p) => {

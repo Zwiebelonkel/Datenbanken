@@ -49,17 +49,24 @@ export class CompareScoresComponent implements OnInit, OnDestroy {
     private levelsService: LevelsService,
     private titleService: Title,
     private metaService: Meta
-  ) {    this.titleService.setTitle('Spieler-Vergleich - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Vergleiche deine Punktzahlen mit anderen Spielern und sieh, wer die Nase vorn hat.' },
-      { property: 'og:title', content: 'Spieler-Vergleich - CardCore' },
-      { property: 'og:description', content: 'Vergleiche deine Punktzahlen mit anderen Spielern und sieh, wer die Nase vorn hat.' },
-      { property: 'og:image', content: 'https://zahlenraten.jascha.ai/assets/logo.png' }
-    ]);}
+  ) {}
 
   ngOnInit(): void {
+    this.setSeoTags()
     this.loadAllUsers();
     window.addEventListener('resize', this.onResize);
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('Entwicklung - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Vergleiche deine Punktzahlen mit anderen Spielern und sieh, wer die Nase vorn hat.' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Entwicklung - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Vergleiche deine Punktzahlen mit anderen Spielern und sieh, wer die Nase vorn hat.' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Spieler, Kampf, Vergleich, CardCore'});
   }
 
   ngOnDestroy(): void {

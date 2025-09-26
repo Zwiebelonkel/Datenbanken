@@ -13,10 +13,21 @@ import { Title, Meta} from '@angular/platform-browser';
   styleUrls: ['./contact.component.scss'],
 })
 export class ContactComponent {
-  constructor(    private titleService: Title, private metaService: Meta
-  ){    this.titleService.setTitle('Contact');
-    this.metaService.addTags([
-      { property: 'og:title', content: 'Contact - CardCore' },
-    ]);
+  constructor(private titleService: Title, private metaService: Meta){}
+
+  ngOnInit(): void {
+    this.setSeoTags();
+  }
+
+  setSeoTags(): void {
+    this.titleService.setTitle('Contact - CardCore');
+  
+    this.metaService.updateTag({ name: 'description', content: 'Kontaktaufnahme zum Entwickler von CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:title', content: 'Contact - CardCore' });
+  
+    this.metaService.updateTag({ property: 'og:description', content: 'Kontaktaufnahme zum Entwickler von CardCore' });
+  
+    this.metaService.updateTag({ name: 'keywords', content: 'Kontakt, Entwickler, Feedback, CardCore'});
   }
 }

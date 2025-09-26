@@ -120,14 +120,7 @@ export class VillageComponent implements OnInit, AfterViewInit, OnDestroy {
     private achievementService: AchievementService,
     private titleService: Title,
     private metaService: Meta
-  ) {
-    this.titleService.setTitle('Village - CardCore');
-    this.metaService.addTags([
-      { name: 'description', content: 'Baue dein eigenes Dorf auf und verbessere es um passiv Einkommen zu generieren.' },
-      { property: 'og:title', content: 'Village - CardCore' },
-      { property: 'og:description', content: 'Baue dein eigenes Dorf auf und verbessere es um passiv Einkommen zu generieren.' },
-    ]);
-  }
+  ) {}
 
   setSeoTags(): void {
     this.titleService.setTitle('Village - CardCore');

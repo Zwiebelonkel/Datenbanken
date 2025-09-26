@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   messages: ChatMessage[] = [];
   newMessage = '';
   username = '';
-  isExpanded = false;
+  isExpanded = true;
   isLoading = true;
 
   @ViewChild('messageContainer') messageContainer!: ElementRef;
